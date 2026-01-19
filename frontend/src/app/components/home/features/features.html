@@ -1,0 +1,144 @@
+<div class="d-flex flex-row justify-content-center align-items-center gap-lg-5 gap-5 feature-room">
+  @if (child_data == null) {
+    <span>Loading ...</span>
+  } @else {
+    @for (item of child_data.rooms; track $index) {
+      <span>> {{ item.name }}</span>
+    }
+  }
+</div>
+<div class="mt-5">
+  <div class="text-center">
+    <span style="color: var(--color-accent)">Danh mục sản phẩm</span>
+    <h3 class="feature-title">
+      Khám Phá <span style="color: var(--color-accent)">Bộ Sưu Tập</span>
+    </h3>
+  </div>
+  <div class="mt-4 d-flex flex-row justify-content-center align-items-center gap-5">
+    @for (item of child_data.category_product; track $index) {
+      <div class="ft-product d-flex flex-column justify-content-center align-items-center gap-4">
+        <div class="feature-product d-flex flex-row justify-content-center align-items-center">
+          <img src="{{ item.image_url }}" alt="{{ item.name }}" />
+        </div>
+        <div class="feature-info d-flex flex-column justify-content-center align-items-center">
+          <h5 class="mb-1">{{ item.name }}</h5>
+          <p class="text-muted-ev">{{ item.quantity }}+ Sản phẩm</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+<div class="mt-2 py-5">
+  <div class="row feature-promotion">
+    <div class="col-lg-6" style="padding: 32px">
+      <div class="card-beige p-4 h-100">
+        <div class="row align-items-center h-100">
+          <div class="col-md-6">
+            <span class="badge-discount mb-3 d-inline-block">GIẢM GIÁ 25%</span>
+            <h2 class="section-title fw-bold mb-3">
+              Bộ Sưu Tập <span class="highlight-text">Phòng Khách </span>
+              <span class="highlight-text">Hiện Đại</span>
+            </h2>
+            <p class="text-muted mb-4">
+              Thiết kế tinh tế, chất liệu cao cấp, mang lại không gian sống đẳng cấp cho gia đình
+              bạn
+            </p>
+            <button class="btn btn-dark-custom">
+              Mua Ngay <i class="fas fa-arrow-right ms-2"></i>
+            </button>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="images/hero-section/P1.png" alt="Living Room" class="product-image" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6" style="padding: 32px">
+      <div class="card-green p-4 h-100">
+        <div class="row align-items-center h-100">
+          <div class="col-md-6">
+            <span class="badge-new mb-3 d-inline-block">ƯU ĐÃI ĐẶC BIỆT</span>
+            <h2 class="section-title fw-bold mb-3">
+              Nội Thất <span style="color: #d4a574">Phòng Ngủ</span> Sang Trọng
+            </h2>
+            <p class="mb-4" style="opacity: 0.9">
+              Tạo không gian nghỉ ngơi hoàn hảo với bộ sưu tập nội thất cao cấp từ HomeBase
+            </p>
+            <button class="btn btn-white-custom">
+              Khám Phá <i class="fas fa-arrow-right ms-2"></i>
+            </button>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="images/hero-section/P2.png" alt="Bedroom" class="product-image" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-section">
+    <div class="row align-items-center mx-4 px-4">
+      <div class="col-lg-5 mb-4 mb-lg-0">
+        <img
+          src="images/hero-section/P3.png"
+          alt="Decorative Room"
+          class="img-fluid decorative-image"
+        />
+      </div>
+
+      <div class="col-lg-7">
+        <span
+          class="text-uppercase text-yellow d-block mb-2 fw-semibold"
+          style="font-size: 0.85rem; letter-spacing: 1px"
+        >
+          VỀ HOMEBASE
+        </span>
+        <h2 class="section-title fw-bold mb-4">
+          Hành Trình Tạo Nên <span class="highlight-text">Không Gian Hoàn Hảo</span>
+        </h2>
+        <p class="text-muted mb-4">
+          Từ năm 2000, HomeBase đã không ngừng sáng tạo và phát triển, mang đến những sản phẩm nội
+          thất cao cấp và thiết kế tinh tế cho hàng triệu gia đình Việt Nam. Chúng tôi cam kết mang
+          đến không gian sống đẹp và tiện nghi cho mọi tổ gia đình.
+        </p>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-number">25+</div>
+              <div class="feature-label">Năm Kinh Nghiệm</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-number">15K+</div>
+              <div class="feature-label">Khách Hàng Tin Tưởng</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="feature-card">
+              <div class="feature-number">99%</div>
+              <div class="feature-label">Hài Lòng</div>
+            </div>
+          </div>
+        </div>
+
+        <hr style="border: 2px solid var(--color-accent)" class="mt-4 mb-4" />
+        <div class="d-flex align-items-center">
+          <div class="brand-circle me-3">
+            <img
+              src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=80&h=80&fit=crop"
+              alt="Brand"
+              class="brand-image"
+            />
+          </div>
+          <div>
+            <h6 class="mb-0 fw-bold">Nguyễn Bảo Huy</h6>
+            <small class="text-muted">Founder & CEO HomeBase</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

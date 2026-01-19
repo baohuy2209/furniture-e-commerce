@@ -1,0 +1,108 @@
+<header class="homebase-header">
+  <div class="top-bar">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="contact-info d-flex gap-4">
+            <a href="tel:+84901234567" class="contact-link">
+              <i class="fas fa-phone-alt me-2"></i>+84 901 234 567
+            </a>
+            <a href="mailto:info@homebase.vn" class="contact-link">
+              <i class="fas fa-envelope me-2"></i>info@homebase.vn
+            </a>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex justify-content-end align-items-center gap-3 header-social">
+            <span class="social-label">Theo dõi chúng tôi:</span>
+            <div class="social-links d-flex gap-2">
+              <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="main-nav navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="logo.png" alt="HomeBase Logo" class="logo-img me-2" />
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link" [class]="getCurrentUrl() == 'home' ? 'active' : ''" href="/"
+              >Trang Chủ</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [class]="getCurrentUrl() == 'products' ? 'active' : ''"
+              href="/products"
+              >Sản Phẩm</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class]="getCurrentUrl() == 'events' ? 'active' : ''" href="/events"
+              >Sự Kiện</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [class]="getCurrentUrl() == 'blogs' ? 'active' : ''"
+              href="/blogs"
+              href="/blogs"
+              >Blogs</a
+            >
+          </li>
+        </ul>
+
+        <div class="nav-icons d-flex align-items-center gap-3">
+          <div class="search-wrapper" [class.active]="isSearchOpen">
+            <div class="search-box">
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Tìm kiếm sản phẩm..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+                #searchInput
+              />
+              <button class="search-submit-btn" (click)="onSearch()" aria-label="Submit Search">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+            <button class="icon-btn search-toggle" (click)="toggleSearch()" aria-label="Search">
+              <i class="fas" [class]="isSearchOpen ? 'fa-times' : 'fa-search'"></i>
+            </button>
+          </div>
+          <button class="icon-btn" aria-label="Wishlist">
+            <i class="far fa-heart"></i>
+          </button>
+          <button class="icon-btn position-relative" aria-label="Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge">0</span>
+          </button>
+          <button class="btn btn-login" aria-label="User Account">Đăng nhập</button>
+          <button class="btn btn-signup" aria-label="User Account">Đăng kí</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

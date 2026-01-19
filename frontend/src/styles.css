@@ -1,0 +1,133 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+:root {
+  /* Màu sắc chính HomeBase */
+  --color-primary: #2d5f3f; /* Xanh nội thất */
+  --color-secondary: #8b7355; /* Nâu gỗ */
+  --color-accent: #c9a66b; /* Vàng đồng */
+  --color-bg: #f8f7f4; /* Nền sáng */
+  --color-white: #ffffff;
+  --color-border: #e8e4dc;
+  --color-text: #2c2c2c;
+  --color-text-light: #6b6b6b;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(45, 95, 63, 0.08);
+  --shadow-md: 0 4px 16px rgba(45, 95, 63, 0.1);
+  --shadow-lg: 0 8px 24px rgba(45, 95, 63, 0.15);
+  /* Màu sắc  trang sự kiện */
+  /* Color Palette */
+  --color-bg-primary: #0d0d0d;
+  --color-bg-secondary: #1a1a1a;
+  --color-bg-tertiary: #252525;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b8b8b8;
+  --color-text-muted: #808080;
+
+  /* Accent Colors */
+  --color-accent-gold: #d4af37;
+  --color-accent-gold-dark: #b8962f;
+  --color-accent-bronze: #cd7f32;
+  --color-gradient-start: #d4af37;
+  --color-gradient-end: #f4d03f;
+
+  /* Status Colors */
+  --color-success: #10b981;
+  --color-live: #ef4444;
+
+  /* Shadows & Effects */
+  --shadow-event-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-event-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-event-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-event-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
+  --glow-gold: 0 0 20px rgba(212, 175, 55, 0.3);
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Typography */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --success-color: #28a745;
+  --light-bg: #f8f9fa;
+  --border-color: #dee2e6;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-family: var(--font-body);
+}
+.section-title {
+  font-family: var(--font-heading);
+}
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+.text-primary-ev {
+  color: var(--color-text-primary);
+}
+.text-secondary-ev {
+  color: var(--color-text-secondary);
+}
+.text-muted-ev {
+  color: var(--color-text-secondary);
+}
+.bg-primary-ev {
+  background-color: var(--color-bg-primary);
+}
+.bg-secondary-ev {
+  background-color: var(--color-bg-secondary);
+}
+.bg-tertiary-ev {
+  background-color: var(--color-bg-tertiary);
+}
+.text-err {
+  color: var(--color-live);
+}
+.text-success {
+  color: var(--color-success);
+}
+.text-yellow {
+  color: var(--color-accent);
+}
+.table-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.main-admin-content {
+  margin-left: 260px;
+  padding: 20px;
+  background: #f8f9fa;
+  min-height: 100vh;
+}

@@ -1,0 +1,13 @@
+<p>settings-breadcrumb works!</p>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="/home"><i class="bi bi-house-door"></i> Trang chủ</a>
+    </li>
+    @for (item of getCurrentUrl(); track $index; let i = $index) {
+      <li class="breadcrumb-item" [class]="i == getCurrentUrl().length - 1 ? 'active' : ''">
+        <a href="#">{{ item }}</a>
+      </li>
+    }
+  </ol>
+</nav>

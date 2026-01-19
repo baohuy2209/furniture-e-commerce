@@ -1,0 +1,250 @@
+.hero-section {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+/* Background Images with Transition */
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.08);
+  transition:
+    opacity 1s ease,
+    transform 2s ease;
+}
+
+.hero-background.active {
+  opacity: 1;
+  z-index: 1;
+  transform: scale(1);
+}
+
+.hero-background.inactive {
+  opacity: 0;
+  z-index: 0;
+}
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+.hero-content {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.hero-text {
+  max-width: 600px;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: #e0e8f0;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary-hero {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  padding: 14px 35px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+}
+
+.btn-primary-hero:hover {
+  transform: translatex(10px);
+  box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
+}
+
+.btn-secondary-hero {
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  padding: 12px 35px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary-hero:hover {
+  background-color: #ffffff;
+  color: #1e3a5f;
+  transform: translateY(-2px);
+}
+
+/* Right Side - Image Gallery */
+.hero-gallery {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding-left: 50px;
+  transition: transform 0.8s ease-in-out;
+  overflow: hidden;
+  width: 100%;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-item:hover {
+  transform: scale(1.05) translateX(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.gallery-item.active {
+  border: 3px solid #d4a574;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+}
+.hero-tag {
+  width: fit-content;
+  background-color: var(--color-bg);
+  color: #1e3a5f;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-tag i {
+  color: var(--color-accent);
+}
+.floating-tag {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #1e3a5f;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 5;
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+
+.floating-tag i {
+  color: #d4a574;
+  font-size: 1.2rem;
+}
+
+.tag-warranty {
+  top: 30%;
+  right: 40%;
+  animation-delay: 0s;
+}
+
+.tag-delivery {
+  bottom: 30%;
+  right: 25%;
+  animation-delay: 1.5s;
+}
+
+@keyframes floatUpDown {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-gallery {
+    margin-top: 3rem;
+    padding-left: 0;
+  }
+
+  .floating-tag {
+    font-size: 0.8rem;
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .gallery-item img {
+    height: 240px;
+  }
+
+  .floating-tag {
+    display: none;
+  }
+}

@@ -1,0 +1,1575 @@
+[
+  {
+    "product_id": "1",
+    "product_name": "Hammpton conrner sofa with adjustable back and storage on left side",
+    "brand_name": "Hammpton",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["sofa", "living room", "hampton"],
+    "important_funtions": [
+      "Adjustable back for different seating positions",
+      "Built-in storage in right armrest"
+    ],
+    "product_component": {
+      "sofa_direction": ["left", "right"],
+      "ulphostery": [
+        "Belge Arezzon Fabric 3331",
+        "Belge Lucca Fabric 3320",
+        "Camel Lucca Fabric 3324",
+        "Green Arezzo Fabric 3334",
+        "Light Brown Arezzo Fabric 3332",
+        "Ochre Arezzo Fabric 3333",
+        "Red Lucca Fabric 3323",
+        "Stone Grey Napoli Fabric 2255",
+        "White Lucca Fabric 3321",
+        "White Rimini Fabric 3083"
+      ]
+    },
+    "image_url": [
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image1.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image2.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image3.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image4.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image5.png"
+    ]
+  },
+  {
+    "product_id": "2",
+    "product_name": "Hammpton conrner sofa with adjustable back and storage on right side",
+    "brand_name": "Hammpton",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["sofa", "living room", "hampton"],
+    "important_funtions": [
+      "Adjustable back for different seating positions",
+      "Built-in storage in right armrest"
+    ],
+    "product_component": {
+      "sofa_direction": ["left", "right"],
+      "ulphostery": [
+        "Belge Arezzon Fabric 3331",
+        "Belge Lucca Fabric 3320",
+        "Camel Lucca Fabric 3324",
+        "Green Arezzo Fabric 3334",
+        "Light Brown Arezzo Fabric 3332",
+        "Ochre Arezzo Fabric 3333",
+        "Red Lucca Fabric 3323",
+        "Stone Grey Napoli Fabric 2255",
+        "White Lucca Fabric 3321",
+        "White Rimini Fabric 3083"
+      ]
+    },
+    "image_url": [
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image1.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image2.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image3.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image4.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image5.png"
+    ]
+  },
+  {
+    "product_id": "37",
+    "product_name": "Belize coral sculpture",
+    "brand_name": "Belize",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["sculpture", "living room", "belize"],
+    "important_function": "",
+    "image_url": [
+      "images/products/living_room/belize_coral_sculpture/image1.png",
+      "images/products/living_room/belize_coral_sculpture/image2.png",
+      "images/products/living_room/belize_coral_sculpture/image3.png",
+      "images/products/living_room/belize_coral_sculpture/image4.png"
+    ]
+  },
+  {
+    "product_id": "38",
+    "product_name": "Float vase",
+    "brand_name": "Float",
+    "description": "",
+    "discount_percent": 0,
+    "is_assembly": true,
+    "warranty": 6,
+    "tags": ["vase", "bathroom", "float"],
+    "important_function": "",
+    "image_url": [
+      "images/products/bathroom/float_vase/image1.png",
+      "images/products/bathroom/float_vase/image2.png",
+      "images/products/bathroom/float_vase/image3.png",
+      "images/products/bathroom/float_vase/image4.png",
+      "images/products/bathroom/float_vase/image5.png"
+    ]
+  },
+  {
+    "product_id": "39",
+    "product_name": "Flora 5 sculpture",
+    "brand_name": "Flora 5",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["sculpture", "living room", "flora"],
+    "important_function": "Handmade",
+    "image_url": [
+      "images/products/living_room/flora_5_sculpture/image1.png",
+      "images/products/living_room/flora_5_sculpture/image2.png",
+      "images/products/living_room/flora_5_sculpture/image3.png",
+      "images/products/living_room/flora_5_sculpture/image4.png"
+    ]
+  },
+  {
+    "product_id": "40",
+    "product_name": "Geometric sculpture",
+    "brand_name": "Geometric",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["sculpture", "living room", "geometric"],
+    "important_function": "For decoration use only",
+    "image_url": [
+      "images/products/living_room/geometric_sculpture/image1.png",
+      "images/products/living_room/geometric_sculpture/image2.png",
+      "images/products/living_room/geometric_sculpture/image3.png"
+    ]
+  },
+  {
+    "product_id": "41",
+    "product_name": "Luna metal vase",
+    "brand_name": "Luna",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["vase", "living room", "luna"],
+    "important_function": "",
+    "image_url": [
+      "images/products/living_room/luna_metal_vase/image1.png",
+      "images/products/living_room/luna_metal_vase/image2.png",
+      "images/products/living_room/luna_metal_vase/image3.png",
+      "images/products/living_room/luna_metal_vase/image4.png",
+      "images/products/living_room/luna_metal_vase/image5.png",
+      "images/products/living_room/luna_metal_vase/image6.png"
+    ]
+  },
+  {
+    "product_id": "42",
+    "product_name": "Magnolia sculpture",
+    "brand_name": "Magnolia",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["sculpture", "living room", "magnolia"],
+    "important_function": "",
+    "image_url": ["images/products/living_room/magnolia_sculpture/image1.png"]
+  },
+  {
+    "product_id": "43",
+    "product_name": "Mango leaf sculpture",
+    "brand_name": "Mango",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["sculpture", "living room", "mango"],
+    "important_function": "",
+    "image_url": ["images/products/living_room/mango_leaf_sculpture/image1.png"]
+  },
+  {
+    "product_id": "44",
+    "product_name": "Rubble vase",
+    "brand_name": "Rubble",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["vase", "outdoor", "rubble"],
+    "important_function": "Mouth-blown, Multiple layer glass",
+    "image_url": [
+      "images/products/outdoor/rubble_vase/image1.png",
+      "images/products/outdoor/rubble_vase/image2.png"
+    ]
+  },
+  {
+    "product_id": "45",
+    "product_name": "Sweet art bowl",
+    "brand_name": "Sweet art",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["bowl", "kitchen", "sweet art"],
+    "important_function": "",
+    "image_url": [
+      "images/products/kitchen/sweet_art_bowl/image1.png",
+      "images/products/kitchen/sweet_art_bowl/image2.png",
+      "images/products/kitchen/sweet_art_bowl/image3.png"
+    ]
+  },
+  {
+    "product_id": "45",
+    "product_name": "Sweet art bowl",
+    "brand_name": "Sweet art",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["bowl", "kitchen", "sweet art"],
+    "important_function": "",
+    "image_url": [
+      "images/products/kitchen/sweet_art_bowl/image1.png",
+      "images/products/kitchen/sweet_art_bowl/image2.png",
+      "images/products/kitchen/sweet_art_bowl/image3.png"
+    ]
+  },
+  {
+    "product_id": "46",
+    "product_name": "Princeton barstool",
+    "brand_name": "Princeton",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["barstool", "dining room", "princeton"],
+    "product_component": {
+      "ulphostery": [
+        "Belge Arezzo Fabric 3331",
+        "Camel Lucca Fabric 3324",
+        "Sand Bologna Fabric 3254"
+      ]
+    },
+    "important_function": "",
+    "image_url": ["images/products/dining_room/princeton_barstool/image1.png"]
+  },
+  {
+    "product_id": "47",
+    "product_name": "Princeton armchair",
+    "brand_name": "Princeton",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["armchair", "outdoor", "princeton"],
+    "product_component": {
+      "ulphostery": [
+        "Belge Arezzo Fabric 3331",
+        "Camel Lucca Fabric 3324",
+        "Sand Bologna Fabric 3254"
+      ]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/outdoor/princeton_armchair/image1.png",
+      "images/products/outdoor/princeton_armchair/image2.png",
+      "images/products/outdoor/princeton_armchair/image3.png",
+      "images/products/outdoor/princeton_armchair/image4.png",
+      "images/products/outdoor/princeton_armchair/image5.png",
+      "images/products/outdoor/princeton_armchair/image6.png"
+    ]
+  },
+  {
+    "product_id": "47",
+    "product_name": "Princeton armchair",
+    "brand_name": "Princeton",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["armchair", "outdoor", "princeton"],
+    "product_component": {
+      "ulphostery": [
+        "Belge Arezzo Fabric 3331",
+        "Camel Lucca Fabric 3324",
+        "Sand Bologna Fabric 3254"
+      ]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/outdoor/princeton_armchair/image1.png",
+      "images/products/outdoor/princeton_armchair/image2.png",
+      "images/products/outdoor/princeton_armchair/image3.png",
+      "images/products/outdoor/princeton_armchair/image4.png",
+      "images/products/outdoor/princeton_armchair/image5.png",
+      "images/products/outdoor/princeton_armchair/image6.png"
+    ]
+  },
+  {
+    "product_id": "48",
+    "product_name": "Princeton bench",
+    "brand_name": "Princeton",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["bench", "outdoor", "princeton"],
+    "product_component": {
+      "ulphostery": [
+        "Belge Arezzo Fabric 3331",
+        "Camel Lucca Fabric 3324",
+        "Sand Bologna Fabric 3254"
+      ]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/outdoor/princeton_bench/image1.png",
+      "images/products/outdoor/princeton_bench/image2.png",
+      "images/products/outdoor/princeton_bench/image3.png"
+    ]
+  },
+  {
+    "product_id": "49",
+    "product_name": "Tone mirror",
+    "brand_name": "Tone",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["mirror", "bathroom", "tone"],
+    "product_component": {
+      "size": ["Size 27", "Size 39"],
+      "color": ["Brown", "Clear", "Dark gray"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/bathroom/tone_mirror/image1.png",
+      "images/products/bathroom/tone_mirror/image2.png",
+      "images/products/bathroom/tone_mirror/image3.png",
+      "images/products/bathroom/tone_mirror/image4.png",
+      "images/products/bathroom/tone_mirror/image5.png",
+      "images/products/bathroom/tone_mirror/image6.png",
+      "images/products/bathroom/tone_mirror/image7.png"
+    ]
+  },
+  {
+    "product_id": "50",
+    "product_name": "Medina mirror",
+    "brand_name": "Medina",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["mirror", "living room", "medina"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": ["images/products/living_room/medina_mirror/image1.png"]
+  },
+  {
+    "product_id": "51",
+    "product_name": "Fermo media unit with drop-down door and drawer",
+    "brand_name": "Fermo",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["drawer", "living room", "fermo"],
+    "product_component": {
+      "material": ["Charcoal gray lacquered", "Matte ash gray lacquered", "Matte white lacquered"]
+    },
+    "important_function": "With drop-down doors and drawer",
+    "image_url": [
+      "images/products/living_room/fermo_media_unit_with_drop-down_door_and_drawer/image1.png",
+      "images/products/living_room/fermo_media_unit_with_drop-down_door_and_drawer/image2.png",
+      "images/products/living_room/fermo_media_unit_with_drop-down_door_and_drawer/image3.png",
+      "images/products/living_room/fermo_media_unit_with_drop-down_door_and_drawer/image4.png",
+      "images/products/living_room/fermo_media_unit_with_drop-down_door_and_drawer/image5.png"
+    ]
+  },
+  {
+    "product_id": "52",
+    "product_name": "Cancun coffee table",
+    "brand_name": "Cancun",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["table", "outdoor", "cancun"],
+    "product_component": {
+      "material": ["Matte ash gray structure lacquered", "Matte white structure lacquered"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/outdoor/cancun_coffee_table/image1.png",
+      "images/products/outdoor/cancun_coffee_table/image2.png"
+    ]
+  },
+  {
+    "product_id": "53",
+    "product_name": "Cancun seat and back cushion for lounge sofa",
+    "brand_name": "Cancun",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["cushion", "outdoor", "cancun"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/outdoor/cancun_seat_and_back_cushion_for_lounge_sofa/image1.png",
+      "images/products/outdoor/cancun_seat_and_back_cushion_for_lounge_sofa/image2.png",
+      "images/products/outdoor/cancun_seat_and_back_cushion_for_lounge_sofa/image3.png",
+      "images/products/outdoor/cancun_seat_and_back_cushion_for_lounge_sofa/image4.png",
+      "images/products/outdoor/cancun_seat_and_back_cushion_for_lounge_sofa/image5.png",
+      "images/products/outdoor/cancun_seat_and_back_cushion_for_lounge_sofa/matt_green_boucle/image1.png",
+      "images/products/outdoor/cancun_seat_and_back_cushion_for_lounge_sofa/matt_green_boucle/image2.png",
+      "images/products/outdoor/cancun_seat_and_back_cushion_for_lounge_sofa/matt_green_boucle/image3.png"
+    ]
+  },
+  {
+    "product_id": "54",
+    "product_name": "Whirlwind rug",
+    "brand_name": "Whirlwind",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["rug", "bathroom", "whirlwind"],
+    "product_component": {
+      "size": ["w67_l94", "w78_l118"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/bathroom/whirlwind_rug/image1.png",
+      "images/products/bathroom/whirlwind_rug/image2.png",
+      "images/products/bathroom/whirlwind_rug/image3.png",
+      "images/products/bathroom/whirlwind_rug/image4.png"
+    ]
+  },
+  {
+    "product_id": "55",
+    "product_name": "Form rug",
+    "brand_name": "Form",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["rug", "living room", "form"],
+    "product_component": {
+      "size": ["w31_l98", "w67_l94", "w78_l118"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/living_room/form_rug/image1.png",
+      "images/products/living_room/form_rug/image2.png",
+      "images/products/living_room/form_rug/image3.png",
+      "images/products/living_room/form_rug/image4.png"
+    ]
+  },
+  {
+    "product_id": "56",
+    "product_name": "Furrow rug",
+    "brand_name": "Furrow",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["rug", "living room", "furrow"],
+    "product_component": {
+      "size": ["size_59", "size_98"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/living_room/furrow_rug/image1.png",
+      "images/products/living_room/furrow_rug/image2.png",
+      "images/products/living_room/furrow_rug/image3.png"
+    ]
+  },
+  {
+    "product_id": "57",
+    "product_name": "Movement rug",
+    "brand_name": "Movement",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["rug", "living room", "movement"],
+    "product_component": {
+      "size": ["w67_l94", "w78_l118"],
+      "color": ["Stone Gray", "White"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/living_room/movement_rug/image1.png",
+      "images/products/living_room/movement_rug/image2.png",
+      "images/products/living_room/movement_rug/image3.png",
+      "images/products/living_room/movement_rug/image4.png"
+    ]
+  },
+  {
+    "product_id": "58",
+    "product_name": "Kip floor lamp",
+    "brand_name": "Kip",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["lamp", "bedroom", "kip"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/bedroom/kip_floor_lamp/image1.png",
+      "images/products/bedroom/kip_floor_lamp/image2.png"
+    ]
+  },
+  {
+    "product_id": "59",
+    "product_name": "Paris table lamp",
+    "brand_name": "Paris",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["lamp", "dining room", "paris"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/dining_room/paris_table_lamp/image1.png",
+      "images/products/dining_room/paris_table_lamp/image2.png",
+      "images/products/dining_room/paris_table_lamp/image3.png",
+      "images/products/dining_room/paris_table_lamp/image4.png",
+      "images/products/dining_room/paris_table_lamp/image5.png",
+      "images/products/dining_room/paris_table_lamp/image.png"
+    ]
+  },
+  {
+    "product_id": "60",
+    "product_name": "Stockholm table lamp",
+    "brand_name": "Stockholm",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["lamp", "living room", "stockholm"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": ["images/products/living_room/stockholm_table_lamp/image1.png"]
+  },
+  {
+    "product_id": "61",
+    "product_name": "Curious floor lamp",
+    "brand_name": "Curiuos",
+    "description": "",
+    "discount_percent": 5,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["lamp", "living room", "curious"],
+    "product_component": {
+      "color": ["Black", "Warm gray"]
+    },
+    "important_function": "",
+    "image_url": ["images/products/living_room/curious_floor_lamp/image1.png"]
+  },
+  {
+    "product_id": "62",
+    "product_name": "Curious table lamp",
+    "brand_name": "Curiuos",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["lamp", "living room", "curious"],
+    "product_component": {
+      "color": ["Black", "Warm gray"]
+    },
+    "important_function": "",
+    "image_url": ["images/products/living_room/curious_table_lamp/image1.png"]
+  },
+  {
+    "product_id": "63",
+    "product_name": "Cupertino desk",
+    "brand_name": "Cupertino",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["desk", "living room", "cupertino"],
+    "product_component": {
+      "tabletop": ["Ash Gray", "Black", "White"]
+    },
+    "important_function": "",
+    "image_url": ["images/products/living_room/cupertino_desk/image1.png"]
+  },
+  {
+    "product_id": "64",
+    "product_name": "Flaskpost light",
+    "brand_name": "Flaskpost",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["light", "bathroom", "flaskpost"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/bathroom/flaskpost/image2.png",
+      "images/products/bathroom/flaskpost/image3.png"
+    ]
+  },
+  {
+    "product_id": "65",
+    "product_name": "Frihult light",
+    "brand_name": "Frihult",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["light", "bathroom", "frihukt"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/bathroom/frihult/image1.png",
+      "images/products/bathroom/frihult/image2.png",
+      "images/products/bathroom/frihult/image3.png",
+      "images/products/bathroom/frihult/image4.png"
+    ]
+  },
+  {
+    "product_id": "66",
+    "product_name": "Havsdun light",
+    "brand_name": "Havsdun",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["light", "bathroom", "havsdun"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/bathroom/havsdun/image2.png",
+      "images/products/bathroom/havsdun/image3.png",
+      "images/products/bathroom/havsdun/image4.png"
+    ]
+  },
+  {
+    "product_id": "67",
+    "product_name": "Kabomba light",
+    "brand_name": "Kabomba",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["light", "bathroom", "kabomba"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/bathroom/havsdun/image1.png",
+      "images/products/bathroom/havsdun/image2.png",
+      "images/products/bathroom/havsdun/image3.png"
+    ]
+  },
+  {
+    "product_id": "68",
+    "product_name": "Silverglans light",
+    "brand_name": "Silverglans",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["light", "bathroom", "silverglans"],
+    "product_component": {
+      "size": ["Size 18", "Size 24"],
+      "color": ["Black", "White"]
+    },
+    "important_function": "",
+    "image_url": []
+  },
+  {
+    "product_id": "69",
+    "product_name": "Toronto mirror arch",
+    "brand_name": "Toronto",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 6,
+    "tags": ["light", "bathroom", "toronto"],
+    "product_component": {
+      "size": ["Size 31", "Size 43", "Size arch", "Size oval"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/bathroom/toronto_mirror_arch/image1.png",
+      "images/products/bathroom/toronto_mirror_arch/image2.png",
+      "images/products/bathroom/toronto_mirror_arch/image3.png",
+      "images/products/bathroom/toronto_mirror_arch/image4.png"
+    ]
+  },
+  {
+    "product_id": "3",
+    "product_name": "Expose Side Table",
+    "brand_name": "Expose",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["table", "living room", "hampton"],
+    "product_component": {
+      "color": ["Black", "Warm Gray"]
+    },
+    "important_function": "Handcrafted artisan product, minor variation from piece to piece",
+    "image_url": [
+      "images/products/living_room/expose_side_table/image1.png",
+      "images/products/living_room/expose_side_table/image2.png",
+      "images/products/living_room/expose_side_table/image3.png",
+      "images/products/living_room/expose_side_table/image4.png",
+      "images/products/living_room/expose_side_table/image5.png"
+    ]
+  },
+
+  {
+    "product_id": "4",
+    "product_name": "Seoul Dining Chair",
+    "brand_name": "Seoul",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["chair", "dining room", "seoul"],
+    "product_component": {
+      "leg": ["Natural_solid_oak", "Solid_dark_oak", "Solid_oak_stained_black"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/dining_room/seoul_dining_chair/image1.png",
+      "images/products/dining_room/seoul_dining_chair/image2.png",
+      "images/products/dining_room/seoul_dining_chair/image3.png",
+      "images/products/dining_room/seoul_dining_chair/image4.png",
+      "images/products/dining_room/seoul_dining_chair/image5.png"
+    ]
+  },
+  {
+    "product_id": "5",
+    "product_name": "Como Bookcase",
+    "brand_name": "Como",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["bookcase", "bedroom room", "como"],
+    "product_component": {
+      "material": ["Dark Oak Veneer", "Natural Oak Veneer"]
+    },
+    "important_function": "Can be combined with Lugano wall cabinets. Can be mounted horizontally or vertically",
+    "image_url": [
+      "images/products/bedroom_room/como_bookcase/image1.png",
+      "images/products/bedroom_room/como_bookcase/image2.png",
+      "images/products/bedroom_room/como_bookcase/image3.png",
+      "images/products/bedroom_room/como_bookcase/image4.png",
+      "images/products/bedroom_room/como_bookcase/image5.png"
+    ]
+  },
+  {
+    "product_id": "6",
+    "product_name": "Lounge Chair",
+    "brand_name": "Lounge",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["chair", "living room", "lounge"],
+    "product_component": {
+      "uphostery": [
+        "Beige_lucca_fabric_3320",
+        "Blue_capri_fabric_3323",
+        "Green_arezzo_fabric_3334",
+        "Brick_red_rimini_fabric_3088",
+        "Brown_tuscany_fabric_3202"
+      ]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/living_room/lounge_chair/image1.png",
+      "images/products/living_room/lounge_chair/image2.png",
+      "images/products/living_room/lounge_chair/image3.png",
+      "images/products/living_room/lounge_chair/image4.png",
+      "images/products/living_room/lounge_chair/image5.png"
+    ]
+  },
+  {
+    "product_id": "7",
+    "product_name": "Element Nightstand Shelf",
+    "brand_name": "Element",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["nightstand", "bedroom", "element"],
+    "product_component": {
+      "material": [
+        "Dark_oak_veneer_matte_ash_gray_structure_lacquered",
+        "Dark_oak_veneer_matte_black_structure_lacquered",
+        "Matte_ash_gray_matte_black_structure_lacquered",
+        "Matte_ash_gray_matte_gray_structure_lacquered",
+        "Natural_oak_veneer_matte_black_structure_lacquered",
+        "Natural_oak_veneer_matte_gray_structure_lacquered"
+      ]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/bed_room/element_nightstand_shelf/image1.png",
+      "images/products/bed_room/element_nightstand_shelf/image2.png",
+      "images/products/bed_room/element_nightstand_shelf/image3.png",
+      "images/products/bed_room/element_nightstand_shelf/image4.png",
+      "images/products/bed_room/element_nightstand_shelf/image5.png",
+      "images/products/bed_room/element_nightstand_shelf/image6.png",
+      "images/products/bed_room/element_nightstand_shelf/image7.png"
+    ]
+  },
+  {
+    "product_id": "8",
+    "product_name": "Ottawa Dining Chair",
+    "brand_name": "Ottawa",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["chair", "living  room", "ottawa"],
+    "product_component": {
+      "type": [
+        "Matte_ash_gray_structure_lacquered_blackseat",
+        "Matte_ash_gray_structure_lacquered_whiteseat",
+        "Matte_black_structure_lacquered_blackseat",
+        "Matte_black_structure_lacquered_whiteseat"
+      ]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/living_room/ottawa_dining_chair/image1.png",
+      "images/products/living_room/ottawa_dining_chair/image2.png",
+      "images/products/living_room/ottawa_dining_chair/image3.png",
+      "images/products/living_room/ottawa_dining_chair/image4.png"
+    ]
+  },
+  {
+    "product_id": "9",
+    "product_name": "Flora 2 Photo Art",
+    "brand_name": "Flora 2",
+    "description": "",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["photo art", "living room", "flora 2"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/living_room/flora_2_photo_art/image1.png",
+      "images/products/living_room/flora_2_photo_art/image2.png",
+      "images/products/living_room/flora_2_photo_art/image3.png",
+      "images/products/living_room/flora_2_photo_art/image4.png",
+      "images/products/living_room/flora_2_photo_art/image5.png",
+      "images/products/living_room/flora_2_photo_art/image6.png"
+    ]
+  },
+  {
+    "product_id": "10",
+    "product_name": "Smaecker Cutery Tray",
+    "brand_name": "Smaecker",
+    "description": "Helps keep the kitchen drawer organised, so you can spend more time on setting the table nicely and less on looking for lost cutlery. A simple and practical cutlery tray in plastic that’s easy to clean.",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["cutery tray", "kitchen", "smaecker"],
+    "product_component": {
+      "color": ["anthracite", "bright_green"]
+    },
+    "important_function": "",
+    "image_url": []
+  },
+  {
+    "product_id": "11",
+    "product_name": "Trivet Stainless Steel",
+    "brand_name": "LAMPLIG",
+    "description": "You can use this trivet as a stand for hot pots and pans on the dining table or for storing saucepans on the kitchen worktop. The rubber feet protect the underlying surface from both heat and scratches.",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["trivet", "kitchen", "lamplig"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/kitchen/trivet_stainless_steel/image1.png",
+      "images/products/kitchen/trivet_stainless_steel/image2.png",
+      "images/products/kitchen/trivet_stainless_steel/image3.png"
+    ]
+  },
+  {
+    "product_id": "12",
+    "product_name": "Adjustable Organiser",
+    "brand_name": "UPPDATERA",
+    "description": "A flexible organiser to manage the mess in your kitchen drawers. Simply cut and rearrange the dividers to fit your storage needs. The soft material dampens sound and upscales the look inside your drawers.",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["organiser", "kitchen", "uppdatera"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/kitchen/adjustable_organiser/image1.png",
+      "images/products/kitchen/adjustable_organiser/image2.png",
+      "images/products/kitchen/adjustable_organiser/image3.png"
+    ]
+  },
+  {
+    "product_id": "13",
+    "product_name": "Food Storage Box",
+    "brand_name": "CHOKLADHAJ",
+    "description": "The CHOKLADHAJ series helps you keep your worktop and pantry organised. This stackable box is perfect for food that thrives at room temperature – pair it with the storage for kitchen utensils and spices.",
+    "discount_percent": 10,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["storage box", "kitchen", "chokladhaj"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/kitchen/food_storage_box/image1.png",
+      "images/products/kitchen/food_storage_box/image2.png",
+      "images/products/kitchen/food_storage_box/image3.png",
+      "images/products/kitchen/food_storage_box/image4.png",
+      "images/products/kitchen/food_storage_box/image5.png",
+      "images/products/kitchen/food_storage_box/image6.png"
+    ]
+  },
+  {
+    "product_id": "14",
+    "product_name": "Madrid coffee table",
+    "brand_name": "Madrid",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["coffee table", "living room", "madrid"],
+    "product_component": {
+      "size": ["h_14_17_31", "h_14_17_39"]
+    },
+    "important_function": "Can be assembled in two different heights",
+    "image_url": [
+      "images/products/living_room/madrid_coffee_table/image1.png",
+      "images/products/living_room/madrid_coffee_table/image2.png",
+      "images/products/living_room/madrid_coffee_table/image3.png",
+      "images/products/living_room/madrid_coffee_table/image4.png",
+      "images/products/living_room/madrid_coffee_table/image5.png",
+      "images/products/living_room/madrid_coffee_table/image6.png",
+      "images/products/living_room/madrid_coffee_table/image7.png"
+    ]
+  },
+  {
+    "product_id": "15",
+    "product_name": "Augusta extendable dining table",
+    "brand_name": "Augusta",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["dining table", "dining room", "augusta"],
+    "product_component": {
+      "size": ["h29_w35_l63", "h29_w41_l90"],
+      "tabletop": ["table_ash_ceramic", "table_dark_marble_ceramic", "table_dark_oak_veneer"]
+    },
+    "important_function": "With built-in extension leaf. Extension leaf is neatly hidden underneath the table top. Can be extended one-handed and with minimal effort",
+    "image_url": [
+      "images/products/dining_room/augusta_extendable_dining_table/image1.png",
+      "images/products/dining_room/augusta_extendable_dining_table/image2.png",
+      "images/products/dining_room/augusta_extendable_dining_table/image3.png",
+      "images/products/dining_room/augusta_extendable_dining_table/image4.png",
+      "images/products/dining_room/augusta_extendable_dining_table/image5.png",
+      "images/products/dining_room/augusta_extendable_dining_table/image6.png"
+    ]
+  },
+  {
+    "product_id": "16",
+    "product_name": "Dining table hauge",
+    "brand_name": "Hauge",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["dining table", "dining room", "hauge"],
+    "product_component": {
+      "size": ["h29_w39_l63", "h29_w39_l73", "h29_w39_l94"],
+      "tabletop": ["table_dark_oak_veneer", "table_natural_oak_veneer"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/dining_room/hauge_dining_table/image1.png",
+      "images/products/dining_room/hauge_dining_table/image2.png",
+      "images/products/dining_room/hauge_dining_table/image3.png",
+      "images/products/dining_room/hauge_dining_table/image4.png",
+      "images/products/dining_room/hauge_dining_table/image5.png"
+    ]
+  },
+  {
+    "product_id": "17",
+    "product_name": "Kingston dining table",
+    "brand_name": "Kingston",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["dining table", "dining room", "kingston"],
+    "product_component": {
+      "size": ["h29_w33_l59", "h29_w39_l63", "h29_w39_l77"],
+      "tabletop": [
+        "table_dark_oak_veneer",
+        "table_natural_oak_veneer",
+        "table_ash_ceramic",
+        "table_matte_while_lacquered"
+      ]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/dining_room/kingston_dining_table/image1.png",
+      "images/products/dining_room/kingston_dining_table/image2.png",
+      "images/products/dining_room/kingston_dining_table/image3.png",
+      "images/products/dining_room/kingston_dining_table/image4.png",
+      "images/products/dining_room/kingston_dining_table/image5.png"
+    ]
+  },
+  {
+    "product_id": "18",
+    "product_name": "Dining table madrid",
+    "brand_name": "Madrid",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["dining table", "dining room", "madrid"],
+    "product_component": {
+      "tabletop": ["table_dark_oak_veneer", "table_matte_white_lacquered"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/dining_room/madrid_dining_table/image1.png",
+      "images/products/dining_room/madrid_dining_table/image2.png",
+      "images/products/dining_room/madrid_dining_table/image3.png",
+      "images/products/dining_room/madrid_dining_table/image4.png"
+    ]
+  },
+  {
+    "product_id": "19",
+    "product_name": "Torino conference/dining table",
+    "brand_name": "Torino",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["dining table", "dining room", "torino"],
+    "product_component": {
+      "size": ["h29_w31_l47", "h29_w31_l71"],
+      "tabletop": ["table_matte_black_lacquered", "table_matte_white_lacquered"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/dining_room/torino_dining_table/image1.png",
+      "images/products/dining_room/torino_dining_table/image2.png",
+      "images/products/dining_room/torino_dining_table/image3.png"
+    ]
+  },
+  {
+    "product_id": "20",
+    "product_name": "Dining table santiago",
+    "brand_name": "Santiago",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["dining table", "dining room", "santiago"],
+    "product_component": {
+      "size": ["h29_w39_l70", "h29_w39_l90"],
+      "tabletop": [
+        "table_ash_ceramic",
+        "table_dark_oak_veneer",
+        "table_natural_oak",
+        "table_brown_ceramic",
+        "table_white_ceramic"
+      ],
+      "leg": ["leg_dark_oak_veneer", "leg_natural_oak_veneer", "leg_matte_ash_gray_lacquered"]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/dining_room/santiago_dining_table/image1.png",
+      "images/products/dining_room/santiago_dining_table/image2.png",
+      "images/products/dining_room/santiago_dining_table/image3.png",
+      "images/products/dining_room/santiago_dining_table/image4.png",
+      "images/products/dining_room/santiago_dining_table/image5.png",
+      "images/products/dining_room/santiago_dining_table/image6.png",
+      "images/products/dining_room/santiago_dining_table/image7.png",
+      "images/products/dining_room/santiago_dining_table/image8.png",
+      "images/products/dining_room/santiago_dining_table/image9.png",
+      "images/products/dining_room/santiago_dining_table/image10.png"
+    ]
+  },
+  {
+    "product_id": "21",
+    "product_name": "Alicante extendable dining table",
+    "brand_name": "Alicante",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["dining table", "dining room", "alicante"],
+    "product_component": {
+      "size": ["h74_w99_l183"],
+      "tabletop": [
+        "table_ash_ceramic",
+        "table_dark_gray_stone_ceramic",
+        "table_dark_oak_veneer",
+        "table_matt_ash_grey_lacquered",
+        "table_white_ceramic",
+        "table_matte_white_lacquered",
+        "table_brown_ceramic"
+      ],
+      "leg": ["leg_matt_ash_grey_lacquered", "leg_matt_white_lacquered", "leg_matt_black_lacquered"]
+    },
+    "important_function": "Extension leaf is neatly hidden underneath the table top.With built-in extension leaf.Can be extended one-handed and with minimal effort",
+    "image_url": [
+      "images/products/dining_room/alicante_dining_table/image1.png",
+      "images/products/dining_room/alicante_dining_table/image2.png",
+      "images/products/dining_room/alicante_dining_table/image3.png",
+      "images/products/dining_room/alicante_dining_table/image4.png",
+      "images/products/dining_room/alicante_dining_table/image5.png",
+      "images/products/dining_room/alicante_dining_table/image6.png"
+    ]
+  },
+  {
+    "product_id": "22",
+    "product_name": "Bolzano bed",
+    "brand_name": "Bolzano",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["bed", "bedroom", "bolzano"],
+    "product_component": {
+      "upholstery": [
+        "light_blue_frisco_fabric_with_aquaclean_2056",
+        "red_lucca_fabric_3323",
+        "white_lucca_fabric_3321"
+      ]
+    },
+    "important_function": "",
+    "image_url": []
+  },
+  {
+    "product_id": "23",
+    "product_name": "Element bed",
+    "brand_name": "Element",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["bed", "bedroom", "element"],
+    "product_component": {
+      "bed_type": ["with_slats_and_storage", "with_slats_without_storage", "without_slats"],
+      "leg": ["dark_oak_veneer", "natural_oak_veneer", "matt_ash_grey_lacquered"],
+      "upholstery": [
+        "green_arezzo_fabric_3334",
+        "orchre_copenhagen_fabric_3312",
+        "orchre_arezzo_fabric_3333",
+        "light_brown_arezzo_fabric_3332",
+        "white_copenhagen_fabric"
+      ]
+    },
+    "important_function": "",
+    "image_url": []
+  },
+  {
+    "product_id": "24",
+    "product_name": "Arlington bed",
+    "brand_name": "Arlington",
+    "description": "",
+    "discount_percent": 15,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["bed", "bedroom", "arlington"],
+    "product_component": {},
+    "important_function": "",
+    "image_url": [
+      "images/products/bedroom/arlington_bed/image1.png",
+      "images/products/bedroom/arlington_bed/image2.png",
+      "images/products/bedroom/arlington_bed/image3.png",
+      "images/products/bedroom/arlington_bed/image4.png"
+    ]
+  },
+  {
+    "product_id": "25",
+    "product_name": "Adelaide armchair",
+    "brand_name": "Adelaide",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 10,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["sofa", "living room", "Adelaide"],
+    "product_component": {
+      "ulphostery": [
+        "Belge Lazio Fabric 3091",
+        "Belge Ravello Fabric 3211",
+        "Blue Bristol Fabric 3065",
+        "Dark Blue Ravello Fabric 3225",
+        "Dark Blue Skagen Fabric 3163",
+        "Dark Green Bristol Fabric 3068",
+        "Dusty Green Ravello Fabric 3223",
+        "Dusty Rose Ravello Fabric 3224",
+        "Green Skagen Fabric 3165",
+        "Grey Ravello Fabric 3222",
+        "Mustard Bristol Fabric 3066",
+        "Sand Ravello Fabric 3220",
+        "Sand Skagen Fabric 3161",
+        "Steel Skagen Fabric 3164"
+      ]
+    },
+    "important_function": "",
+    "image_url": [
+      "images/products/bedroom/adelaide_armchair/image1.png",
+      "images/products/bedroom/adelaide_armchair/image2.png",
+      "images/products/bedroom/adelaide_armchair/image3.png",
+      "images/products/bedroom/adelaide_armchair/image4.png"
+    ]
+  },
+  {
+    "product_id": "26",
+    "product_name": "Adelaide barstool",
+    "brand_name": "Adelaide",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 9,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["sofa", "kitchen", "Adelaide"],
+    "product_component": {
+      "size": ["standard", "tall"],
+      "ulphostery": [
+        "Belge Arezzo Fabric 3331",
+        "Camel Lucca Fabric 3324",
+        "Green Arezzo Fabric 3334",
+        "Green Lucca Fabric 3322",
+        "Light Brown Arezzo Fabric 3332",
+        "Light Gray Frisco Fabric With Aquaclean 2063",
+        "Ochre Arezzo Fabric 3333",
+        "Ochre Copenhagen Fabric 3312",
+        "Red Lucca Fabric 3323",
+        "White Rimini Fabric 3083"
+      ]
+    }
+  },
+  {
+    "product_id": "27",
+    "product_name": "Indivi headrest",
+    "brand_name": "Indivi",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 7,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["headrest", "bedroom", "Indivi"],
+    "product_component": {
+      "ulphostery": [
+        "Belge Skagen Fabric 3160",
+        "Blue Capri Fabric 3233",
+        "Dark Gray Nani Fabric 2111",
+        "Dark Green Frisco Fabric With Aquaclean 2058",
+        "Dusty Blue Frisco Fabric 2275",
+        "Gray Ravello Fabric 3222",
+        "Green Capri Fabric 3232",
+        "Light Gray Bristol Fabric 3060",
+        "Sand Capri Farbic 3231",
+        "Sand Colored Nani Fabric 2110"
+      ]
+    }
+  },
+  {
+    "product_id": "28",
+    "product_name": "Hampton pouf on wheels with storage left and right sides",
+    "brand_name": "Hampton",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 12,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["pouf", "living room", "Hampton"],
+    "product_component": {
+      "ulphostery": ["Blue Bristol Fabric 3065"]
+    },
+    "important_function": "Built-in storage in right and left side"
+  },
+  {
+    "product_id": "29",
+    "product_name": "Hampton corner sofa with adjustable back and storage on left side",
+    "brand_name": "Hampton",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 7,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["sofa", "living room", "Hampton"],
+    "product_component": {
+      "storage_direction": ["left", "right"],
+      "ulphostery": [
+        "Belge Arezzon Fabric 3331",
+        "Belge Lucca Fabric 3320",
+        "Camel Lucca Fabric 3324",
+        "Green Arezzo Fabric 3334",
+        "Light Brown Arezzo Fabric 3332",
+        "Ochre Arezzo Fabric 3333",
+        "Red Lucca Fabric 3323",
+        "Stone Gray Napoli Fabric 2255",
+        "White Lucca Fabric 3321",
+        "White Rimini Fabric 3083"
+      ]
+    },
+    "important_function": "Adjustable back for different seating positions Built-in storage in left armrest",
+    "image_url": [
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image1.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image2.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image3.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image4.png",
+      "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image5.png"
+    ]
+  },
+  {
+    "product_id": "30",
+    "product_name": "Lugano nightstand",
+    "brand_name": "Lugano",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 11,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["nightstand", "bedroom", "Lugano"],
+    "product_component": {
+      "cabinet": ["Matte ash gray lacquered", "Matte Withe lacquered"],
+      "leg": ["Matte ash gray lacquered", "Matte Withe lacquered"]
+    },
+    "image_url": [
+      "images/products/bedroom/lugano_nightstand/3.png",
+      "images/products/bedroom/lugano_nightstand/4.png",
+      "images/products/bedroom/lugano_nightstand/5.png",
+      "images/products/bedroom/lugano_nightstand/6.png"
+    ]
+  },
+  {
+    "product_id": "31",
+    "product_name": "Hampton pouf with storage left and right sides",
+    "brand_name": "Hampton",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 7,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["pouf", "living room", "Hampton"],
+    "product_component": {
+      "ulphostery": [
+        "Belge Arezzon Fabric 3331",
+        "Camel Lucca Fabric 3324",
+        "Green Arezzo Fabric 3334",
+        "Green Lucca Fabric 3322",
+        "Green Rimini Fabric 3086",
+        "Light Brown Arezzo Fabric 3332",
+        "Mustard Capri Fabric 3234",
+        "Ochre Arezzo Fabric 3333",
+        "Red Lucca Fabric 3323",
+        "Stone Gray Napoli Fabric 2255"
+      ]
+    },
+    "important_function": "Built-in storage in right and left side",
+    "image_url": [
+      "images/products/living_room/hampton_pouf_with_storage_left_and_right_sides/image1.png",
+      "images/products/living_room/hampton_pouf_with_storage_left_and_right_sides/image2.png",
+      "images/products/living_room/hampton_pouf_with_storage_left_and_right_sides/image3.png",
+      "images/products/living_room/hampton_pouf_with_storage_left_and_right_sides/image4.png",
+      "images/products/living_room/hampton_pouf_with_storage_left_and_right_sides/image5.png"
+    ]
+  },
+  {
+    "product_id": "32",
+    "product_name": "Lugano base cabinet with drop-down doors",
+    "brand_name": "Lugano",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 12,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["cabinet", "kitchen", "Lugano"],
+    "product_component": {
+      "material": ["Matte ash gray lacquered", "Dark oak veneer", "Matte white lacquered"]
+    },
+    "important_function": "With drop-down doors Cut-out in the back for easy cable management",
+    "image_url": [
+      "images/products/kitchen/lugano_base_cabinet_with_drop-down_doors/image1.png",
+      "images/products/kitchen/lugano_base_cabinet_with_drop-down_doors/image2.png",
+      "images/products/kitchen/lugano_base_cabinet_with_drop-down_doors/image3.png",
+      "images/products/kitchen/lugano_base_cabinet_with_drop-down_doors/image4.png"
+    ]
+  },
+  {
+    "product_id": "33",
+    "product_name": "Indivi sofa with chaise longue left",
+    "brand_name": "Indivi",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 7,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["sofa", "living room", "Indivi"],
+    "product_component": {
+      "sofa_direction": ["left", "right"],
+      "leg_style": ["oak 6", "oak 4", "black 6", "black 4"],
+      "ulphostery": [
+        "Belge Arezzon Fabric 3331",
+        "Belge Skagen Fabric 3160",
+        "Brown Cophenhagen Fabric 3311",
+        "Camel Lucca Fabric 3324",
+        "Green Arezzo Fabric 3334",
+        "Green Lucca Fabric 3322",
+        "Light Brown Arezzo Fabric 3332",
+        "Ochre Copenhagen Fabric 3312",
+        "Ochre Arezzo Fabric 3333",
+        "White Cophenhagen Fabric 3310"
+      ]
+    },
+    "image_url": [
+      "images/products/living_room/indivi_sofa_with_chaise_longue_left/image1.png",
+      "images/products/living_room/indivi_sofa_with_chaise_longue_left/image2.png",
+      "images/products/living_room/indivi_sofa_with_chaise_longue_left/image3.png",
+      "images/products/living_room/indivi_sofa_with_chaise_longue_left/image4.png",
+      "images/products/living_room/indivi_sofa_with_chaise_longue_left/image5.png"
+    ]
+  },
+  {
+    "product_id": "34",
+    "product_name": "Lugano sideboard",
+    "brand_name": "Lugano",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 10,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["sideboard", "living room", "Lugano"],
+    "product_component": {
+      "function": ["Carved fronts", "Regular fronts"],
+      "material": ["Matte ash gray lacquered", "Dark oak veneer", "Matte white lacquered"],
+      "leg_style": [
+        "Matte black structure lacquered",
+        "Matte ash gray structure lacquered",
+        "Matte white structure lacquered"
+      ]
+    },
+    "important_function": "With soft-close doors",
+    "image_url": [
+      "images/products/living_room/lugano_sideboard/image1.png",
+      "images/products/living_room/lugano_sideboard/image2.png",
+      "images/products/living_room/lugano_sideboard/image3.png",
+      "images/products/living_room/lugano_sideboard/image4.png"
+    ]
+  },
+  {
+    "product_id": "35",
+    "product_name": "Calgary storage with dropdown front",
+    "brand_name": "Calgary",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 11,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["storage", "living room", "Calgary"],
+    "product_component": {
+      "material": ["Matte ash gray lacquered", "Dark oak veneer", "Natural oak veneer"],
+      "leg": ["Matte ash gray structure lacquered", "Matte black structure lacquered"]
+    },
+    "important_function": "Storage With drop-down door Calgary cannot be free-standing. Every unit is designed to attach to walls and includes fittings and wall distance adjustment fittings.",
+    "image_url": [
+      "images/products/bathroom/calgary_storage_with_dropdown_front/image1.png",
+      "images/products/bathroom/calgary_storage_with_dropdown_front/image2.png",
+      "images/products/bathroom/calgary_storage_with_dropdown_front/image3.png",
+      "images/products/bathroom/calgary_storage_with_dropdown_front/image4.png",
+      "images/products/bathroom/calgary_storage_with_dropdown_front/image5.png"
+    ]
+  },
+  {
+    "product_id": "36",
+    "product_name": "Form of line Gallery",
+    "brand_name": "Gallery",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 6,
+    "is_assembly": false,
+    "warranty": 12,
+    "tags": ["gallery", "bathroom"],
+    "product_component": {},
+    "care_instructions": "Dust with a dry cloth when necessary",
+    "image_url": [
+      "images/products/bathroom/form_of_line_gallery/image1.png",
+      "images/products/bathroom/form_of_line_gallery/image2.png",
+      "images/products/bathroom/form_of_line_gallery/image3.png",
+      "images/products/bathroom/form_of_line_gallery/image4.png"
+    ]
+  },
+  {
+    "product_id": "72",
+    "product_name": "Lugano wall mounted wall system with drop-down door",
+    "brand_name": "Lugano",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 10,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["wall", "living room", "Lugano"],
+    "product_component": {
+      "material": ["Matte ash gray lacquered", "Dark oak veneer", "Matte white lacquered"]
+    },
+    "important_function": "With soft-close, integrated shelf and drop-down door",
+    "image_url": [
+      "images/products/living_room/lugano_wall_mounted_wall_system_with_dropdown_door/image1.png",
+      "images/products/living_room/lugano_wall_mounted_wall_system_with_dropdown_door/image2.png",
+      "images/products/living_room/lugano_wall_mounted_wall_system_with_dropdown_door/image3.png",
+      "images/products/living_room/lugano_wall_mounted_wall_system_with_dropdown_door/image4.png"
+    ]
+  },
+  {
+    "product_id": "73",
+    "product_name": "Lugano wall system with drop-down doors and drawer",
+    "brand_name": "Lugano",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 10,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["wall", "living room", "Lugano"],
+    "product_component": {
+      "material": ["Matte ash gray lacquered", "Dark oak veneer", "Matte white lacquered"]
+    },
+    "important_function": "With drop-down doors Cut-out in the back for easy cable management",
+    "image_url": [
+      "images/products/living_room/lugano_wall_system_with_drop-down doors_and_drawer/image1.png",
+      "images/products/living_room/lugano_wall_system_with_drop-down doors_and_drawer/image2.png",
+      "images/products/living_room/lugano_wall_system_with_drop-down doors_and_drawer/image3.png",
+      "images/products/living_room/lugano_wall_system_with_drop-down doors_and_drawer/image4.png",
+      "images/products/living_room/lugano_wall_system_with_drop-down doors_and_drawer/image5.png"
+    ]
+  },
+  {
+    "product_id": "74",
+    "product_name": "Indivi ottoman",
+    "brand_name": "Indivi",
+    "description": "Quality takes time – most of our furniture is made to order and thoughtfully crafted just for you.",
+    "discount_percent": 7,
+    "is_assembly": true,
+    "warranty": 12,
+    "tags": ["ottoman", "outdoor", "Indivi"],
+    "product_component": {
+      "size": ["h46_w66_d55", "h43_w66_d55", "h46_w96_d66", "h43_w96_d66"],
+      "leg_style": ["oak 6", "oak 4", "black 6", "black 4"],
+      "ulphostery": [
+        "Belge Arezzon Fabric 3331",
+        "Belge Lucca Fabric 3320",
+        "Belge Skagen Fabric 3160",
+        "Camel Lucca Fabric 3324",
+        "Green Arezzo Fabric 3334",
+        "Green Lucca Fabric 3322",
+        "Green Rimini Fabric 3086",
+        "Light Brown Arezzo Fabric 3332",
+        "Ochre Copenhagen Fabric 3312",
+        "Ochre Arezzo Fabric 3333",
+        "Red Lucca Fabric 3323"
+      ]
+    },
+    "image_url": [
+      "images/products/outdoor/indivi_ottoman/image1.png",
+      "images/products/outdoor/indivi_ottoman/image2.png",
+      "images/products/outdoor/indivi_ottoman/image3.png",
+      "images/products/outdoor/indivi_ottoman/image4.png",
+      "images/products/outdoor/indivi_ottoman/image5.png"
+    ]
+  }
+]

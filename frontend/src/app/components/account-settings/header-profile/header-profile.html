@@ -1,0 +1,23 @@
+<div class="profile-header">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-3 text-center">
+        <div class="avatar-container">
+          <img src="{{ user.avatar }}" alt="Avatar" class="avatar-image" id="avatarPreview" />
+          <label for="avatarInput" class="avatar-upload">
+            <i class="bi bi-camera-fill"></i>
+          </label>
+          <input type="file" id="avatarInput" accept="image/*" style="display: none" />
+        </div>
+      </div>
+      <div class="col-md-9">
+        <h2 class="mb-2">{{ user.firstName + ' ' + user.lastName }}</h2>
+        <p class="mb-2"><i class="bi bi-envelope me-2"></i>{{ user.email }}</p>
+        <p class="mb-2"><i class="bi bi-phone me-2"></i>{{ user.phone }}</p>
+        <span class="status-badge verified-badge">
+          <i class="bi bi-check-circle-fill me-1"></i>Đã xác thực
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
