@@ -92,6 +92,7 @@ frontend/
 │ └─ styles.css
 │
 └─ .editorconfig
+```
 
 ## 1️⃣ Frontend (Client – Angular)
 
@@ -280,6 +281,7 @@ Chứa tài nguyên tĩnh.
 
 # Sơ đồ thư mục phía server
 
+```text
 backend/
 ├── app/
 │ ├── config/
@@ -297,6 +299,7 @@ backend/
 ├── package.json
 ├── server.js
 └── swagger.json
+```
 
 ---
 
