@@ -1,5 +1,6 @@
 # Sơ đồ thư mục của phía client
 
+```text
 frontend/
 ├─ .angular/
 ├─ .vscode/
