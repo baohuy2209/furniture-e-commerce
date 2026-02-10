@@ -2,10 +2,10 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
   /* Màu sắc chính HomeBase */
-  --color-primary: #2d5f3f; /* Xanh nội thất */
+  --color-primary: #3d529d; /* Xanh nội thất */
   --color-secondary: #8b7355; /* Nâu gỗ */
-  --color-accent: #c9a66b; /* Vàng đồng */
-  --color-bg: #f8f7f4; /* Nền sáng */
+  --color-accent: #ff911f; /* Vàng đồng */
+  --color-bg: #faf9f6; /* Nền sáng */
   --color-white: #ffffff;
   --color-border: #e8e4dc;
   --color-text: #2c2c2c;

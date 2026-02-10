@@ -73,6 +73,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/user-profile/user-profile').then((m) => m.UserProfile),
       },
       {
+        path: 'my-orders',
+        loadComponent: () => import('./pages/my-orders/my-orders').then((m) => m.MyOrders), // <== CẦN TẠO COMPONENT NÀY
+      },
+      {
+        path: 'wishlist', 
+        loadComponent: () => import('./pages/my-reviews/my-reviews').then((m) => m.MyReviews), // <== CẦN TẠO COMPONENT NÀY
+      },
+      {
         path: 'change-password',
         loadComponent: () =>
           import('./pages/change-password/change-password').then((m) => m.ChangePassword),
