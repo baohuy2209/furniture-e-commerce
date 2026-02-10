@@ -1,1 +1,244 @@
-<p>my-payment-method works!</p>
+<div class="container">
+  <div class="wallet-section">
+    <div class="credit-card">
+      <div class="card-number">{{ user.card_number }}</div>
+      <div class="card-details">
+        <div>
+          <div class="card-holder">
+            <span class="card-label">Card Holder</span>
+            <span class="card-value">{{ user.name }}</span>
+          </div>
+        </div>
+        <div>
+          <div class="card-expires">
+            <span class="card-label">Expires</span>
+            <span class="card-value">{{ user.expired_card }}</span>
+          </div>
+        </div>
+        <div class="card-logo"></div>
+      </div>
+    </div>
+    <div class="wallet-card">
+      <div class="wallet-icon">
+        <i class="bi bi-wallet2"></i>
+      </div>
+      <div class="wallet-name">Salary</div>
+      <div class="wallet-subtitle">Belong Interactive</div>
+      <div class="wallet-amount positive">+$2000</div>
+    </div>
+    <div class="wallet-card">
+      <div class="wallet-icon">
+        <i class="bi bi-paypal"></i>
+      </div>
+      <div class="wallet-name">Paypal</div>
+      <div class="wallet-subtitle">Freelance Payment</div>
+      <div class="wallet-amount">$455.00</div>
+    </div>
+  </div>
+  <div class="container table-card mb-4">
+    <div class="d-flex flex-row justify-content-start align-items-center gap-4">
+      <div class="section-header">
+        <h4 class="section-title">Payment Method</h4>
+      </div>
+      <button class="btn btn-add-card w-100">
+        <i class="bi bi-plus-circle me-2"></i>Add New Card
+      </button>
+    </div>
+
+    <div class="payment-cards">
+      <div class="payment-card">
+        <div class="payment-logo mastercard-logo">
+          <span>MC</span>
+        </div>
+        <div class="payment-number">**** **** **** 7852</div>
+      </div>
+
+      <div class="payment-card">
+        <div class="payment-logo visa-logo">
+          <span>VISA</span>
+        </div>
+        <div class="payment-number">**** **** **** 5248</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Grid -->
+  <div class="content-grid">
+    <!-- Billing Information -->
+    <div class="info-card">
+      <div class="section-header">
+        <h4 class="section-title">Billing Information</h4>
+      </div>
+
+      <div class="billing-item">
+        <div class="billing-header">
+          <div class="billing-name">Oliver Liam</div>
+          <div class="billing-actions">
+            <button class="btn-action btn-delete">Delete</button>
+            <button class="btn-action btn-edit">Edit</button>
+          </div>
+        </div>
+        <div class="billing-info">
+          <div>
+            <span class="info-label">Company Name:</span>
+            <span>Viking Burrito</span>
+          </div>
+          <div>
+            <span class="info-label">Email Address:</span>
+            <span>oliver@burrito.com</span>
+          </div>
+          <div>
+            <span class="info-label">VAT Number:</span>
+            <span>FRB1235476</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="billing-item">
+        <div class="billing-header">
+          <div class="billing-name">Lucas Harper</div>
+          <div class="billing-actions">
+            <button class="btn-action btn-delete">Delete</button>
+            <button class="btn-action btn-edit">Edit</button>
+          </div>
+        </div>
+        <div class="billing-info">
+          <div>
+            <span class="info-label">Company Name:</span>
+            <span>Stone Tech Zone</span>
+          </div>
+          <div>
+            <span class="info-label">Email Address:</span>
+            <span>lucas@stone-tech.com</span>
+          </div>
+          <div>
+            <span class="info-label">VAT Number:</span>
+            <span>FRB1235476</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoices & Transactions -->
+    <div>
+      <!-- Invoices -->
+      <div class="info-card mb-4">
+        <div class="invoice-header">
+          <h4 class="section-title">Invoices</h4>
+          <button class="btn-view-all">View All</button>
+        </div>
+
+        <div class="invoice-item">
+          <div class="invoice-details">
+            <div class="invoice-date">March, 01, 2020</div>
+            <div class="invoice-code">#MS-415646</div>
+          </div>
+          <div class="invoice-right">
+            <div class="invoice-amount">$180</div>
+            <button class="btn-pdf">PDF</button>
+          </div>
+        </div>
+
+        <div class="invoice-item">
+          <div class="invoice-details">
+            <div class="invoice-date">February, 10, 2021</div>
+            <div class="invoice-code">#RV-126749</div>
+          </div>
+          <div class="invoice-right">
+            <div class="invoice-amount">$250</div>
+            <button class="btn-pdf">PDF</button>
+          </div>
+        </div>
+
+        <div class="invoice-item">
+          <div class="invoice-details">
+            <div class="invoice-date">April, 05, 2020</div>
+            <div class="invoice-code">#FB-212562</div>
+          </div>
+          <div class="invoice-right">
+            <div class="invoice-amount">$560</div>
+            <button class="btn-pdf">PDF</button>
+          </div>
+        </div>
+
+        <div class="invoice-item">
+          <div class="invoice-details">
+            <div class="invoice-date">June, 25, 2019</div>
+            <div class="invoice-code">#QW-103578</div>
+          </div>
+          <div class="invoice-right">
+            <div class="invoice-amount">$120</div>
+            <button class="btn-pdf">PDF</button>
+          </div>
+        </div>
+
+        <div class="invoice-item">
+          <div class="invoice-details">
+            <div class="invoice-date">March, 01, 2019</div>
+            <div class="invoice-code">#AR-803481</div>
+          </div>
+          <div class="invoice-right">
+            <div class="invoice-amount">$300</div>
+            <button class="btn-pdf">PDF</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transactions -->
+      <div class="info-card">
+        <div class="section-header">
+          <h4 class="section-title">Your Transaction's</h4>
+        </div>
+        <div class="transaction-period">23 - 30 March 2020</div>
+
+        <div class="transaction-date-header">NEWEST</div>
+
+        <div class="transaction-item">
+          <div class="transaction-icon expense">
+            <i class="bi bi-arrow-down-circle-fill"></i>
+          </div>
+          <div class="transaction-info">
+            <div class="transaction-name">Netflix</div>
+            <div class="transaction-time">27 March 2020, at 12:30 PM</div>
+          </div>
+          <div class="transaction-amount expense">- $ 2,500</div>
+        </div>
+
+        <div class="transaction-item">
+          <div class="transaction-icon income">
+            <i class="bi bi-arrow-up-circle-fill"></i>
+          </div>
+          <div class="transaction-info">
+            <div class="transaction-name">Apple</div>
+            <div class="transaction-time">27 March 2020, at 04:30 AM</div>
+          </div>
+          <div class="transaction-amount income">+ $ 2,000</div>
+        </div>
+
+        <div class="transaction-date-header">YESTERDAY</div>
+
+        <div class="transaction-item">
+          <div class="transaction-icon income">
+            <i class="bi bi-arrow-up-circle-fill"></i>
+          </div>
+          <div class="transaction-info">
+            <div class="transaction-name">Stripe</div>
+            <div class="transaction-time">26 March 2020, at 13:45 PM</div>
+          </div>
+          <div class="transaction-amount income">+ $ 750</div>
+        </div>
+
+        <div class="transaction-item">
+          <div class="transaction-icon income">
+            <i class="bi bi-arrow-up-circle-fill"></i>
+          </div>
+          <div class="transaction-info">
+            <div class="transaction-name">HubSpot</div>
+            <div class="transaction-time">26 March 2020, at 12:30 PM</div>
+          </div>
+          <div class="transaction-amount income">+ $ 1,000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

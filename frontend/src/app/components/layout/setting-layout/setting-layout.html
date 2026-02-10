@@ -1,1 +1,15 @@
-<router-outlet></router-outlet>
+<div class="w-100">
+  <app-header></app-header>
+  <div class="">
+    <div class="row w-fit-content g-0 container mx-auto mt-4">
+      <div class="col-lg-3 col-md-3 p-4">
+        <app-settings-sidebar></app-settings-sidebar>
+      </div>
+      <div class="col-lg-9 col-md-9">
+        <app-header-profile></app-header-profile>
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

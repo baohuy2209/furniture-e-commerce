@@ -13,7 +13,7 @@ export class SettingsSidebar {
     {
       id: 1,
       name: 'Thông tin cá nhân',
-      href: '/user-profile',
+      href: '/settings/user-profile',
       iconClass: 'fa-solid fa-user',
     },
     {

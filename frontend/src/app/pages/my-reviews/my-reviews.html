@@ -1,1 +1,89 @@
-<p>my-reviews works!</p>
+<div class="container">
+  <div class="page-header">
+    <app-settings-breadcrumb></app-settings-breadcrumb>
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Tìm kiếm đánh giá..." />
+      <button class="btn btn-primary">
+        <i class="bi bi-search"></i>
+        Tìm kiếm
+      </button>
+      <span class="result-count">Số sản phẩm đã đánh giá: <strong>12</strong></span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  @for (item of list_orders; track $index) {
+    <div class="product-card">
+      <div class="product-header">
+        <img src="{{ item.image_url }}" alt="{{ item.product_name }}" class="product-image" />
+        <div class="product-info">
+          <h5 class="product-title">{{ item.product_name }}</h5>
+          <div class="product-sku"><i class="bi bi-tag"></i> SKU: {{ item.sku }}</div>
+          <div class="product-meta">
+            <div class="meta-item">
+              <span class="meta-label">Đơn giá:</span>
+              <span class="meta-value price-value">{{ formatNumberVN(item.price) }} VNĐ</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Số lượng:</span>
+              <span class="meta-value">x{{ item.quantity }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Giảm giá:</span>
+              <span class="meta-value">-{{ formatNumberVN(item.discount_total) }} VNĐ</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">{{ item.description }}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Thành tiền:</span>
+              <span class="meta-value price-value"
+                >{{ formatNumberVN(item.price * item.quantity - item.discount_total) }} VNĐ</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="review-section-header">
+        <i class="bi bi-star-fill"></i>
+        Đánh giá của bạn
+      </div>
+      @for (review of item.reviews; track $index) {
+        <div class="review-card">
+          <div class="review-header">
+            <img
+              src="{{ review.user_avatar }}"
+              alt="{{ review.user_name }}"
+              class="reviewer-avatar"
+            />
+            <div class="reviewer-info">
+              <div class="reviewer-name">{{ review.user_name }}</div>
+              <div class="reviewer-handle">{{ review.user_email }}</div>
+            </div>
+            <div class="rating-stars">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+            </div>
+          </div>
+          <p class="review-content">
+            {{ review.content }}
+          </p>
+          <div class="review-meta">
+            <div class="review-date">
+              <i class="bi bi-clock"></i>
+              <span>{{ review.review_data }}</span>
+            </div>
+            <div class="like-button" [class]="review.is_liked ? 'liked' : ''">
+              <i class="bi bi-heart-fill"></i>
+              <span>Thích</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,1 +1,769 @@
-<p>my-orders works!</p>
+<div class="container">
+  <div class="page-header">
+    <app-settings-breadcrumb></app-settings-breadcrumb>
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Tìm kiếm đơn hàng..." />
+      <button class="btn btn-primary">
+        <i class="bi bi-search"></i>
+        Tìm kiếm
+      </button>
+      <span class="result-count"
+        >Sản phẩm đã chọn:
+        <strong>{{ getAllOrderChosen().length }}/{{ list_orders.length }}</strong></span
+      >
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#preparing">
+        <i class="bi bi-check-circle me-2"></i>Đang chuẩn bị
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#shipped">
+        <i class="bi bi-truck me-2"></i>Đang giao hàng
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#delivered">
+        <i class="bi bi-star me-2"></i>Đã giao
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#rated">
+        <i class="bi bi-chat-quote me-2"></i>Đã trả hàng
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#unpaid">
+        <i class="bi bi-chat-quote me-2"></i>Chưa thanh toán
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#need_rating">
+        <i class="bi bi-chat-quote me-2"></i>Cần đánh giá
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cancelled">
+        <i class="bi bi-x-circle me-2"></i>Đã hủy đơn
+      </button>
+    </li>
+  </ul>
+
+  <div class="row">
+    <!-- Left Column - Product List -->
+    <div class="col-lg-8">
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="preparing">
+          @if (getOrderByStatus('preparing').length == 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-truck" style="font-size: 4rem; color: var(--color-primary)"></i>
+              <h4 class="mt-3">Chưa có đơn hàng nào</h4>
+            </div>
+          } @else {
+            @for (item of getOrderByStatus('preparing'); track $index; let i = $index) {
+              <div class="product-card" (click)="chooseOrder(item.order_number)">
+                <div class="product-header">
+                  <img
+                    src="{{ item.image_url }}"
+                    alt="{{ item.product_name }}"
+                    class="product-image"
+                  />
+                  <div class="product-info">
+                    <h5 class="product-title">{{ item.product_name }}</h5>
+                    <div class="product-sku"><strong>SKU:</strong> {{ item.sku }}</div>
+                    <p class="product-description">{{ item.description }}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label mr-1">Ngày đặt:</span>
+                        <span class="info-value">{{ item.created_at }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Phương thức thanh toán:</span>
+                        <span class="info-value">{{ item.payment_method }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Địa chỉ:</span>
+                        <span class="info-value float-end">{{ item.location }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Mã vận đơn:</span>
+                        <span class="info-value">{{ item.order_number }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label">Đơn giá:</span>
+                        <span class="info-value price-highlight"
+                          >{{ formatNumberVN(item.price) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Số lượng:</span>
+                        <span class="info-value">x{{ item.quantity }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Khuyến mãi:</span>
+                        <span class="info-value text-success"
+                          >{{ formatNumberVN(item.discount_total) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Thành tiền:</span>
+                        <span class="info-value price-highlight"
+                          >{{
+                            formatNumberVN(item.price * item.quantity - item.discount_total)
+                          }}
+                          VNĐ</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="total-price">
+                  <i class="bi bi-wallet2 me-2"></i>Tổng giá trị đơn:
+                  {{ formatNumberVN(item.price * item.quantity - item.discount_total) }} VNĐ
+                </div>
+
+                <div class="action-buttons mt-3">
+                  <button class="btn btn-detail"><i class="bi bi-eye me-2"></i>Đánh giá</button>
+                  <button class="btn btn-order">
+                    <i class="bi bi-cart-check me-2"></i>Mở rộng
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+        <div class="tab-pane fade" id="shipped">
+          @if (getOrderByStatus('shipped').length == 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-truck" style="font-size: 4rem; color: var(--color-primary)"></i>
+              <h4 class="mt-3">Chưa có đơn hàng nào đang giao</h4>
+            </div>
+          } @else {
+            @for (item of getOrderByStatus('shipped'); track $index; let i = $index) {
+              <div class="product-card">
+                <div class="product-header">
+                  <img
+                    src="{{ item.image_url }}"
+                    alt="{{ item.product_name }}"
+                    class="product-image"
+                  />
+                  <div class="product-info">
+                    <h5 class="product-title">{{ item.product_name }}</h5>
+                    <div class="product-sku"><strong>SKU:</strong> {{ item.sku }}</div>
+                    <p class="product-description">{{ item.description }}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label mr-1">Ngày đặt:</span>
+                        <span class="info-value">{{ item.created_at }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Phương thức thanh toán:</span>
+                        <span class="info-value">{{ item.payment_method }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Địa chỉ:</span>
+                        <span class="info-value float-end">{{ item.location }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Mã vận đơn:</span>
+                        <span class="info-value">{{ item.order_number }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label">Đơn giá:</span>
+                        <span class="info-value price-highlight"
+                          >{{ formatNumberVN(item.price) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Số lượng:</span>
+                        <span class="info-value">x{{ item.quantity }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Khuyến mãi:</span>
+                        <span class="info-value text-success"
+                          >{{ formatNumberVN(item.discount_total) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Thành tiền:</span>
+                        <span class="info-value price-highlight"
+                          >{{
+                            formatNumberVN(item.price * item.quantity - item.discount_total)
+                          }}
+                          VNĐ</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="total-price">
+                  <i class="bi bi-wallet2 me-2"></i>Tổng giá trị đơn:
+                  {{ formatNumberVN(item.price * item.quantity - item.discount_total) }} VNĐ
+                </div>
+
+                <div class="action-buttons mt-3">
+                  <button class="btn btn-detail"><i class="bi bi-eye me-2"></i>Đánh giá</button>
+                  <button class="btn btn-order">
+                    <i class="bi bi-cart-check me-2"></i>Mở rộng
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+        <div class="tab-pane fade" id="delivered">
+          @if (getOrderByStatus('delivered').length == 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-truck" style="font-size: 4rem; color: var(--color-primary)"></i>
+              <h4 class="mt-3">Chưa có đơn hàng nào đã giao</h4>
+            </div>
+          } @else {
+            @for (item of getOrderByStatus('delivered'); track $index; let i = $index) {
+              <div class="product-card">
+                <div class="product-header">
+                  <img
+                    src="{{ item.image_url }}"
+                    alt="{{ item.product_name }}"
+                    class="product-image"
+                  />
+                  <div class="product-info">
+                    <h5 class="product-title">{{ item.product_name }}</h5>
+                    <div class="product-sku"><strong>SKU:</strong> {{ item.sku }}</div>
+                    <p class="product-description">{{ item.description }}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label mr-1">Ngày đặt:</span>
+                        <span class="info-value">{{ item.created_at }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Phương thức thanh toán:</span>
+                        <span class="info-value">{{ item.payment_method }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Địa chỉ:</span>
+                        <span class="info-value float-end">{{ item.location }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Mã vận đơn:</span>
+                        <span class="info-value">{{ item.order_number }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label">Đơn giá:</span>
+                        <span class="info-value price-highlight"
+                          >{{ formatNumberVN(item.price) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Số lượng:</span>
+                        <span class="info-value">x{{ item.quantity }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Khuyến mãi:</span>
+                        <span class="info-value text-success"
+                          >{{ formatNumberVN(item.discount_total) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Thành tiền:</span>
+                        <span class="info-value price-highlight"
+                          >{{
+                            formatNumberVN(item.price * item.quantity - item.discount_total)
+                          }}
+                          VNĐ</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="total-price">
+                  <i class="bi bi-wallet2 me-2"></i>Tổng giá trị đơn:
+                  {{ formatNumberVN(item.price * item.quantity - item.discount_total) }} VNĐ
+                </div>
+
+                <div class="action-buttons mt-3">
+                  <button class="btn btn-detail"><i class="bi bi-eye me-2"></i>Đánh giá</button>
+                  <button class="btn btn-order">
+                    <i class="bi bi-cart-check me-2"></i>Mở rộng
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+        <div class="tab-pane fade" id="rated">
+          @if (getOrderByStatus('rated').length == 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-truck" style="font-size: 4rem; color: var(--color-primary)"></i>
+              <h4 class="mt-3">Chưa có đơn hàng nào đã trả hàng</h4>
+            </div>
+          } @else {
+            @for (item of getOrderByStatus('rated'); track $index; let i = $index) {
+              <div class="product-card">
+                <div class="product-header">
+                  <img
+                    src="{{ item.image_url }}"
+                    alt="{{ item.product_name }}"
+                    class="product-image"
+                  />
+                  <div class="product-info">
+                    <h5 class="product-title">{{ item.product_name }}</h5>
+                    <div class="product-sku"><strong>SKU:</strong> {{ item.sku }}</div>
+                    <p class="product-description">{{ item.description }}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label mr-1">Ngày đặt:</span>
+                        <span class="info-value">{{ item.created_at }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Phương thức thanh toán:</span>
+                        <span class="info-value">{{ item.payment_method }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Địa chỉ:</span>
+                        <span class="info-value float-end">{{ item.location }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Mã vận đơn:</span>
+                        <span class="info-value">{{ item.order_number }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label">Đơn giá:</span>
+                        <span class="info-value price-highlight"
+                          >{{ formatNumberVN(item.price) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Số lượng:</span>
+                        <span class="info-value">x{{ item.quantity }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Khuyến mãi:</span>
+                        <span class="info-value text-success"
+                          >{{ formatNumberVN(item.discount_total) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Thành tiền:</span>
+                        <span class="info-value price-highlight"
+                          >{{
+                            formatNumberVN(item.price * item.quantity - item.discount_total)
+                          }}
+                          VNĐ</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="total-price">
+                  <i class="bi bi-wallet2 me-2"></i>Tổng giá trị đơn:
+                  {{ formatNumberVN(item.price * item.quantity - item.discount_total) }} VNĐ
+                </div>
+
+                <div class="action-buttons mt-3">
+                  <button class="btn btn-detail"><i class="bi bi-eye me-2"></i>Đánh giá</button>
+                  <button class="btn btn-order">
+                    <i class="bi bi-cart-check me-2"></i>Mở rộng
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+        <div class="tab-pane fade" id="unpaid">
+          @if (getOrderByStatus('unpaid').length == 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-truck" style="font-size: 4rem; color: var(--color-primary)"></i>
+              <h4 class="mt-3">Không nợ tiền đơn hàng nào</h4>
+            </div>
+          } @else {
+            @for (item of getOrderByStatus('unpaid'); track $index; let i = $index) {
+              <div class="product-card">
+                <div class="product-header">
+                  <img
+                    src="{{ item.image_url }}"
+                    alt="{{ item.product_name }}"
+                    class="product-image"
+                  />
+                  <div class="product-info">
+                    <h5 class="product-title">{{ item.product_name }}</h5>
+                    <div class="product-sku"><strong>SKU:</strong> {{ item.sku }}</div>
+                    <p class="product-description">{{ item.description }}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label mr-1">Ngày đặt:</span>
+                        <span class="info-value">{{ item.created_at }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Phương thức thanh toán:</span>
+                        <span class="info-value">{{ item.payment_method }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Địa chỉ:</span>
+                        <span class="info-value float-end">{{ item.location }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Mã vận đơn:</span>
+                        <span class="info-value">{{ item.order_number }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label">Đơn giá:</span>
+                        <span class="info-value price-highlight"
+                          >{{ formatNumberVN(item.price) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Số lượng:</span>
+                        <span class="info-value">x{{ item.quantity }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Khuyến mãi:</span>
+                        <span class="info-value text-success"
+                          >{{ formatNumberVN(item.discount_total) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Thành tiền:</span>
+                        <span class="info-value price-highlight"
+                          >{{
+                            formatNumberVN(item.price * item.quantity - item.discount_total)
+                          }}
+                          VNĐ</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="total-price">
+                  <i class="bi bi-wallet2 me-2"></i>Tổng giá trị đơn:
+                  {{ formatNumberVN(item.price * item.quantity - item.discount_total) }} VNĐ
+                </div>
+
+                <div class="action-buttons mt-3">
+                  <button class="btn btn-detail"><i class="bi bi-eye me-2"></i>Đánh giá</button>
+                  <button class="btn btn-order">
+                    <i class="bi bi-cart-check me-2"></i>Mở rộng
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+        <div class="tab-pane fade" id="need_rating">
+          @if (getOrderByStatus('need_rating').length == 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-truck" style="font-size: 4rem; color: var(--color-primary)"></i>
+              <h4 class="mt-3">Đã đánh giá tất cả các đơn hàng</h4>
+            </div>
+          } @else if (list_orders.length == 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-truck" style="font-size: 4rem; color: var(--color-primary)"></i>
+              <h4 class="mt-3">Chưa mua đơn hàng nào</h4>
+            </div>
+          } @else {
+            @for (item of getOrderByStatus('need_rating'); track $index; let i = $index) {
+              <div class="product-card">
+                <div class="product-header">
+                  <img
+                    src="{{ item.image_url }}"
+                    alt="{{ item.product_name }}"
+                    class="product-image"
+                  />
+                  <div class="product-info">
+                    <h5 class="product-title">{{ item.product_name }}</h5>
+                    <div class="product-sku"><strong>SKU:</strong> {{ item.sku }}</div>
+                    <p class="product-description">{{ item.description }}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label mr-1">Ngày đặt:</span>
+                        <span class="info-value">{{ item.created_at }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Phương thức thanh toán:</span>
+                        <span class="info-value">{{ item.payment_method }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Địa chỉ:</span>
+                        <span class="info-value float-end">{{ item.location }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Mã vận đơn:</span>
+                        <span class="info-value">{{ item.order_number }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label">Đơn giá:</span>
+                        <span class="info-value price-highlight"
+                          >{{ formatNumberVN(item.price) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Số lượng:</span>
+                        <span class="info-value">x{{ item.quantity }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Khuyến mãi:</span>
+                        <span class="info-value text-success"
+                          >{{ formatNumberVN(item.discount_total) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Thành tiền:</span>
+                        <span class="info-value price-highlight"
+                          >{{
+                            formatNumberVN(item.price * item.quantity - item.discount_total)
+                          }}
+                          VNĐ</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="total-price">
+                  <i class="bi bi-wallet2 me-2"></i>Tổng giá trị đơn:
+                  {{ formatNumberVN(item.price * item.quantity - item.discount_total) }} VNĐ
+                </div>
+
+                <div class="action-buttons mt-3">
+                  <button class="btn btn-detail"><i class="bi bi-eye me-2"></i>Đánh giá</button>
+                  <button class="btn btn-order">
+                    <i class="bi bi-cart-check me-2"></i>Mở rộng
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+        <div class="tab-pane fade" id="cancelled">
+          @if (getOrderByStatus('cancelled').length == 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-truck" style="font-size: 4rem; color: var(--color-primary)"></i>
+              <h4 class="mt-3">Chưa hủy đơn hàng nào</h4>
+            </div>
+          } @else if (list_orders.length == 0) {
+            <div class="text-center py-5">
+              <i class="bi bi-truck" style="font-size: 4rem; color: var(--color-primary)"></i>
+              <h4 class="mt-3">Chưa mua đơn hàng nào</h4>
+            </div>
+          } @else {
+            @for (item of getOrderByStatus('cancelled'); track $index; let i = $index) {
+              <div class="product-card">
+                <div class="product-header">
+                  <img
+                    src="{{ item.image_url }}"
+                    alt="{{ item.product_name }}"
+                    class="product-image"
+                  />
+                  <div class="product-info">
+                    <h5 class="product-title">{{ item.product_name }}</h5>
+                    <div class="product-sku"><strong>SKU:</strong> {{ item.sku }}</div>
+                    <p class="product-description">{{ item.description }}</p>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label mr-1">Ngày đặt:</span>
+                        <span class="info-value">{{ item.created_at }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Phương thức thanh toán:</span>
+                        <span class="info-value">{{ item.payment_method }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Địa chỉ:</span>
+                        <span class="info-value float-end">{{ item.location }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label mr-1">Mã vận đơn:</span>
+                        <span class="info-value">{{ item.order_number }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="order-info">
+                      <div class="info-row">
+                        <span class="info-label">Đơn giá:</span>
+                        <span class="info-value price-highlight"
+                          >{{ formatNumberVN(item.price) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Số lượng:</span>
+                        <span class="info-value">x{{ item.quantity }}</span>
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Khuyến mãi:</span>
+                        <span class="info-value text-success"
+                          >{{ formatNumberVN(item.discount_total) }} VNĐ</span
+                        >
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">Thành tiền:</span>
+                        <span class="info-value price-highlight"
+                          >{{
+                            formatNumberVN(item.price * item.quantity - item.discount_total)
+                          }}
+                          VNĐ</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="total-price">
+                  <i class="bi bi-wallet2 me-2"></i>Tổng giá trị đơn:
+                  {{ formatNumberVN(item.price * item.quantity - item.discount_total) }} VNĐ
+                </div>
+
+                <div class="action-buttons mt-3">
+                  <button class="btn btn-detail"><i class="bi bi-eye me-2"></i>Đánh giá</button>
+                  <button class="btn btn-order">
+                    <i class="bi bi-cart-check me-2"></i>Mở rộng
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column - Order Summary -->
+    <div class="col-lg-4">
+      <div class="order-summary">
+        <div class="summary-title">
+          <i class="bi bi-clipboard-check me-2"></i>Thông tin đơn hàng
+          <button class="btn btn-link float-end text-danger p-0">
+            <i class="bi bi-arrow-clockwise"></i> Chọn lại tất cả
+          </button>
+        </div>
+        @if (getAllOrderChosen().length != 0) {
+          @for (item of getAllOrderChosen(); track $index) {
+            <div class="order-item">
+              <img
+                src="{{ item.image_url }}"
+                alt="{{ item.product_name }}"
+                class="order-item-image"
+              />
+              <div class="order-item-info">
+                @if (item.product_name.length > 20) {
+                  <div class="order-item-title">{{ item.product_name.slice(0, 20) }} ...</div>
+                } @else {
+                  <div class="order-item-title">{{ item.product_name }}</div>
+                }
+                <div class="order-item-code">Mã hàng: {{ item.sku }}</div>
+                <div class="order-item-details">
+                  <span class="quantity-badge">Số lượng: {{ item.quantity }}</span>
+                  <span class="item-price"
+                    >{{
+                      formatNumberVN(item.price * item.quantity - item.discount_total)
+                    }}
+                    VNĐ</span
+                  >
+                </div>
+              </div>
+              <i class="bi bi-x-circle-fill remove-icon"></i>
+            </div>
+          }
+        }
+
+        <!-- Summary -->
+        <div class="mt-4 pt-3 border-top">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Tạm tính:</span>
+            <strong>{{ formatNumberVN(getTotalMoneyOrderChosen()) }} VNĐ</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Khuyến mãi:</span>
+            <strong class="text-success"
+              >-{{ formatNumberVN(getTotalDiscountOrderChosen()) }} VNĐ</strong
+            >
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <span>Phí vận chuyển:</span>
+            @if (getTotalShippingFeeOrderChosen() == 0) {
+              <strong class="text-success">Miễn phí</strong>
+            } @else {
+              <strong class="text-success">{{ getTotalShippingFeeOrderChosen() }}</strong>
+            }
+          </div>
+          <div class="total-price">
+            Tổng cộng:
+            {{
+              formatNumberVN(
+                getTotalMoneyOrderChosen() -
+                  getTotalDiscountOrderChosen() +
+                  getTotalShippingFeeOrderChosen()
+              )
+            }}
+            VNĐ
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

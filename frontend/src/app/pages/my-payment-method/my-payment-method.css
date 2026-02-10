@@ -1,0 +1,498 @@
+:root {
+  --primary-color: #2d5f3f;
+  --primary-hover: #234a31;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --gold-color: #ff6b35;
+  --success-color: #28a745;
+  --light-bg: #f8f9fa;
+  --border-color: #dee2e6;
+  --card-bg: #2d3436;
+}
+
+body {
+  background: #f0f0f5;
+  padding: 2rem 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  max-width: 1400px;
+}
+
+/* Credit Card */
+.credit-card {
+  background: linear-gradient(135deg, #2d3436 0%, #1e272e 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+}
+
+.credit-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+}
+
+.card-number {
+  font-size: 1.75rem;
+  letter-spacing: 4px;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.card-holder,
+.card-expires {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-label {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card-value {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.card-logo {
+  width: 60px;
+  height: 40px;
+  background: linear-gradient(135deg, #eb4d4b 0%, #f39c12 100%);
+  border-radius: 8px;
+}
+
+/* Wallet Cards */
+.wallet-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.wallet-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.wallet-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--gold-color);
+}
+
+.wallet-icon {
+  width: 70px;
+  height: 70px;
+  background: var(--gold-color);
+  border-radius: 16px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+}
+
+.wallet-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.5rem;
+}
+
+.wallet-subtitle {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.wallet-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.wallet-amount.positive {
+  color: var(--success-color);
+}
+
+/* Payment Methods */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.btn-add-card {
+  background: #212529;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-add-card:hover {
+  background: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.payment-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.payment-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.payment-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 16px rgba(45, 95, 63, 0.15);
+}
+
+.payment-logo {
+  width: 60px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.mastercard-logo {
+  background: linear-gradient(135deg, #eb4d4b 0%, #f39c12 100%);
+  border-radius: 8px;
+  color: white;
+}
+
+.visa-logo {
+  background: #1434cb;
+  border-radius: 8px;
+  color: white;
+}
+
+.payment-number {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  color: #495057;
+}
+
+/* Billing & Transactions */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.billing-item {
+  padding: 1.5rem;
+  border: 2px solid var(--light-bg);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s;
+}
+
+.billing-item:hover {
+  border-color: var(--primary-color);
+  background: rgba(45, 95, 63, 0.02);
+}
+
+.billing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.billing-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.5rem;
+}
+
+.billing-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.btn-edit {
+  color: var(--primary-color);
+}
+
+.btn-edit:hover {
+  color: var(--primary-hover);
+}
+
+.btn-delete {
+  color: var(--danger-color);
+}
+
+.btn-delete:hover {
+  color: #bd2130;
+}
+
+.billing-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+
+.billing-info div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.info-label {
+  font-weight: 500;
+  min-width: 120px;
+}
+
+/* Invoices */
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-view-all {
+  background: white;
+  border: 2px solid var(--gold-color);
+  color: var(--gold-color);
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-view-all:hover {
+  background: var(--gold-color);
+  color: white;
+}
+
+.invoice-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--light-bg);
+}
+
+.invoice-item:last-child {
+  border-bottom: none;
+}
+
+.invoice-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.invoice-date {
+  font-weight: 600;
+  color: #212529;
+}
+
+.invoice-code {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.invoice-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.invoice-amount {
+  font-weight: 600;
+  color: #495057;
+  min-width: 80px;
+  text-align: right;
+}
+
+.btn-pdf {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: all 0.3s;
+}
+
+.btn-pdf:hover {
+  background: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+/* Transactions */
+.transaction-date-header {
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 1.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--light-bg);
+}
+
+.transaction-date-header:first-child {
+  margin-top: 0;
+}
+
+.transaction-period {
+  color: #495057;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  text-align: right;
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s;
+  background: var(--light-bg);
+}
+
+.transaction-item:hover {
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.transaction-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid;
+}
+
+.transaction-icon.expense {
+  border-color: #ffe0e0;
+  background: #fff5f5;
+  color: var(--danger-color);
+}
+
+.transaction-icon.income {
+  border-color: #d4f4dd;
+  background: #f0fdf4;
+  color: var(--success-color);
+}
+
+.transaction-info {
+  flex: 1;
+}
+
+.transaction-name {
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.25rem;
+}
+
+.transaction-time {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.transaction-amount {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.transaction-amount.expense {
+  color: var(--danger-color);
+}
+
+.transaction-amount.income {
+  color: var(--success-color);
+}
+
+@media (max-width: 1024px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .wallet-section {
+    grid-template-columns: 1fr;
+  }
+}
