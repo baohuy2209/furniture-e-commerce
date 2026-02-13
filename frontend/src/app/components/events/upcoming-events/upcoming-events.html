@@ -1,0 +1,15 @@
+<section class="upcoming">
+  <p class="section-label">UPCOMING EVENTS</p>
+  <h2>Sự kiện <span>Sắp tổ chức</span></h2>
+
+  <div class="grid">
+    @for (event of events; track event.id) {
+      <div class="event-card">
+        <img [src]="event.image" />
+        <h4>{{ event.title }}</h4>
+        <p>{{ event.desc }}</p>
+        <a>Tìm hiểu thêm →</a>
+      </div>
+    }
+  </div>
+</section>

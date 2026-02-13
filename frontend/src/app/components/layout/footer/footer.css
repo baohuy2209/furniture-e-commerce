@@ -1,5 +1,5 @@
 .homebase-footer {
-  background: #2c3e50;
+  background: #2C3750;
   color: #b8c5d6;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   border-top: 3px solid #4a90e2;
@@ -94,6 +94,17 @@
 .footer-policy {
   width: 100%;
 }
+
+/* .homebase-footer.light {
+  background: #f8f8f8;
+  color: #111;
+} */
+
+.homebase-footer.dark {
+  background: #1a1a1a;
+  color: #fff;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .footer-heading {

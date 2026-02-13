@@ -1,4 +1,4 @@
-<header class="homebase-header">
+<header class="homebase-header" [ngClass]="variant">
   <div class="top-bar">
     <div class="container">
       <div class="row align-items-center">
@@ -83,12 +83,13 @@
         </ul>
 
         <div class="nav-icons d-flex align-items-center gap-3">
+          <!-- SEARCH: LUÔN HIỂN THỊ -->
           <div class="search-wrapper" [class.active]="isSearchOpen">
             <div class="search-box">
               <input
                 type="text"
                 class="search-input"
-                placeholder="Tìm kiếm sản phẩm..."
+                placeholder="Tìm kiếm sản phẩm, sự kiện..."
                 [(ngModel)]="searchQuery"
                 (keyup.enter)="onSearch()"
                 #searchInput
@@ -101,61 +102,69 @@
               <i class="fas" [class]="isSearchOpen ? 'fa-times' : 'fa-search'"></i>
             </button>
           </div>
-          <button class="icon-btn" aria-label="Wishlist">
-            <i class="far fa-heart"></i>
-          </button>
-          <button class="icon-btn position-relative" aria-label="Cart">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-badge">0</span>
-          </button>
 
-          <!-- KHỐI NÀY SẼ HIỂN THỊ KHI CHƯA ĐĂNG NHẬP -->
-          <div *ngIf="!isLoggedIn" class="d-flex align-items-center gap-2">
-            <button class="btn-header btn-header-primary">Đăng Nhập</button>
-            <button class="btn-header btn-header-outline">Đăng Ký</button>
-          </div>
+          <!-- NÚT ĐĂNG KÝ EVENT -->
+          <button *ngIf="variant === 'dark'" class="btn-event-glow">Đăng ký sự kiện →</button>
 
-          <!-- KHỐI NÀY LÀ DROPDOWN CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->
-          <div class="dropdown" *ngIf="isLoggedIn">
-            <a
-              class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
-              href="#"
-              role="button"
-              id="dropdownUser"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                src="assets/images/user-avatar-placeholder.png"
-                alt="User Avatar"
-                class="user-avatar"
-              />
-              <span>Tánh</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
-              <li>
-                <a class="dropdown-item" [routerLink]="['/settings']">
-                  <i class="far fa-file-alt me-2"></i> Tài khoản của bạn</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" [routerLink]="['/settings/my-orders']">
-                  <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" [routerLink]="['/settings/my-reviews']">
-                  <i class="fas fa-star me-2"></i> Đánh giá của tôi</a
-                >
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" (click)="logout()"
-                  ><i class="fas fa-sign-out-alt me-2"></i> Thoát</a
-                >
-              </li>
-            </ul>
-          </div>
+          <!-- PHẦN CÒN LẠI: CHỈ HIỂN THỊ KHI KHÔNG PHẢI EVENT -->
+          <ng-container *ngIf="variant !== 'dark'">
+            <button class="icon-btn" aria-label="Wishlist">
+              <i class="far fa-heart"></i>
+            </button>
+
+            <button class="icon-btn position-relative" aria-label="Cart">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-badge">0</span>
+            </button>
+
+            <!-- CHƯA ĐĂNG NHẬP -->
+            <div *ngIf="!isLoggedIn" class="d-flex align-items-center gap-2">
+              <button class="btn-header btn-header-primary">Đăng Nhập</button>
+              <button class="btn-header btn-header-outline">Đăng Ký</button>
+            </div>
+
+            <!-- ĐÃ ĐĂNG NHẬP -->
+            <div class="dropdown" *ngIf="isLoggedIn">
+              <a
+                class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
+                href="#"
+                role="button"
+                id="dropdownUser"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img
+                  src="assets/images/user-avatar-placeholder.png"
+                  alt="User Avatar"
+                  class="user-avatar"
+                />
+                <span>Tánh</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+                <li>
+                  <a class="dropdown-item" [routerLink]="['/settings']">
+                    <i class="far fa-file-alt me-2"></i> Tài khoản của bạn
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" [routerLink]="['/settings/my-orders']">
+                    <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" [routerLink]="['/settings/my-reviews']">
+                    <i class="fas fa-star me-2"></i> Đánh giá của tôi
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" (click)="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i> Thoát
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>

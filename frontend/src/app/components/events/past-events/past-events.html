@@ -1,0 +1,10 @@
+<section class="past">
+  <p class="section-label">PAST EVENTS</p>
+  <h2>Sự kiện <span>Đã Qua</span></h2>
+
+  <div class="masonry">
+    @for (img of pastImages; track $index) {
+      <img [src]="img" />
+    }
+  </div>
+</section>
