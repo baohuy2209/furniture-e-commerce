@@ -1,0 +1,154 @@
+<div class="event-details-page">
+
+  <!-- BACK BUTTON -->
+  <div class="container back-container">
+    <button class="btn-back" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i> Quay lại
+    </button>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="details-hero" [style.backgroundImage]="'url(' + event.image + ')'">
+    <div class="overlay"></div>
+    <div class="hero-content container">
+      <span class="status-badge">⏳ SẮP DIỄN RA</span>
+      <h1>{{ event.title }}</h1>
+      <p class="subtitle">{{ event.description }}</p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT GRID -->
+  <div class="container main-content">
+    <div class="row">
+      
+      <!-- LEFT COLUMN -->
+      <div class="col-lg-8 left-col">
+        
+        <!-- INTRO -->
+        <section class="section-block">
+          <h3><i class="bi bi-journal-text text-gold"></i> Giới Thiệu Sự Kiện</h3>
+          <p class="text-desc">
+            Interior Art Expo 2025 là sự kiện triển lãm nghệ thuật nội thất và thiết kế đương đại lớn nhất trong năm. 
+            Chúng tôi tập hợp hơn 100 thương hiệu nội thất cao cấp, các nhà thiết kế nổi tiếng và những xu hướng mới nhất trong ngành.
+            <br><br>
+            Đây là cơ hội tuyệt vời để bạn ám phá những sản phẩm độc đáo, gặp gỡ các chuyên gia hàng đầu và cập nhật
+            những xu hướng thiết kế mới nhất cho không gian sống của mình.
+          </p>
+        </section>
+
+        <!-- HIGHLIGHTS -->
+        <section class="section-block">
+          <h3><i class="bi bi-check-square text-gold"></i> Điểm Nổi Bật</h3>
+          <div class="highlights-list">
+            @for (item of event.highlights; track item) {
+              <div class="highlight-item">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>{{ item }}</span>
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- TIMELINE -->
+        <section class="section-block">
+          <h3><i class="bi bi-calendar-event text-gold"></i> Chương Trình</h3>
+          <div class="timeline">
+            @for (item of event.timeline; track item) {
+              <div class="timeline-item">
+                <div class="dot"></div>
+                <div class="time-badge">{{ item.time }}</div>
+                <h4>{{ item.title }}</h4>
+                <p>{{ item.description }}</p>
+              </div>
+            }
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT COLUMN (SIDEBAR) -->
+      <div class="col-lg-4 right-col">
+        
+        <div class="sidebar-card info-card">
+          <h4>Thông Tin Sự Kiện</h4>
+          
+          <div class="info-row">
+            <i class="bi bi-calendar3"></i>
+            <div>
+              <label>NGÀY TỔ CHỨC</label>
+              <span>15-17 Tháng 3, 2025</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <i class="bi bi-clock"></i>
+            <div>
+              <label>THỜI GIAN</label>
+              <span>{{ event.time }}</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <i class="bi bi-geo-alt"></i>
+            <div>
+              <label>ĐỊA ĐIỂM</label>
+              <span>{{ event.location }}</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <i class="bi bi-ticket-perforated"></i>
+            <div>
+              <label>GIÁ VÉ</label>
+              <span>Miễn phí (Đăng ký trước)</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <i class="bi bi-people"></i>
+            <div>
+              <label>SỐ CHỖ CÒN LẠI</label>
+              <span>{{ event.stats?.attendees || 0 }}/200</span>
+            </div>
+          </div>
+
+          <button class="btn-event-primary w-100 mt-3" (click)="openRegisterModal()">ĐĂNG KÝ NGAY</button>
+
+        </div>
+      <!-- MODAL (Moved to top) -->
+  <!-- MODAL (Moved to top) -->
+  @if (isModalOpen) {
+    <app-event-registration-modal 
+      [event]="event" 
+      (close)="closeRegisterModal()">
+    </app-event-registration-modal>
+  }      
+
+        <div class="sidebar-card contact-card">
+          <h4>Liên Hệ</h4>
+          <div class="contact-row">
+            <i class="bi bi-telephone"></i>
+            <span>(+84) 901 234 567</span>
+          </div>
+          <div class="contact-row">
+            <i class="bi bi-envelope"></i>
+            <span>events&#64;homebase.vn</span>
+          </div>
+        </div>
+
+        <div class="sidebar-card share-card">
+          <h4>Chia Sẻ</h4>
+          <div class="social-icons">
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-youtube"></i></a>
+            <a href="#"><i class="bi bi-tiktok"></i></a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

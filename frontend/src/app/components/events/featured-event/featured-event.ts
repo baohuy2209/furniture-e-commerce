@@ -1,11 +1,44 @@
 import { Component } from '@angular/core';
+import { CommonModule, DecimalPipe } from '@angular/common';
+import { Event } from '../../../models/event.model';
+import { RouterModule } from '@angular/router';
+
+import { EventRegistrationModal } from '../event-registration-modal/event-registration-modal';
 
 @Component({
   selector: 'app-featured-event',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, RouterModule, DecimalPipe, EventRegistrationModal],
   templateUrl: './featured-event.html',
   styleUrl: './featured-event.css',
 })
 export class FeaturedEvent {
+  isModalOpen = false;
 
+  openRegisterModal() {
+    this.isModalOpen = true;
+  }
+
+  closeRegisterModal() {
+    this.isModalOpen = false;
+  }
+
+  event: Event = {
+    id: 1,
+    title: 'Interior Harmony Expo 2025',
+    description:
+      'Triển lãm nội thất nghệ thuật – Cân bằng lý trí & cảm xúc. Khám phá cách phối cảnh, ánh sáng, màu sắc và vật liệu tạo không gian sống mang dấu ấn cá nhân.',
+    date: { day: 15, month: 1, year: 2025 },
+    time: '08:00 - 17:00',
+    location: 'HomeBase Quận 2, TP.HCM',
+    image: '/images/event/event_images1.jpg', // Ensure this path is correct or use a placeholder
+    status: 'ONGOING',
+    type: 'EXHIBITION',
+    price: 0,
+    stats: {
+      attendees: 500,
+      brands: 15,
+      workshops: 6,
+    },
+  };
 }

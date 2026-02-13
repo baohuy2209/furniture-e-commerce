@@ -25,11 +25,11 @@
   --color-text-muted: #808080;
 
   /* Accent Colors */
-  --color-accent-gold: #d4af37;
-  --color-accent-gold-dark: #b8962f;
+  --color-accent-gold: #FF911F;
+  --color-accent-gold-dark: #e07e10;
   --color-accent-bronze: #cd7f32;
-  --color-gradient-start: #d4af37;
-  --color-gradient-end: #f4d03f;
+  --color-gradient-start: #FF911F;
+  --color-gradient-end: #ffb366;
 
   /* Status Colors */
   --color-success: #10b981;
@@ -130,4 +130,30 @@ html {
   padding: 20px;
   background: #f8f9fa;
   min-height: 100vh;
+}
+
+/* Global Event Button */
+.btn-event-primary {
+  background: linear-gradient(135deg, #FF911F, #CD7F32);
+  color: #111;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 0 rgba(255, 145, 31, 0.6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.btn-event-primary:hover {
+  background: linear-gradient(135deg, #ffcf70, #FF911F);
+  box-shadow: 0 0 6px rgba(255, 145, 31, 0.6), 0 0 12px rgba(255, 145, 31, 0.4);
+  transform: translateY(-1px);
+  color: #000;
 }
