@@ -1,1 +1,96 @@
-<p>blogs works!</p>
+<!-- blog-hero.component.html -->
+<section class="bh-wrap">
+  <!-- ── Hero ── -->
+  <div class="bh-hero position-relative overflow-hidden">
+    <img
+      src="images/blog/blog_images1.jpg"
+      alt="Blog hero"
+      class="bh-hero-img w-100 h-100 object-fit-cover"
+    />
+    <div class="bh-overlay position-absolute top-0 start-0 w-100 h-100"></div>
+
+    <!-- Text -->
+    <div
+      class="bh-hero-content position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center px-3"
+    >
+      <h1 class="bh-title text-white mb-3">Không gian sống là nghệ thuật</h1>
+      <p class="bh-subtitle text-white-50 mb-0">
+        Blog chia sẻ cảm hứng &amp; giải pháp thiết kế từ HomeBase
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Filter bar ── -->
+  <div class="bh-filter-bar container">
+    <div class="bh-filter-inner bg-white rounded-3 shadow d-flex align-items-stretch px-2">
+      <!-- Danh mục -->
+      <div class="bh-filter-group d-flex flex-column justify-content-center flex-fill px-3 py-3">
+        <span class="bh-label text-uppercase mb-1">Danh mục</span>
+        <div class="bh-select-wrap position-relative d-flex align-items-center">
+          <select
+            class="bh-select form-select border-0 p-0 pe-4 bg-transparent"
+            [(ngModel)]="filter.category"
+            (change)="onFilterChange()"
+          >
+            <option>Tất cả</option>
+            <option>Decor</option>
+            <option>Nội thất</option>
+            <option>Phong cách sống</option>
+            <option>Mẹo hay</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bh-divider align-self-center"></div>
+
+      <!-- Thời gian đọc -->
+      <div class="bh-filter-group d-flex flex-column justify-content-center flex-fill px-3 py-3">
+        <span class="bh-label text-uppercase mb-1">Thời gian đọc</span>
+        <div class="bh-select-wrap position-relative d-flex align-items-center">
+          <select
+            class="bh-select form-select border-0 p-0 pe-4 bg-transparent"
+            [(ngModel)]="filter.readTime"
+            (change)="onFilterChange()"
+          >
+            <option>Tất cả</option>
+            <option>Dưới 3 phút</option>
+            <option>3 – 5 phút</option>
+            <option>Trên 5 phút</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bh-divider align-self-center"></div>
+
+      <!-- Sắp xếp -->
+      <div class="bh-filter-group d-flex flex-column justify-content-center flex-fill px-3 py-3">
+        <span class="bh-label text-uppercase mb-1">Sắp xếp</span>
+        <div class="bh-select-wrap position-relative d-flex align-items-center">
+          <select
+            class="bh-select form-select border-0 p-0 pe-4 bg-transparent"
+            [(ngModel)]="filter.sortBy"
+            (change)="onFilterChange()"
+          >
+            <option>Mới nhất</option>
+            <option>Cũ nhất</option>
+            <option>Đọc nhiều nhất</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="row g-4 container mx-auto py-4 mt-4">
+  <div class="col-12 col-sm-6 col-lg-4">
+    <app-blog-card></app-blog-card>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-4">
+    <app-blog-card></app-blog-card>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-4">
+    <app-blog-card></app-blog-card>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-4">
+    <app-blog-card></app-blog-card>
+  </div>
+</div>

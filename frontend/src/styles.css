@@ -131,3 +131,19 @@ html {
   background: #f8f9fa;
   min-height: 100vh;
 }
+
+.w-100 {
+  width: 100%;
+}
+
+.w-90 {
+  width: 90%;
+}
+
+.w-95 {
+  width: 95%;
+}
+
+.w-80 {
+  width: 80%;
+}

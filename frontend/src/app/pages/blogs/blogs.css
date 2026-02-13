@@ -1,0 +1,175 @@
+/* blog-hero.component.css */
+/* Only custom styles — Bootstrap v5 handles the rest */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ── Wrapper ────────────────────────────────────── */
+.bh-wrap {
+  position: relative;
+  padding-bottom: 52px; /* space for floating filter bar */
+}
+
+/* ── Hero image area ────────────────────────────── */
+.bh-hero {
+  height: 320px;
+}
+
+@media (min-width: 768px) {
+  .bh-hero {
+    height: 380px;
+  }
+}
+@media (min-width: 1200px) {
+  .bh-hero {
+    height: 440px;
+  }
+}
+
+.bh-hero-img {
+  object-position: center 30%;
+  animation: heroZoom 8s ease both;
+}
+
+@keyframes heroZoom {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.bh-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 18, 28, 0.28) 0%,
+    rgba(18, 18, 28, 0.52) 60%,
+    rgba(18, 18, 28, 0.7) 100%
+  );
+}
+
+/* ── Hero text ──────────────────────────────────── */
+.bh-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 5.5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+  animation: fadeUp 0.7s ease 0.1s both;
+}
+
+.bh-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(0.82rem, 1.8vw, 1rem);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+  animation: fadeUp 0.7s ease 0.25s both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Filter bar ─────────────────────────────────── */
+.bh-filter-bar {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
+  max-width: 720px;
+  animation: filterSlide 0.6s ease 0.35s both;
+}
+
+@keyframes filterSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.bh-filter-inner {
+  border-radius: 16px !important;
+  box-shadow:
+    0 8px 32px rgba(18, 18, 28, 0.13),
+    0 2px 8px rgba(18, 18, 28, 0.07) !important;
+  overflow: hidden;
+}
+
+/* ── Label ──────────────────────────────────────── */
+.bh-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: #9e9082;
+}
+
+/* ── Select ─────────────────────────────────────── */
+.bh-select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #2a2118;
+  cursor: pointer;
+  /* override Bootstrap form-select */
+  box-shadow: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23C8553D' stroke-width='2.5'%3E%3Cpath d='M9 18l6-6-6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  background-size: 14px;
+  transition: color 0.15s ease;
+}
+
+.bh-select:hover,
+.bh-select:focus {
+  color: #c8553d;
+  outline: none;
+}
+
+/* ── Divider ────────────────────────────────────── */
+.bh-divider {
+  width: 1px;
+  height: 36px;
+  background: #ede4dc;
+  flex-shrink: 0;
+}
+
+/* ── Responsive: stack on small screens ─────────── */
+@media (max-width: 576px) {
+  .bh-filter-bar {
+    width: calc(100% - 32px);
+  }
+
+  .bh-filter-inner {
+    flex-direction: column !important;
+  }
+
+  .bh-filter-group {
+    border-bottom: 1px solid #ede4dc;
+  }
+
+  .bh-filter-group:last-child {
+    border-bottom: none;
+  }
+
+  .bh-divider {
+    display: none;
+  }
+
+  .bh-wrap {
+    padding-bottom: 190px;
+  }
+}

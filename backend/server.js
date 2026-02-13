@@ -8,6 +8,7 @@ const route = require("./routes/index.route");
 const swaggerUi = require("swagger-ui-express");
 const cookieSession = require("cookie-session");
 const fs = require("fs");
+const cloudinary = require("cloudinary").v2;
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
@@ -29,6 +30,12 @@ app.use(
     secure: false,
   }),
 );
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 app.get("/", (req, res) => {
   res.send("Welcome to furniture e-commerce");
 });
