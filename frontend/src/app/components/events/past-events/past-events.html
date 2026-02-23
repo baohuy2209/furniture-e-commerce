@@ -7,9 +7,9 @@
   <!-- IMAGE GRID -->
   <div class="past-grid">
 
-    @for (event of pastEvents; track event.id) {
-      <a class="past-item" [routerLink]="['/events', event.id]">
-        <img [src]="event.image" [alt]="event.title" />
+    @for (event of pastEvents; track event.event_id) {
+      <a class="past-item" [routerLink]="['/events', event.event_id]">
+        <img [src]="event.thumbnail_image" [alt]="event.event_name" />
       </a>
     }
 

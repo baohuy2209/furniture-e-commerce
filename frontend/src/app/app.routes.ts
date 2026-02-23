@@ -40,6 +40,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/events/events').then((m) => m.Events),
       },
       {
+        path: 'policy',
+        loadComponent: () => import('./pages/policy/policy').then((m) => m.Policy),
+      },
+      {
         path: 'events/:id',
         loadComponent: () =>
           import('./pages/event-page-details/event-page-details').then(

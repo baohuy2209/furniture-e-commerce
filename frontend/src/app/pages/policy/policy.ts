@@ -105,12 +105,8 @@ export class Policy {
 
   toggleSection(index: number) {
     // Accordion behavior: close others, toggle clicked
-    // const currentState = this.sections[index].isOpen; 
-    // this.sections.forEach(s => s.isOpen = false);
-    // this.sections[index].isOpen = !currentState;
-    
-    // OR Multi-open behavior (often better for long policy docs, but design implies accordion)
-    // Going with toggle behavior strictly based on typical UI patterns for this layout
-    this.sections[index].isOpen = !this.sections[index].isOpen;
+    const currentState = this.sections[index].isOpen; 
+    this.sections.forEach(s => s.isOpen = false);
+    this.sections[index].isOpen = !currentState;
   }
 }

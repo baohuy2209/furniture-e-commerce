@@ -13,7 +13,7 @@
           <div class="accordion-header" (click)="toggleSection(i)">
             <h3 class="section-title">{{ section.id }}. {{ section.title }}</h3>
             <span class="toggle-icon">
-              <i class="fas" [class.fa-caret-down]="!section.isOpen" [class.fa-caret-up]="section.isOpen"></i>
+              <i class="bi" [class.bi-caret-right-fill]="!section.isOpen" [class.bi-caret-down-fill]="section.isOpen"></i>
             </span>
           </div>
           

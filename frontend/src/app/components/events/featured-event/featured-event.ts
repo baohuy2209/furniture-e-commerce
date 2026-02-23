@@ -24,21 +24,23 @@ export class FeaturedEvent {
   }
 
   event: Event = {
-    id: 1,
-    title: 'Interior Harmony Expo 2025',
+    event_id: 1,
+    event_name: 'Interior Harmony Expo 2025',
     description:
       'Triển lãm nội thất nghệ thuật – Cân bằng lý trí & cảm xúc. Khám phá cách phối cảnh, ánh sáng, màu sắc và vật liệu tạo không gian sống mang dấu ấn cá nhân.',
     date: { day: 15, month: 1, year: 2025 },
     time: '08:00 - 17:00',
     location: 'HomeBase Quận 2, TP.HCM',
-    image: '/images/event/event_images1.jpg', // Ensure this path is correct or use a placeholder
-    status: 'ONGOING',
-    type: 'EXHIBITION',
+    thumbnail_image: '/images/event/event_images1.jpg',
+    event_status: 'ONGOING',
+    event_type: 'EXHIBITION',
     price: 0,
+    max_participants: 500,
     stats: {
       attendees: 500,
       brands: 15,
       workshops: 6,
     },
+    is_featured: true
   };
 }

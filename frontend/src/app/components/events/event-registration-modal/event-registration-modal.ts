@@ -18,7 +18,7 @@ export class EventRegistrationModal {
 
   // Form Data
   formData = {
-    name: '',
+    fullname: '',
     email: '',
     phone: '',
     address: '',
@@ -44,7 +44,7 @@ export class EventRegistrationModal {
     // Reset form for next time if needed, though component is usually destroyed
     this.step = 'form';
     this.formData = {
-      name: '',
+      fullname: '',
       email: '',
       phone: '',
       address: '',

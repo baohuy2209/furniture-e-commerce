@@ -6,39 +6,27 @@
 
   <div class="grid">
 
-    @for (event of events; track event.id) {
-
+    @for (event of events; track event.event_id) {
       <div class="event-card">
-
         <div class="thumb">
-          <img [src]="event.image" [alt]="event.title" />
-
+          <img [src]="event.thumbnail_image" [alt]="event.event_name" />
           <div class="date-badge">
             <b>{{ event.date.day }}</b>
             <span>THÁNG {{ event.date.month }}</span>
           </div>
         </div>
-
         <div class="content">
-
-          <span class="tag">{{ event.type }}</span>
-
-          <h4>{{ event.title }}</h4>
-
+          <span class="tag">{{ event.event_type }}</span>
+          <h4>{{ event.event_name }}</h4>
           <p>{{ event.description }}</p>
-
           <div class="meta">
             <span><i class="bi bi-clock"></i> {{ event.time }}</span>
             <span *ngIf="event.price === 0">Miễn phí</span>
             <span *ngIf="event.price > 0">{{ event.price | number }}đ</span>
           </div>
-
-          <a class="more" [routerLink]="['/events', event.id]">Tìm hiểu thêm →</a>
-
+          <a class="more" [routerLink]="['/events', event.event_id]">Tìm hiểu thêm →</a>
         </div>
-
       </div>
-
     }
 
   </div>

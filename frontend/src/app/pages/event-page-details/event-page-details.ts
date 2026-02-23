@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, afterNextRender } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Event } from '../../models/event.model';
@@ -18,16 +18,17 @@ export class EventPageDetails {
   isModalOpen = false;
 
   event: Event = {
-    id: 999,
-    title: 'Interior Art Expo 2025',
+    event_id: 999,
+    event_name: 'Interior Art Expo 2025',
     description: 'Triển lãm nghệ thuật nội thất & thiết kế đương đại',
     date: { day: 15, month: 3, year: 2025 },
     time: '09:00 - 18:00',
     location: 'SECC - Quận 7, TP.HCM',
-    image: '/images/event/event_images1.jpg',
-    status: 'UPCOMING',
-    type: 'EXHIBITION',
+    thumbnail_image: '/images/event/event_images1.jpg',
+    event_status: 'UPCOMING',
+    event_type: 'EXHIBITION',
     price: 0,
+    max_participants: 200,
     stats: {
       attendees: 47,
       brands: 100,

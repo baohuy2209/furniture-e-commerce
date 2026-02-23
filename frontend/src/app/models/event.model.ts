@@ -1,6 +1,6 @@
 export interface Event {
-    id: number;
-    title: string;
+    event_id: number;
+    event_name: string;
     description: string;
     date: {
         day: number;
@@ -9,16 +9,17 @@ export interface Event {
     };
     time: string;
     location: string;
-    image: string;
-    status: 'UPCOMING' | 'ONGOING' | 'PAST';
-    type: 'WORKSHOP' | 'EXHIBITION' | 'LAUNCH' | 'POP-UP'; // Added specific event types
+    thumbnail_image: string;
+    event_status: 'UPCOMING' | 'ONGOING' | 'PAST';
+    event_type: 'WORKSHOP' | 'EXHIBITION' | 'LAUNCH' | 'POP-UP';
     price: number;
+    max_participants: number;
+    is_featured?: boolean;
     stats?: {
         attendees?: number;
         brands?: number;
         workshops?: number;
     };
-    isFeatured?: boolean;
     highlights?: string[];
     timeline?: {
         time: string;

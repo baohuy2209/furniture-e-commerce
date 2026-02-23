@@ -9,7 +9,7 @@
     <!-- IMAGE -->
     <div class="featured-image">
       <span class="badge-live">● ĐANG DIỄN RA</span>
-      <img [src]="event.image" [alt]="event.title" />
+      <img [src]="event.thumbnail_image" [alt]="event.event_name" />
     </div>
 
     <!-- CONTENT -->
@@ -19,7 +19,7 @@
         {{ event.location }}
       </p>
 
-      <h3>{{ event.title }}</h3>
+      <h3>{{ event.event_name }}</h3>
 
       <p class="desc">
         {{ event.description }}
@@ -46,8 +46,8 @@
       </div>
 
       <div class="actions">
-        <button class="btn-primary" [routerLink]="['/events', event.id]">Xem chi tiết →</button>
-        <button class="btn-outline" [disabled]="event.status === 'PAST'" (click)="openRegisterModal()">Đăng ký tham dự</button>
+        <button class="btn-primary" [routerLink]="['/events', event.event_id]">Xem chi tiết →</button>
+        <button class="btn-outline" [disabled]="event.event_status === 'PAST'" (click)="openRegisterModal()">Đăng ký tham dự</button>
       </div>
     </div>
   </div>
