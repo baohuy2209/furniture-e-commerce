@@ -36,6 +36,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/blogs/blogs').then((m) => m.Blogs),
       },
       {
+        path: 'blogs/:id',
+        loadComponent: () =>
+          import('./pages/blogs-details/blogs-details').then((m) => m.BlogsDetails),
+      },
+      {
         path: 'events',
         loadComponent: () => import('./pages/events/events').then((m) => m.Events),
       },
@@ -77,7 +82,7 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/my-orders/my-orders').then((m) => m.MyOrders), // <== CẦN TẠO COMPONENT NÀY
       },
       {
-        path: 'wishlist', 
+        path: 'wishlist',
         loadComponent: () => import('./pages/my-reviews/my-reviews').then((m) => m.MyReviews), // <== CẦN TẠO COMPONENT NÀY
       },
       {

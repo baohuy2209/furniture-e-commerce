@@ -19,9 +19,12 @@ const blogPostsSchema = new mongoose.Schema(
         order: Number,
       },
     ],
-    tags: {
-      type: String,
-    },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "BlogTags",
+      },
+    ],
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "BlogAuthor",
