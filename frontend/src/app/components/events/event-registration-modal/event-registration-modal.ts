@@ -27,9 +27,6 @@ export class EventRegistrationModal {
     agreed: false
   };
 
-  // Validation state (simple)
-  isSubmitting = false;
-
   closeModal() {
     this.close.emit();
   }
@@ -39,13 +36,7 @@ export class EventRegistrationModal {
       alert('Vui lòng đồng ý với điều khoản tham dự.');
       return;
     }
-    
-    // Simulate API call
-    this.isSubmitting = true;
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.step = 'success';
-    }, 100);
+    this.step = 'success';
   }
 
   finish() {
