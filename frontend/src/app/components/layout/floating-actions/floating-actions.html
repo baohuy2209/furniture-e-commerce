@@ -1,0 +1,43 @@
+<div class="floating-actions">
+
+  <!-- CONTACT CLUSTER -->
+  <div class="contact-cluster" [class.expanded]="contactExpanded">
+
+    <!-- Action items (shown when expanded) -->
+    <div class="contact-items">
+      <a href="tel:19001234" class="fab-item fab-phone" title="Gọi 1900 1234">
+        <i class="fas fa-phone-alt"></i>
+        <span class="fab-label">1900 1234</span>
+      </a>
+      <a href="mailto:events@homebase.vn" class="fab-item fab-mail" title="Email">
+        <i class="fas fa-envelope"></i>
+        <span class="fab-label">events&#64;homebase.vn</span>
+      </a>
+      <a href="https://facebook.com" target="_blank" class="fab-item fab-fb" title="Facebook">
+        <i class="fab fa-facebook-f"></i>
+        <span class="fab-label">Facebook</span>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="fab-item fab-ig" title="Instagram">
+        <i class="fab fa-instagram"></i>
+        <span class="fab-label">Instagram</span>
+      </a>
+    </div>
+
+    <!-- Toggle button -->
+    <button class="fab-main" (click)="toggleContact()" [attr.aria-expanded]="contactExpanded" aria-label="Liên hệ">
+      <i class="fas" [class]="contactExpanded ? 'fa-times' : 'fa-headset'"></i>
+    </button>
+  </div>
+
+  <!-- BACK TO TOP -->
+  <button
+    class="fab-back-to-top"
+    [class.visible]="showBackToTop"
+    (click)="scrollToTop()"
+    aria-label="Về đầu trang"
+    title="Về đầu trang"
+  >
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+</div>

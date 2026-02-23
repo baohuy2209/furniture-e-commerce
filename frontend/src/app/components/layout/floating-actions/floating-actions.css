@@ -1,0 +1,178 @@
+/* ============================================================
+   FLOATING ACTIONS — back-to-top + contact cluster
+   ============================================================ */
+
+.floating-actions {
+  position: fixed;
+  bottom: 32px;
+  right: 28px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── FAB base ──────────────────────────────────────────────── */
+.fab-main,
+.fab-back-to-top,
+.fab-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+/* ── Main toggle button ─────────────────────────────────────── */
+.fab-main {
+  width: 52px;
+  height: 52px;
+  background: var(--color-accent-gold);
+  color: #fff;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 16px rgba(255, 145, 31, 0.45);
+}
+
+.fab-main:hover {
+  background: #e07a10;
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(255, 145, 31, 0.55);
+}
+
+/* rotate icon when expanded */
+.contact-cluster.expanded .fab-main {
+  background: #e74c3c;
+  box-shadow: 0 4px 16px rgba(231, 76, 60, 0.4);
+}
+
+/* ── Contact items  ─────────────────────────────────────────── */
+.contact-items {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.contact-cluster.expanded .contact-items {
+  max-height: 300px;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ── Individual contact item ────────────────────────────────── */
+.fab-item {
+  width: 44px;
+  height: 44px;
+  font-size: 1.05rem;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* label tooltip on hover */
+.fab-label {
+  position: absolute;
+  right: 56px;
+  white-space: nowrap;
+  background: rgba(20, 20, 20, 0.88);
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.fab-item:hover .fab-label {
+  opacity: 1;
+}
+
+/* colours */
+.fab-phone {
+  background: #27ae60;
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(39, 174, 96, 0.4);
+}
+.fab-phone:hover { background: #1e8449; transform: scale(1.1); }
+
+.fab-mail {
+  background: #e67e22;
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(230, 126, 34, 0.4);
+}
+.fab-mail:hover { background: #ca6f1e; transform: scale(1.1); }
+
+.fab-fb {
+  background: #1877f2;
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(24, 119, 242, 0.4);
+}
+.fab-fb:hover { background: #0d65d9; transform: scale(1.1); }
+
+.fab-ig {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(214, 36, 159, 0.35);
+}
+.fab-ig:hover { transform: scale(1.1); filter: brightness(1.1); }
+
+/* ── Back to top ────────────────────────────────────────────── */
+.fab-back-to-top {
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  color: var(--color-accent, #FF911F);
+  font-size: 1rem;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.18);
+  border: 2px solid var(--color-accent, #FF911F);
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+}
+
+.fab-back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.fab-back-to-top:hover {
+  background: var(--color-accent, #FF911F);
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 575px) {
+  .floating-actions {
+    bottom: 20px;
+    right: 16px;
+  }
+
+  .fab-main {
+    width: 46px;
+    height: 46px;
+    font-size: 1.1rem;
+  }
+
+  .fab-back-to-top {
+    width: 38px;
+    height: 38px;
+  }
+
+  .fab-label {
+    display: none; /* tránh bị cắt ở mobile */
+  }
+}
