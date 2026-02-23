@@ -2,9 +2,9 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
   /* Màu sắc chính HomeBase */
-  --color-primary: #3d529d; /* Xanh nội thất */
+  --color-primary: #3d529d; /* Xanh Navy Modern */
   --color-secondary: #8b7355; /* Nâu gỗ */
-  --color-accent: #ff911f; /* Vàng đồng */
+  --color-accent: #ff911f; /* Cam Vàng */
   --color-bg: #faf9f6; /* Nền sáng */
   --color-white: #ffffff;
   --color-border: #e8e4dc;
@@ -24,23 +24,24 @@
   --color-text-secondary: #b8b8b8;
   --color-text-muted: #808080;
 
-  /* Accent Colors */
-  --color-accent-gold: #FF911F;
-  --color-accent-gold-dark: #e07e10;
-  --color-accent-bronze: #cd7f32;
+  /* Accent Colors - REPLACED GOLD WITH ORANGE */
+  --color-accent-gold: #FF911F; /* Primary Orange */
+  --color-accent-gold-dark: #e67e17;
+  --color-accent-bronze: #cd7f32; 
   --color-gradient-start: #FF911F;
   --color-gradient-end: #ffb366;
 
-  /* Status Colors */
-  --color-success: #10b981;
+  /* Status Colors & Themes - REPLACED GREEN WITH BLUE */
+  --color-success: #3d529d; /* Changed to Blue for consistency with theme if used for branding */
   --color-live: #ef4444;
+  --color-blue-theme: #3d529d;
 
   /* Shadows & Effects */
   --shadow-event-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-event-md: 0 4px 16px rgba(0, 0, 0, 0.5);
   --shadow-event-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
   --shadow-event-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
-  --glow-gold: 0 0 20px rgba(212, 175, 55, 0.3);
+  --glow-gold: 0 0 20px rgba(255, 145, 31, 0.3); /* Orange Glow */
 
   /* Spacing */
   --spacing-xs: 0.5rem;

@@ -103,11 +103,7 @@
             </button>
           </div>
 
-          <!-- NÚT ĐĂNG KÝ EVENT -->
-          <button *ngIf="variant === 'dark'" class="btn-event-glow">Đăng ký sự kiện →</button>
-
-          <!-- PHẦN CÒN LẠI: CHỈ HIỂN THỊ KHI KHÔNG PHẢI EVENT -->
-          <ng-container *ngIf="variant !== 'dark'">
+          <!-- ICONS & PHẦN CÒN LẠI -->
             <button class="icon-btn" aria-label="Wishlist">
               <i class="far fa-heart"></i>
             </button>
@@ -164,7 +160,6 @@
                 </li>
               </ul>
             </div>
-          </ng-container>
         </div>
       </div>
     </div>

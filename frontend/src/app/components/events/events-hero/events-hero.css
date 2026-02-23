@@ -2,7 +2,7 @@
   position: relative;
   height: 80vh; /* Set height based on design */
   width: 100%;
-  background-image: url('/images/event/hero-bg.jpg'); /* Need to ensure this mage exists or use a placeholder */
+  background-image: url('/images/event/background_image.jpg'); /* Need to ensure this mage exists or use a placeholder */
   background-size: cover;
   background-position: center;
   display: flex;

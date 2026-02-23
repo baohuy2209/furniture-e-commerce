@@ -111,7 +111,7 @@
 
 .btn-secondary-hero:hover {
   background-color: #ffffff;
-  color: #1e3a5f;
+  color: var(--color-primary); /* Blue text */
   transform: translateY(-2px);
 }
 
@@ -154,7 +154,7 @@
 .hero-tag {
   width: fit-content;
   background-color: var(--color-bg);
-  color: #1e3a5f;
+  color: var(--color-primary); /* Blue */
   padding: 10px 16px;
   border-radius: 25px;
   font-size: 0.9rem;
@@ -165,12 +165,12 @@
   gap: 10px;
 }
 .hero-tag i {
-  color: var(--color-accent);
+  color: var(--color-accent); /* Orange */
 }
 .floating-tag {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.95);
-  color: #1e3a5f;
+  color: var(--color-primary); /* Blue */
   padding: 12px 20px;
   border-radius: 25px;
   font-size: 0.9rem;
@@ -184,7 +184,7 @@
 }
 
 .floating-tag i {
-  color: #d4a574;
+  color: var(--color-accent); /* Orange */
   font-size: 1.2rem;
 }
 

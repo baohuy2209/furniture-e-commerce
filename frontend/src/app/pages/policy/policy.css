@@ -1,0 +1,124 @@
+.policy-page {
+  padding: 60px 0 100px;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.policy-header {
+  text-align: center;
+  margin-bottom: 50px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.policy-header h1 {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.policy-intro {
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+  text-align: justify;
+  text-align-last: center;
+}
+
+/* Accordion */
+.policy-accordion {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accordion-item {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background-color: white;
+}
+
+.accordion-header {
+  background-color: #2c3e50; /* Dark Blue Header */
+  color: white;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.accordion-header:hover {
+  background-color: #34495e;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--font-heading);
+}
+
+.toggle-icon {
+  font-size: 18px;
+}
+
+.accordion-content-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+  background-color: #fff;
+}
+
+.accordion-content {
+  padding: 24px;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.accordion-content p {
+  margin-bottom: 12px;
+  line-height: 1.6;
+  color: #333;
+  font-size: 15px;
+  text-align: justify;
+}
+
+.accordion-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Specific styling for nested list simulation */
+.accordion-content p:nth-child(4), /* Item 3.1 */
+.accordion-content p:nth-child(5), /* Item 3.2 */
+.accordion-content p:nth-child(6), /* Item 3.3 */
+.accordion-content p:nth-child(7), /* Item 3.4 */
+.accordion-content p:nth-child(9), /* Item 4.1 */
+.accordion-content p:nth-child(10), /* Item 4.2 */
+.accordion-content p:nth-child(11), /* Item 4.3 */
+.accordion-content p:nth-child(12)  /* Item 4.4 */
+{
+  margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .policy-header h1 {
+    font-size: 22px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+  }
+}

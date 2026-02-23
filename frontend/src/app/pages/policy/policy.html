@@ -1,1 +1,31 @@
-<p>policy works!</p>
+<div class="policy-page">
+  <div class="container">
+    <div class="policy-header">
+      <h1>ĐIỀU KHOẢN VÀ CHÍNH SÁCH SỬ DỤNG WEBSITE BÁN ĐỒ NỘI THẤT</h1>
+      <p class="policy-intro">
+        Tài liệu này quy định các điều khoản, điều kiện và chính sách áp dụng cho việc truy cập, sử dụng website và các dịch vụ liên quan. Khi người dùng truy cập hoặc thực hiện giao dịch trên website, người dùng được hiểu là đã đọc, hiểu và đồng ý chịu sự ràng buộc của toàn bộ Điều khoản và Chính sách dưới đây.
+      </p>
+    </div>
+
+    <div class="policy-accordion">
+      @for (section of sections; track $index; let i = $index) {
+        <div class="accordion-item" [class.active]="section.isOpen">
+          <div class="accordion-header" (click)="toggleSection(i)">
+            <h3 class="section-title">{{ section.id }}. {{ section.title }}</h3>
+            <span class="toggle-icon">
+              <i class="fas" [class.fa-caret-down]="!section.isOpen" [class.fa-caret-up]="section.isOpen"></i>
+            </span>
+          </div>
+          
+          <div class="accordion-content-wrapper" [style.max-height]="section.isOpen ? '2000px' : '0'">
+            <div class="accordion-content">
+              @for (paragraph of section.content; track $index) {
+                <p>{{ paragraph }}</p>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

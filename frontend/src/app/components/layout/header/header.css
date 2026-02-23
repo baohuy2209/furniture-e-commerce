@@ -287,26 +287,13 @@
   background: transparent;
 }
 
-.btn-event-glow {
-  background: linear-gradient(135deg, #D4AF37, #CD7F32);
-  color: #111;
-  font-weight: 600;
-  padding: 10px 22px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 0 rgba(244, 183, 64, 0.6);
+/* Dark mode: user profile text & dropdown trigger */
+.homebase-header.dark .user-profile {
+  color: #ffffff !important;
 }
 
-.btn-event-glow:hover {
-  background: linear-gradient(135deg, #ffcf70, #ffd980);
-  box-shadow:
-  0 0 6px rgba(244,183,64,.6),
-  0 0 12px rgba(244,183,64,.4),
-  0 0 20px rgba(244,183,64,.2);
-
-  transform: translateY(-1px);
+.homebase-header.dark .user-profile:hover {
+  color: #f4b740 !important;
 }
 
 /* Responsive Styles */

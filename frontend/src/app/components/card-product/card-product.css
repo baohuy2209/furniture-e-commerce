@@ -17,7 +17,7 @@
   position: absolute;
   top: 16px;
   left: 16px;
-  background: #2d5f3f;
+  background: var(--color-primary);
   color: white;
   padding: 6px 16px;
   border-radius: 20px;
@@ -77,18 +77,18 @@
 }
 
 .action-btn:hover {
-  background: #2d5f3f;
+  background: var(--color-primary);
   color: white;
   transform: scale(1.1);
 }
 
 .action-btn.view-btn {
-  background: #2d5f3f;
+  background: var(--color-primary);
   color: white;
 }
 
 .action-btn.view-btn:hover {
-  background: #1f4029;
+  background: var(--color-primary);
 }
 
 .product-info {

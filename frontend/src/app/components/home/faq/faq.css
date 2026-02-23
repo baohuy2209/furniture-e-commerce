@@ -1,0 +1,140 @@
+.faq-section {
+  padding: 80px 0;
+  background-color: var(--color-bg); /* Cream/Off-white background */
+}
+
+.faq-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.faq-label {
+  font-size: 14px;
+  color: var(--color-accent); /* Orange */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.faq-title {
+  font-family: var(--font-heading);
+  font-size: 42px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.faq-title .highlight {
+  color: var(--color-accent); /* Orange */
+}
+
+/* FAQ List */
+.faq-list {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faq-item {
+  border-radius: 50px; /* Rounded pill shape */
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.faq-item.active {
+  border-radius: 20px; /* Less rounded when open */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* Question Bar */
+.faq-question {
+  background-color: var(--color-primary); /* Blue */
+  color: white;
+  padding: 16px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-height: 60px;
+}
+
+.faq-question:hover {
+  background-color: #2a3b75; /* Darker Blue */
+}
+
+.question-icon {
+  margin-right: 15px;
+  font-size: 20px;
+  opacity: 0.8;
+  border: 2px solid white;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faq-question span {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: var(--font-heading);
+}
+
+.toggle-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* Answer Area */
+.faq-answer-wrapper {
+  background-color: white;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out; 
+  /* Note: Height transition with 'auto' is tricky in pure CSS. 
+     Angular animation or explicit max-height is usually better. 
+     For simple 'auto', often max-height: 500px is used for transition. */
+  max-height: 0;
+  transition: max-height 0.4s ease-out;
+}
+
+.faq-item.active .faq-answer-wrapper {
+  max-height: 300px; /* Arbitrary large height */
+  height: auto;
+}
+
+.faq-answer {
+  padding: 24px 30px;
+  color: #666;
+  line-height: 1.6;
+  font-size: 16px;
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .faq-title {
+    font-size: 32px;
+  }
+  
+  .faq-question {
+    padding: 12px 20px;
+  }
+
+  .faq-question span {
+    font-size: 16px;
+  }
+}
