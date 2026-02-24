@@ -1,0 +1,32 @@
+<section class="golden-week-section">
+  <div class="container">
+    <div class="promo-card">
+      <div class="side-panel left-panel">
+        <img src="images/hero-section/P1.png" alt="Promo 1" class="panel-image">
+      </div>
+      
+      <div class="center-content">
+        <span class="tag-promo">ƯU ĐÃI ĐẶC BIỆT</span>
+        <h2 class="promo-title">{{ event_data.event_name }}</h2>
+        <h3 class="brand-highlight">{{ event_data.brand_highlight }}</h3>
+        <p class="promo-desc">{{ event_data.description }}</p>
+        
+        <div class="countdown-timer">
+          @for (unit of timer_units; track $index; let last = $last) {
+            <div class="timer-unit">
+              <span class="value">{{ unit.value }}</span>
+              <span class="label">{{ unit.label }}</span>
+            </div>
+            @if (!last) {
+              <span class="separator">:</span>
+            }
+          }
+        </div>
+      </div>
+      
+      <div class="side-panel right-panel">
+        <img src="images/hero-section/P2.png" alt="Promo 2" class="panel-image">
+      </div>
+    </div>
+  </div>
+</section>

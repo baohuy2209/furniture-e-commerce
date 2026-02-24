@@ -10,57 +10,57 @@ export class Features {
   child_data: any = {
     category_product: [
       {
-        id: 1,
-        name: 'Sofa & Ghế',
+        category_id: 1,
+        category_name: 'Sofa & Ghế',
         quantity: 120,
         image_url:
           'images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_arezzon_fabric_3331/main/image.png',
       },
       {
-        id: 2,
-        name: 'Bàn',
+        category_id: 2,
+        category_name: 'Bàn',
         quantity: 85,
         image_url:
           'images/products/dinning_room/kingston_dining_table/h29_w39_l63/table_dark_oak_veneer/leg_matt_black_lacquered/main/image.png',
       },
       {
-        id: 3,
-        name: 'Tủ & Kệ',
+        category_id: 3,
+        category_name: 'Tủ & Kệ',
         quantity: 95,
         image_url:
           'images/products/bedroom/lugano_nightstand/cabinet_matte_ash_gray_lacquered/leg_ash_gray_lacquered/main/image.png',
       },
       {
-        id: 4,
-        name: 'Giường ngủ',
+        category_id: 4,
+        category_name: 'Giường ngủ',
         quantity: 120,
         image_url: 'images/products/bedroom/bolzano_bed/red_lucca_fabric_3323/main/image.png',
       },
       {
-        id: 5,
-        name: 'Vật dụng trang trí',
+        category_id: 5,
+        category_name: 'Vật dụng trang trí',
         quantity: 45,
         image_url: 'images/products/bathroom/whirlwind_rug/w67_l94/main/image.png',
       },
     ],
     rooms: [
       {
-        name: 'Phòng khách',
+        category_name: 'Phòng khách',
       },
       {
-        name: 'Phòng ngủ',
+        category_name: 'Phòng ngủ',
       },
       {
-        name: 'Phòng ăn',
+        category_name: 'Phòng ăn',
       },
       {
-        name: 'Văn phòng',
+        category_name: 'Văn phòng',
       },
       {
-        name: 'Trang trí',
+        category_name: 'Trang trí',
       },
       {
-        name: 'Phụ kiện',
+        category_name: 'Phụ kiện',
       },
     ],
   };

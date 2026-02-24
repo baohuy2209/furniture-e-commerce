@@ -3,7 +3,7 @@
     <span>Loading ...</span>
   } @else {
     @for (item of child_data.rooms; track $index) {
-      <span>> {{ item.name }}</span>
+      <span>> {{ item.category_name }}</span>
     }
   }
 </div>
@@ -15,13 +15,13 @@
     </h3>
   </div>
   <div class="mt-4 d-flex flex-row justify-content-center align-items-center gap-5">
-    @for (item of child_data.category_product; track $index) {
+    @for (item of child_data.category_product; track item.category_id) {
       <div class="ft-product d-flex flex-column justify-content-center align-items-center gap-4">
         <div class="feature-product d-flex flex-row justify-content-center align-items-center">
-          <img src="{{ item.image_url }}" alt="{{ item.name }}" />
+          <img src="{{ item.image_url }}" alt="{{ item.category_name }}" />
         </div>
         <div class="feature-info d-flex flex-column justify-content-center align-items-center">
-          <h5 class="mb-1">{{ item.name }}</h5>
+          <h5 class="mb-1">{{ item.category_name }}</h5>
           <p class="text-muted-ev">{{ item.quantity }}+ Sản phẩm</p>
         </div>
       </div>
@@ -31,23 +31,21 @@
 <div class="mt-2 py-5">
   <div class="row feature-promotion">
     <div class="col-lg-6" style="padding: 32px">
-      <div class="card-beige p-4 h-100">
-        <div class="row align-items-center h-100">
-          <div class="col-md-6">
-            <span class="badge-discount mb-3 d-inline-block">GIẢM GIÁ 25%</span>
-            <h2 class="section-title fw-bold mb-3">
-              Bộ Sưu Tập <span class="highlight-text">Phòng Khách </span>
-              <span class="highlight-text">Hiện Đại</span>
+      <div class="card-beige p-5 h-100">
+        <div class="row align-items-center">
+          <div class="col-md-7">
+            <span class="badge-discount mb-4 d-inline-block">GIẢM GIÁ 25%</span>
+            <h2 class="section-title fw-bold mb-3" style="font-size: 2rem; line-height: 1.3;">
+              Bộ Sưu Tập <span style="color: #ff911f;">Phòng<br>Khách</span> Hiện Đại
             </h2>
-            <p class="text-muted mb-4">
-              Thiết kế tinh tế, chất liệu cao cấp, mang lại không gian sống đẳng cấp cho gia đình
-              bạn
+            <p class="text-muted mb-4" style="font-size: 0.9rem;">
+              Thiết kế tinh tế, chất liệu cao cấp, mang lại không gian sống đẳng cấp cho gia đình bạn
             </p>
             <button class="btn btn-dark-custom">
-              Mua Ngay <i class="fas fa-arrow-right ms-2"></i>
+              Mua Ngay <i class="fas fa-arrow-right"></i>
             </button>
           </div>
-          <div class="col-md-6 text-center">
+          <div class="col-md-5">
             <img src="images/hero-section/P1.png" alt="Living Room" class="product-image" />
           </div>
         </div>
@@ -55,21 +53,21 @@
     </div>
 
     <div class="col-lg-6" style="padding: 32px">
-      <div class="card-green p-4 h-100">
-        <div class="row align-items-center h-100">
-          <div class="col-md-6">
-            <span class="badge-new mb-3 d-inline-block">ƯU ĐÃI ĐẶC BIỆT</span>
-            <h2 class="section-title fw-bold mb-3">
-              Nội Thất <span style="color: #d4a574">Phòng Ngủ</span> Sang Trọng
+      <div class="card-blue card-green p-5 h-100">
+        <div class="row align-items-center">
+          <div class="col-md-7">
+            <span class="badge-new mb-4 d-inline-block">ƯU ĐÃI ĐẶC BIỆT</span>
+            <h2 class="section-title fw-bold mb-3" style="color: white; font-size: 2rem; line-height: 1.3;">
+              Nội Thất <span style="color: #ff911f;">Phòng<br>Ngủ</span> Sang Trọng
             </h2>
-            <p class="mb-4" style="opacity: 0.9">
-              Tạo không gian nghỉ ngơi hoàn hảo với bộ sưu tập nội thất cao cấp từ HomeBase
+            <p class="mb-4" style="opacity: 0.8; font-size: 0.9rem;">
+              Tạo không gian nghỉ ngơi hoàn hảo với bộ sưu tập giường, tủ cao cấp từ HomeBase
             </p>
             <button class="btn btn-white-custom">
-              Khám Phá <i class="fas fa-arrow-right ms-2"></i>
+              Khám Phá <i class="fas fa-arrow-right"></i>
             </button>
           </div>
-          <div class="col-md-6 text-center">
+          <div class="col-md-5">
             <img src="images/hero-section/P2.png" alt="Bedroom" class="product-image" />
           </div>
         </div>

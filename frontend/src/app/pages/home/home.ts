@@ -6,10 +6,24 @@ import { BestSellerProducts } from '../../components/home/best-seller-products/b
 import { Testimonial } from '../../components/home/testimonial/testimonial';
 import { NewProduct } from '../../components/home/new-product/new-product';
 import { BlogSection } from '../../components/home/blog-section/blog-section';
+import { GoldenWeekComponent } from '../../components/home/golden-week/golden-week';
+import { DiscountProductsComponent } from '../../components/home/discount-products/discount-products';
+import { FlashSaleComponent } from '../../components/home/flash-sale/flash-sale';
 
 @Component({
   selector: 'app-home',
-  imports: [HeroSection, Faq, Features, BestSellerProducts, Testimonial, BlogSection, NewProduct],
+  imports: [
+    HeroSection,
+    Faq,
+    Features,
+    BestSellerProducts,
+    GoldenWeekComponent,
+    DiscountProductsComponent,
+    FlashSaleComponent,
+    Testimonial,
+    BlogSection,
+    NewProduct,
+  ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

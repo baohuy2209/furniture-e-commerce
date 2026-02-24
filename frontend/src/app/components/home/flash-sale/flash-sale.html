@@ -1,0 +1,35 @@
+<section class="flash-sale-section">
+  <div class="container">
+    <div class="flash-sale-card">
+      <div class="row h-100 align-items-center">
+        <!-- Left Info -->
+        <div class="col-lg-7">
+          <div class="flash-sale-content">
+            <span class="tag-sale">{{ flash_sale_data.tag_text }}</span>
+            <h2 class="sale-title">{{ flash_sale_data.event_name.split(':')[0] }}: <span class="highlight">{{ flash_sale_data.event_name.split(':')[1] }}</span></h2>
+            
+            <div class="timer-display">
+              <span class="main-time">{{ flash_sale_data.main_time }}</span>
+              <span class="slash">/</span>
+              <span class="total-time">{{ flash_sale_data.total_time }}</span>
+            </div>
+            
+            <button class="btn-shop-now">Mua Ngay <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+        
+        <!-- Right Categories -->
+        <div class="col-lg-5">
+          <div class="category-grid">
+            @for (cat of categories; track $index) {
+              <div class="category-box">
+                <h4 class="cat-name" [class.text-orange]="cat.is_highlight">{{ cat.category_name }}</h4>
+                <img [src]="cat.image_url" [alt]="cat.category_name" class="cat-img">
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
