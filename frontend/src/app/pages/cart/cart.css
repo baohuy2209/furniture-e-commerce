@@ -1,0 +1,476 @@
+/* Wrapper */
+.cart-wrapper {
+    background-color: #f5f3ef;
+    min-height: 100vh;
+    padding-bottom: 50px;
+    font-family: 'Inter', sans-serif;
+}
+
+.cart-container {
+    width: 96%;
+    /* Almost full width 'chỉ cách hai rìa trái phải một tí' */
+    max-width: 1600px;
+    /* Allow it to be very wide */
+    margin: 0 auto;
+}
+
+/* Header Bar (Dark Navy) */
+.cart-header-bar {
+    background-color: #273142;
+    padding: 15px 30px;
+    border-radius: 0 0 4px 4px;
+    color: #fff;
+    margin-bottom: 25px;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.page-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.search-box {
+    position: relative;
+    width: 300px;
+    /* Wider search box */
+}
+
+.search-box input {
+    width: 100%;
+    padding: 8px 35px 8px 12px;
+    border-radius: 4px;
+    border: none;
+    background: #e6e8eb;
+    font-size: 13px;
+    outline: none;
+    color: #333;
+}
+
+.search-box i {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 13px;
+}
+
+/* Empty State */
+.empty-cart {
+    text-align: center;
+    padding: 80px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.btn-shopping {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #3b4fa3;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+/* List Layout */
+.cart-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* More space between rows */
+}
+
+/* Section Bars (Summary, Header) */
+.section-bar {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px 40px;
+    /* Spacious internal padding */
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.summary-bar {
+    justify-content: space-between;
+}
+
+.left-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.highlight-text {
+    color: #e67e22;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.label-text {
+    font-weight: 500;
+    color: #333;
+    font-style: italic;
+    font-size: 15px;
+}
+
+.right-action {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.total-info {
+    display: flex;
+    align-items: center;
+}
+
+.total-info .label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-right: 15px;
+}
+
+.total-info .price-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e67e22;
+    min-width: 150px;
+    text-align: right;
+    display: inline-block;
+}
+
+.btn-buy-now {
+    background: #3b4fa3;
+    color: #fff;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(59, 79, 163, 0.3);
+}
+
+.btn-buy-now:hover {
+    background: #2f3e85;
+}
+
+/* Table Header Row */
+.table-header-row {
+    font-weight: 600;
+    font-size: 14px;
+    color: #555;
+    display: grid;
+    /* Grid Definition: Truly Wide Layout */
+    /* Checkbox | Product | Price | Qty | Total | Delete */
+    /* Give 'Total' more space (2fr) so numbers don't wrap */
+    grid-template-columns: 150px 4fr 1.5fr 1.5fr 2fr 60px;
+    gap: 20px;
+    align-items: center;
+}
+
+.col-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    white-space: nowrap;
+}
+
+/* Items List */
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.item-row {
+    background: #fff;
+    border-radius: 8px;
+    padding: 30px 40px;
+    /* Spacious row padding */
+    display: grid;
+    /* Exact Match to Header */
+    grid-template-columns: 150px 4fr 1.5fr 1.5fr 2fr 60px;
+    gap: 20px;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.item-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+}
+
+/* Product Column */
+.product-detail {
+    display: flex;
+    gap: 25px;
+    /* Spacing between image and text */
+    align-items: center;
+    /* Center vertically with image */
+}
+
+.product-detail img {
+    width: 90px;
+    /* Larger image */
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    background: #f9f9f9;
+}
+
+.product-detail .info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.product-detail .name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.product-detail .variant {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+}
+
+.btn-detail {
+    background: #fff;
+    border: 1px solid #e67e22;
+    color: #e67e22;
+    font-size: 12px;
+    padding: 4px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    width: fit-content;
+    font-weight: 600;
+}
+
+.btn-detail:hover {
+    background: #fff8f0;
+}
+
+/* Other Cols */
+.text-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.col-price {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+.col-total {
+    justify-content: center;
+    /* Ensure centered */
+}
+
+.fw-bold {
+    font-weight: 800;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+/* Quantity Pill */
+.qty-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #3b4fa3;
+    border-radius: 25px;
+    padding: 5px 10px;
+    /* Comfortable size */
+}
+
+.qty-pill button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s;
+    /* Smooth transition */
+    border-radius: 50%;
+    /* Ensure round for hover/active */
+}
+
+.qty-pill button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    /* Light highlight */
+}
+
+.qty-pill button:active {
+    background-color: rgba(0, 0, 0, 0.2);
+    /* Darker "bold" press */
+    transform: scale(0.9);
+    /* Press effect */
+}
+
+.qty-pill input {
+    width: 35px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* Custom Checkbox (Round) */
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+}
+
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 24px;
+    /* Larger */
+    width: 24px;
+    background-color: #eee;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.custom-checkbox:hover input~.checkmark {
+    background-color: #ddd;
+}
+
+.custom-checkbox input:checked~.checkmark {
+    background-color: #fff;
+    border: 2px solid #e67e22;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox input:checked~.checkmark:after {
+    display: block;
+}
+
+.custom-checkbox .checkmark:after {
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    /* Larger inner circle */
+    height: 14px;
+    border-radius: 50%;
+    background: #e67e22;
+    transform: translate(-50%, -50%);
+}
+
+.btn-trash {
+    border: none;
+    background: transparent;
+    color: #ff6b6b;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.btn-trash:hover {
+    color: #d63031;
+    background: #ffeeee;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .table-header-row {
+        display: none;
+    }
+
+    .item-row {
+        grid-template-columns: 50px 1fr;
+        gap: 15px;
+        position: relative;
+        padding: 20px;
+    }
+
+    .col-checkbox {
+        grid-column: 1;
+        grid-row: 1 / span 4;
+        align-self: flex-start;
+        margin-top: 10px;
+    }
+
+    .product-detail {
+        grid-column: 2;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .col-price {
+        grid-column: 2;
+        justify-content: flex-start;
+        font-weight: 700;
+    }
+
+    .col-qty {
+        grid-column: 2;
+        justify-content: flex-start;
+    }
+
+    .col-total {
+        grid-column: 2;
+        justify-content: flex-start;
+        color: #e67e22;
+    }
+
+    .col-action {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+}

@@ -3,7 +3,7 @@ import { ClientLayout } from './components/layout/client-layout/client-layout';
 import { AuthLayout } from './components/layout/auth-layout/auth-layout';
 import { SettingLayout } from './components/layout/setting-layout/setting-layout';
 import { AdminLayout } from './components/layout/admin-layout/admin-layout';
-
+import { SignIn } from './pages/sign-in/sign-in';
 export const routes: Routes = [
   {
     path: '',
@@ -62,7 +62,15 @@ export const routes: Routes = [
         path: 'verify-email',
         loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
       },
+      {
+        path: 'forgot-password',
+        loadComponent: () => import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
+      },
     ],
+  },
+  {
+    path: 'mock-google-login',
+    loadComponent: () => import('./pages/mock-google-login/mock-google-login').then((m) => m.MockGoogleLogin),
   },
   {
     path: 'settings',

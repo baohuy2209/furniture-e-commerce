@@ -1,0 +1,16 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.auth-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background: linear-gradient(rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0.25)),
+    url('../../../../assets/home/db0846b3-e9d0-425b-9b2c-369e45fc6bde.jpg') center / cover no-repeat;
+}
