@@ -26,33 +26,30 @@
   <div class="hero-overlay"></div>
 
   <img class="hero-image" src="/images/blog/blog4.jpg" alt="Ảnh bài viết blog" />
-  <div class="container h-100">
-    <div class="row h-100 align-items-center">
-      <div class="col-12">
+  <div class="container h-100 mb-4">
+    <div class="row h-100 position-relative">
+      <div class="col-12 hero-container">
         <div class="hero-content">
-          <!-- Category Badge -->
           <div class="mb-3">
             <span class="category-badge">
               <i class="bi bi-tag me-2"></i>
               TIPS
             </span>
           </div>
-
-          <!-- Title -->
           <h1 class="hero-title mb-4">Nghệ thuật phối màu trong nội thất hiện đại</h1>
-
-          <!-- Meta Information -->
-          <div class="hero-meta d-flex flex-wrap align-items-center gap-3 gap-md-4">
+          <div
+            class="hero-meta d-flex flex-wrap align-items-center justify-content-start gap-3 gap-md-4"
+          >
             <div class="meta-item d-flex align-items-center">
-              <i class="bi bi-pencil-square me-2"></i>
+              <i class="fa-regular fa-calendar"></i>
               <span>15 tháng 1, 2025</span>
             </div>
             <div class="meta-item d-flex align-items-center">
-              <i class="bi bi-clock me-2"></i>
+              <i class="fa-solid fa-clock"></i>
               <span>5 phút đọc</span>
             </div>
             <div class="meta-item d-flex align-items-center">
-              <i class="bi bi-eye me-2"></i>
+              <i class="fa-regular fa-eye"></i>
               <span>1.250 lượt xem</span>
             </div>
           </div>
@@ -66,7 +63,7 @@
     <!-- Blog Article Section -->
     <section class="blog-article-section">
       <!-- Article Content -->
-      <div class="px-4  blog-article-content">
+      <div class="px-4 blog-article-content">
         <p class="article-intro">
           Khám phá những tuyệt tác nội thất trang trí với hơn 10 loại vòng xích để tạo nên không
           gian sống phù hợp với phong cách của bạn
@@ -227,11 +224,6 @@
             <span>Facebook</span>
           </button>
 
-          <button class="share-btn share-btn-twitter" (click)="shareOnTwitter()">
-            <i class="fab fa-twitter"></i>
-            <span>Twitter</span>
-          </button>
-
           <button class="share-btn share-btn-pinterest" (click)="shareOnPinterest()">
             <i class="fab fa-pinterest-p"></i>
             <span>Pinterest</span>
@@ -251,21 +243,12 @@
 
         <div class="author-card">
           <div class="author-logo">
-            <img
-              src="assets/images/homebase-logo.png"
-              alt="HomeBase Logo"
-              class="author-logo-img"
-            />
-          </div>
-
-          <div class="author-brand">
-            <h4 class="brand-name">HOMEBASE</h4>
-            <p class="brand-tagline">Style Your Nest</p>
+            <img src="logo.png" alt="HomeBase Logo" class="author-logo-img" />
           </div>
 
           <p class="author-description">
-            Chuyên gia FuongXinh với hơn 10 năm kinh nghiệm trong lĩnh vực thiết kế và tư vấn nội
-            thất cao cấp.
+            Thương hiệu nội thất HOMEBASE – Style Your Nest, mang đến không gian sống tinh tế và
+            đẳng cấp cho ngôi nhà của bạn.
           </p>
         </div>
       </div>

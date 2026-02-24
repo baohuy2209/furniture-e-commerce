@@ -108,13 +108,16 @@
   z-index: 3;
   height: 100%;
 }
-
+.hero-container {
+  position: absolute;
+  bottom: 64px; /* cách nền trắng – chỉnh số này cho đẹp */
+  left: 64px;
+}
 /* Hero Content */
 .hero-content {
-  max-width: 900px;
   color: #ffffff;
   margin: 0 auto;
-  text-align: center;
+  text-align: start;
 }
 
 /* Category Badge */
@@ -126,7 +129,7 @@
   border: 2px solid rgba(255, 255, 255, 0.8);
   border-radius: 50px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 900;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: #ffffff;
@@ -162,7 +165,7 @@
 .meta-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
 }
 
 .meta-item i {
@@ -272,8 +275,8 @@
   .hero-title {
     font-size: 2.2rem;
   }
-
   .hero-content {
+    height: 100%;
     max-width: 100%;
     padding: 0 15px;
   }
@@ -281,6 +284,7 @@
   .category-badge {
     font-size: 12px;
     padding: 6px 18px;
+    font-weight: 900;
   }
 
   .hero-meta {
@@ -880,17 +884,12 @@
   --color-accent: #ff911f;
 }
 
-.blog-sidebar {
-  padding: 20px 0;
-}
-
 /* Common Sidebar Elements */
 .sidebar-title {
   font-size: 22px;
   font-weight: 700;
   color: #2c2c2c;
   margin-bottom: 15px;
-  font-family: 'Georgia', serif;
 }
 
 .sidebar-divider {
@@ -1000,16 +999,13 @@
 }
 
 .author-logo {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto 20px;
-  background: #8b7355;
-  border-radius: 50%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(139, 115, 85, 0.2);
 }
 
 .author-logo-img {
@@ -1104,7 +1100,7 @@
 }
 
 .cta-button {
-  background-color: var(--color-accent);
+  background: linear-gradient(to right, #d4ae37, #ff911f);
   color: #ffffff;
   border: none;
   padding: 16px 40px;
@@ -1118,6 +1114,7 @@
   gap: 10px;
   box-shadow: 0 6px 20px rgba(255, 145, 31, 0.4);
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .cta-button i {
