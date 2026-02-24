@@ -1,0 +1,111 @@
+.policy-page {
+  padding: 40px 0 100px;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.policy-header {
+  text-align: center;
+  margin-bottom: 50px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.policy-header h1 {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #1a2a3a;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.policy-intro {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  text-align: justify;
+  text-align-last: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Accordion */
+.policy-accordion {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.accordion-item {
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+}
+
+.accordion-header {
+  background-color: #2E3E4E; 
+  color: white;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.accordion-header:hover {
+  background-color: #3a4b5d;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.toggle-icon {
+  font-size: 14px;
+}
+
+.accordion-content-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #fff;
+}
+
+.accordion-content {
+  padding: 30px 40px;
+}
+
+.accordion-content p {
+  margin-bottom: 12px;
+  line-height: 1.65;
+  color: #333;
+  font-size: 14.5px;
+  text-align: justify;
+}
+
+.accordion-content p strong {
+  color: #1a2a3a;
+}
+
+.accordion-content p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .policy-header h1 {
+    font-size: 20px;
+  }
+  
+  .search-input-wrapper {
+    width: 200px;
+  }
+}

@@ -64,6 +64,10 @@ export const routes: Routes = [
               import('./pages/my-promotions/my-promotions').then((m) => m.MyPromotions),
           },
           {
+            path: 'policy', // Khớp với href: '/settings/policy' trong list_menu của Huy
+            loadComponent: () => import('./pages/policy/policy').then((m) => m.Policy),
+          },
+          {
             path: 'my-orders',
             loadComponent: () => import('./pages/my-orders/my-orders').then((m) => m.MyOrders),
           },

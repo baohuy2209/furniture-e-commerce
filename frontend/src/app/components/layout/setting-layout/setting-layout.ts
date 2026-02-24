@@ -7,7 +7,7 @@ import { SettingsSidebar } from './settings-sidebar/settings-sidebar';
 @Component({
   selector: 'app-setting-layout',
   standalone: true,
-  imports: [RouterOutlet, SettingsSidebar, HeaderProfile, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, SettingsSidebar, HeaderProfile],
   templateUrl: './setting-layout.html',
   styleUrl: './setting-layout.css',
 })
@@ -54,7 +54,7 @@ export class SettingLayout implements OnInit, OnDestroy {
     {
       id: 9,
       name: 'Bảo hành',
-      href: '/settings/request-warranty',
+      href: '/settings/requests-warranty',
       iconClass: 'fa-solid fa-user-shield',
     },
     {
@@ -104,7 +104,7 @@ export class SettingLayout implements OnInit, OnDestroy {
           'my-promotions',
           'user-setting',
           'policy',
-          'request-warranty',
+          'requests-warranty',
           'support',
         ];
 

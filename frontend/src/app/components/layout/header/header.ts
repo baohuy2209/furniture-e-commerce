@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, ViewChild, OnInit, OnDestroy, } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router'; 
@@ -7,7 +8,7 @@ import { AuthService } from '../../../services/auth';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })

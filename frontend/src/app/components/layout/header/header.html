@@ -67,7 +67,7 @@
               >Blogs</a
             >
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" [class]="getCurrentUrl() == 'about' ? 'active' : ''" href="/about"
               >Về chúng tôi</a
             >
@@ -79,7 +79,7 @@
               href="/support"
               >Hỗ trợ</a
             >
-          </li>
+          </li> -->
         </ul>
 
         <div class="nav-icons d-flex align-items-center gap-3">
@@ -110,61 +110,52 @@
           </button>
 
           <!-- KHỐI NÀY SẼ HIỂN THỊ KHI CHƯA ĐĂNG NHẬP -->
-          @if (!isLoggedIn) {
-            <div class="d-flex align-items-center gap-2">
-              <button class="btn-header btn-header-primary">Đăng Nhập</button>
-              <button class="btn-header btn-header-outline">Đăng Ký</button>
-            </div>
-          }
+          <div *ngIf="!isLoggedIn" class="d-flex align-items-center gap-2">
+            <button class="btn-header btn-header-primary">Đăng Nhập</button>
+            <button class="btn-header btn-header-outline">Đăng Ký</button>
+          </div>
 
           <!-- KHỐI NÀY LÀ DROPDOWN CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->
-          @if (isLoggedIn) {
-            <div class="dropdown">
-              <a
-                class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
-                href="#"
-                role="button"
-                id="dropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <img
-                  src="assets/images/user-avatar-placeholder.png"
-                  alt="User Avatar"
-                  class="user-avatar"
-                />
-                <span>Tánh</span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
-                <li>
-                  <a class="dropdown-item" [routerLink]="['/settings']">
-                    <i class="far fa-file-alt me-2"></i> Tài khoản của bạn</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" [routerLink]="['/settings/my-orders']">
-                    <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" [routerLink]="['/settings/my-reviews']">
-                    <i class="fas fa-star me-2"></i> Đánh giá của tôi</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" [routerLink]="['/settings/support']">
-                    <i class="fas fa-question-circle me-2"></i> Hỗ trợ</a
-                  >
-                </li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" (click)="logout()"
-                    ><i class="fas fa-sign-out-alt me-2"></i> Thoát</a
-                  >
-                </li>
-              </ul>
-            </div>
-          }
+          <div class="dropdown" *ngIf="isLoggedIn">
+            <a
+              class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
+              href="#"
+              role="button"
+              id="dropdownUser"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img
+                src="assets/images/user-avatar-placeholder.png"
+                alt="User Avatar"
+                class="user-avatar"
+              />
+              <span>Tánh</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+              <li>
+                <a class="dropdown-item" [routerLink]="['/settings']">
+                  <i class="far fa-file-alt me-2"></i> Tài khoản của bạn</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" [routerLink]="['/settings/my-orders']">
+                  <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" [routerLink]="['/settings/my-reviews']">
+                  <i class="fas fa-star me-2"></i> Đánh giá của tôi</a
+                >
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item" (click)="logout()"
+                  ><i class="fas fa-sign-out-alt me-2"></i> Thoát</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
