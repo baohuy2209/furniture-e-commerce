@@ -67,6 +67,19 @@
               >Blogs</a
             >
           </li>
+          <li class="nav-item">
+            <a class="nav-link" [class]="getCurrentUrl() == 'about' ? 'active' : ''" href="/about"
+              >Về chúng tôi</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [class]="getCurrentUrl() == 'support' ? 'active' : ''"
+              href="/support"
+              >Hỗ trợ</a
+            >
+          </li>
         </ul>
 
         <div class="nav-icons d-flex align-items-center gap-3">
