@@ -83,6 +83,7 @@
   border-radius: 30px;
   text-decoration: none;
   display: inline-flex;
+  cursor: pointer;
   align-items: center;
   gap: 10px;
   transition: all 0.3s ease;
@@ -123,7 +124,7 @@
   gap: 20px;
   padding-left: 50px;
   transition: transform 0.8s ease-in-out;
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
 }
 
@@ -179,7 +180,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  z-index: 5;
+  z-index: 15;
   animation: floatUpDown 3s ease-in-out infinite;
 }
 
@@ -189,14 +190,14 @@
 }
 
 .tag-warranty {
-  top: 30%;
-  right: 40%;
+  top: 20%;
+  right: 30%;
   animation-delay: 0s;
 }
 
 .tag-delivery {
-  bottom: 30%;
-  right: 25%;
+  bottom: 20%;
+  right: 20%;
   animation-delay: 1.5s;
 }
 
