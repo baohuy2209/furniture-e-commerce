@@ -49,9 +49,21 @@
             <a class="nav-link" [class]="getCurrentUrl() == 'events' ? 'active' : ''" href="/events">Sự Kiện</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [class]="getCurrentUrl() == 'blogs' ? 'active' : ''" href="/blogs"
-              href="/blogs">Blogs</a>
+            <a class="nav-link" [class]="getCurrentUrl() == 'blogs' ? 'active' : ''" href="/blogs">Blogs</a>
           </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" [class]="getCurrentUrl() == 'about' ? 'active' : ''" href="/about"
+              >Về chúng tôi</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [class]="getCurrentUrl() == 'support' ? 'active' : ''"
+              href="/support"
+              >Hỗ trợ</a
+            >
+          </li> -->
         </ul>
 
         <div class="nav-icons d-flex align-items-center gap-3">
@@ -74,9 +86,64 @@
             <i class="fas fa-shopping-cart"></i>
             <span class="cart-badge">{{ cartCount }}</span>
           </button>
-          <div class="auth-buttons">
-            <button class="btn btn-login" aria-label="User Account" (click)="goSignIn()">ĐĂNG NHẬP</button>
-            <button class="btn btn-signup" aria-label="User Account" (click)="goSignUp()">ĐĂNG KÍ</button>
+          <!-- KHỐI NÀY LÀ DROPDOWN KHI CHƯA ĐĂNG NHẬP-->
+          <div class="auth-buttons" *ngIf="!isLoggedIn">
+            <button
+              class="btn btn-login"
+              aria-label="User Account"
+              (click)="goSignIn()"
+            >
+              ĐĂNG NHẬP
+            </button>
+            <button
+              class="btn btn-signup"
+              aria-label="User Account"
+              (click)="goSignUp()"
+            >
+              ĐĂNG KÝ
+            </button>
+            </div>
+          </div>
+          <!-- KHỐI NÀY LÀ DROPDOWN CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->
+          <div class="dropdown" *ngIf="isLoggedIn">
+            <a
+              class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
+              href="#"
+              role="button"
+              id="dropdownUser"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img
+                src="assets/images/user-avatar-placeholder.png"
+                alt="User Avatar"
+                class="user-avatar"
+              />
+              <span>Tánh</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+              <li>
+                <a class="dropdown-item" [routerLink]="['/settings']">
+                  <i class="far fa-file-alt me-2"></i> Tài khoản của bạn</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" [routerLink]="['/settings/my-orders']">
+                  <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" [routerLink]="['/settings/my-reviews']">
+                  <i class="fas fa-star me-2"></i> Đánh giá của tôi</a
+                >
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item" (click)="logout()"
+                  ><i class="fas fa-sign-out-alt me-2"></i> Thoát</a
+                >
+              </li>
+            </ul>
           </div>
         </div>
       </div>

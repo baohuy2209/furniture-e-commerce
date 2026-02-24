@@ -1,5 +1,4 @@
-const User = reuqire("../app/models/user.model.js");
-const Role = require("../app/models/role.");
+const User = require("../app/models/user.model");
 const { roles } = require("../constants/constants");
 
 const checkDuplicatedEmail = async (req, res, next) => {
@@ -12,9 +11,10 @@ const checkDuplicatedEmail = async (req, res, next) => {
     }
     next();
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Lỗi từ server, không thể load dữ liệu từ server" });
+    return res.status(500).json({
+      message:
+        "Lỗi từ server, không thể load dữ liệu từ server: " + err.message,
+    });
   }
 };
 const checkRolesExisted = (req, res, next) => {

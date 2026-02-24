@@ -6,8 +6,8 @@ const morgan = require("morgan");
 const { connect } = require("./app/config/db");
 const route = require("./routes/index.route");
 const swaggerUi = require("swagger-ui-express");
+const cookieSession = require("cookie-session");
 const fs = require("fs");
-const errorHandler = require("./middlewares/errrorHandler");
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
@@ -20,7 +20,15 @@ app.use(
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(errorHandler());
+app.use(
+  cookieSession({
+    name: "session",
+    secret: process.env.SECRET_KEY,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+  }),
+);
 app.get("/", (req, res) => {
   res.send("Welcome to furniture e-commerce");
 });

@@ -4,7 +4,7 @@
 }
 
 .top-bar {
-  background-color: #3D529D;
+  background-color: var(--color-primary); 
   color: #ffffff;
   padding: 10px 0;
   font-size: 0.875rem;
@@ -43,28 +43,23 @@
 }
 
 .social-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
   text-decoration: none;
-  font-size: 0.75rem;
+  font-size: 1rem; 
   transition: all 0.3s ease;
 }
 
 .social-icon:hover {
-  background-color: #ffffff;
-  color: #5a6b54;
   transform: translateY(-2px);
+  opacity: 0.8;
 }
 
 .main-nav {
-  background-color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-bg); 
+  box-shadow: none; 
   padding: 1rem 0;
 }
 
@@ -83,7 +78,7 @@
 }
 
 .nav-link {
-  color: #333333 !important;
+  color: var(--color-text) !important;
   font-weight: 500;
   font-size: 1rem;
   padding: 0.5rem 1rem !important;
@@ -93,7 +88,7 @@
 
 .nav-link:hover,
 .nav-link.active {
-  color: #d4a574 !important;
+   color: var(--color-accent) !important; 
 }
 
 .nav-link.active::after {
@@ -104,7 +99,7 @@
   transform: translateX(-50%);
   width: 30px;
   height: 2px;
-  background-color: #d4a574;
+  background-color: var(--color-accent); 
 }
 
 /* Navigation Icons */
@@ -126,7 +121,7 @@
 }
 
 .icon-btn:hover {
-  color: #d4a574;
+  color: var(--color-accent);
 }
 .btn-login,
 .btn-signup {
@@ -152,7 +147,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  background-color: #d4a574;
+  background-color: var(--color-accent);
   color: #ffffff;
   font-size: 0.65rem;
   font-weight: 600;
@@ -207,7 +202,7 @@
 .search-submit-btn {
   background: none;
   border: none;
-  color: #d4a574;
+  color: var(--color-accent);
   font-size: 1rem;
   cursor: pointer;
   padding: 8px 10px;
@@ -292,4 +287,118 @@
     justify-content: center;
     align-items: center;
   }
+}
+
+
+/* Nút bấm chung */
+.btn-header {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+/* Nút Đăng Nhập */
+.btn-header-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-header-primary:hover {
+  background-color: #2c417c; /* Màu xanh đậm hơn một chút khi hover */
+  color: var(--color-white);
+}
+
+/* Nút Đăng Ký */
+.btn-header-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-header-outline:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* Khu vực thông tin người dùng */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none; 
+  color: var(--color-text) !important;
+  font-weight: 500;
+  transition: opacity 0.3s ease, color 0.3s ease;
+  padding: 0.5rem 0.75rem;
+  line-height: 1;
+  cursor: pointer; 
+}
+
+.user-profile:hover {
+  opacity: 0.8;
+  color: var(--color-accent) !important; 
+}
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dropdown-menu {
+  border-radius: 8px; 
+  box-shadow: var(--shadow-md); 
+  min-width: 200px; 
+  padding: 0.5rem 0; 
+  background-color: var(--color-white); 
+  border: 1px solid var(--color-border);
+}
+
+.dropdown-item {
+  color: var(--color-text);
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  display: flex; 
+  align-items: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap; 
+}
+
+.dropdown-item i {
+  color: var(--color-primary);
+  width: 20px; 
+  text-align: center;
+  margin-right: 0.75rem; 
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-bg);
+  color: var(--color-accent);
+}
+
+.dropdown-item:hover i {
+  color: var(--color-accent);
+}
+
+.dropdown-divider {
+  border-top: 1px solid var(--color-border);
+  margin: 0.5rem 0;
+}
+
+.cart-badge {
+  top: -5px; 
+  right: -5px; 
+  background-color: var(--color-accent); 
+}
+
+.nav-icons .icon-btn {
+  color: var(--color-text);
+}
+
+.nav-icons .icon-btn:hover {
+  color: var(--color-accent); 
 }
