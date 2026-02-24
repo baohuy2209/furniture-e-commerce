@@ -1,0 +1,142 @@
+/* Màu sắc thương hiệu Huy đã dùng */
+:root {
+  --hb-brown: #B07D4A;
+  --hb-gold: #D4AF37;
+  --hb-beige: #F5F1EA;
+}
+
+.promo-page { color: #2c2c2c; }
+
+/* Avatar tròn chuẩn */
+.avatar-wrapper { width: 90px; height: 90px; border-radius: 50%; overflow: hidden; border: 3px solid white; }
+.avatar-img { width: 100%; height: 100%; object-fit: cover; }
+.display-name { font-weight: 800; font-family: 'Playfair Display', serif; }
+
+/* VIP Badge kiểu Figma */
+.vip-status-box { color: var(--hb-brown); font-family: 'Playfair Display', serif; }
+.vip-label { font-size: 1.8rem; font-weight: 700; margin-right: 5px; }
+.vip-number { font-size: 3.5rem; font-weight: 900; }
+
+/* --- THANH TIẾN TRÌNH CHUẨN FIGMA --- */
+.custom-progress-wrapper {
+  position: relative;
+  padding: 40px 0; /* Tăng không gian để các nút không bị che */
+}
+
+.progress-line {
+  height: 12px; /* Độ dày thanh line */
+  background: #fdf5e6; /* Màu be nhạt cho phần chưa đạt tới */
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.progress-filled {
+  height: 100%;
+  background: #B07D4A; /* Màu nâu đậm của Huy cho phần đã đạt tới */
+  border-radius: 20px;
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+
+/* Style cho các nút tròn (Nodes) */
+.node {
+  position: absolute;
+  width: 45px; /* Làm nút to hơn line giống hình 2 */
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2; /* Nằm trên thanh line */
+  font-weight: 800;
+  color: white;
+  transition: 0.3s;
+  background-color: #fdf2e9; /* Mặc định màu be rất nhạt cho nút chưa đạt */
+}
+
+/* Nút khi đã đạt tới (Màu nâu đậm) */
+.node.active {
+  background-color: #B07D4A !important;
+  box-shadow: 0 4px 10px rgba(176, 125, 74, 0.3);
+}
+
+/* Vị trí các nút */
+.node-1 { left: 0; transform: translate(-50%, 0); } /* Căn giữa nút vào điểm đầu */
+.node-3 { left: 30%; transform: translate(-50%, 0); }
+.node-10 { right: 0; transform: translate(50%, 0); }
+
+/* Chỉnh lại text bên trong nút */
+.node span {
+  font-size: 1rem;
+}
+
+
+/* Points text */
+.points-display-text { font-weight: 700; font-size: 2rem; }
+/* Chỉnh lại màu số 3000 cho sang hơn */
+.points-highlight {
+  font-family: 'Playfair Display', serif;
+  color: #D4AF37; /* Màu vàng đồng */
+  font-weight: 900;
+  font-size: 3.5rem;
+  margin-left: 15px;
+}
+
+/* Voucher Card tinh tế */
+.voucher-card-luxury {
+    background: white;
+    border-radius: 25px;
+    overflow: hidden; /* Quan trọng để Header không bị lòi góc vuông ra ngoài */
+    border: 1px solid #eee;
+}
+.voucher-header-brown {
+  background: var(--hb-brown); color: white;
+  padding: 18px 25px; font-weight: 700; font-size: 1.2rem;
+}
+
+.voucher-icon-gold i { font-size: 3.5rem; color: #F5E6BE; display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+.small-list { list-style: disc; padding-left: 15px; margin: 0; color: #03875b !important; }
+
+.value-number { color: #3d529d; font-weight: 800; font-size: 1.3rem; }
+.footer-link { color: #888; font-size: 0.9rem; text-decoration: none; }
+.footer-link b { color: var(--hb-brown); }
+
+.italic { font-style: italic; }
+.smaller-text { font-size: 0.85rem; }
+
+/* --- THANH TIÊU ĐỀ VOUCHER MÀU CAM NÂU --- */
+.voucher-header-line {
+    background-color: #B07D4A; /* Màu cam nâu đặc trưng Figma */
+    color: #ffffff !important; /* Ép chữ màu trắng */
+    padding: 15px 25px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-radius: 20px 20px 0 0; /* Bo tròn 2 góc trên để khớp với Card */
+    display: block;
+    width: 100%;
+}
+
+/* Thêm vào file my-promotions.css */
+
+.points-formula-box {
+    margin-top: -5px;
+    line-height: 1.4;
+}
+
+.points-formula-box .badge {
+    font-weight: 500;
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background-color: #f8f9fa !important;
+}
+
+/* Hiệu ứng cho text quy đổi */
+.text-brown.smaller-text {
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-top: 4px;
+}

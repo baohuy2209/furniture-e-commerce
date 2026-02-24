@@ -1,1 +1,146 @@
-<p>user-settings works!</p>
+<!-- src/app/pages/user-settings/user-settings.html -->
+
+<div class="container py-5 settings-page">
+  <div class="settings-wrapper mx-auto">
+    @for (group of settingsGroups(); track group.id) {
+      <div class="settings-group-card mb-3" [class.is-open]="group.isExpanded">
+        <!-- Header -->
+        <div
+          class="group-header d-flex justify-content-between align-items-center p-4"
+          (click)="toggleGroup(group.id)"
+        >
+          <h5 class="mb-0 fw-bold text-white">{{ group.title }}</h5>
+          <i class="bi bi-caret-right-fill arrow-icon"></i>
+        </div>
+
+        @if (group.isExpanded) {
+          <div class="group-body animate-slide-down p-4">
+            <!-- KIỂU 1: DANH SÁCH NÚT GẠT (Thông báo / Bảo mật) -->
+            @if (group.type === 'toggle-list') {
+              <div class="master-toggle-row mb-4 p-3 rounded">
+                <div class="form-check form-switch custom-switch master-red">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [(ngModel)]="group.masterToggle"
+                    (change)="toggleAllItems(group)"
+                  />
+                  <label class="form-check-label fw-bold ms-3">Bật tất cả mục này</label>
+                </div>
+              </div>
+              <div class="row gy-4">
+                @for (item of group.items; track item.label) {
+                  <div class="col-md-6">
+                    <div
+                      class="form-check form-switch custom-switch sub-blue d-flex align-items-center"
+                    >
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="item.status"
+                        (change)="checkMasterStatus(group)"
+                      />
+                      <label class="form-check-label ms-3 small-label">{{ item.label }}</label>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- KIỂU 2: CHỌN NGÔN NGỮ / TIỀN TỆ -->
+            @if (group.type === 'select-box') {
+              <div class="row g-4">
+                @for (opt of group.options; track opt.label) {
+                  <div class="col-md-6">
+                    <label class="fw-bold small mb-2 d-block text-muted">{{ opt.label }}</label>
+                    <select class="form-select luxury-select">
+                      @for (val of opt.list; track val) {
+                        <option [value]="val">{{ val }}</option>
+                      }
+                    </select>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- KIỂU 3: CÁC NÚT HÀNH ĐỘNG NGUY HIỂM -->
+            @if (group.type === 'danger-zone') {
+              <div class="danger-box p-3 border-danger-subtle border rounded bg-light">
+                <p class="small text-muted mb-4 italic">
+                  Lưu ý: Các hành động trong mục này sẽ ảnh hưởng trực tiếp đến quyền truy cập của
+                  Huy.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                  @for (act of group.actions; track act.label) {
+                    <button
+                      class="btn btn-sm px-4 py-2 fw-bold"
+                      [class]="act.btnClass"
+                      [attr.data-bs-toggle]="act.triggerModal ? 'modal' : null"
+                      [attr.data-bs-target]="act.triggerModal || null"
+                    >
+                      {{ act.label }}
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Modal Xác Nhận Xóa Tài Khoản -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Xác Nhận Xóa Tài Khoản Vĩnh Viễn</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-exclamation-triangle text-danger" style="font-size: 4rem"></i>
+        <p class="fw-bold mt-3 fs-5">Huy có chắc chắn muốn xóa tài khoản không?</p>
+        <p class="text-muted">
+          Hành động này không thể hoàn tác. Mọi lịch sử đơn hàng và thông tin cá nhân của bạn sẽ bị
+          xóa khỏi hệ thống.
+        </p>
+        <div class="mt-4 text-start">
+          <label class="form-label small fw-bold">Nhập mật khẩu để xác nhận</label>
+          <input type="password" class="form-control luxury-select" placeholder="Mật khẩu của bạn" />
+        </div>
+      </div>
+      <div class="modal-footer border-0 pb-4">
+        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Hủy bỏ</button>
+        <button type="button" class="btn btn-danger px-4" (click)="onDeleteAccount()">Xác nhận xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Vô Hiệu Hóa Tài Khoản Tạm Thời -->
+<div class="modal fade" id="disableAccountModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Vô Hiệu Hóa Tài Khoản Tạm Thời</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center p-4">
+        <div class="icon-circle bg-primary-subtle text-primary mx-auto mb-3">
+          <i class="bi bi-shield-lock-fill" style="font-size: 2.5rem"></i>
+        </div>
+        <p class="fw-bold fs-5">Huy muốn tạm dừng sử dụng HomeBase?</p>
+        <p class="text-muted small">
+          Tài khoản của bạn sẽ tạm thời bị ẩn. Mọi thông tin, đơn hàng và ưu đãi của bạn vẫn được giữ nguyên. 
+          Bạn có thể <b>kích hoạt lại bất cứ lúc nào</b> bằng cách đăng nhập lại.
+        </p>
+      </div>
+      <div class="modal-footer border-0 pb-4 justify-content-center">
+        <button type="button" class="btn btn-outline-secondary px-5" data-bs-dismiss="modal">Để sau</button>
+        <button type="button" class="btn btn-primary px-5" data-bs-dismiss="modal">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>

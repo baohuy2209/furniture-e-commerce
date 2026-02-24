@@ -1,0 +1,128 @@
+.setting-page-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px; /* Padding ngang */
+  /* margin-top: -6rem !important; <== ĐÃ XÓA */
+  position: relative;
+  z-index: 1; /* Đảm bảo wrapper nằm trên banner */
+}
+
+.card {
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+}
+
+.card-header {
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+}
+
+.card-header i {
+  color: var(--color-primary);
+  margin-right: 0.75rem;
+}
+
+/* Form controls */
+.form-label {
+  font-weight: 500;
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  transition: all 0.2s ease;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+.btn-primary:hover {
+  background-color: #2c417c; /* Màu đậm hơn một chút khi hover */
+  border-color: #2c417c;
+}
+.btn-outline-primary {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  transition: all 0.2s ease;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+.btn-outline-primary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* Nút thêm địa chỉ nhỏ trên card (nút "+ Thêm địa chỉ") */
+/* Thường là btn-primary */
+.card-header .btn-primary.btn-sm {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+.card-header .btn-primary.btn-sm:hover {
+  background-color: #2c417c; /* Màu đậm hơn khi hover */
+  border-color: #2c417c;
+}
+
+/* Các nút trong Modal */
+.modal-footer .btn-primary { /* Nút "Thêm địa chỉ" trong modal footer */
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+.modal-footer .btn-primary:hover {
+  background-color: #2c417c;
+  border-color: #2c417c;
+}
+.modal-footer .btn-secondary { /* Nút "Hủy" trong modal footer */
+  background-color: var(--color-border); /* Màu xám nhạt từ biến border */
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+.modal-footer .btn-secondary:hover {
+  background-color: #d1cbc2; /* Màu xám đậm hơn một chút */
+  border-color: #d1cbc2;
+}
+
+/* Tùy chỉnh Box Shadow của form-control khi focus (dùng RGB) */
+.form-control:focus, .form-select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 0.2rem rgba(var(--color-accent-rgb), 0.25);
+}
+
+.user-settings-page.container {
+  padding: 0 15px;
+  margin-top: 2rem !important; 
+  position: relative;
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 991px) {
+  .user-settings-page.container {
+    margin-top: 1rem !important; /* Điều chỉnh lại khoảng cách trên màn hình nhỏ */
+    box-shadow: none;
+    border-radius: 0;
+  }
+}

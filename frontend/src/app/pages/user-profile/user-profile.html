@@ -1,1 +1,275 @@
-<p>user-profile works!</p>
+<div class="container pb-5">
+  <div class="row">
+    <!-- Thông tin cá nhân -->
+    <div class="col-lg-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Thông Tin Cá Nhân</h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label class="form-label">Tên đăng nhập</label>
+                <input
+                  type="text"
+                  class="form-control readonly-field"
+                  [(ngModel)]="user.username"
+                  name="username"
+                  readonly
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Họ <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="firstname"
+                  [(ngModel)]="user.firstName"
+                  required
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Tên <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="lastname"
+                  [(ngModel)]="user.lastName"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email <span class="text-danger">*</span></label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                [(ngModel)]="user.email"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+              <input
+                type="tel"
+                class="form-control"
+                name="phone"
+                [(ngModel)]="user.phone"
+                required
+              />
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Ngày sinh</label>
+                <input type="date" class="form-control" name="dob" [(ngModel)]="user.dob" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Giới tính</label>
+                <select class="form-select">
+                  <option value="male">Nam</option>
+                  <option value="female">Nữ</option>
+                  <option value="other">Khác</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-circle me-2"></i>Cập Nhật Thông Tin
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Thông tin bảo mật -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Bảo Mật</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Đăng nhập lần cuối</label>
+            <input
+              type="text"
+              class="form-control readonly-field"
+              value="15/11/2025 14:30"
+              readonly
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tài khoản được tạo</label>
+            <input
+              type="text"
+              class="form-control readonly-field"
+              value="15/11/2025 14:30"
+              readonly
+            />
+          </div>
+          <a href="/change-password" type="button" class="btn btn-outline-primary w-100">
+            <i class="bi bi-key me-2"></i>Đổi Mật Khẩu
+          </a>
+          <button
+            class="btn btn-outline-danger w-100 mt-2"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteAccountModal"
+          >
+            <i class="bi bi-person-x me-2"></i>Xóa Tài Khoản
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Địa chỉ giao hàng -->
+    <div class="col-lg-6">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0"><i class="bi bi-geo-alt me-2"></i>Địa Chỉ Giao Hàng</h5>
+          <button
+            class="btn btn-primary btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#addAddressModal"
+          >
+            <i class="bi bi-plus-circle me-1"></i>Thêm địa chỉ
+          </button>
+        </div>
+        <div class="card-body">
+          @for (item of user.address; track $index) {
+            <div class="address-card mb-3" [class]="item.is_default ? 'default' : ''">
+              @if (item.is_default) {
+                <span class="badge bg-primary default-badge">Mặc định</span>
+              }
+              <h6 class="mb-2">{{ user.firstName + ' ' + user.lastName }}</h6>
+              <p class="mb-1"><i class="bi bi-telephone me-2"></i>{{ user.phone }}</p>
+              <p class="mb-2">
+                <i class="bi bi-house-door me-2"></i>
+                {{ item.specific_address }}
+              </p>
+              <p class="mb-3 text-muted small">
+                <i class="bi bi-mailbox me-2"></i>Mã bưu điện:
+                {{ item.postal_code }}
+              </p>
+              <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-pencil"></i> Sửa
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-sm">
+                  <i class="bi bi-trash"></i> Xóa
+                </button>
+                @if (!item.is_default) {
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="setDefaultAddress($index)"
+                  >
+                    <i class="bi bi-bookmark"></i> Đặt làm mặc định
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Xác Nhận Xóa Tài Khoản Vĩnh Viễn</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem"></i>
+        <p class="fw-bold mt-3">Bạn có chắc chắn muốn xóa tài khoản không?</p>
+        <p class="text-muted small">
+          Hành động này không thể hoàn tác. Mọi lịch sử đơn hàng và thông tin cá nhân của bạn sẽ bị
+          xóa khỏi hệ thống.
+        </p>
+        <input type="password" class="form-control mt-3" placeholder="Nhập mật khẩu để xác nhận" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+        <button type="button" class="btn btn-danger">Xác nhận xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal thêm địa chỉ -->
+<div class="modal fade" id="addAddressModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Thêm Địa Chỉ Mới</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Họ <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" required />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Tên <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" required />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+            <input type="tel" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Tỉnh/Thành phố <span class="text-danger">*</span></label>
+            <select class="form-select" required>
+              <option value="">Chọn tỉnh/thành phố</option>
+              <option value="hcm">TP. Hồ Chí Minh</option>
+              <option value="hn">Hà Nội</option>
+              <option value="dn">Đà Nẵng</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Quận/Huyện <span class="text-danger">*</span></label>
+            <select class="form-select" required>
+              <option value="">Chọn quận/huyện</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Phường/Xã <span class="text-danger">*</span></label>
+            <select class="form-select" required>
+              <option value="">Chọn phường/xã</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Địa chỉ cụ thể <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control"
+              rows="3"
+              placeholder="Số nhà, tên đường..."
+              required
+            ></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" class="btn btn-primary">Thêm Địa Chỉ</button>
+      </div>
+    </div>
+  </div>
+</div>

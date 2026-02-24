@@ -1,1 +1,149 @@
-<p>my-reviews works!</p>
+<!-- src/app/pages/my-reviews/my-reviews.html -->
+
+<div class="container py-5">
+  <!-- Toolbar (Thanh công cụ trên cùng) -->
+  <!-- Toolbar: Chỉnh lại cấu trúc cho chuẩn Figma hình 2 -->
+  <div class="reviews-toolbar d-flex justify-content-between align-items-center mb-4 pb-3">
+    <div class="d-flex align-items-center gap-4">
+      <!-- Chọn tất cả -->
+      <div class="form-check custom-check-toolbar">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="checkAll"
+          (change)="toggleSelectAll($event)"
+          [checked]="isAllSelected()"
+        />
+        <label class="form-check-label text-dark fw-bold" for="checkAll"
+          >Chọn tất cả đơn hàng</label
+        >
+      </div>
+      <!-- Nút xóa (Dạng text + icon, không viền hộp) -->
+      <button class="btn-delete-toolbar" (click)="deleteSelectedReviews()">
+        <i class="bi bi-trash3"></i> Xóa các mục đã chọn
+      </button>
+    </div>
+
+    <div class="d-flex align-items-center gap-4">
+      <!-- Ô tìm kiếm bo tròn, icon nằm trong -->
+      <div class="search-bar-luxury">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          placeholder="Tìm kiếm sản phẩm hoặc đánh giá"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+        />
+      </div>
+      <!-- Thống kê -->
+      <div class="review-stats">
+        Đánh giá đã chọn:
+        <span class="fw-bold">{{ selectedReviewIds().length }}/{{ totalReviews() }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Danh sách các sản phẩm và đánh giá của chúng -->
+  @for (review of filteredReviews(); track review.reviewId) {
+    <div class="review-block-card mb-5 shadow-sm">
+      <!-- PHẦN 1: THÔNG TIN SẢN PHẨM (Đã bỏ cột Checkbox bên phải) -->
+      <div class="product-info-row p-4">
+        <div class="row align-items-center">
+          <div class="col-lg-2 col-md-3 text-center">
+            <div class="beige-square-sm shadow-sm">
+              <img [src]="review.productImage" alt="Product" />
+            </div>
+            <div class="mt-2"><a href="#" class="small-link">Xem chi tiết</a></div>
+          </div>
+
+          <div class="col-lg-5 col-md-5">
+            <h5 class="fw-bold mb-1">{{ review.productName }}</h5>
+            <p class="text-muted mb-0 small">
+              Ghế: {{ review.productColor }} | Chân: {{ review.productMaterial }}
+            </p>
+          </div>
+
+          <!-- Cột giá chiếm diện tích còn lại (col-lg-5 thay vì col-lg-4) -->
+          <div class="col-lg-5 col-md-4 text-end">
+            <div class="price-table-mini small ms-auto">
+              <div class="d-flex justify-content-between">
+                <span>Đơn giá:</span> <span>{{ review.productPrice | number }} VND</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span>Số lượng:</span> <span>x1</span>
+              </div>
+              <div class="d-flex justify-content-between text-danger">
+                <span>Khuyến mãi:</span> <span>-{{ review.productDiscount | number }} VND</span>
+              </div>
+              <div class="d-flex justify-content-between fw-bold border-top pt-1 mt-1">
+                <span>Thành tiền:</span>
+                <span class="text-danger fs-5"
+                  >{{ review.productPrice - review.productDiscount | number }} VND</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHẦN 2: THANH TIÊU ĐỀ NỐI -->
+      <div class="review-category-header">
+        <h6 class="mb-0 px-4 py-2 fw-bold text-white">Đánh giá của bạn</h6>
+      </div>
+
+      <!-- PHẦN 3: NỘI DUNG ĐÁNH GIÁ (Chỉ giữ 1 checkbox duy nhất ở đây) -->
+      <div class="review-content-area p-4">
+        <div class="individual-review d-flex align-items-start">
+          <!-- Avatar bao tròn hoàn hảo -->
+          <div class="avatar-wrapper me-3">
+            <img [src]="review.authorAvatar" class="review-avatar-img" />
+          </div>
+
+          <div class="flex-grow-1 position-relative">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <div class="d-flex align-items-center">
+                <h6 class="fw-bold mb-0 me-2">{{ review.authorName }}</h6>
+                <span class="text-muted small">{{ review.authorUsername }}</span>
+                <div class="star-rating-gold ms-3">
+                  @for (star of getStarArray(review.rating); track $index) {
+                    <i class="bi bi-star-fill"></i>
+                  }
+                </div>
+              </div>
+              <!-- Ô CHỌN DUY NHẤT Ở ĐÂY -->
+              <input
+                type="checkbox"
+                class="form-check-input rounded-circle red-dot-check"
+                (change)="toggleReview(review.reviewId)"
+                [checked]="selectedReviewIds().includes(review.reviewId)"
+              />
+            </div>
+            <p class="review-text-dark mb-0">{{ review.reviewText }}</p>
+            <!-- THÊM KHỐI NÀY VÀO ĐÂY: Hiển thị hình ảnh đánh giá -->
+            @if (review.reviewImages && review.reviewImages.length > 0) {
+              <div class="review-images-gallery d-flex gap-2 mt-3">
+                @for (img of review.reviewImages; track img) {
+                  <div class="review-img-item shadow-sm" (click)="openImagePreview(img)">
+                    <img [src]="img" alt="Review Image" class="review-thumbnail-img" />
+                  </div>
+                }
+              </div>
+            }
+            <div class="text-end text-muted small mt-2">{{ review.reviewDate }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+@if (selectedImagePreview()) {
+  <div class="image-preview-overlay d-flex align-items-center justify-content-center" (click)="closeImagePreview()">
+    <div class="preview-content position-relative" (click)="$event.stopPropagation()">
+      <button class="btn-close-preview" (click)="closeImagePreview()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <img [src]="selectedImagePreview()" alt="Large Preview" class="large-preview-img animate-zoom">
+    </div>
+  </div>
+}

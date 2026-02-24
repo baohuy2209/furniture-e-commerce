@@ -1,1 +1,18 @@
-<router-outlet></router-outlet>
+<div class="user-settings-page container my-5"> 
+  <div class="row">
+    <div class="col-lg-3">
+      <!-- THAY ĐỔI DÒNG NÀY: THÊM INPUT showUserInSidebar -->
+      <app-settings-sidebar 
+        [listMenu]="list_menu" 
+        [user]="user" 
+        [showUserInfo]="showUserInSidebar()" 
+      ></app-settings-sidebar>
+    </div>
+    <div class="col-lg-9">
+      @if (showHeaderProfile()) {
+        <app-header-profile [user]="user"></app-header-profile> 
+      }
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

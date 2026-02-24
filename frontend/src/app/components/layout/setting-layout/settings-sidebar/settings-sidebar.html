@@ -1,0 +1,20 @@
+<div class="card sidebar-card">
+  @if (showUserInfo) {
+    <div class="card-body text-center user-mini-profile">
+      <img src="{{ user.avatar }}" alt="User Avatar" class="profile-avatar-sm mb-2" />
+      <h6 class="mb-0">{{ user.firstName + ' ' + user.lastName }}</h6>
+    </div>
+  }
+  
+  <div class="list-group list-group-flush">
+    @for (item of listMenu; track item.id) {
+      <a
+        [routerLink]="item.href"
+        routerLinkActive="active"
+        class="list-group-item list-group-item-action"
+      >
+        <i class="{{ item.iconClass }} me-2"></i> {{ item.name }}
+      </a>
+    }
+  </div>
+</div>

@@ -39,6 +39,59 @@ export const routes: Routes = [
         path: 'events',
         loadComponent: () => import('./pages/events/events').then((m) => m.Events),
       },
+      {
+        path: 'settings',
+        component: SettingLayout, // <== SettingLayout sẽ hiển thị bên trong ClientLayout
+        children: [
+          {
+            path: '',
+            redirectTo: 'profile', // <== CHUYỂN HƯỚNG MẶC ĐỊNH KHI GÕ /settings
+            pathMatch: 'full',
+          },
+          {
+            path: 'profile', // <== ROUTE CHO USER PROFILE
+            loadComponent: () =>
+              import('./pages/user-profile/user-profile').then((m) => m.UserProfile),
+          },
+          {
+            path: 'my-payment-method',
+            loadComponent: () =>
+              import('./pages/my-payment-method/my-payment-method').then((m) => m.MyPaymentMethod),
+          },
+          {
+            path: 'my-promotions',
+            loadComponent: () =>
+              import('./pages/my-promotions/my-promotions').then((m) => m.MyPromotions),
+          },
+          {
+            path: 'my-orders',
+            loadComponent: () => import('./pages/my-orders/my-orders').then((m) => m.MyOrders),
+          },
+          {
+            path: 'my-reviews', // Đã đổi từ 'wishlist' sang 'my-reviews'
+            loadComponent: () => import('./pages/my-reviews/my-reviews').then((m) => m.MyReviews),
+          },
+          {
+            path: 'change-password',
+            loadComponent: () =>
+              import('./pages/change-password/change-password').then((m) => m.ChangePassword),
+          },
+          {
+            path: 'user-setting', // Có thể đổi thành 'general' hoặc 'preferences'
+            loadComponent: () =>
+              import('./pages/user-settings/user-settings').then((m) => m.UserSettings),
+          },
+          {
+            path: 'requests-warranty',
+            loadComponent: () =>
+              import('./pages/requests-warranty/requests-warranty').then((m) => m.RequestsWarranty),
+          },
+          {
+            path: 'support', // Hỗ trợ giờ là con của settings
+            loadComponent: () => import('./pages/support/support').then((m) => m.Support),
+          },
+        ],
+      },
     ],
   },
   {
@@ -61,43 +114,6 @@ export const routes: Routes = [
       {
         path: 'verify-email',
         loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
-      },
-    ],
-  },
-  {
-    path: 'settings',
-    component: SettingLayout,
-    children: [
-      {
-        path: '',
-        loadComponent: () => import('./pages/user-profile/user-profile').then((m) => m.UserProfile),
-      },
-      {
-        path: 'my-orders',
-        loadComponent: () => import('./pages/my-orders/my-orders').then((m) => m.MyOrders), // <== CẦN TẠO COMPONENT NÀY
-      },
-      {
-        path: 'wishlist', 
-        loadComponent: () => import('./pages/my-reviews/my-reviews').then((m) => m.MyReviews), // <== CẦN TẠO COMPONENT NÀY
-      },
-      {
-        path: 'change-password',
-        loadComponent: () =>
-          import('./pages/change-password/change-password').then((m) => m.ChangePassword),
-      },
-      {
-        path: 'user-setting',
-        loadComponent: () =>
-          import('./pages/user-settings/user-settings').then((m) => m.UserSettings),
-      },
-      {
-        path: 'requests-warranty',
-        loadComponent: () =>
-          import('./pages/requests-warranty/requests-warranty').then((m) => m.RequestsWarranty),
-      },
-      {
-        path: 'support',
-        loadComponent: () => import('./pages/support/support').then((m) => m.Support),
       },
     ],
   },

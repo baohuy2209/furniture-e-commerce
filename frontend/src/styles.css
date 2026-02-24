@@ -2,9 +2,11 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
   /* Màu sắc chính HomeBase */
-  --color-primary: #3d529d; /* Xanh nội thất */
+  --color-primary: #3d529d;
+  --color-primary-rgb: 61, 82, 157;
   --color-secondary: #8b7355; /* Nâu gỗ */
   --color-accent: #ff911f; /* Vàng đồng */
+   --color-accent-rgb: 255, 145, 31;
   --color-bg: #faf9f6; /* Nền sáng */
   --color-white: #ffffff;
   --color-border: #e8e4dc;
@@ -32,7 +34,7 @@
   --color-gradient-end: #f4d03f;
 
   /* Status Colors */
-  --color-success: #10b981;
+  --color-success: #03875b;
   --color-live: #ef4444;
 
   /* Shadows & Effects */
@@ -64,9 +66,9 @@
   /* Typography */
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
-  --danger-color: #dc3545;
+  --danger-color: #ef4444;
   --warning-color: #ffc107;
-  --success-color: #28a745;
+  --success-color: #03875b;
   --light-bg: #f8f9fa;
   --border-color: #dee2e6;
 }
@@ -130,4 +132,12 @@ html {
   padding: 20px;
   background: #f8f9fa;
   min-height: 100vh;
+}
+
+
+.modal {
+  z-index: 1060 !important;
+}
+.modal-backdrop {
+  z-index: 1050 !important;
 }
