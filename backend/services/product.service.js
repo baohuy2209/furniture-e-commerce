@@ -8,12 +8,18 @@ class ProductService {
     });
     return mainProductVariant;
   }
-  async getMainImageForDefaultVariant(product_variant) {
+  async getMainImageForDefaultVariant(product_variant_id) {
     const mainImageDefaultProduct = await ProductVariantImage.findOne({
-      product_variant: product_variant._id,
+      product_variant: product_variant_id,
       is_main: true,
     });
     return mainImageDefaultProduct;
+  }
+  async getAllDefaultProductVariantImage(product_variant_id) {
+    const listDefaultProductVariantImage = await ProductVariantImage.find({
+      product_variant: product_variant_id,
+    });
+    return listDefaultProductVariantImage;
   }
 }
 

@@ -559,44 +559,212 @@
   },
   {
     "product_variant": "699dac13f343b12e59fa8cd6",
-    "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/main/image.png",
+    "url": "images/products/living_room/belize_coral_sculpture/main/image.png",
     "is_main": true,
     "position": 0
   },
   {
     "product_variant": "699dac13f343b12e59fa8cd6",
-    "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image1.png",
+    "url": "images/products/living_room/belize_coral_sculpture/image1.png",
     "is_main": false,
     "position": 1
   },
   {
     "product_variant": "699dac13f343b12e59fa8cd6",
-    "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image2.png",
+    "url": "images/products/living_room/belize_coral_sculpture/image2.png",
     "is_main": false,
     "position": 2
   },
   {
     "product_variant": "699dac13f343b12e59fa8cd6",
-    "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image3.png",
+    "url": "images/products/living_room/belize_coral_sculpture/image3.png",
     "is_main": false,
     "position": 3
   },
   {
     "product_variant": "699dac13f343b12e59fa8cd6",
-    "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image4.png",
+    "url": "images/products/living_room/belize_coral_sculpture/image4.png",
     "is_main": false,
     "position": 4
   },
   {
-    "product_variant": "699dac13f343b12e59fa8cd6",
-    "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image5.png",
+    "product_variant": "699dac13f343b12e59fa8cd7",
+    "url": "images/products/bathroom/float_vase/main/image.png",
+    "is_main": true,
+    "position": 0
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd7",
+    "url": "images/products/bathroom/float_vase/image1.png",
+    "is_main": false,
+    "position": 1
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd7",
+    "url": "images/products/bathroom/float_vase/image2.png",
+    "is_main": false,
+    "position": 2
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd7",
+    "url": "images/products/bathroom/float_vase/image3.png",
+    "is_main": false,
+    "position": 3
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd7",
+    "url": "images/products/bathroom/float_vase/image4.png",
+    "is_main": false,
+    "position": 4
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd7",
+    "url": "images/products/bathroom/float_vase/image5.png",
     "is_main": false,
     "position": 5
   },
   {
-    "product_variant": "699dac13f343b12e59fa8cd6",
-    "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image6.png",
+    "product_variant": "699dac13f343b12e59fa8cd8",
+    "url": "images/products/living_room/flora_5_sculpture/main/image.png",
+    "is_main": true,
+    "position": 0
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd8",
+    "url": "images/products/living_room/flora_5_sculpture/image1.png",
+    "is_main": false,
+    "position": 1
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd8",
+    "url": "images/products/living_room/flora_5_sculpture/image2.png",
+    "is_main": false,
+    "position": 2
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd8",
+    "url": "images/products/living_room/flora_5_sculpture/image3.png",
+    "is_main": false,
+    "position": 3
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd8",
+    "url": "images/products/living_room/flora_5_sculpture/image4.png",
+    "is_main": false,
+    "position": 4
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd9",
+    "url": "images/products/living_room/geometric_sculpture/main/image.png",
+    "is_main": true,
+    "position": 0
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd9",
+    "url": "images/products/living_room/geometric_sculpture/image1.png",
+    "is_main": false,
+    "position": 1
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd9",
+    "url": "images/products/living_room/geometric_sculpture/image2.png",
+    "is_main": false,
+    "position": 2
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cd9",
+    "url": "images/products/living_room/geometric_sculpture/image3.png",
+    "is_main": false,
+    "position": 3
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cda",
+    "url": "images/products/living_room/luna_metal_vase/main/image.png",
+    "is_main": true,
+    "position": 0
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cda",
+    "url": "images/products/living_room/luna_metal_vase/image1.png",
+    "is_main": false,
+    "position": 1
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cda",
+    "url": "images/products/living_room/luna_metal_vase/image2.png",
+    "is_main": false,
+    "position": 2
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cda",
+    "url": "images/products/living_room/luna_metal_vase/image3.png",
+    "is_main": false,
+    "position": 3
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cda",
+    "url": "images/products/living_room/luna_metal_vase/image4.png",
+    "is_main": false,
+    "position": 4
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cda",
+    "url": "images/products/living_room/luna_metal_vase/image5.png",
+    "is_main": false,
+    "position": 5
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cda",
+    "url": "images/products/living_room/luna_metal_vase/image6.png",
     "is_main": false,
     "position": 6
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cdb",
+    "url": "images/products/living_room/magnolia_sculpture/main/image.png",
+    "is_main": true,
+    "position": 0
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cdb",
+    "url": "images/products/living_room/magnolia_sculpture/image1.png",
+    "is_main": false,
+    "position": 1
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cdc",
+    "url": "images/products/outdoor/rubble_vase/main/image.png",
+    "is_main": true,
+    "position": 0
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cdc",
+    "url": "images/products/outdoor/rubble_vase/image1.png",
+    "is_main": false,
+    "position": 1
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cdc",
+    "url": "images/products/outdoor/rubble_vase/image2.png",
+    "is_main": false,
+    "position": 2
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cdd",
+    "url": "images/products/kitchen/sweet_art_bowl/main/image.png",
+    "is_main": true,
+    "position": 0
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cdd",
+    "url": "images/products/kitchen/sweet_art_bowl/image1.png",
+    "is_main": false,
+    "position": 1
+  },
+  {
+    "product_variant": "699dac13f343b12e59fa8cdd",
+    "url": "images/products/kitchen/sweet_art_bowl/image2.png",
+    "is_main": false,
+    "position": 2
   }
 ]

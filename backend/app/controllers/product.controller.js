@@ -3,7 +3,7 @@ const ProductTags = require("../models/productTags.model");
 const productService = require("../../services/product.service");
 class ProductController {
   // [GET] /api/products/
-  async getAll(req, res) {
+  async getAllProduct(req, res) {
     try {
       const products = await Product.find({});
 
@@ -56,8 +56,25 @@ class ProductController {
         .json({ message: "Lỗi server", error: error.message });
     }
   }
-  async getById(req, res) {
-    res.json({ message: `Get product with id ${req.params.id}` });
+  async getProductById(req, res) {
+    try {
+      const productId = req.params.id;
+      const productInfo = await Product.findById(productId);
+      const defaultProductVariant =
+        await productService.getMainProductVariantInfo(productId);
+      const listMainImageDefaultProduct =
+        await productService.getAllDefaultProductVariantImage(
+          defaultProductVariant._id,
+        );
+      return res.json({
+        message: `Get product with id ${req.params.id}`,
+        productInfo,
+        defaultProductVariant,
+        listMainImageDefaultProduct,
+      });
+    } catch (e) {
+      return res.status(500).json({ message: "Lỗi server", error: e.message });
+    }
   }
 }
 
