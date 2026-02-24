@@ -35,14 +35,6 @@ export class BlogsDetails {
   }
 
   /**
-   * Share article on Twitter
-   */
-  shareOnTwitter(): void {
-    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(this.articleUrl)}&text=${encodeURIComponent(this.articleTitle)}`;
-    window.open(twitterUrl, '_blank', 'width=600,height=400');
-  }
-
-  /**
    * Share article on Pinterest
    */
   shareOnPinterest(): void {

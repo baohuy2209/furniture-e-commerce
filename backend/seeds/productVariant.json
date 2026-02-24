@@ -1,0 +1,546 @@
+[
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK003331",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 1000,
+    "num_selled": 200,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 5, "count": 120 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "Belge Arezzo Fabric 3331",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    },
+    "is_default": true
+  },
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK003320",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 1000,
+    "num_selled": 180,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.8, "count": 95 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "Belge Lucca Fabric 3320",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK003324",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 1000,
+    "num_selled": 170,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.7, "count": 90 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "Camel Lucca Fabric 3324",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK003334",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 30,
+    "num_selled": 80,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.6, "count": 60 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "Green Arezzo Fabric 3334",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK003332",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 230,
+    "num_selled": 90,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.5, "count": 70 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "Light Brown Arezzo Fabric 3332",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK003333",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 230,
+    "num_selled": 90,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.5, "count": 70 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "Ochre Arezzo Fabric 3333",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK003323",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 230,
+    "num_selled": 90,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.5, "count": 70 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "Red Lucca Fabric 3323",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK002255",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 230,
+    "num_selled": 90,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.7, "count": 10 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "Stone Grey Napoli Fabric 2255",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK003321",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 120,
+    "num_selled": 40,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.7, "count": 30 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "White Lucca Fabric 3321",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db96",
+    "sku": "4415165AK003083",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 40,
+    "num_selled": 30,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.5, "count": 20 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "left",
+      "ulphostery": "White Rimiri Fabric 3083",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db97",
+    "sku": "4415165AJ003083",
+    "price": 164000000,
+    "weight": 157,
+    "num_inventory": 10,
+    "num_selled": 160,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 5, "count": 150 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "right",
+      "ulphostery": "White Rimiri Fabric 3083",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    },
+    "is_default": true
+  },
+  {
+    "product": "699d61b8aa32e5f0dd4d06e9",
+    "sku": "4415165AJ003331",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 12,
+    "num_selled": 140,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.9, "count": 120 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "right",
+      "ulphostery": "Belge Arezzo Fabric 3331",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d61b8aa32e5f0dd4d06e9",
+    "sku": "4415165AJ003320",
+    "price": 164000000,
+    "weight": 157,
+    "num_inventory": 23,
+    "num_selled": 100,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.7, "count": 90 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "right",
+      "ulphostery": "Belge Lucca Fabric 3320",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db97",
+    "sku": "4415165AJ003324",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 23,
+    "num_selled": 100,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.7, "count": 90 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "right",
+      "ulphostery": "Camel Lucca Fabric 3324",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db97",
+    "sku": "4415165AJ003334",
+    "price": 208900000,
+    "weight": 157,
+    "num_inventory": 23,
+    "num_selled": 70,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.7, "count": 67 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "right",
+      "ulphostery": "Green Arezzo Fabric 3334",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db97",
+    "sku": "4415165AJ003321",
+    "price": 199900000,
+    "weight": 157,
+    "num_inventory": 300,
+    "num_selled": 70,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.5, "count": 67 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "right",
+      "ulphostery": "Light Brown Arezzo Fabric 3321",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db97",
+    "sku": "4415165AJ003333",
+    "price": 189908000,
+    "weight": 157,
+    "num_inventory": 300,
+    "num_selled": 70,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.5, "count": 67 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "right",
+      "ulphostery": "Ochre Arezzo Fabric 3333",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db97",
+    "sku": "4415165AJ003323",
+    "price": 189908000,
+    "weight": 160,
+    "num_inventory": 23,
+    "num_selled": 1000,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.7, "count": 123 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "right",
+      "ulphostery": "Red Lucca Fabric 3323",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db97",
+    "sku": "4415165AJ002255",
+    "price": 178908000,
+    "weight": 140,
+    "num_inventory": 23,
+    "num_selled": 1000,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.7, "count": 123 },
+    "expected_delivery": "6-7 ngày",
+    "measurement": {
+      "sofa_direction": "right",
+      "ulphostery": "Stone Grey Napoli Fabric 2255",
+      "armrest_height": 53,
+      "depth": 191,
+      "height": 88.5,
+      "legs_height": 8,
+      "seating_height": 40,
+      "width": 298
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db9c",
+    "sku": "104011032910",
+    "price": 16890000,
+    "weight": 10,
+    "num_inventory": 23,
+    "num_selled": 23,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.9, "count": 16 },
+    "expected_delivery": "6-12 ngày",
+    "is_default": true
+  },
+  {
+    "product": "699d977cc400dbca31d7db9d",
+    "sku": "104011034410",
+    "price": 16890000,
+    "weight": 25,
+    "num_inventory": 3000,
+    "num_selled": 1230,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.9, "count": 1100 },
+    "expected_delivery": "6-10 ngày",
+    "is_default": true
+  },
+  {
+    "product": "699d977cc400dbca31d7db9e",
+    "sku": "104011036420",
+    "price": 19890000,
+    "weight": 15,
+    "num_inventory": 2100,
+    "num_selled": 2230,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 5, "count": 1400 },
+    "expected_delivery": "8-12 ngày",
+    "is_default": true,
+    "measurement": {
+      "depth": 30,
+      "height": 50,
+      "width": 12
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db9f",
+    "sku": "104011036280",
+    "price": 22800000,
+    "weight": 15,
+    "num_inventory": 2100,
+    "num_selled": 130,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 5, "count": 100 },
+    "expected_delivery": "8-12 ngày",
+    "is_default": true,
+    "measurement": {
+      "depth": 9,
+      "height": 18,
+      "width": 5
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7dba0",
+    "sku": "104011033030",
+    "price": 22800000,
+    "weight": 15,
+    "num_inventory": 2100,
+    "num_selled": 130,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 5, "count": 100 },
+    "expected_delivery": "8-12 ngày",
+    "is_default": true,
+    "measurement": {
+      "height": 20,
+      "diameter": 20
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7dba1",
+    "sku": "104011034160",
+    "price": 13560000,
+    "weight": 15,
+    "num_inventory": 2400,
+    "num_selled": 10,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 5, "count": 7 },
+    "expected_delivery": "8-12 ngày",
+    "is_default": true,
+    "measurement": {
+      "depth": 18,
+      "height": 20,
+      "width": 40
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7dba2",
+    "sku": "104011034030",
+    "price": 11330000,
+    "weight": 29,
+    "num_inventory": 1100,
+    "num_selled": 900,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 5, "count": 670 },
+    "expected_delivery": "8-16 ngày",
+    "is_default": true,
+    "measurement": {
+      "diameter": 20,
+      "height": 30
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db9b",
+    "sku": "104011036340",
+    "price": 11330000,
+    "weight": 29,
+    "num_inventory": 1100,
+    "num_selled": 900,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 5, "count": 670 },
+    "expected_delivery": "8-16 ngày",
+    "is_default": true,
+    "measurement": {
+      "diameter": 20,
+      "height": 30
+    }
+  },
+  {
+    "product": "699d977cc400dbca31d7db98",
+    "sku": "406615203331075",
+    "price": 36500000,
+    "weight": 12,
+    "num_inventory": 2100,
+    "num_selled": 1100,
+    "designed_by": "Henrik Pedersen",
+    "rating": { "average": 4.7, "count": 1000 },
+    "expected_delivery": "8-16 ngày",
+    "is_default": true,
+    "measurement": {
+      "armrest_height": 15,
+      "depth": 28,
+      "height": 27,
+      "seating_height": 15,
+      "maximum_weight_load": 140,
+      "width": 25
+    }
+  }
+]

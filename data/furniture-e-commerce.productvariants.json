@@ -1,0 +1,296 @@
+[{
+  "_id": {
+    "$oid": "699d6b959bc4ed147b4e7175"
+  },
+  "product": {
+    "$oid": "699d61b8aa32e5f0dd4d06e8"
+  },
+  "sku": "4415165AK003331",
+  "price": 208900000,
+  "weight": 157,
+  "num_inventory": 1000,
+  "num_selled": 200,
+  "designed_by": "Henrik Pedersen",
+  "rating": {
+    "average": 5,
+    "count": 120
+  },
+  "expected_delivery": "6-7 weeks",
+  "measurement": {
+    "sofa_direction": "left",
+    "ulphostery": "Belge Arezzo Fabric 3331",
+    "armrest_height": 53,
+    "depth": 191,
+    "height": 88.5,
+    "legs_height": 8,
+    "seating_height": 40,
+    "width": 298
+  },
+  "is_default": true,
+  "createdAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d6b959bc4ed147b4e7176"
+  },
+  "product": {
+    "$oid": "699d61b8aa32e5f0dd4d06e8"
+  },
+  "sku": "4415165AK003320",
+  "price": 208900000,
+  "weight": 157,
+  "num_inventory": 1000,
+  "num_selled": 180,
+  "designed_by": "Henrik Pedersen",
+  "rating": {
+    "average": 4.8,
+    "count": 95
+  },
+  "expected_delivery": "6-7 weeks",
+  "measurement": {
+    "sofa_direction": "left",
+    "ulphostery": "Belge Lucca Fabric 3320",
+    "armrest_height": 53,
+    "depth": 191,
+    "height": 88.5,
+    "legs_height": 8,
+    "seating_height": 40,
+    "width": 298
+  },
+  "is_default": false,
+  "createdAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d6b959bc4ed147b4e717a"
+  },
+  "product": {
+    "$oid": "699d61b8aa32e5f0dd4d06e9"
+  },
+  "sku": "4415165AJ003083",
+  "price": 164000000,
+  "weight": 157,
+  "num_inventory": 10,
+  "num_selled": 160,
+  "designed_by": "Henrik Pedersen",
+  "rating": {
+    "average": 5,
+    "count": 150
+  },
+  "expected_delivery": "6-7 weeks",
+  "measurement": {
+    "sofa_direction": "right",
+    "ulphostery": "White Rimiri Fabric 3083",
+    "armrest_height": 53,
+    "depth": 191,
+    "height": 88.5,
+    "legs_height": 8,
+    "seating_height": 40,
+    "width": 298
+  },
+  "is_default": true,
+  "createdAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d6b959bc4ed147b4e717b"
+  },
+  "product": {
+    "$oid": "699d61b8aa32e5f0dd4d06e9"
+  },
+  "sku": "4415165AJ003331",
+  "price": 208900000,
+  "weight": 157,
+  "num_inventory": 12,
+  "num_selled": 140,
+  "designed_by": "Henrik Pedersen",
+  "rating": {
+    "average": 4.9,
+    "count": 120
+  },
+  "expected_delivery": "6-7 weeks",
+  "measurement": {
+    "sofa_direction": "right",
+    "ulphostery": "Belge Arezzo Fabric 3331",
+    "armrest_height": 53,
+    "depth": 191,
+    "height": 88.5,
+    "legs_height": 8,
+    "seating_height": 40,
+    "width": 298
+  },
+  "is_default": false,
+  "createdAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d6b959bc4ed147b4e7179"
+  },
+  "product": {
+    "$oid": "699d61b8aa32e5f0dd4d06e8"
+  },
+  "sku": "4415165AK003332",
+  "price": 208900000,
+  "weight": 157,
+  "num_inventory": 230,
+  "num_selled": 90,
+  "designed_by": "Henrik Pedersen",
+  "rating": {
+    "average": 4.5,
+    "count": 70
+  },
+  "expected_delivery": "6-7 weeks",
+  "measurement": {
+    "sofa_direction": "left",
+    "ulphostery": "Light Brown Arezzo Fabric 3332",
+    "armrest_height": 53,
+    "depth": 191,
+    "height": 88.5,
+    "legs_height": 8,
+    "seating_height": 40,
+    "width": 298
+  },
+  "is_default": false,
+  "createdAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d6b959bc4ed147b4e7178"
+  },
+  "product": {
+    "$oid": "699d61b8aa32e5f0dd4d06e8"
+  },
+  "sku": "4415165AK003334",
+  "price": 208900000,
+  "weight": 157,
+  "num_inventory": 30,
+  "num_selled": 80,
+  "designed_by": "Henrik Pedersen",
+  "rating": {
+    "average": 4.6,
+    "count": 60
+  },
+  "expected_delivery": "6-7 weeks",
+  "measurement": {
+    "sofa_direction": "left",
+    "ulphostery": "Green Arezzo Fabric 3334",
+    "armrest_height": 53,
+    "depth": 191,
+    "height": 88.5,
+    "legs_height": 8,
+    "seating_height": 40,
+    "width": 298
+  },
+  "is_default": false,
+  "createdAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d6b959bc4ed147b4e717c"
+  },
+  "product": {
+    "$oid": "699d61b8aa32e5f0dd4d06e9"
+  },
+  "sku": "4415165AJ003320",
+  "price": 164000000,
+  "weight": 157,
+  "num_inventory": 23,
+  "num_selled": 100,
+  "designed_by": "Henrik Pedersen",
+  "rating": {
+    "average": 4.7,
+    "count": 90
+  },
+  "expected_delivery": "6-7 weeks",
+  "measurement": {
+    "sofa_direction": "right",
+    "ulphostery": "Belge Lucca Fabric 3320",
+    "armrest_height": 53,
+    "depth": 191,
+    "height": 88.5,
+    "legs_height": 8,
+    "seating_height": 40,
+    "width": 298
+  },
+  "is_default": false,
+  "createdAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d6b959bc4ed147b4e7177"
+  },
+  "product": {
+    "$oid": "699d61b8aa32e5f0dd4d06e8"
+  },
+  "sku": "4415165AK003324",
+  "price": 208900000,
+  "weight": 157,
+  "num_inventory": 1000,
+  "num_selled": 170,
+  "designed_by": "Henrik Pedersen",
+  "rating": {
+    "average": 4.7,
+    "count": 90
+  },
+  "expected_delivery": "6-7 weeks",
+  "measurement": {
+    "sofa_direction": "left",
+    "ulphostery": "Camel Lucca Fabric 3324",
+    "armrest_height": 53,
+    "depth": 191,
+    "height": 88.5,
+    "legs_height": 8,
+    "seating_height": 40,
+    "width": 298
+  },
+  "is_default": false,
+  "createdAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T09:12:53.234Z"
+  },
+  "__v": 0
+}]

@@ -1,0 +1,540 @@
+[{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71e4"
+  },
+  "name": "Living Room",
+  "slug": "living-room",
+  "description": "Sản phẩm phù hợp cho không gian phòng khách",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71ee"
+  },
+  "name": "Metal",
+  "slug": "metal",
+  "description": "Sản phẩm làm từ kim loại hoặc có chi tiết kim loại",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71ef"
+  },
+  "name": "Glass",
+  "slug": "glass",
+  "description": "Sản phẩm làm từ thủy tinh hoặc có chi tiết thủy tinh",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f0"
+  },
+  "name": "Bathroom",
+  "slug": "bathroom",
+  "description": "Sản phẩm sử dụng trong không gian phòng tắm",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71ed"
+  },
+  "name": "Vase",
+  "slug": "vase",
+  "description": "Bình trang trí dùng cắm hoa hoặc trưng bày",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f1"
+  },
+  "name": "Outdoor",
+  "slug": "outdoor",
+  "description": "Sản phẩm dùng cho không gian ngoài trời",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f4"
+  },
+  "name": "Chair",
+  "slug": "chair",
+  "description": "Các loại ghế ngồi",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f5"
+  },
+  "name": "Armchair",
+  "slug": "armchair",
+  "description": "Ghế đơn có tay vịn, mang lại sự thoải mái",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f6"
+  },
+  "name": "Bar Stool",
+  "slug": "bar-stool",
+  "description": "Ghế cao dùng cho quầy bar hoặc đảo bếp",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f7"
+  },
+  "name": "Bench",
+  "slug": "bench",
+  "description": "Ghế dài dùng cho nhiều người ngồi",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f8"
+  },
+  "name": "Mirror",
+  "slug": "mirror",
+  "description": "Gương trang trí và sử dụng hằng ngày",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f9"
+  },
+  "name": "Minimal",
+  "slug": "minimal",
+  "description": "Sản phẩm mang phong cách tối giản",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71fa"
+  },
+  "name": "Hammpton",
+  "slug": "hammpton",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Hammpton",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71fb"
+  },
+  "name": "Princeton",
+  "slug": "princeton",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Princeton",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71fc"
+  },
+  "name": "Belize",
+  "slug": "belize",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Belize",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71fd"
+  },
+  "name": "Float",
+  "slug": "float",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Float",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71fe"
+  },
+  "name": "Flora",
+  "slug": "flora",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Flora",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71ff"
+  },
+  "name": "Luna",
+  "slug": "luna",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Luna",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea7200"
+  },
+  "name": "Magnolia",
+  "slug": "magnolia",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Magnolia",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea7201"
+  },
+  "name": "Mango",
+  "slug": "mango",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Mango",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea7202"
+  },
+  "name": "Rubble",
+  "slug": "rubble",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Rubble",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea7203"
+  },
+  "name": "Sweet Art",
+  "slug": "sweet-art",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Sweet Art",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea7204"
+  },
+  "name": "Tone",
+  "slug": "tone",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Tone",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea7205"
+  },
+  "name": "Medina",
+  "slug": "medina",
+  "description": "Thẻ thương hiệu dành cho các sản phẩm Medina",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.133Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f2"
+  },
+  "name": "Kitchen",
+  "slug": "kitchen",
+  "description": "Sản phẩm phù hợp cho khu vực nhà bếp",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71f3"
+  },
+  "name": "Dining Room",
+  "slug": "dining-room",
+  "description": "Sản phẩm sử dụng trong phòng ăn",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71e8"
+  },
+  "name": "Decor",
+  "slug": "decor",
+  "description": "Đồ trang trí giúp tăng tính thẩm mỹ cho không gian",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71e2"
+  },
+  "name": "Sofa",
+  "slug": "sofa",
+  "description": "Các loại ghế sofa dùng trong không gian sinh hoạt",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.131Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.131Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71e6"
+  },
+  "name": "Storage",
+  "slug": "storage",
+  "description": "Nội thất có tích hợp không gian lưu trữ",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71eb"
+  },
+  "name": "Geometric",
+  "slug": "geometric",
+  "description": "Thiết kế dựa trên các hình khối hình học",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71e3"
+  },
+  "name": "Corner Sofa",
+  "slug": "corner-sofa",
+  "description": "Sofa góc chữ L giúp tối ưu không gian phòng",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71e9"
+  },
+  "name": "Art",
+  "slug": "art",
+  "description": "Sản phẩm mang tính nghệ thuật cao",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71ec"
+  },
+  "name": "Nature Inspired",
+  "slug": "nature-inspired",
+  "description": "Thiết kế lấy cảm hứng từ thiên nhiên",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71e5"
+  },
+  "name": "Adjustable Back",
+  "slug": "adjustable-back",
+  "description": "Sản phẩm có khả năng điều chỉnh phần tựa lưng",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71e7"
+  },
+  "name": "Sculpture",
+  "slug": "sculpture",
+  "description": "Tác phẩm điêu khắc trang trí nội thất",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d531503c4b1aef1ea71ea"
+  },
+  "name": "Handmade",
+  "slug": "handmade",
+  "description": "Sản phẩm thủ công được làm bằng tay",
+  "createdAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T07:28:21.132Z"
+  },
+  "__v": 0
+}]

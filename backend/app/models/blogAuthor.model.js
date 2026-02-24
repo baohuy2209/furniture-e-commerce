@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const slug = require("mongoose-slug-generator");
-mongoose.plugin(slug);
 const BlogAuthorSchema = new mongoose.Schema(
   {
     user_id: {
