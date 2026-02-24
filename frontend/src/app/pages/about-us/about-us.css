@@ -224,12 +224,23 @@
 .value-item-custom {
   font-size: 15px;
   line-height: 1.6;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.value-item-custom:hover {
+  transform: translateX(8px);
+}
+
+.value-item-custom:hover .value-title-bold {
+  color: var(--color-accent);
 }
 
 .value-title-bold {
   color: var(--color-primary);
   font-weight: 700;
   margin-right: 5px;
+  transition: color 0.3s ease;
 }
 
 .value-desc-light {
@@ -268,6 +279,13 @@
   padding: 40px;
   height: 350px;
   gap: 20px;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  cursor: pointer;
+}
+
+.vm-card-custom:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 .vision-bg {
