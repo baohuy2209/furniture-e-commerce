@@ -18,4 +18,13 @@ export class EventsHero {
     }
   }
 
+  scrollToVideo() {
+    const el = document.getElementById('video-section');
+    if (el) {
+      el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }
 }

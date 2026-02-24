@@ -66,6 +66,7 @@ h2 span {
   flex: 1.5;
   position: relative;
   min-height: 300px;
+  cursor: pointer;
 }
 
 .recap-thumb img {

@@ -67,4 +67,9 @@ export class PastEvents {
     }
   ];
 
+  videoVisible = false;
+
+  playVideo() {
+    this.videoVisible = true;
+  }
 }
