@@ -8,8 +8,16 @@
         <label>Email <span class="required">*</span></label>
         <div class="input-group">
           <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
-          <input type="email" name="email" [(ngModel)]="email" required email placeholder="Example@gmail.com"
-            #emailCtrl="ngModel" [class.error-border]="emailCtrl.invalid && emailCtrl.touched" />
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            email
+            placeholder="Example@gmail.com"
+            #emailCtrl="ngModel"
+            [class.error-border]="emailCtrl.invalid && emailCtrl.touched"
+          />
         </div>
         <small class="error-text" *ngIf="emailCtrl.invalid && emailCtrl.touched">
           Email không hợp lệ
@@ -21,13 +29,23 @@
         <label>Mật Khẩu <span class="required">*</span></label>
         <div class="input-group">
           <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-          <input type="password" name="password" [(ngModel)]="password" required placeholder="*****************"
-            #passCtrl="ngModel" [class.error-border]="passCtrl.touched && !isPasswordValid" />
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            placeholder="*****************"
+            #passCtrl="ngModel"
+            [class.error-border]="passCtrl.touched && !isPasswordValid"
+          />
         </div>
       </div>
 
       <!-- Password Strength Validation -->
-      <div class="password-requirements" *ngIf="(passCtrl.dirty || passCtrl.touched) && passwordErrorsList.length">
+      <div
+        class="password-requirements"
+        *ngIf="(passCtrl.dirty || passCtrl.touched) && passwordErrorsList.length"
+      >
         <p class="invalid">
           <i class="fa-solid fa-xmark"></i>
           {{ passwordErrorsList[0] }}
@@ -52,7 +70,6 @@
       <div class="signup-text">
         Bạn chưa có tài khoản? <a routerLink="/auth/sign-up" class="signup-link">Đăng ký ngay</a>
       </div>
-
     </form>
   </div>
 </div>

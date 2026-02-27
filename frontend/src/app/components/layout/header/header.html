@@ -33,23 +33,39 @@
         <img src="logo.png" alt="HomeBase Logo" class="logo-img me-2" />
       </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <a class="nav-link" [class]="getCurrentUrl() == 'home' ? 'active' : ''" href="/">Trang Chủ</a>
+            <a class="nav-link" [class]="getCurrentUrl() == 'home' ? 'active' : ''" href="/"
+              >Trang Chủ</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" [class]="getCurrentUrl() == 'products' ? 'active' : ''" href="/products">Sản Phẩm</a>
+            <a
+              class="nav-link"
+              [class]="getCurrentUrl() == 'products' ? 'active' : ''"
+              href="/products"
+              >Sản Phẩm</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" [class]="getCurrentUrl() == 'events' ? 'active' : ''" href="/events">Sự Kiện</a>
+            <a class="nav-link" [class]="getCurrentUrl() == 'events' ? 'active' : ''" href="/events"
+              >Sự Kiện</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" [class]="getCurrentUrl() == 'blogs' ? 'active' : ''" href="/blogs">Blogs</a>
+            <a class="nav-link" [class]="getCurrentUrl() == 'blogs' ? 'active' : ''" href="/blogs"
+              >Blogs</a
+            >
           </li>
           <!-- <li class="nav-item">
             <a class="nav-link" [class]="getCurrentUrl() == 'about' ? 'active' : ''" href="/about"
@@ -69,8 +85,14 @@
         <div class="nav-icons d-flex align-items-center gap-3">
           <div class="search-wrapper" [class.active]="isSearchOpen">
             <div class="search-box">
-              <input type="text" class="search-input" placeholder="Tìm kiếm sản phẩm..." [(ngModel)]="searchQuery"
-                (keyup.enter)="onSearch()" #searchInput />
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Tìm kiếm sản phẩm..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+                #searchInput
+              />
               <button class="search-submit-btn" (click)="onSearch()" aria-label="Submit Search">
                 <i class="fas fa-search"></i>
               </button>
@@ -89,58 +111,53 @@
           <!-- KHỐI NÀY LÀ DROPDOWN KHI CHƯA ĐĂNG NHẬP-->
           <div class="auth-buttons" *ngIf="!isLoggedIn">
             <button
-              class="btn btn-login"
+              class="btn btn-login text-nowrap"
               aria-label="User Account"
               (click)="goSignIn()"
             >
               ĐĂNG NHẬP
             </button>
-            <button
-              class="btn btn-signup"
-              aria-label="User Account"
-              (click)="goSignUp()"
-            >
+            <button class="btn btn-signup" aria-label="User Account" (click)="goSignUp()">
               ĐĂNG KÝ
             </button>
-            </div>
           </div>
-          <!-- KHỐI NÀY LÀ DROPDOWN CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->
-          <div class="dropdown" *ngIf="isLoggedIn">
-            <a
-              class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
-              href="#"
-              role="button"
-              id="dropdownUser"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img src="user/image.png" alt="User Avatar" class="user-avatar" />
-              <span>Tánh</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
-              <li>
-                <a class="dropdown-item" [routerLink]="['/settings']">
-                  <i class="far fa-file-alt me-2"></i> Tài khoản của bạn</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" [routerLink]="['/settings/my-orders']">
-                  <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" [routerLink]="['/settings/my-reviews']">
-                  <i class="fas fa-star me-2"></i> Đánh giá của tôi</a
-                >
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <a class="dropdown-item" (click)="logout()"
-                  ><i class="fas fa-sign-out-alt me-2"></i> Thoát</a
-                >
-              </li>
-            </ul>
-          </div>
+        </div>
+        <!-- KHỐI NÀY LÀ DROPDOWN CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->
+        <div class="dropdown" *ngIf="isLoggedIn">
+          <a
+            class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
+            href="#"
+            role="button"
+            id="dropdownUser"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img src="user/image.png" alt="User Avatar" class="user-avatar" />
+            <span>Tánh</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+            <li>
+              <a class="dropdown-item" [routerLink]="['/settings']">
+                <i class="far fa-file-alt me-2"></i> Tài khoản của bạn</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/settings/my-orders']">
+                <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/settings/my-reviews']">
+                <i class="fas fa-star me-2"></i> Đánh giá của tôi</a
+              >
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" (click)="logout()"
+                ><i class="fas fa-sign-out-alt me-2"></i> Thoát</a
+              >
+            </li>
+          </ul>
         </div>
       </div>
     </div>
