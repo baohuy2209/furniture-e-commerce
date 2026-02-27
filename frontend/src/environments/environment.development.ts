@@ -11,4 +11,5 @@ export const environment = {
   upholstery_url: 'assets/data/upholstery.json',
   home_featured_product_url: 'assets/home/category.json',
   home_room_url: 'assets/home/room.json',
+  backend_url: 'http:localhost:3000/api/',
 };
