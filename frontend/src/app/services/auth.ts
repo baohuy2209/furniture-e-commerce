@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class AuthService {
   // <== ĐÂY LÀ NƠI CHỨA TRẠNG THÁI ĐĂNG NHẬP, SẼ CUNG CẤP CHO HEADER COMPONENT
-  private _isLoggedIn = new BehaviorSubject<boolean>(true); // Khởi tạo ban đầu là false (chưa đăng nhập)
+  private _isLoggedIn = new BehaviorSubject<boolean>(false);
   public isLoggedIn$: Observable<boolean> = this._isLoggedIn.asObservable();
 
   constructor() {

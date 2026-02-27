@@ -33,39 +33,23 @@
         <img src="logo.png" alt="HomeBase Logo" class="logo-img me-2" />
       </a>
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <a class="nav-link" [class]="getCurrentUrl() == 'home' ? 'active' : ''" href="/"
-              >Trang Chủ</a
-            >
+            <a class="nav-link" [class]="getCurrentUrl() == 'home' ? 'active' : ''" href="/">Trang Chủ</a>
           </li>
           <li class="nav-item">
-            <a
-              class="nav-link"
-              [class]="getCurrentUrl() == 'products' ? 'active' : ''"
-              href="/products"
-              >Sản Phẩm</a
-            >
+            <a class="nav-link" [class]="getCurrentUrl() == 'products' ? 'active' : ''" href="/products">Sản Phẩm</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [class]="getCurrentUrl() == 'events' ? 'active' : ''" href="/events"
-              >Sự Kiện</a
-            >
+            <a class="nav-link" [class]="getCurrentUrl() == 'events' ? 'active' : ''" href="/events">Sự Kiện</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [class]="getCurrentUrl() == 'blogs' ? 'active' : ''" href="/blogs"
-              >Blogs</a
-            >
+            <a class="nav-link" [class]="getCurrentUrl() == 'blogs' ? 'active' : ''" href="/blogs">Blogs</a>
           </li>
           <!-- <li class="nav-item">
             <a class="nav-link" [class]="getCurrentUrl() == 'about' ? 'active' : ''" href="/about"
@@ -85,14 +69,8 @@
         <div class="nav-icons d-flex align-items-center gap-3">
           <div class="search-wrapper" [class.active]="isSearchOpen">
             <div class="search-box">
-              <input
-                type="text"
-                class="search-input"
-                placeholder="Tìm kiếm sản phẩm..."
-                [(ngModel)]="searchQuery"
-                (keyup.enter)="onSearch()"
-                #searchInput
-              />
+              <input type="text" class="search-input" placeholder="Tìm kiếm sản phẩm..." [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()" #searchInput />
               <button class="search-submit-btn" (click)="onSearch()" aria-label="Submit Search">
                 <i class="fas fa-search"></i>
               </button>
@@ -104,17 +82,28 @@
           <button class="icon-btn" aria-label="Wishlist">
             <i class="far fa-heart"></i>
           </button>
-          <button class="icon-btn position-relative" aria-label="Cart">
+          <button class="icon-btn position-relative" aria-label="Cart" routerLink="/cart">
             <i class="fas fa-shopping-cart"></i>
-            <span class="cart-badge">0</span>
+            <span class="cart-badge">{{ cartCount }}</span>
           </button>
-
-          <!-- KHỐI NÀY SẼ HIỂN THỊ KHI CHƯA ĐĂNG NHẬP -->
-          <div *ngIf="!isLoggedIn" class="d-flex align-items-center gap-2">
-            <button class="btn-header btn-header-primary">Đăng Nhập</button>
-            <button class="btn-header btn-header-outline">Đăng Ký</button>
+          <!-- KHỐI NÀY LÀ DROPDOWN KHI CHƯA ĐĂNG NHẬP-->
+          <div class="auth-buttons" *ngIf="!isLoggedIn">
+            <button
+              class="btn btn-login"
+              aria-label="User Account"
+              (click)="goSignIn()"
+            >
+              ĐĂNG NHẬP
+            </button>
+            <button
+              class="btn btn-signup"
+              aria-label="User Account"
+              (click)="goSignUp()"
+            >
+              ĐĂNG KÝ
+            </button>
+            </div>
           </div>
-
           <!-- KHỐI NÀY LÀ DROPDOWN CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->
           <div class="dropdown" *ngIf="isLoggedIn">
             <a

@@ -1,1 +1,58 @@
-<p>sign-in works!</p>
+<div class="signin-container">
+  <div class="signin-card">
+    <h2 class="title">ĐĂNG NHẬP</h2>
+
+    <form #f="ngForm" (ngSubmit)="login(f)" novalidate>
+      <!-- EMAIL -->
+      <div class="form-group">
+        <label>Email <span class="required">*</span></label>
+        <div class="input-group">
+          <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
+          <input type="email" name="email" [(ngModel)]="email" required email placeholder="Example@gmail.com"
+            #emailCtrl="ngModel" [class.error-border]="emailCtrl.invalid && emailCtrl.touched" />
+        </div>
+        <small class="error-text" *ngIf="emailCtrl.invalid && emailCtrl.touched">
+          Email không hợp lệ
+        </small>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="form-group">
+        <label>Mật Khẩu <span class="required">*</span></label>
+        <div class="input-group">
+          <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+          <input type="password" name="password" [(ngModel)]="password" required placeholder="*****************"
+            #passCtrl="ngModel" [class.error-border]="passCtrl.touched && !isPasswordValid" />
+        </div>
+      </div>
+
+      <!-- Password Strength Validation -->
+      <div class="password-requirements" *ngIf="(passCtrl.dirty || passCtrl.touched) && passwordErrorsList.length">
+        <p class="invalid">
+          <i class="fa-solid fa-xmark"></i>
+          {{ passwordErrorsList[0] }}
+        </p>
+      </div>
+
+      <div class="forgot-pass">
+        <a (click)="forgotPassword()">Quên mật khẩu?</a>
+      </div>
+
+      <!-- GOOGLE LOGIN -->
+      <button type="button" class="btn-google" (click)="loginWithGoogle()">
+        <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" width="24" />
+        Đăng nhập bằng Google
+      </button>
+
+      <!-- SUBMIT BUTTON -->
+      <button type="submit" class="btn-login" [disabled]="f.invalid || isPasswordValid === false">
+        Đăng Nhập
+      </button>
+
+      <div class="signup-text">
+        Bạn chưa có tài khoản? <a routerLink="/auth/sign-up" class="signup-link">Đăng ký ngay</a>
+      </div>
+
+    </form>
+  </div>
+</div>

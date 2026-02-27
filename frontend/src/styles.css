@@ -64,6 +64,7 @@
   /* Typography */
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Inter', sans-serif;
+  --font-family: 'Poppins', sans-serif;
   --danger-color: #dc3545;
   --warning-color: #ffc107;
   --success-color: #28a745;

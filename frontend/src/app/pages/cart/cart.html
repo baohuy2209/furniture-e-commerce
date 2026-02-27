@@ -1,1 +1,104 @@
-<p>cart works!</p>
+<div class="cart-wrapper">
+    <div class="cart-container">
+
+        <!-- Dark Header Bar -->
+        <div class="cart-header-bar">
+            <div class="header-content">
+                <span class="page-title">Giỏ hàng/</span>
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm kiếm cài đặt">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-cart" *ngIf="cartItems.length === 0">
+            <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" alt="Empty Cart" width="150">
+            <p>Giỏ hàng của bạn đang trống</p>
+            <a routerLink="/products" class="btn-shopping">Mua sắm ngay</a>
+        </div>
+
+        <!-- Cart Body -->
+        <div class="cart-body" *ngIf="cartItems.length > 0">
+
+            <!-- Summary Bar -->
+            <div class="section-bar summary-bar">
+                <div class="left-info">
+                    <span class="highlight-text" *ngIf="selectedItemsCount > 0">x{{ selectedItemsCount }}</span>
+                    <span class="label-text">Đã chọn</span>
+                </div>
+                <div class="right-action">
+                    <div class="total-info">
+                        <span class="label">Tổng cộng ({{ totalItems }} sản phẩm)</span>
+                        <span class="price-text">{{ totalPrice | number:'1.0-0' }} VND</span>
+                    </div>
+                    <button class="btn-buy-now">Mua Ngay</button>
+                </div>
+            </div>
+
+            <!-- Table Header (Column Labels) -->
+            <div class="section-bar table-header-row">
+                <div class="col-checkbox">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" [checked]="allSelected" (change)="toggleAll($event)">
+                        <span class="checkmark"></span>
+                    </label>
+                    <span class="header-label">Chọn tất cả</span>
+                </div>
+                <div class="col-product">Sản phẩm</div>
+                <div class="col-price text-center">Đơn giá</div>
+                <div class="col-qty text-center">Số lượng</div>
+                <div class="col-total text-center">Thành tiền</div>
+                <div class="col-action text-center">Xóa sản phẩm</div>
+            </div>
+
+            <!-- Items List -->
+            <div class="items-list">
+                <div class="item-row" *ngFor="let item of cartItems">
+
+                    <div class="col-checkbox">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" [checked]="item.selected" (change)="toggleItem(item.id)">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="col-product product-detail">
+                        <img [src]="item.image" alt="Product">
+                        <div class="info">
+                            <h3 class="name">{{ item.name }}</h3>
+                            <p class="variant">Ghi chú: {{ item.variant || 'Mặc định' }}</p>
+                            <button class="btn-detail">Chi tiết</button>
+                        </div>
+                    </div>
+
+                    <div class="col-price text-center">
+                        {{ item.price | number:'1.0-0' }} VND
+                    </div>
+
+                    <div class="col-qty text-center">
+                        <div class="qty-pill">
+                            <button class="btn-decrease" (click)="decreaseQuantity(item.id, item.quantity)">-</button>
+                            <input type="text" [value]="item.quantity" readonly>
+                            <button class="btn-increase" (click)="increaseQuantity(item.id, item.quantity)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="col-total text-center fw-bold">
+                        {{ item.price * item.quantity | number:'1.0-0' }} VND
+                    </div>
+
+                    <div class="col-action text-center">
+                        <button class="btn-trash" (click)="removeItem(item.id)">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

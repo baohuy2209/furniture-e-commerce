@@ -1,1 +1,263 @@
-<p>requests-warranty works!</p>
+<div class="warranty-container">
+    <!-- Header / Search -->
+    <div class="page-header">
+        <div class="search-box">
+            <input type="text" placeholder="Tìm kiếm sản phẩm" [(ngModel)]="searchTerm">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+    </div>
+
+    <!-- List of Warranty Items -->
+    <div class="warranty-list">
+        <div class="warranty-card" *ngFor="let item of warrantyItems">
+
+            <!-- Main Card Content -->
+            <div class="card-main">
+                <!-- Left: Image -->
+                <div class="card-image">
+                    <img [src]="item.image" [alt]="item.productName">
+                    <!-- Navigation Arrows (Mock UI) -->
+                    <div class="img-nav">
+                        <button class="nav-btn"><i class="fa-solid fa-arrow-left"></i></button>
+                        <span>Mặt hàng: 1/3</span> <!-- Static for now as per image -->
+                        <button class="nav-btn"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Middle: Info & Dates -->
+                <div class="card-info">
+                    <h3 class="product-name">{{ item.productName }}</h3>
+                    <div class="product-variant">
+                        <p><strong>Ghế:</strong> {{ item.variant }}</p>
+                        <p><strong>Chân:</strong> {{ item.note }}</p>
+                    </div>
+
+                    <div class="dates-info">
+                        <p><strong>Ngày đặt:</strong> {{ item.orderDate }}</p>
+                        <p><strong>Ngày nhận:</strong> {{ item.receiveDate }}</p>
+                        <p><strong>Phương thức thanh toán:</strong> {{ item.paymentMethod }}</p>
+                        <p><strong>Địa chỉ:</strong> {{ item.address }}</p>
+                        <p><strong>Mã vận đơn:</strong> {{ item.orderId }}</p>
+                        <p><strong>Trạng thái:</strong> <span class="status-confirmed">Đã nhận</span></p>
+                        <p class="warranty-expiry">Thời hạn bảo hành / đổi trả: {{ item.warrantyEndDate }}</p>
+                    </div>
+                </div>
+
+                <!-- Right: Price & Actions -->
+                <div class="card-actions">
+                    <div class="price-row">
+                        <span class="label">Đơn giá:</span>
+                        <span class="value strike">{{ item.unitPrice + 100000 | number:'1.0-0' }} VND</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="label">Số lượng:</span>
+                        <span class="value">x{{ item.quantity }}</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="label">Khuyến mãi:</span>
+                        <span class="value">{{ item.discount | number:'1.0-0' }} VND</span>
+                    </div>
+                    <div class="price-row total">
+                        <span class="label">Thành tiền:</span>
+                        <span class="value highlight">{{ item.totalPrice | number:'1.0-0' }} VND</span>
+                    </div>
+
+                    <div class="order-total-row">
+                        <span class="label">Tổng giá trị đơn:</span>
+                        <span class="value red">{{ item.orderTotalValue | number:'1.0-0' }} VND</span>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-warranty" (click)="openWarrantyPopup(item)">Bảo hành / Đổi trả</button>
+                        <button class="btn-expand" (click)="toggleExpand(item.id)">
+                            {{ expandedItemId === item.id ? 'Thu gọn' : 'Mở rộng' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expanded Order Details -->
+            <div class="expanded-details" *ngIf="expandedItemId === item.id">
+                <div class="details-header">
+                    <h4>Thông tin đơn hàng</h4>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-col">
+                        <p><strong>Ngày đặt:</strong> {{ item.orderDate }}</p>
+                        <p><strong>Phương thức thanh toán:</strong> {{ item.paymentMethod }}</p>
+                        <p><strong>Trạng thái:</strong> Chờ xác nhận</p> <!-- Mock status -->
+                        <p class="red-text"><strong>Tổng giá trị đơn:</strong> {{ item.orderTotalValue | number:'1.0-0'
+                            }} VND</p>
+                    </div>
+                    <div class="detail-col">
+                        <p><strong>Mã vận đơn:</strong> {{ item.orderId }}</p>
+                        <p><strong>Địa chỉ:</strong> {{ item.address }}</p>
+                    </div>
+                    <div class="detail-col action-col">
+                        <button class="btn-collapse" (click)="toggleExpand(item.id)">Thu gọn</button>
+                    </div>
+                </div>
+
+                <!-- Expanded List Item (Repeating the item to simulate list inside order) -->
+                <div class="nested-item">
+                    <div class="nested-img">
+                        <img [src]="item.image" alt="">
+                        <span class="img-counter">Mặt hàng: 1/3</span>
+                    </div>
+                    <div class="nested-info">
+                        <h5>{{ item.productName }}</h5>
+                        <p>Ghế: {{ item.variant }}</p>
+                        <p>Chân: {{ item.note }}</p>
+                        <p>Ngày nhận: {{ item.receiveDate }}</p>
+                        <button class="btn-warranty small" (click)="openWarrantyPopup(item)">Bảo hành / Đổi trả</button>
+                    </div>
+                    <div class="nested-price">
+                        <div class="row"><span class="lbl">Đơn giá:</span> <span>{{ item.unitPrice | number:'1.0-0' }}
+                                VND</span></div>
+                        <div class="row"><span class="lbl">Số lượng:</span> <span>x{{ item.quantity }}</span></div>
+                        <div class="row"><span class="lbl">Khuyến mãi:</span> <span>{{ item.discount | number:'1.0-0' }}
+                                VND</span></div>
+                        <div class="row"><span class="lbl">Thành tiền:</span> <span>{{ item.totalPrice | number:'1.0-0'
+                                }} VND</span></div>
+                        <p class="expiry">Thời hạn bảo hành / đổi trả: {{ item.warrantyEndDate }}</p>
+                    </div>
+                </div>
+                <!-- Create duplicates to show 'multiple items' in order -->
+                <div class="nested-item">
+                    <div class="nested-img">
+                        <img [src]="item.image" alt="">
+                        <span class="img-counter">Mặt hàng: 2/3</span>
+                    </div>
+                    <div class="nested-info">
+                        <h5>{{ item.productName }}</h5>
+                        <p>Ghế: {{ item.variant }}</p>
+                        <p>Chân: {{ item.note }}</p>
+                        <p>Ngày nhận: {{ item.receiveDate }}</p>
+                        <button class="btn-warranty small" (click)="openWarrantyPopup(item)">Bảo hành / Đổi trả</button>
+                    </div>
+                    <div class="nested-price">
+                        <div class="row"><span class="lbl">Đơn giá:</span> <span>{{ item.unitPrice | number:'1.0-0' }}
+                                VND</span></div>
+                        <div class="row"><span class="lbl">Số lượng:</span> <span>x{{ item.quantity }}</span></div>
+                        <div class="row"><span class="lbl">Khuyến mãi:</span> <span>{{ item.discount | number:'1.0-0' }}
+                                VND</span></div>
+                        <div class="row"><span class="lbl">Thành tiền:</span> <span>{{ item.totalPrice | number:'1.0-0'
+                                }} VND</span></div>
+                        <p class="expiry red-text">Hết thời hạn bảo hành / đổi trả</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- WARRANTY POPUP MODAL -->
+<div class="warranty-modal-overlay" *ngIf="showWarrantyPopup">
+    <div class="warranty-modal">
+        <!-- Blue Header -->
+        <div class="modal-header">
+            Bạn có muốn lưu những thay đổi sau?
+        </div>
+
+        <div class="modal-body">
+            <h3>Chọn phương thức bảo hành</h3>
+
+            <!-- Radio Options -->
+            <div class="radio-group">
+                <label class="radio-card" [class.checked]="warrantyMethod === 'home'">
+                    <div class="radio-content">
+                        <i class="fa-solid fa-house-chimney icon"></i>
+                        <span class="text">Bảo hành tại nhà</span>
+                    </div>
+                    <input type="radio" name="warrantyMethod" value="home" [(ngModel)]="warrantyMethod">
+                    <span class="radio-circle"></span>
+                </label>
+
+                <label class="radio-card" [class.checked]="warrantyMethod === 'store'">
+                    <div class="radio-content">
+                        <i class="fa-solid fa-briefcase icon"></i>
+                        <span class="text">Bảo hành tại cơ sở sản xuất</span>
+                    </div>
+                    <input type="radio" name="warrantyMethod" value="store" [(ngModel)]="warrantyMethod">
+                    <span class="radio-circle"></span>
+                </label>
+
+                <label class="radio-card" [class.checked]="warrantyMethod === 'return'">
+                    <div class="radio-content">
+                        <i class="fa-solid fa-wallet icon"></i>
+                        <span class="text">Đổi trả hàng khác</span>
+                    </div>
+                    <input type="radio" name="warrantyMethod" value="return" [(ngModel)]="warrantyMethod">
+                    <span class="radio-circle"></span>
+                </label>
+            </div>
+
+            <!-- Reason Checkboxes -->
+            <div class="reason-section">
+                <h4>Lý do trả hàng</h4>
+                <div class="reason-grid">
+                    <label class="reason-check">
+                        <input type="checkbox"> <span>Sản phẩm móp méo, bong tróc</span>
+                    </label>
+                    <label class="reason-check">
+                        <input type="checkbox"> <span>Sản phẩm thiếu thành phần, linh kiện</span>
+                    </label>
+                    <label class="reason-check">
+                        <input type="checkbox"> <span>Sản phẩm sai mẫu mã, kích thước</span>
+                    </label>
+                    <label class="reason-check">
+                        <input type="checkbox"> <span>Sản phẩm sai, thiếu chức năng</span>
+                    </label>
+                    <label class="reason-check">
+                        <input type="checkbox"> <span>Lý do khác</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Note Textarea -->
+            <div class="note-section">
+                <h4>Bạn có thể chia sẻ thêm về vấn đề của sản phẩm không?</h4>
+                <textarea placeholder="Vui lòng nhập văn bản" [(ngModel)]="warrantyNote"></textarea>
+            </div>
+
+            <!-- Selected Item Summary Card -->
+            <div class="selected-item-summary" *ngIf="selectedWarrantyItem">
+                <div class="summary-header">Một hàng bạn đã chọn</div>
+                <div class="summary-content">
+                    <img [src]="selectedWarrantyItem.image" alt="">
+                    <div class="summary-info">
+                        <h5>{{ selectedWarrantyItem.productName }}</h5>
+                        <p>Ghế: {{ selectedWarrantyItem.variant }}</p>
+                        <p>Chân: {{ selectedWarrantyItem.note }}</p>
+                        <p>Ngày nhận: {{ selectedWarrantyItem.receiveDate }}</p>
+                    </div>
+                    <div class="summary-price">
+                        <div class="row"><span>Đơn giá:</span> <span>{{ selectedWarrantyItem.unitPrice | number:'1.0-0'
+                                }} VND</span></div>
+                        <div class="row"><span>Số lượng:</span> <span>x{{ selectedWarrantyItem.quantity }}</span></div>
+                        <div class="row"><span>Khuyến mãi:</span> <span>{{ selectedWarrantyItem.discount |
+                                number:'1.0-0' }} VND</span></div>
+                        <div class="row total"><span>Thành tiền:</span> <span>{{ selectedWarrantyItem.totalPrice |
+                                number:'1.0-0' }} VND</span></div>
+                        <p class="mini-expiry">Thời hạn bảo hành / đổi trả: {{ selectedWarrantyItem.warrantyEndDate }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Agreement -->
+            <div class="modal-footer">
+                <label class="agreement">
+                    <input type="checkbox" [(ngModel)]="agreedToTerms">
+                    <span>Tôi đã đọc và đồng ý với <a href="#">Điều Khoản và Điều Kiện</a> của HomeBase</span>
+                </label>
+
+                <div class="footer-buttons">
+                    <button class="btn-cancel" (click)="closeWarrantyPopup()">Hủy bỏ</button>
+                    <button class="btn-confirm">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
