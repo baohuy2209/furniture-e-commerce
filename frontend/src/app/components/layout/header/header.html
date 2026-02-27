@@ -109,18 +109,24 @@
             <span class="cart-badge">{{ cartCount }}</span>
           </button>
           <!-- KHỐI NÀY LÀ DROPDOWN KHI CHƯA ĐĂNG NHẬP-->
-          <div class="auth-buttons" *ngIf="!isLoggedIn">
-            <button
-              class="btn btn-login text-nowrap"
-              aria-label="User Account"
-              (click)="goSignIn()"
-            >
-              ĐĂNG NHẬP
-            </button>
-            <button class="btn btn-signup" aria-label="User Account" (click)="goSignUp()">
-              ĐĂNG KÝ
-            </button>
-          </div>
+          @if (!isLoggedIn) {
+            <div class="auth-buttons">
+              <button
+                class="btn btn-login text-nowrap text-center"
+                aria-label="User Account"
+                (click)="goSignIn()"
+              >
+                ĐĂNG NHẬP
+              </button>
+              <button
+                class="btn btn-signup text-center"
+                aria-label="User Account"
+                (click)="goSignUp()"
+              >
+                ĐĂNG KÝ
+              </button>
+            </div>
+          }
         </div>
         <!-- KHỐI NÀY LÀ DROPDOWN CHỈ HIỂN THỊ KHI ĐÃ ĐĂNG NHẬP -->
         <div class="dropdown" *ngIf="isLoggedIn">

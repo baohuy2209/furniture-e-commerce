@@ -4,7 +4,7 @@
 }
 
 .top-bar {
-  background-color: var(--color-primary); 
+  background-color: var(--color-primary);
   color: #ffffff;
   padding: 10px 0;
   font-size: 0.875rem;
@@ -48,7 +48,7 @@
   justify-content: center;
   color: #ffffff;
   text-decoration: none;
-  font-size: 1rem; 
+  font-size: 1rem;
   transition: all 0.3s ease;
 }
 
@@ -58,8 +58,8 @@
 }
 
 .main-nav {
-  background-color: var(--color-bg); 
-  box-shadow: none; 
+  background-color: var(--color-bg);
+  box-shadow: none;
   padding: 1rem 0;
 }
 
@@ -88,7 +88,7 @@
 
 .nav-link:hover,
 .nav-link.active {
-   color: var(--color-accent) !important; 
+  color: var(--color-accent) !important;
 }
 
 .nav-link.active::after {
@@ -99,7 +99,7 @@
   transform: translateX(-50%);
   width: 30px;
   height: 2px;
-  background-color: var(--color-accent); 
+  background-color: var(--color-accent);
 }
 
 /* Navigation Icons */
@@ -125,15 +125,16 @@
 }
 .btn-login,
 .btn-signup {
-  background: #3D529D;
+  background: #3d529d;
   color: white;
   font-size: 1rem;
   cursor: pointer;
-  padding: 0.5rem;
-  width: 120px; 
-  height: 40px;        
+  padding: 2px 3px;
+  width: 120px;
+  height: 40px;
   text-align: center;
   transition: all 0.3s ease-in-out;
+  font-weight: 600;
 }
 .btn-login:hover,
 .btn-signup:hover {
@@ -142,6 +143,8 @@
 .auth-buttons {
   display: flex;
   gap: 10px;
+  align-items: center;
+  justify-content: center;
 }
 .cart-badge {
   position: absolute;
@@ -289,7 +292,6 @@
   }
 }
 
-
 /* Nút bấm chung */
 .btn-header {
   padding: 8px 20px;
@@ -329,18 +331,20 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  text-decoration: none; 
+  text-decoration: none;
   color: var(--color-text) !important;
   font-weight: 500;
-  transition: opacity 0.3s ease, color 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    color 0.3s ease;
   padding: 0.5rem 0.75rem;
   line-height: 1;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .user-profile:hover {
   opacity: 0.8;
-  color: var(--color-accent) !important; 
+  color: var(--color-accent) !important;
 }
 .user-avatar {
   width: 40px;
@@ -350,11 +354,11 @@
 }
 
 .dropdown-menu {
-  border-radius: 8px; 
-  box-shadow: var(--shadow-md); 
-  min-width: 200px; 
-  padding: 0.5rem 0; 
-  background-color: var(--color-white); 
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  min-width: 200px;
+  padding: 0.5rem 0;
+  background-color: var(--color-white);
   border: 1px solid var(--color-border);
 }
 
@@ -362,17 +366,19 @@
   color: var(--color-text);
   font-size: 0.95rem;
   padding: 0.75rem 1rem;
-  display: flex; 
+  display: flex;
   align-items: center;
-  transition: background-color 0.2s ease, color 0.2s ease;
-  white-space: nowrap; 
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+  white-space: nowrap;
 }
 
 .dropdown-item i {
   color: var(--color-primary);
-  width: 20px; 
+  width: 20px;
   text-align: center;
-  margin-right: 0.75rem; 
+  margin-right: 0.75rem;
 }
 
 .dropdown-item:hover {
@@ -390,9 +396,9 @@
 }
 
 .cart-badge {
-  top: -5px; 
-  right: -5px; 
-  background-color: var(--color-accent); 
+  top: -5px;
+  right: -5px;
+  background-color: var(--color-accent);
 }
 
 .nav-icons .icon-btn {
@@ -400,5 +406,5 @@
 }
 
 .nav-icons .icon-btn:hover {
-  color: var(--color-accent); 
+  color: var(--color-accent);
 }

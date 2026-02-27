@@ -14,3 +14,13 @@
   z-index: 0;
   max-height: 50vh;
 }
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Màu đen mờ 50% */
+  z-index: 1; /* Nằm trên lớp ảnh */
+  max-height: 50vh;
+}
