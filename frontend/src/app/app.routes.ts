@@ -69,13 +69,15 @@ export const routes: Routes = [
       },
       {
         path: 'forgot-password',
-        loadComponent: () => import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
+        loadComponent: () =>
+          import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
       },
     ],
   },
   {
     path: 'mock-google-login',
-    loadComponent: () => import('./pages/mock-google-login/mock-google-login').then((m) => m.MockGoogleLogin),
+    loadComponent: () =>
+      import('./pages/mock-google-login/mock-google-login').then((m) => m.MockGoogleLogin),
   },
   {
     path: 'settings',

@@ -1,0 +1,209 @@
+/* Container */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+}
+
+/* Card Style */
+.auth-card {
+  background: #fff;
+  width: 450px;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+/* Titles */
+.title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.title.orange {
+  color: #ff8c00;
+  /* Orange color */
+  text-shadow: 2px 2px 0px #ffe0b2;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+/* Inputs */
+.input-group {
+  position: relative;
+  width: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 16px;
+}
+
+input {
+  width: 100%;
+  padding: 10px 15px 10px 40px;
+  border-radius: 30px;
+  font-size: 14px;
+  outline: none;
+  background: #fdfdfd;
+  border: none;
+}
+
+.input-group:focus-within {
+  border-color: #3b4fa3;
+  background: #fff;
+}
+
+.error-border {
+  border-color: #ff4d4f;
+}
+
+/* Toggle Password Eye */
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+  z-index: 2;
+}
+
+.field-error {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+/* Buttons */
+.btn-submit {
+  width: 100%;
+  padding: 10px;
+  background: #3b4fa3;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  opacity: 0.9;
+}
+
+.btn-submit:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* Messages */
+.error-msg {
+  color: #ff4d4f;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.success-msg {
+  color: #52c41a;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.back-login {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.back-login a {
+  color: #555;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.back-login a:hover {
+  text-decoration: underline;
+}
+
+/* Password Requirements */
+.password-requirements {
+  margin-top: 8px;
+  font-size: 12px;
+  background: #f9f9f9;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.password-requirements p {
+  margin: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.password-requirements .invalid {
+  color: #ff4d4f;
+}
+
+.password-requirements .valid {
+  color: #52c41a;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .auth-card {
+    width: 100%;
+    padding: 20px;
+  }
+}

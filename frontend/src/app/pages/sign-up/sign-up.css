@@ -1,209 +1,220 @@
 /* Container */
 .auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
 }
 
 /* Card Style */
 .auth-card {
-    background: #fff;
-    /* Slight transparency for glassmorphism feel if needed, currently solid white */
-    width: 450px;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    text-align: left;
+  background: #fff;
+  /* Slight transparency for glassmorphism feel if needed, currently solid white */
+  width: 450px;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: left;
 }
 
 /* Title */
 .title {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 25px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 25px;
 }
 
 .title.orange {
-    color: #FF8C00;
-    text-shadow: 2px 2px 0px #ffe0b2;
+  color: #ff8c00;
+  text-shadow: 2px 2px 0px #ffe0b2;
 }
 
 /* Form Group */
 .form-group {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 label {
-    display: block;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 5px;
-    font-size: 14px;
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 14px;
 }
 
 .required {
-    color: #ff4d4f;
-    margin-left: 3px;
+  color: #ff4d4f;
+  margin-left: 0.5px;
 }
 
 /* Input Group */
 .input-group {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .input-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #666;
-    font-size: 16px;
-    z-index: 1;
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 16px;
+  z-index: 1;
 }
 
 input {
-    width: 100%;
-    padding: 10px 40px 10px 40px;
-    /* Right padding for eye icon */
-    border: 1px solid #ccc;
-    border-radius: 30px;
-    font-size: 14px;
-    outline: none;
-    background: #fdfdfd;
-    transition: all 0.3s;
+  width: 100%;
+  padding: 10px 40px 10px 40px;
+  /* Right padding for eye icon */
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  background: #fdfdfd;
+  border: none;
 }
 
-input:focus {
-    border-color: #3b4fa3;
-    background: #fff;
-    box-shadow: 0 0 0 2px rgba(59, 79, 163, 0.1);
+.input-group:focus-within {
+  border-color: #3b4fa3;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(59, 79, 163, 0.1);
 }
 
 .error-border {
-    border-color: #ff4d4f;
+  border-color: #ff4d4f;
 }
 
 /* Toggle Password Eye */
 .toggle-password {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #666;
-    font-size: 16px;
-    z-index: 2;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+  z-index: 2;
 }
 
 /* Button */
 .btn-submit {
-    width: 100%;
-    padding: 12px;
-    background: #3b4fa3;
-    color: #fff;
-    border: none;
-    border-radius: 30px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 15px;
-    box-shadow: 0 4px 10px rgba(59, 79, 163, 0.3);
+  width: 100%;
+  padding: 12px;
+  background: #3b4fa3;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 15px;
+  box-shadow: 0 4px 10px rgba(59, 79, 163, 0.3);
 }
 
 .btn-submit:hover {
-    background: #2f3e85;
-    transform: translateY(-1px);
+  background: #2f3e85;
+  transform: translateY(-1px);
 }
 
 .btn-submit:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 .btn-submit:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-    opacity: 1;
+  background: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  opacity: 1;
 }
 
 .field-error {
-    color: #ff4d4f;
-    font-size: 12px;
-    margin-top: 5px;
-    margin-left: 10px;
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 10px;
 }
 
 /* Messages */
 .error-msg {
-    color: #ff4d4f;
-    text-align: center;
-    font-size: 13px;
-    margin-top: 10px;
+  color: #ff4d4f;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 10px;
 }
 
 .success-msg {
-    color: #52c41a;
-    text-align: center;
-    font-size: 13px;
-    margin-top: 10px;
+  color: #52c41a;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 10px;
 }
 
 /* Footer Link */
 .footer-link {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #555;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
 }
 
 .footer-link a {
-    color: #333;
-    text-decoration: none;
-    font-weight: 700;
+  color: #333;
+  text-decoration: none;
+  font-weight: 700;
 }
 
 .footer-link a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* Password Requirements */
 .password-requirements {
-    margin-top: 8px;
-    font-size: 12px;
-    background: #f9f9f9;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 15px;
+  margin-top: 8px;
+  font-size: 12px;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
 }
 
 .password-requirements p {
-    margin: 3px 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  margin: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .password-requirements .invalid {
-    color: #ff4d4f;
+  color: #ff4d4f;
 }
 
 .password-requirements .valid {
-    color: #52c41a;
+  color: #52c41a;
 }
 
 /* Responsive */
 @media (max-width: 576px) {
-    .auth-card {
-        width: 100%;
-        padding: 20px;
-        border-radius: 15px;
-    }
+  .auth-card {
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+  }
 }

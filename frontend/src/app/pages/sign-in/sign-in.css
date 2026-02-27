@@ -5,7 +5,11 @@
   align-items: center;
   width: 100%;
   padding: 10px;
-  /* Reduced from 20px */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
 }
 
 /* Card Style */
@@ -29,7 +33,9 @@
   margin-bottom: 20px;
   text-shadow: 2px 2px 0px #cbd2f0;
 }
-
+form {
+  overflow: visible;
+}
 /* Form Group */
 .form-group {
   margin-bottom: 15px;
@@ -45,6 +51,7 @@ label {
 
 .required {
   color: red;
+  margin-left: 0.5px;
 }
 
 /* Input Group with Icon */
@@ -52,6 +59,12 @@ label {
   position: relative;
   width: 100%;
   border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .input-icon {
@@ -67,15 +80,13 @@ label {
 input {
   width: 100%;
   padding: 10px 15px 10px 40px;
-  border: 1px solid #ccc;
-  border-radius: 30px;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.3s;
   background: #fdfdfd;
+  border: none;
 }
 
-input:focus {
+.input-group:focus-within {
   border-color: #3b4fa3;
   background: #fff;
 }
@@ -98,7 +109,7 @@ input::placeholder {
 
 /* Forgot Password */
 .forgot-pass {
-  text-align: right;
+  text-align: center;
   margin-bottom: 15px;
 }
 

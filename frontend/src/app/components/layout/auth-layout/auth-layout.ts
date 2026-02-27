@@ -6,10 +6,8 @@ import { Marquee } from '../marquee/marquee';
 
 @Component({
   selector: 'app-auth-layout',
-  imports: [RouterOutlet, Header, Footer, Marquee],
+  imports: [RouterOutlet, Header, Marquee],
   templateUrl: './auth-layout.html',
   styleUrl: './auth-layout.css',
 })
-export class AuthLayout {
-
-}
+export class AuthLayout {}

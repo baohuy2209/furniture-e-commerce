@@ -5,6 +5,9 @@
   background: #fff;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
+  z-index: 50;
+  position: absolute;
+  bottom: 0;
 }
 
 .marquee span {
@@ -13,7 +16,7 @@
   padding-left: 100%;
   font-weight: 600;
   letter-spacing: 1px;
-  color: #3D539D;
+  color: #3d539d;
   font-size: 20px;
   animation: marquee 16s linear infinite;
 }
