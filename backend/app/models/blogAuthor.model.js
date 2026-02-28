@@ -8,7 +8,6 @@ const BlogAuthorSchema = new mongoose.Schema(
     name: { type: String, required: true },
     slug: {
       type: String,
-      slug: "name",
       unique: true,
     },
 
