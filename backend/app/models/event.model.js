@@ -24,13 +24,27 @@ const RegistrationSchema = new Schema(
   },
   { _id: false },
 );
+const TimelineEvent = new Schema(
+  {
+    start_time: String,
+    end_time: String,
+    title: String,
+    description: String,
+  },
+  { _id: false },
+);
 const eventSchema = new Schema(
   {
     title: String,
     slug: String,
     description: String,
-
-    dateRange: {
+    // Các điểm nổi bật
+    hightlight_des: [
+      {
+        type: String,
+      },
+    ],
+    date_range: {
       startDate: Date,
       endDate: Date,
     },
@@ -48,6 +62,11 @@ const eventSchema = new Schema(
       enum: ["UPCOMING", "ONGOING", "ENDED"],
       default: "UPCOMING",
     },
+    timeline_event: [
+      {
+        type: TimelineEvent,
+      },
+    ],
     search_text: {
       type: String,
       index: true, // rất quan trọng
