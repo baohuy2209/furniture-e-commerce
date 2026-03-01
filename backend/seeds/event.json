@@ -3,6 +3,7 @@
     "title": "Furniture Design Workshop 2025",
     "slug": "furniture-design-workshop-2025",
     "description": "Tham gia cùng các chuyên gia hàng đầu để tìm hiểu về xu hướng thiết kế nội thất bền vững và hiện đại.",
+    "category": "Workshop",
     "hightlight_des": [
       "Gặp gỡ các nhà thiết kế nổi tiếng",
       "Trải nghiệm vật liệu mới",
@@ -23,6 +24,16 @@
       "maxSlot": 100,
       "registeredCount": 100
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/spacejoy-RqO6kwm4tZY-unsplash_orxb5t.jpg",
+        "is_main": true
+      },
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358496/kam-idris-_HqHX3LBN18-unsplash_dx4nid.jpg",
+        "is_main": false
+      }
+    ],
     "status": "ENDED",
     "timeline_event": [
       {
@@ -38,6 +49,7 @@
     "title": "Spring Home Fair",
     "slug": "spring-home-fair-2025",
     "description": "Hội chợ đồ gỗ và trang trí nội thất mùa xuân với hàng ngàn ưu đãi hấp dẫn.",
+    "category": "Ưu đãi",
     "hightlight_des": [
       "Giảm giá lên đến 50%",
       "Khu vực tư vấn phong thủy miễn phí",
@@ -58,6 +70,12 @@
       "maxSlot": 5000,
       "registeredCount": 4200
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/nathan-fertig-FBXuXp57eM0-unsplash_zn30jr.jpg",
+        "is_main": true
+      }
+    ],
     "status": "ENDED",
     "timeline_event": [],
     "search_text": "spring home fair 2025 phu tho"
@@ -66,6 +84,7 @@
     "title": "International Furniture Expo",
     "slug": "international-furniture-expo-2025",
     "description": "Triển lãm quốc tế quy tụ các thương hiệu nội thất hàng đầu thế giới.",
+    "category": "Triển lãm",
     "hightlight_des": [
       "Ra mắt bộ sưu tập thu đông",
       "Hợp tác kinh doanh B2B",
@@ -86,6 +105,12 @@
       "maxSlot": 2000,
       "registeredCount": 1950
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/spacejoy-c0JoR_-2x3E-unsplash_hyyc44.jpg",
+        "is_main": true
+      }
+    ],
     "status": "ENDED",
     "timeline_event": [
       {
@@ -101,6 +126,7 @@
     "title": "Minimalist Living Talkshow",
     "slug": "minimalist-living-talkshow",
     "description": "Chia sẻ về cách bài trí không gian sống tối giản nhưng vẫn đầy đủ tiện nghi.",
+    "category": "Talkshow",
     "hightlight_des": [
       "Giao lưu cùng KOL nội thất",
       "Mẹo sắp xếp đồ đạc gọn gàng",
@@ -121,6 +147,12 @@
       "maxSlot": 50,
       "registeredCount": 50
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/inside-weather-dbH_vy7vICE-unsplash_l1gprv.jpg",
+        "is_main": true
+      }
+    ],
     "status": "ENDED",
     "timeline_event": [],
     "search_text": "minimalist living talkshow coffee house hcm"
@@ -129,6 +161,7 @@
     "title": "Tet Decoration Seminar",
     "slug": "tet-decoration-seminar-2026",
     "description": "Hướng dẫn trang hoàng nhà cửa đón Tết Bính Ngọ theo phong cách hiện đại.",
+    "category": "Workshop",
     "hightlight_des": [
       "Cắm hoa ngày Tết",
       "Cách phối màu thảm và rèm",
@@ -149,6 +182,16 @@
       "maxSlot": 80,
       "registeredCount": 80
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/toa-heftiba-FV3GConVSss-unsplash_dpbqsc.jpg",
+        "is_main": true
+      },
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358493/spacejoy-YI2YkyaREHk-unsplash_r1yfiv.jpg",
+        "is_main": false
+      }
+    ],
     "status": "ENDED",
     "timeline_event": [],
     "search_text": "tet decoration seminar 2026 thu duc"
@@ -157,6 +200,7 @@
     "title": "Year-End Furniture Sale",
     "slug": "year-end-furniture-sale-2025",
     "description": "Đợt xả kho lớn nhất năm để chuẩn bị cho các bộ sưu tập mới.",
+    "category": "Ưu đãi",
     "hightlight_des": [
       "Giảm giá 70% tất cả mặt hàng trưng bày",
       "Miễn phí vận chuyển nội thành",
@@ -177,6 +221,16 @@
       "maxSlot": 10000,
       "registeredCount": 8500
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/spacejoy-umAXneH4GhA-unsplash_erx375.jpg",
+        "is_main": true
+      },
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/lotus-design-n-print-0sDzRgrN_pI-unsplash_s5lgg7.jpg",
+        "is_main": false
+      }
+    ],
     "status": "ENDED",
     "search_text": "year end sale 2025 binh duong"
   },
@@ -184,6 +238,7 @@
     "title": "Modern Office Furniture Expo",
     "slug": "modern-office-furniture-expo-2026",
     "description": "Giải pháp nội thất văn phòng thông minh cho các startup và doanh nghiệp.",
+    "category": "Triển lãm",
     "hightlight_des": [
       "Bàn ghế công thái học thế hệ mới",
       "Giải pháp cách âm phòng họp",
@@ -204,6 +259,20 @@
       "maxSlot": 500,
       "registeredCount": 420
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/minh-pham-OtXADkUh3-I-unsplash_yvzjjx.jpg",
+        "is_main": true
+      },
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/spacejoy-9M66C_w_ToM-unsplash_mx8ycd.jpg",
+        "is_main": false
+      },
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/collov-home-design-HmHArS-HvNw-unsplash_dbad5b.jpg",
+        "is_main": false
+      }
+    ],
     "status": "ONGOING",
     "timeline_event": [
       {
@@ -218,7 +287,8 @@
   {
     "title": "Smart Home Integration Workshop",
     "slug": "smart-home-integration-workshop",
-    "description": "Cách kết hợp nội thất truyền thống với các thiết bị nhà thông minh hiện đại.",
+    "description": "Cách kết hợp nội thất truyền thống with các thiết bị nhà thông minh hiện đại.",
+    "category": "Workshop",
     "hightlight_des": [
       "Trải nghiệm nhà thông minh thực tế",
       "Lắp đặt cảm biến ánh sáng",
@@ -239,6 +309,16 @@
       "maxSlot": 60,
       "registeredCount": 15
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/michael-warf-f8egRYt5RGk-unsplash_sfdcmr.jpg",
+        "is_main": true
+      },
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/sven-brandsma-GZ5cKOgeIB0-unsplash_kftuhu.jpg",
+        "is_main": false
+      }
+    ],
     "status": "UPCOMING",
     "timeline_event": [],
     "search_text": "smart home integration workshop landmark 81"
@@ -247,6 +327,7 @@
     "title": "Sustainable Wood Exhibition",
     "slug": "sustainable-wood-exhibition-2026",
     "description": "Triển lãm các sản phẩm gỗ bền vững, đạt chứng chỉ FSC và bảo vệ môi trường.",
+    "category": "Triển lãm",
     "hightlight_des": [
       "Chứng chỉ FSC cho mọi sản phẩm",
       "Quy trình tái chế gỗ thải",
@@ -267,6 +348,16 @@
       "maxSlot": 1000,
       "registeredCount": 0
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/curology-6CJg-fOTYs4-unsplash_np1iwb.jpg",
+        "is_main": true
+      },
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/sherzod-gulomov-P0q_HK_-GGM-unsplash_jwkxi5.jpg",
+        "is_main": false
+      }
+    ],
     "status": "UPCOMING",
     "timeline_event": [],
     "search_text": "sustainable wood exhibition 2026 gia dinh"
@@ -275,6 +366,7 @@
     "title": "Summer Interior Design Camp",
     "slug": "summer-interior-design-camp-2026",
     "description": "Khóa học ngắn hạn về thiết kế nội thất dành cho sinh viên và người yêu thích sáng tạo.",
+    "category": "Workshop",
     "hightlight_des": [
       "Học cùng kiến trúc sư",
       "Thực hành thiết kế trên phần mềm",
@@ -295,6 +387,12 @@
       "maxSlot": 30,
       "registeredCount": 0
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/katja-rooke-77JACslA8G0-unsplash_xytbne.jpg",
+        "is_main": true
+      }
+    ],
     "status": "UPCOMING",
     "timeline_event": [],
     "search_text": "summer interior design camp 2026 uah"
@@ -302,7 +400,8 @@
   {
     "title": "Vintage Chair Restoration Mini-Workshop",
     "slug": "vintage-chair-restoration-2025",
-    "description": "Một buổi hướng dẫn nhỏ về cách phục hồi các loại ghế gỗ cũ tại nhà.",
+    "description": " Một buổi hướng dẫn nhỏ về cách phục hồi các loại ghế gỗ cũ tại nhà.",
+    "category": "Workshop",
     "hightlight_des": [
       "Kỹ thuật chà nhám cơ bản",
       "Lựa chọn loại sơn phù hợp",
@@ -323,6 +422,12 @@
       "maxSlot": 15,
       "registeredCount": 15
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358493/pickawood-rwa0Yh38FeA-unsplash_entfen.jpg",
+        "is_main": true
+      }
+    ],
     "status": "ENDED",
     "timeline_event": [],
     "search_text": "vintage chair restoration 2025 workshop"
@@ -331,6 +436,7 @@
     "title": "Eco-friendly Fabric Showcase",
     "slug": "eco-fabric-showcase-2025",
     "description": "Giới thiệu các loại vải bọc sofa thân thiện với môi trường.",
+    "category": "Triển lãm",
     "hightlight_des": [
       "Vải từ sợi tái chế",
       "Độ bền và màu sắc tự nhiên",
@@ -351,6 +457,12 @@
       "maxSlot": 200,
       "registeredCount": 145
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358493/myxa69-nZnVdtlJvbw-unsplash_qlvwni.jpg",
+        "is_main": true
+      }
+    ],
     "status": "ENDED",
     "timeline_event": [],
     "search_text": "eco fabric showcase 2025 green home"
@@ -359,6 +471,7 @@
     "title": "Small Apartment Layout Talk",
     "slug": "small-apartment-layout-talk-2025",
     "description": "Chia sẻ kinh nghiệm sắp xếp nội thất cho căn hộ dưới 50m2.",
+    "category": "Talkshow",
     "hightlight_des": [
       "Sử dụng nội thất đa năng",
       "Tối ưu hóa ánh sáng tự nhiên",
@@ -379,9 +492,14 @@
       "maxSlot": 30,
       "registeredCount": 30
     },
+    "images": [
+      {
+        "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358493/virender-singh-hE0nmTffKtM-unsplash_hqwbnd.jpg",
+        "is_main": true
+      }
+    ],
     "status": "ENDED",
     "timeline_event": [],
     "search_text": "small apartment layout talk 2025 yoko coffee"
   }
 ]
-
