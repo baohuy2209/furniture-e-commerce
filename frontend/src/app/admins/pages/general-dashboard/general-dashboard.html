@@ -1,1 +1,282 @@
-<p>general-dashboard works!</p>
+<div class="hb-wrap">
+  <div class="hb-titlebar">
+    <h1 class="hb-title">DASHBOARD</h1>
+  </div>
+
+  <div class="hb-card">
+    <div class="hb-card-body">
+      <!-- KPI ROW -->
+      <div class="hb-kpi-row">
+        <div class="hb-kpi">
+          <div class="hb-kpi-icon">$</div>
+          <div>
+            <div class="hb-kpi-label">Tổng doanh thu</div>
+            <div class="hb-kpi-value">{{ fmtVND(vm.revenue) }}</div>
+          </div>
+        </div>
+
+        <div class="hb-kpi">
+          <div class="hb-kpi-icon">🧾</div>
+          <div>
+            <div class="hb-kpi-label">Tổng đơn hàng</div>
+            <div class="hb-kpi-value">{{ vm.totalOrders }}</div>
+          </div>
+        </div>
+
+        <div class="hb-kpi">
+          <div class="hb-kpi-icon">🚚</div>
+          <div>
+            <div class="hb-kpi-label">Đơn đang xử lý</div>
+            <div class="hb-kpi-value">{{ vm.activeOrders }}</div>
+          </div>
+        </div>
+
+        <div class="hb-kpi">
+          <div class="hb-kpi-icon">👥</div>
+          <div>
+            <div class="hb-kpi-label">Số khách hàng</div>
+            <div class="hb-kpi-value">{{ vm.customers }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN GRID -->
+      <div class="hb-grid">
+        <!-- LEFT: LINE CHART -->
+        <div class="hb-panel">
+          <div class="hb-panel-head">
+            <div class="hb-panel-title">Doanh thu</div>
+
+            <div class="hb-range-tabs">
+              <button
+                class="hb-range-btn"
+                [class.is-active]="rangeMode === 'day'"
+                (click)="setRangeMode('day')"
+              >
+                Ngày
+              </button>
+              <button
+                class="hb-range-btn"
+                [class.is-active]="rangeMode === 'week'"
+                (click)="setRangeMode('week')"
+              >
+                Tuần
+              </button>
+              <button
+                class="hb-range-btn"
+                [class.is-active]="rangeMode === 'month'"
+                (click)="setRangeMode('month')"
+              >
+                Tháng
+              </button>
+            </div>
+
+            <div class="hb-range-dates">
+              <span class="hb-date-label">Từ:</span>
+              <input
+                type="date"
+                class="form-control hb-date-input"
+                [(ngModel)]="from_date"
+                (ngModelChange)="onFromChange()"
+                [attr.max]="todayStr"
+              />
+              <span class="hb-date-label">Đến:</span>
+              <input
+                type="date"
+                class="form-control hb-date-input"
+                [(ngModel)]="to_date"
+                (ngModelChange)="onToChange()"
+                [attr.min]="from_date"
+                [attr.max]="todayStr"
+              />
+            </div>
+          </div>
+
+          <div class="hb-chart-legend">
+            <div class="hb-legend-item"><span class="hb-dot hb-dot-a"></span> Doanh thu (VND)</div>
+            <div class="hb-legend-item"><span class="hb-dot hb-dot-b"></span> Số lượng đơn</div>
+          </div>
+
+          <div class="hb-chart-wrap">
+            <svg
+              class="hb-chart"
+              [attr.viewBox]="'0 0 ' + vm.series.svg.width + ' ' + vm.series.svg.height"
+            >
+              <polyline
+                class="hb-line hb-line-a"
+                [attr.points]="vm.series.svg.revPoints"
+              ></polyline>
+              <polyline
+                class="hb-line hb-line-b"
+                [attr.points]="vm.series.svg.ordPoints"
+              ></polyline>
+
+              <line
+                x1="18"
+                [attr.y1]="vm.series.svg.height - 18"
+                [attr.x2]="vm.series.svg.width - 18"
+                [attr.y2]="vm.series.svg.height - 18"
+                class="hb-axis"
+              ></line>
+            </svg>
+
+            <div class="hb-chart-x">
+              <span
+                *ngFor="let b of vm.series.buckets; let i = index"
+                class="hb-xlab"
+                [style.width.%]="100 / vm.series.buckets.length"
+              >
+                {{ b.label }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: DONUT -->
+        <div class="hb-panel">
+          <div class="hb-panel-head">
+            <div class="hb-panel-title">Trạng thái đơn hàng</div>
+          </div>
+
+          <div class="hb-donut-wrap">
+            <svg class="hb-donut" viewBox="0 0 180 180">
+              <g transform="translate(90,90) rotate(-90)">
+                <circle r="64" cx="0" cy="0" class="hb-donut-track"></circle>
+
+                <ng-container *ngFor="let s of vm.donut.segments; let idx = index">
+                  <circle
+                    r="64"
+                    cx="0"
+                    cy="0"
+                    class="hb-donut-seg"
+                    [attr.data-k]="s.key"
+                    [attr.stroke-dasharray]="s.dash"
+                    [attr.stroke-dashoffset]="-s.offset"
+                  ></circle>
+                </ng-container>
+              </g>
+              <text x="90" y="92" text-anchor="middle" class="hb-donut-center">
+                {{ vm.donut.total }}
+              </text>
+              <text x="90" y="112" text-anchor="middle" class="hb-donut-sub">đơn</text>
+            </svg>
+
+            <div class="hb-donut-legend">
+              <div class="hb-leg" *ngFor="let s of vm.donut.segments">
+                <span class="hb-leg-dot" [attr.data-k]="s.key"></span>
+                <span class="hb-leg-text">{{ s.label }}</span>
+                <span class="hb-leg-val">{{ s.value }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM LEFT: RECENT ORDERS -->
+        <div class="hb-panel">
+          <div class="hb-panel-head">
+            <div class="hb-panel-title">Đơn hàng gần đây</div>
+            <button class="btn btn-sm btn-outline-secondary" (click)="resetFilters()">
+              Đặt lại
+            </button>
+          </div>
+
+          <div class="hb-table-wrap">
+            <table class="table hb-table align-middle">
+              <thead>
+                <tr>
+                  <th style="width: 140px">Mã đơn</th>
+                  <th>Khách hàng</th>
+                  <th style="width: 160px">Tổng tiền</th>
+                  <th style="width: 160px">Ngày</th>
+                  <th style="width: 170px">Trạng thái</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let o of vm.recent">
+                  <td class="hb-name">{{ o.order_number }}</td>
+                  <td>
+                    <div class="hb-name">{{ o.customer_name }}</div>
+                    <div class="hb-sub">{{ o.customer_phone }}</div>
+                  </td>
+                  <td>{{ fmtVND(o.total_amount) }}</td>
+                  <td class="hb-sub">{{ fmtDateTime(o.created_at) }}</td>
+                  <td>
+                    <span class="hb-pill" [ngClass]="statusPillClass(o.status)">
+                      {{ statusLabel(o.status) }}
+                    </span>
+                  </td>
+                </tr>
+
+                <tr *ngIf="vm.recent.length === 0">
+                  <td colspan="5" class="text-center py-4 text-muted">Không có dữ liệu</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- BOTTOM RIGHT: TOP PRODUCTS -->
+        <div class="hb-panel">
+          <div class="hb-panel-head">
+            <div class="hb-panel-title">Sản phẩm được mua nhiều nhất</div>
+          </div>
+
+          <div class="hb-toplist">
+            <div class="hb-topitem" *ngFor="let p of vm.topProducts">
+              <div class="hb-thumb" [class.is-empty]="!p.image_url">
+                <img *ngIf="p.image_url" [src]="p.image_url" alt="" />
+              </div>
+              <div class="hb-topmeta">
+                <div class="hb-name">{{ p.product_name }}</div>
+                <div class="hb-sub">ID: {{ p.product_id }}</div>
+              </div>
+              <div class="hb-topqty">{{ p.qty }} lượt</div>
+            </div>
+
+            <div *ngIf="vm.topProducts.length === 0" class="text-muted">Chưa có dữ liệu</div>
+          </div>
+        </div>
+
+        <!-- EXTRA: RECENT REVIEWS -->
+        <div class="hb-panel">
+          <div class="hb-panel-head">
+            <div class="hb-panel-title">Đánh giá gần đây</div>
+          </div>
+
+          <div class="hb-table-wrap">
+            <table class="table hb-table align-middle">
+              <thead>
+                <tr>
+                  <th>Sản phẩm</th>
+                  <th style="width: 190px">Khách hàng</th>
+                  <th style="width: 120px">Rating</th>
+                  <th style="width: 160px">Ngày</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let r of vm.recentReviews">
+                  <td>
+                    <div class="hb-name">{{ r.product_name }}</div>
+                    <div class="hb-sub hb-ellipsis">{{ r.comment }}</div>
+                  </td>
+                  <td class="hb-sub">{{ r.customer_name }}</td>
+                  <td>
+                    <span class="hb-stars">{{ stars(r.rating) }}</span>
+                    <span class="hb-sub">({{ r.rating }}/5)</span>
+                  </td>
+                  <td class="hb-sub">{{ fmtDateTime(r.created_at) }}</td>
+                </tr>
+
+                <tr *ngIf="vm.recentReviews.length === 0">
+                  <td colspan="4" class="text-center py-4 text-muted">Chưa có đánh giá</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

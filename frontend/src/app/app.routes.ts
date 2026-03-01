@@ -77,7 +77,7 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/my-orders/my-orders').then((m) => m.MyOrders), // <== CẦN TẠO COMPONENT NÀY
       },
       {
-        path: 'wishlist', 
+        path: 'wishlist',
         loadComponent: () => import('./pages/my-reviews/my-reviews').then((m) => m.MyReviews), // <== CẦN TẠO COMPONENT NÀY
       },
       {
@@ -127,6 +127,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'management-voucher',
+        loadComponent: () =>
+          import('./admins/pages/management-voucher/management-voucher').then(
+            (m) => m.ManagementVoucher,
+          ),
+      },
+      {
         path: 'management-orders',
         loadComponent: () =>
           import('./admins/pages/management-orders/management-orders').then(
@@ -172,6 +179,13 @@ export const routes: Routes = [
             (m) => m.ManagementWarehouse,
           ),
       },
+      {
+        path: 'management-blog',
+        loadComponent: () =>
+          import('./admins/pages/management-blog/management-blog').then(
+            (m) => m.ManagementBlog,
+          ),
+      }
     ],
   },
 ];

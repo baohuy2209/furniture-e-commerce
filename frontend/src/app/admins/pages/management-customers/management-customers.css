@@ -1,0 +1,583 @@
+:host {
+  --hb-primary: #3d529d;
+  --hb-accent: #ff911f;
+  --hb-bg: #ffffff;
+  --hb-soft: #f6f7fb;
+  --hb-border: rgba(16, 24, 40, 0.12);
+  --hb-text: #101828;
+  --hb-muted: rgba(16, 24, 40, 0.62);
+
+  --hb-radius: 16px;
+  --hb-radius-sm: 12px;
+}
+
+/* ===== PAGE SHELL (align Products) ===== */
+.hb-page-shell {
+  width: 100%;
+}
+
+.hb-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.hb-header-left {
+  min-width: 0;
+}
+
+.hb-title {
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: var(--hb-primary);
+  line-height: 1.1;
+}
+
+.hb-sub {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--hb-muted);
+}
+
+.hb-header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hb-page-body {
+  min-height: 0;
+}
+
+/* ===== CARDS (align Products) ===== */
+.hb-card {
+  border: 1px solid var(--hb-border);
+  border-radius: var(--hb-radius);
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(16, 24, 40, 0.08);
+}
+
+.hb-card-pad {
+  padding: 14px;
+}
+
+/* ===== BUTTON SYSTEM (Products-like) ===== */
+.btn-hb {
+  background: var(--hb-primary);
+  border-color: var(--hb-primary);
+  color: #fff;
+  font-weight: 900;
+  border-radius: var(--hb-radius-sm);
+  padding: 10px 14px;
+}
+
+.btn-hb:hover {
+  filter: brightness(0.95);
+  color: #fff;
+}
+
+.btn-hb-outline {
+  background: #fff;
+  border: 1px solid rgba(61, 82, 157, 0.25);
+  color: var(--hb-primary);
+  font-weight: 900;
+  border-radius: var(--hb-radius-sm);
+  padding: 10px 14px;
+}
+
+.btn-hb-outline:hover {
+  background: rgba(61, 82, 157, 0.06);
+  border-color: rgba(61, 82, 157, 0.4);
+  color: var(--hb-primary);
+}
+
+/* NÚT VÀNG (Hủy vàng / accent) -> CHỮ TRẮNG */
+.btn-hb-accent {
+  background: var(--hb-accent);
+  border-color: var(--hb-accent);
+  color: #fff !important;
+  font-weight: 900;
+  border-radius: var(--hb-radius-sm);
+  padding: 10px 14px;
+}
+
+.btn-hb-accent:hover {
+  filter: brightness(0.96);
+  color: #fff !important;
+}
+
+/* ===== FORMS (align Products) ===== */
+.form-control,
+.form-select {
+  border-radius: var(--hb-radius-sm);
+  border: 1px solid rgba(16, 24, 40, 0.14);
+  padding: 10px 12px;
+  font-weight: 700;
+}
+
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 145, 31, 0.22);
+  border-color: rgba(255, 145, 31, 0.6);
+}
+
+/* ===== FILTERBAR (align Products) ===== */
+.hb-filterbar {
+  display: grid;
+  grid-template-columns: 1.5fr 0.7fr 0.35fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.hb-filter-reset {
+  min-width: 92px;
+  justify-self: end;
+}
+
+/* ===== TABLE CARD LAYOUT ===== */
+.hb-table-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: calc(100vh - 230px);
+  padding: 12px;
+}
+
+.hb-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border-radius: var(--hb-radius-sm);
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  background: #fff;
+}
+
+.hb-table {
+  margin: 0;
+  width: 100%;
+}
+
+.hb-th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f7f8fb;
+  border-bottom: 1px solid rgba(16, 24, 40, 0.12) !important;
+  padding: 12px !important;
+  font-weight: 900;
+  color: rgba(16, 24, 40, 0.85);
+}
+
+.hb-th-sort {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  cursor: pointer;
+  user-select: none;
+  font-weight: 900;
+}
+
+.hb-th-sort .hb-sort {
+  width: 18px;
+  text-align: center;
+  opacity: 0.55;
+  font-weight: 900;
+}
+
+.hb-th-sort.is-active .hb-sort {
+  opacity: 1;
+  color: var(--hb-primary);
+}
+
+.hb-row td {
+  padding: 14px 12px !important;
+  vertical-align: middle;
+  border-top: 1px solid rgba(16, 24, 40, 0.06) !important;
+}
+
+.hb-row:hover {
+  background: rgba(255, 143, 23, 0.08);
+}
+
+.w-customer {
+  width: 44%;
+}
+
+.hb-customer {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.hb-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--hb-radius-sm);
+  background: rgba(61, 82, 157, 0.1);
+  border: 1px solid rgba(61, 82, 157, 0.2);
+  color: var(--hb-primary);
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+}
+
+.hb-avatar-lg {
+  width: 76px;
+  height: 76px;
+  border-radius: var(--hb-radius);
+  font-size: 20px;
+}
+
+.hb-customer-meta {
+  min-width: 0;
+}
+
+.hb-name {
+  font-weight: 950;
+  color: var(--hb-text);
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.hb-id {
+  font-weight: 800;
+  font-size: 12px;
+  color: rgba(16, 24, 40, 0.45);
+}
+
+.hb-subline {
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: rgba(16, 24, 40, 0.62);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hb-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hb-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 12px;
+  border: 1px solid rgba(16, 24, 40, 0.12);
+  background: rgba(16, 24, 40, 0.04);
+  color: rgba(16, 24, 40, 0.72);
+}
+
+.hb-pill.is-locked {
+  background: rgba(255, 145, 31, 0.18);
+  border-color: rgba(255, 145, 31, 0.28);
+  color: #7a3b00;
+}
+
+.hb-pill.is-soft {
+  background: rgba(61, 82, 157, 0.08);
+  border-color: rgba(61, 82, 157, 0.16);
+  color: rgba(16, 24, 40, 0.78);
+}
+
+/* ✅ Đồng bộ typography số liệu */
+.hb-num {
+  font-weight: 900;
+  color: var(--hb-text);
+}
+
+.hb-date {
+  color: rgba(16, 24, 40, 0.78);
+  font-weight: 800;
+}
+
+.hb-sort-ic {
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0.75;
+  transform: translateY(1px);
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.hb-th-sort.is-active .hb-sort-ic {
+  opacity: 1;
+  color: var(--hb-primary);
+}
+
+.hb-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--hb-radius-sm);
+  border: 1px solid rgba(61, 82, 157, 0.18);
+  background: rgba(61, 82, 157, 0.06);
+  color: var(--hb-primary);
+  font-weight: 950;
+  cursor: pointer;
+}
+
+/* ✅ Đồng bộ hover icon */
+.hb-icon-btn:hover {
+  background: rgba(61, 82, 157, 0.1);
+  border-color: rgba(61, 82, 157, 0.28);
+}
+
+.hb-empty {
+  padding: 18px !important;
+  text-align: center;
+  color: rgba(16, 24, 40, 0.6);
+  font-weight: 800;
+}
+
+/* ===== PAGINATION (sticky bottom) ===== */
+.hb-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 4px 2px;
+}
+
+.hb-page-btn {
+  border: 1px solid rgba(16, 24, 40, 0.14);
+  background: #fff;
+  border-radius: var(--hb-radius-sm);
+  padding: 8px 12px;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.hb-page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hb-page-mid {
+  color: rgba(16, 24, 40, 0.7);
+  font-weight: 900;
+}
+
+/* ===== DETAIL ===== */
+.hb-detail-card {
+  padding: 12px;
+  height: calc(100vh - 210px);
+  min-height: 0;
+}
+
+.hb-detail-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+  height: 100%;
+  min-height: 0;
+}
+
+.hb-profile-card {
+  border: 1px solid rgba(16, 24, 40, 0.1);
+  border-radius: var(--hb-radius);
+  padding: 16px;
+  background: #fff;
+}
+
+.hb-profile-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.hb-profile-name {
+  font-weight: 950;
+  font-size: 18px;
+  color: var(--hb-text);
+}
+
+.hb-profile-id {
+  font-weight: 800;
+  color: rgba(16, 24, 40, 0.55);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.hb-profile-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.hb-profile-stats {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.hb-stat {
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: var(--hb-radius-sm);
+  padding: 10px;
+  background: rgba(61, 82, 157, 0.04);
+}
+
+.hb-stat-num {
+  font-weight: 950;
+  color: var(--hb-primary);
+}
+
+.hb-stat-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(16, 24, 40, 0.6);
+  margin-top: 2px;
+}
+
+.hb-profile-kv {
+  margin-top: 14px;
+  border-top: 1px solid rgba(16, 24, 40, 0.08);
+  padding-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.hb-kv {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.hb-k {
+  font-weight: 900;
+  color: rgba(16, 24, 40, 0.55);
+  font-size: 12px;
+}
+
+.hb-v {
+  font-weight: 800;
+  color: var(--hb-text);
+  min-width: 0;
+}
+
+.hb-mono {
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+}
+
+.hb-detail {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hb-tabs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid rgba(16, 24, 40, 0.12);
+  padding-bottom: 10px;
+}
+
+.hb-tab {
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 10px 12px;
+  border-radius: var(--hb-radius-sm);
+  font-weight: 950;
+  color: rgba(16, 24, 40, 0.65);
+  cursor: pointer;
+}
+
+.hb-tab.is-active {
+  background: rgba(255, 145, 31, 0.14);
+  border-color: rgba(255, 145, 31, 0.3);
+  color: #7a3b00;
+}
+
+.hb-tab-panel {
+  flex: 1;
+  min-height: 0;
+  padding-top: 12px;
+  overflow: auto;
+}
+
+.hb-panels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.hb-mini-card {
+  border: 1px solid rgba(16, 24, 40, 0.1);
+  border-radius: var(--hb-radius);
+  padding: 14px;
+  background: #fff;
+}
+
+.hb-mini-title {
+  font-weight: 950;
+  color: var(--hb-text);
+}
+
+.hb-mini-value {
+  font-weight: 950;
+  color: var(--hb-primary);
+  margin-top: 8px;
+}
+
+.hb-mini-sub {
+  color: rgba(16, 24, 40, 0.6);
+  font-weight: 700;
+  margin-top: 6px;
+  font-size: 12.5px;
+}
+
+.hb-subtitle-row {
+  margin-top: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hb-subtitle {
+  font-weight: 950;
+  color: var(--hb-text);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .hb-filterbar {
+    grid-template-columns: 1fr;
+  }
+
+  .hb-filter-reset {
+    justify-self: start;
+  }
+
+  .hb-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hb-panels {
+    grid-template-columns: 1fr;
+  }
+}

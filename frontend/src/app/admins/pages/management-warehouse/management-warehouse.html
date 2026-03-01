@@ -1,1 +1,522 @@
-<p>management-warehouse works!</p>
+<div class="hb-page-shell" *ngIf="vm$ | async as vm">
+  <!-- HEADER -->
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title">QUẢN LÝ TỒN KHO</div>
+
+      <div class="hb-sub text-muted" *ngIf="vm.mode === 'list'">
+        Tổng: <b>{{ vm.total }}</b>
+        <span class="hb-dot">•</span>
+        Hiển thị: <b>{{ vm.showingFrom }}-{{ vm.showingTo }}</b
+        >/<b>{{ vm.total }}</b>
+        <span class="hb-dot">•</span>
+        Sort: <b>{{ vm.sortKeyStock }}</b> ({{ vm.sortDirStock }})
+      </div>
+
+      <ng-container *ngIf="vm.mode !== 'list' && vm.detail as d">
+        <div class="hb-sub text-muted">
+          {{ d.stock.product_variant_id }}
+          <span class="hb-dot">•</span>
+          Stock ID: <b>{{ d.stock.stock_item_id }}</b>
+          <span class="hb-dot">•</span>
+          Panel: <b>{{ vm.currentPanel }}</b>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="hb-header-actions" *ngIf="vm.mode === 'list'">
+      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
+      <button class="btn btn-hb" type="button" (click)="exportCsvStock()">
+        <i class="bi bi-download me-1"></i>
+        Xuất CSV
+      </button>
+    </div>
+
+    <div class="hb-header-actions" *ngIf="vm.mode === 'detail'">
+      <button class="btn btn-hb-outline" type="button" (click)="goList()">
+        <i class="bi bi-arrow-left me-1"></i>
+        Quay lại
+      </button>
+
+      <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
+        <i class="bi bi-pencil-square me-1"></i>
+        Nhập/Điều chỉnh
+      </button>
+    </div>
+
+    <div class="hb-header-actions" *ngIf="vm.mode === 'edit'">
+      <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Huỷ</button>
+
+      <button class="btn btn-hb" type="button" (click)="saveEdit()">
+        <i class="bi bi-check2-circle me-1"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="hb-page-body">
+    <!-- ===== LIST ===== -->
+    <ng-container *ngIf="vm.mode === 'list'">
+      <div class="hb-summary-row">
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon"><i class="bi bi-boxes"></i></div>
+          <div>
+            <div class="hb-sc-label">SKU đang theo dõi</div>
+            <div class="hb-sc-value">{{ vm.summary.totalSkus }}</div>
+          </div>
+        </div>
+
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon warn"><i class="bi bi-exclamation-triangle"></i></div>
+          <div>
+            <div class="hb-sc-label">Low stock</div>
+            <div class="hb-sc-value">{{ vm.summary.lowStockCount }}</div>
+          </div>
+        </div>
+
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon ok"><i class="bi bi-cash-coin"></i></div>
+          <div>
+            <div class="hb-sc-label">Giá trị tồn (ước tính)</div>
+            <div class="hb-sc-value">{{ vm.summary.totalOnHandValueText }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hb-card hb-card-pad mb-3">
+        <div class="hb-filterbar hb-filterbar-warehouse">
+          <input
+            class="form-control"
+            [ngModel]="q"
+            (ngModelChange)="onChangeQ($event)"
+            placeholder="Tìm theo variant_id / SKU / product_id / kho..."
+          />
+
+          <select
+            class="form-select"
+            [ngModel]="f_warehouse_id"
+            (ngModelChange)="onChangeWarehouse($event)"
+          >
+            <option value="">Tất cả kho</option>
+            <option *ngFor="let w of vm.warehouses" [value]="w.warehouse_id">{{ w.name }}</option>
+          </select>
+
+          <label class="hb-check">
+            <input
+              type="checkbox"
+              [ngModel]="f_low_only"
+              (ngModelChange)="onToggleLowOnly($event)"
+            />
+            <span>Chỉ Low stock</span>
+          </label>
+
+          <select
+            class="form-select"
+            [ngModel]="pageSize"
+            (ngModelChange)="onChangePageSize($event)"
+          >
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="20">20</option>
+            <option [ngValue]="50">50</option>
+          </select>
+
+          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
+            Reset
+          </button>
+        </div>
+
+      </div>
+
+      <div class="card hb-card hb-table-card">
+        <div class="hb-table-wrap">
+          <div class="hb-grid-table hb-grid-stock">
+            <div class="hb-grid-head hb-grid-stock-v3">
+              <div class="hb-th" (click)="toggleSortStock('product_variant_id')">
+                <div class="th-content">
+                  <span>Variant</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="
+                      vm.sortKeyStock === 'product_variant_id' && vm.sortDirStock === 'asc'
+                    "
+                    [class.fa-sort-down]="
+                      vm.sortKeyStock === 'product_variant_id' && vm.sortDirStock === 'desc'
+                    "
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th" (click)="toggleSortStock('sku')">
+                <div class="th-content">
+                  <span>SKU</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="vm.sortKeyStock === 'sku' && vm.sortDirStock === 'asc'"
+                    [class.fa-sort-down]="vm.sortKeyStock === 'sku' && vm.sortDirStock === 'desc'"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th" (click)="toggleSortStock('warehouse')">
+                <div class="th-content">
+                  <span>Kho</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="
+                      vm.sortKeyStock === 'warehouse' && vm.sortDirStock === 'asc'
+                    "
+                    [class.fa-sort-down]="
+                      vm.sortKeyStock === 'warehouse' && vm.sortDirStock === 'desc'
+                    "
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th" (click)="toggleSortStock('status')">
+                <div class="th-content">
+                  <span>Trạng thái</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="vm.sortKeyStock === 'status' && vm.sortDirStock === 'asc'"
+                    [class.fa-sort-down]="
+                      vm.sortKeyStock === 'status' && vm.sortDirStock === 'desc'
+                    "
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th" (click)="toggleSortStock('quantity_on_hand')">
+                <div class="th-content">
+                  <span>Tồn</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="
+                      vm.sortKeyStock === 'quantity_on_hand' && vm.sortDirStock === 'asc'
+                    "
+                    [class.fa-sort-down]="
+                      vm.sortKeyStock === 'quantity_on_hand' && vm.sortDirStock === 'desc'
+                    "
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th" (click)="toggleSortStock('updated_at')">
+                <div class="th-content">
+                  <span>Cập nhật</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="
+                      vm.sortKeyStock === 'updated_at' && vm.sortDirStock === 'asc'
+                    "
+                    [class.fa-sort-down]="
+                      vm.sortKeyStock === 'updated_at' && vm.sortDirStock === 'desc'
+                    "
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th hb-th-center">Sửa</div>
+            </div>
+
+            <div
+              class="hb-grid-row hb-row-click hb-grid-stock-v3"
+              *ngFor="let r of vm.rowsStock; let i = index"
+              (click)="openDetail(r.stock_item_id)"
+              [class.is-alt]="i % 2 === 1"
+            >
+              <div class="hb-td">
+                <div class="hb-name">{{ r.product_variant_id }}</div>
+                <div class="hb-subline" *ngIf="r.product_id">PID: {{ r.product_id }}</div>
+              </div>
+
+              <div class="hb-td">
+                <div class="hb-name">{{ r.sku || '—' }}</div>
+              </div>
+
+              <div class="hb-td">{{ r.warehouse_name }}</div>
+
+              <div class="hb-td">
+                <span class="hb-badge-soft" [ngClass]="r.statusPillClass">{{ r.statusLabel }}</span>
+              </div>
+
+              <div class="hb-td hb-td-num">
+                <span class="hb-qty">{{ r.qtyText }}</span>
+              </div>
+
+              <div class="hb-td hb-muted">{{ r.updatedAtText }}</div>
+
+              <div class="hb-td hb-td-center">
+                <button
+                  class="hb-icon-btn"
+                  type="button"
+                  title="Nhập/Điều chỉnh"
+                  (click)="stopEvent($event); openAdjust(r.stock_item_id)"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="hb-empty" *ngIf="vm.rowsStock.length === 0">Không có dữ liệu</div>
+          </div>
+        </div>
+
+        <div class="hb-pagination">
+          <button
+            class="hb-page-btn"
+            type="button"
+            [disabled]="vm.page === 1"
+            (click)="setPage(vm.page - 1)"
+          >
+            ‹
+          </button>
+          <div class="hb-page-info">
+            <span>Trang</span>
+            <b>{{ vm.page }}</b>
+            <span>/</span>
+            <span>{{ vm.totalPages }}</span>
+          </div>
+          <button
+            class="hb-page-btn"
+            type="button"
+            [disabled]="vm.page === vm.totalPages"
+            (click)="setPage(vm.page + 1)"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ===== DETAIL ===== -->
+    <ng-container *ngIf="vm.mode === 'detail'">
+      <ng-container *ngIf="vm.detail as d">
+        <div class="row g-3">
+          <div class="col-12 col-xl-8">
+            <div class="card hb-card hb-card-pad mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <span class="hb-pill" [ngClass]="d.statusPillClass">{{ d.statusLabel }}</span>
+
+                <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
+                  <i class="bi bi-pencil-square me-1"></i>
+                  Nhập/Điều chỉnh
+                </button>
+              </div>
+            </div>
+
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-title" style="font-size: 18px">Thông tin tồn kho</div>
+              <div class="hb-divider"></div>
+
+              <div class="row g-2">
+                <div class="col-6">
+                  <div class="hb-kv">
+                    <div class="k">Variant ID</div>
+                    <div class="v">{{ d.stock.product_variant_id }}</div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="hb-kv">
+                    <div class="k">SKU</div>
+                    <div class="v">{{ d.variant?.sku || '—' }}</div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="hb-kv">
+                    <div class="k">Kho</div>
+                    <div class="v">{{ d.warehouse?.name || d.stock.warehouse_id }}</div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="hb-kv">
+                    <div class="k">Tồn</div>
+                    <div class="v">{{ d.onHandText }}</div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <div class="hb-kv">
+                    <div class="k">Cập nhật</div>
+                    <div class="v">{{ d.updatedAtText }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hb-divider"></div>
+
+              <div class="hb-title" style="font-size: 16px">Biến động gần đây</div>
+              <div class="hb-sub text-muted mb-2">
+                Hiển thị 6 dòng gần nhất (phục vụ detail thôi).
+              </div>
+
+              <div class="hb-mini-table" *ngIf="d.recentMovements.length > 0; else noMv">
+                <div class="hb-mini-row hb-mini-head">
+                  <div>Thời gian</div>
+                  <div>Ref</div>
+                  <div>Số lượng</div>
+                  <div>Lý do</div>
+                </div>
+
+                <div class="hb-mini-row" *ngFor="let m of d.recentMovements">
+                  <div class="text-muted">{{ m.createdAtText }}</div>
+                  <div>
+                    <div class="fw-bold">{{ m.reference_type }}</div>
+                    <div class="text-muted small">{{ m.reference_id || '—' }}</div>
+                  </div>
+                  <div>
+                    <span class="hb-pill" [ngClass]="m.signText === 'IN' ? 'pill-ok' : 'pill-warn'">
+                      {{ m.signText }}
+                    </span>
+                    <span class="hb-qty">{{ m.qtyText }}</span>
+                  </div>
+                  <div class="text-muted">{{ m.reason || '—' }}</div>
+                </div>
+              </div>
+
+              <ng-template #noMv>
+                <div class="text-muted">Chưa có biến động.</div>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="col-12 col-xl-4">
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-title" style="font-size: 18px">Thao tác</div>
+              <div class="hb-sub text-muted">Detail/Adjust dính query param.</div>
+
+              <div class="hb-divider"></div>
+
+              <button class="btn btn-hb-accent w-100 mb-2" type="button" (click)="enterEdit()">
+                <i class="bi bi-pencil-square me-1"></i>
+                Nhập/Điều chỉnh
+              </button>
+
+              <button class="btn btn-hb-outline w-100" type="button" (click)="goList()">
+                <i class="bi bi-arrow-left me-1"></i>
+                Về danh sách
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- ===== EDIT (Adjust) ===== -->
+    <ng-container *ngIf="vm.mode === 'edit'">
+      <ng-container *ngIf="vm.detail as d">
+        <ng-container *ngIf="vm.editModel as em">
+          <div class="row g-3">
+            <div class="col-12 col-xl-8">
+              <div class="card hb-card hb-card-pad">
+                <div class="hb-title" style="font-size: 18px">Nhập / Điều chỉnh tồn kho</div>
+                <div class="hb-sub text-muted">
+                  Variant: <b>{{ d.stock.product_variant_id }}</b> • Kho:
+                  <b>{{ d.warehouse?.name || d.stock.warehouse_id }}</b>
+                </div>
+
+                <div class="hb-divider"></div>
+
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold">Chọn thao tác</label>
+                    <select class="form-select" [(ngModel)]="em.adjustType">
+                      <option [ngValue]="'inbound'">Nhập kho</option>
+                      <option [ngValue]="'manual'">Điều chỉnh thủ công</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold">Số lượng</label>
+                    <input class="form-control" type="number" min="0" [(ngModel)]="em.qtyAbs" />
+                  </div>
+
+                  <ng-container *ngIf="em.adjustType === 'manual'">
+                    <div class="col-md-6">
+                      <label class="form-label fw-bold">Hướng điều chỉnh</label>
+                      <select class="form-select" [(ngModel)]="em.direction">
+                        <option [ngValue]="'increase'">Tăng</option>
+                        <option [ngValue]="'decrease'">Giảm</option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label fw-bold">Lý do (bắt buộc)</label>
+                      <input
+                        class="form-control"
+                        [(ngModel)]="em.reason"
+                        placeholder="VD: kiểm kê, hỏng, sai lệch..."
+                      />
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="em.adjustType === 'inbound'">
+                    <div class="col-12">
+                      <label class="form-label fw-bold">Ghi chú (tuỳ chọn)</label>
+                      <input
+                        class="form-control"
+                        [(ngModel)]="em.reason"
+                        placeholder="VD: nhập bổ sung, nhập PO..."
+                      />
+                    </div>
+                  </ng-container>
+
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold">Reference type</label>
+                    <select class="form-select" [(ngModel)]="em.reference_type">
+                      <option [ngValue]="'manual'">manual</option>
+                      <option [ngValue]="'purchase_order'">purchase_order</option>
+                      <option [ngValue]="'order'">order</option>
+                      <option [ngValue]="'audit'">audit</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold">Reference id</label>
+                    <input
+                      class="form-control"
+                      [(ngModel)]="em.reference_id"
+                      placeholder="VD: PO_001 / OD_8891"
+                    />
+                  </div>
+                </div>
+
+                <div class="hb-divider"></div>
+
+                <div class="d-flex gap-2 flex-wrap">
+                  <button class="btn btn-hb" type="button" (click)="saveEdit()">
+                    <i class="bi bi-check2-circle me-1"></i> Lưu
+                  </button>
+                  <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">
+                    Huỷ
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-xl-4">
+              <div class="card hb-card hb-card-pad">
+                <div class="hb-title" style="font-size: 18px">Trạng thái hiện tại</div>
+                <div class="hb-divider"></div>
+
+                <div class="hb-kv">
+                  <div class="k">Tồn</div>
+                  <div class="v">{{ d.onHandText }}</div>
+                </div>
+
+                <div class="hb-kv mt-2">
+                  <div class="k">Cập nhật</div>
+                  <div class="v">{{ d.updatedAtText }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

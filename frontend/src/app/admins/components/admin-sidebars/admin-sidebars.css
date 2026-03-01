@@ -1,0 +1,77 @@
+:host {
+  --hb-primary: #3d529d;
+  --hb-accent: #ff911f;
+}
+
+/* Sidebar full chiều cao */
+.hb-sidebar {
+  height: 100vh;
+  background: var(--hb-primary);
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+/* BRAND */
+.hb-brand {
+  padding: 20px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.hb-logo {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.hb-sub {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* NAV */
+.hb-nav {
+  flex: 1;
+  padding: 12px 10px;
+  overflow-y: auto;
+}
+
+.hb-nav-item {
+  display: block;
+  padding: 10px 14px;
+  margin: 6px 4px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.92);
+  transition: 0.2s ease;
+}
+
+.hb-nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ACTIVE state */
+.hb-nav-item.active {
+  background: white;
+  color: #3d529d;
+  border-left: 4px solid var(--hb-accent);
+  padding-left: 10px; /* trừ 4px border */
+}
+
+/* USER */
+.hb-user {
+  padding: 16px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.hb-user-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hb-user-role {
+  font-size: 12px;
+  opacity: 0.8;
+}

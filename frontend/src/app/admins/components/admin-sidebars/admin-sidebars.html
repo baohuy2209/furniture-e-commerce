@@ -1,0 +1,59 @@
+<aside class="hb-sidebar">
+  <!-- BRAND -->
+  <div class="hb-brand">
+    <div class="hb-logo">HOMEBASE</div>
+    <div class="hb-sub">Admin Panel</div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav class="hb-nav">
+    <a
+      routerLink="/admin"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="hb-nav-item"
+    >
+      Tổng quan
+    </a>
+
+    <a routerLink="/admin/management-products" routerLinkActive="active" class="hb-nav-item">
+      Quản lý sản phẩm
+    </a>
+
+    <a routerLink="/admin/management-warehouse" routerLinkActive="active" class="hb-nav-item">
+      Quản lý kho
+    </a>
+
+    <a routerLink="/admin/management-voucher" routerLinkActive="active" class="hb-nav-item">
+      Quản lý voucher
+    </a>
+
+    <a routerLink="/admin/management-orders" routerLinkActive="active" class="hb-nav-item">
+      Quản lý đơn hàng
+    </a>
+
+    <a routerLink="/admin/management-customers" routerLinkActive="active" class="hb-nav-item">
+      Quản lý khách hàng
+    </a>
+
+    <a routerLink="/admin/management-blog" routerLinkActive="active" class="hb-nav-item">
+      Bài viết
+    </a>
+
+    <a routerLink="/admin/management-events" routerLinkActive="active" class="hb-nav-item">
+      Sự kiện
+    </a>
+
+    <a routerLink="/admin/management-warranty" routerLinkActive="active" class="hb-nav-item">
+      Bảo hành / đổi trả
+    </a>
+
+    <a routerLink="/admin/reports" routerLinkActive="active" class="hb-nav-item"> Reports </a>
+  </nav>
+
+  <!-- USER -->
+  <div class="hb-user">
+    <div class="hb-user-name">Admin HOMEBASE</div>
+    <div class="hb-user-role">Admin</div>
+  </div>
+</aside>

@@ -22,7 +22,9 @@
               },
               "src/assets"
             ],
-            "styles": ["src/styles.css"]
+            "styles": ["src/styles.css",
+          "node_modules/bootstrap-icons/font/bootstrap-icons.css"
+          ]
           },
           "configurations": {
             "production": {
@@ -78,5 +80,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "8e9825e1-2ef8-4deb-a787-1d84d1cf62c8"
   }
 }

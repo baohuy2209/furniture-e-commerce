@@ -1,1 +1,139 @@
-<p>management-contents works!</p>
+<div class="hb-wrap">
+  <!-- TITLE -->
+  <div class="hb-titlebar">
+    <h1 class="hb-title">QUẢN LÝ BÀI VIẾT</h1>
+    <div class="hb-actions" *ngIf="mode === 'list'">
+      <button class="btn btn-primary" (click)="goCreate()">+ Thêm bài viết</button>
+    </div>
+  </div>
+
+  <div class="hb-card">
+    <div class="hb-card-body">
+      <!-- LIST MODE -->
+      <ng-container *ngIf="mode === 'list'">
+        <div class="row mb-3">
+          <div class="col">
+            <input class="form-control" placeholder="Tìm theo tiêu đề" [(ngModel)]="search" />
+          </div>
+          <div class="col">
+            <select class="form-select" [(ngModel)]="selectedCategory">
+              <option value="">Tất cả danh mục</option>
+              <option *ngFor="let c of categories$ | async" [value]="c.category_id">
+                {{ c.name }}
+              </option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-select" [(ngModel)]="selectedStatus">
+              <option value="">Tất cả trạng thái</option>
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="hb-table-wrap">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Tiêu đề</th>
+                <th>Danh mục</th>
+                <th>Trạng thái</th>
+                <th>Chỉnh sửa</th>
+                <th>Xóa mềm</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of filterPosts()">
+                <td>{{ p.title }}</td>
+                <td>{{ p.blog_category_id }}</td>
+                <td>{{ p.post_status }}</td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary" (click)="goEdit(p.post_id)">
+                    Edit
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-outline-danger" (click)="softDelete(p.post_id)">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+
+      <!-- CREATE / EDIT MODE -->
+      <ng-container *ngIf="mode !== 'list'">
+        <div class="mb-3">
+          <label>Tiêu đề</label>
+          <input
+            class="form-control"
+            [(ngModel)]="currentPost!.title"
+            (ngModelChange)="currentPost!.slug = generateSlug($event)"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label>Slug</label>
+          <input class="form-control" [(ngModel)]="currentPost!.slug" />
+        </div>
+
+        <div class="mb-3">
+          <label>Danh mục</label>
+          <select class="form-select" [(ngModel)]="currentPost!.blog_category_id">
+            <option *ngFor="let c of categories$ | async" [value]="c.category_id">
+              {{ c.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label>Thumbnail URL</label>
+          <input class="form-control" [(ngModel)]="currentPost!.thumbnail_url" />
+        </div>
+
+        <div class="mb-3">
+          <label>Nội dung</label>
+          <textarea class="form-control" rows="5" [(ngModel)]="currentPost!.content"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label>Tags</label>
+          <div class="d-flex gap-2 flex-wrap">
+            <button
+              type="button"
+              *ngFor="let t of tags$ | async"
+              class="btn btn-sm"
+              [class.btn-primary]="selectedTagIds.includes(t.tag_id)"
+              [class.btn-outline-primary]="!selectedTagIds.includes(t.tag_id)"
+              (click)="toggleTag(t.tag_id)"
+            >
+              {{ t.name }}
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label>Upload hình ảnh (nhập URL mock)</label>
+          <input #imgUrl class="form-control mb-2" />
+          <button
+            class="btn btn-secondary btn-sm"
+            (click)="addImage(imgUrl.value); imgUrl.value = ''"
+          >
+            Thêm ảnh
+          </button>
+          <div class="mt-2 d-flex gap-2">
+            <img *ngFor="let img of uploadedImages" [src]="img.image_url" width="80" />
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button class="btn btn-primary me-2" (click)="savePost()">Lưu</button>
+          <button class="btn btn-outline-secondary" (click)="backToList()">Hủy</button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

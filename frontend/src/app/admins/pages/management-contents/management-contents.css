@@ -1,0 +1,48 @@
+:host {
+  --hb-primary: #3d529d;
+  --hb-accent: #ff911f;
+}
+
+.hb-wrap {
+  width: 100%;
+}
+
+.hb-titlebar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.hb-title {
+  font-weight: 700;
+  color: var(--hb-primary);
+}
+
+.hb-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 26px rgba(22, 30, 50, 0.08);
+}
+
+.hb-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 140px);
+}
+
+.hb-table-wrap {
+  flex: 1;
+  overflow-y: auto;
+}
+
+table thead {
+  position: sticky;
+  top: 0;
+  background: #fff;
+}
+
+table tbody tr {
+  height: 70px;
+  vertical-align: middle;
+}

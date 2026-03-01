@@ -1,1 +1,865 @@
-<p>management-products works!</p>
+<div class="hb-page-shell">
+  <!-- PAGE HEADER (sticky trong vùng content) -->
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title">QUẢN LÝ SẢN PHẨM</div>
+      <div class="hb-sub text-muted">
+        Tổng: <b>{{ (vm$ | async)?.total || 0 }}</b> sản phẩm
+      </div>
+    </div>
+
+    <!-- LIST ACTIONS -->
+    <div class="hb-header-actions" *ngIf="mode === 'list'">
+      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
+
+      <button class="btn btn-hb" type="button" (click)="exportCsv(exportRows)">
+        <i class="bi bi-download me-1"></i>
+        Xuất CSV
+      </button>
+
+      <button class="btn btn-hb-accent" type="button" (click)="createNewProduct()">
+        <i class="bi bi-plus-lg me-1"></i>
+        Thêm sản phẩm
+      </button>
+    </div>
+
+    <!-- DETAIL/EDIT ACTIONS -->
+    <div class="hb-header-actions" *ngIf="mode !== 'list'">
+      <button class="btn btn-hb-outline" type="button" (click)="backToList()">
+        <i class="bi bi-arrow-left me-1"></i> Quay lại
+      </button>
+
+      <button class="btn btn-hb" type="button" *ngIf="mode === 'detail'" (click)="goEdit()">
+        <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
+      </button>
+
+      <button
+        class="btn btn-hb"
+        type="button"
+        *ngIf="mode === 'edit'"
+        [disabled]="saving || !isDirty"
+        (click)="saveEdit()"
+      >
+        <i class="bi bi-save2 me-1"></i> Lưu
+      </button>
+
+      <button
+        class="btn btn-hb-outline"
+        type="button"
+        *ngIf="mode === 'edit'"
+        (click)="cancelEdit()"
+      >
+        Hủy
+      </button>
+    </div>
+  </div>
+
+  <!-- PAGE BODY -->
+  <div class="hb-page-body">
+    <!-- LIST -->
+    <ng-container *ngIf="mode === 'list'">
+      <!-- Filters -->
+      <div class="card hb-card hb-card-pad mb-3" *ngIf="vm$ | async as vm">
+        <div class="hb-filterbar">
+          <input
+            class="form-control"
+            placeholder="Mã / Tên / Brand / Tag"
+            [(ngModel)]="vm.query.q"
+            (ngModelChange)="patchQuery({ q: $event })"
+          />
+
+          <select
+            class="form-select"
+            [(ngModel)]="vm.query.room"
+            (ngModelChange)="patchQuery({ room: $event })"
+          >
+            <option value="">Tất cả khu vực</option>
+            <option *ngFor="let r of vm.roomOptions" [value]="r">{{ r }}</option>
+          </select>
+
+          <select
+            class="form-select"
+            [(ngModel)]="vm.query.stock"
+            (ngModelChange)="patchQuery({ stock: $event })"
+          >
+            <option value="all">Tồn kho: Tất cả</option>
+            <option value="in">Còn hàng</option>
+            <option value="out">Hết hàng</option>
+            <option value="low">Sắp hết</option>
+          </select>
+
+          <input
+            class="form-control"
+            type="number"
+            placeholder="Giá từ"
+            [ngModel]="vm.query.minPrice"
+            (ngModelChange)="patchQuery({ minPrice: $event === '' ? null : $event })"
+          />
+
+          <input
+            class="form-control"
+            type="number"
+            placeholder="Giá đến"
+            [ngModel]="vm.query.maxPrice"
+            (ngModelChange)="patchQuery({ maxPrice: $event === '' ? null : $event })"
+          />
+
+          <select
+            class="form-select"
+            [(ngModel)]="vm.query.pageSize"
+            (ngModelChange)="patchQuery({ pageSize: $event })"
+          >
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="20">20</option>
+            <option [ngValue]="50">50</option>
+          </select>
+
+          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
+            Reset
+          </button>
+
+          <div class="hb-low-stock" *ngIf="vm.query.stock === 'low'">
+            <div class="text-muted small">Ngưỡng low-stock:</div>
+            <input
+              class="form-control hb-input-sm"
+              type="number"
+              [ngModel]="vm.query.lowStockThreshold"
+              (ngModelChange)="patchQuery({ lowStockThreshold: $event })"
+              style="max-width: 140px"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Card -->
+      <div class="card hb-card hb-table-card" *ngIf="vm$ | async as vm">
+        <!-- scroll nội bộ -->
+        <div class="hb-table-wrap">
+          <div class="hb-table">
+            <!-- div header sortable -->
+            <div class="hb-table-head">
+              <div class="hb-th w-id" (click)="toggleSort('id')">
+                <div class="th-content">
+                  <span>ID</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="isSortKey('id') && isSortDir('asc')"
+                    [class.fa-sort-down]="isSortKey('id') && isSortDir('desc')"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-name" (click)="toggleSort('name')">
+                <div class="th-content">
+                  <span>Tên sản phẩm</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="isSortKey('name') && isSortDir('asc')"
+                    [class.fa-sort-down]="isSortKey('name') && isSortDir('desc')"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-brand" (click)="toggleSort('brand')">
+                <div class="th-content">
+                  <span>Brand</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="isSortKey('brand') && isSortDir('asc')"
+                    [class.fa-sort-down]="isSortKey('brand') && isSortDir('desc')"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-room" (click)="toggleSort('roomLabel')">
+                <div class="th-content">
+                  <span>Khu vực</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="isSortKey('roomLabel') && isSortDir('asc')"
+                    [class.fa-sort-down]="isSortKey('roomLabel') && isSortDir('desc')"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-price" (click)="toggleSort('priceMin')">
+                <div class="th-content">
+                  <span>Giá</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="isSortKey('priceMin') && isSortDir('asc')"
+                    [class.fa-sort-down]="isSortKey('priceMin') && isSortDir('desc')"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-stock" (click)="toggleSort('inventoryTotal')">
+                <div class="th-content">
+                  <span>Tồn</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="isSortKey('inventoryTotal') && isSortDir('asc')"
+                    [class.fa-sort-down]="isSortKey('inventoryTotal') && isSortDir('desc')"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-sold" (click)="toggleSort('soldTotal')">
+                <div class="th-content">
+                  <span>Đã bán</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="isSortKey('soldTotal') && isSortDir('asc')"
+                    [class.fa-sort-down]="isSortKey('soldTotal') && isSortDir('desc')"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-rate" (click)="toggleSort('ratingAvg')">
+                <div class="th-content">
+                  <span>Đánh giá</span>
+                  <i
+                    class="fas fa-sort"
+                    [class.fa-sort-up]="isSortKey('ratingAvg') && isSortDir('asc')"
+                    [class.fa-sort-down]="isSortKey('ratingAvg') && isSortDir('desc')"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-edit text-center">
+                <div class="th-content justify-center">
+                  <span>Sửa</span>
+                </div>
+              </div>
+
+              <div class="hb-th w-del text-center">
+                <div class="th-content justify-center">
+                  <span>Xóa</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- rows -->
+            <div
+              class="hb-table-row hb-row-click"
+              *ngFor="let r of vm.rows"
+              (click)="openDetail(r)"
+              title="Xem chi tiết"
+            >
+              <div class="hb-td w-id text-muted fw-semibold">{{ r.id }}</div>
+
+              <div class="hb-td w-name">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="hb-cover" *ngIf="r.imageCover">
+                    <img [src]="r.imageCover" alt="cover" />
+                  </div>
+
+                  <div class="hb-name-block">
+                    <div class="fw-semibold hb-name">{{ r.name }}</div>
+                    <div class="d-flex flex-wrap gap-1 mt-1">
+                      <span class="hb-badge" *ngIf="r.discountPercent > 0"
+                        >-{{ r.discountPercent }}%</span
+                      >
+                      <span class="hb-tag" *ngFor="let t of r.tags | slice: 0 : 3">{{ t }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hb-td w-brand">{{ r.brand }}</div>
+              <div class="hb-td w-room">{{ r.roomLabel }}</div>
+              <div class="hb-td w-price">
+                {{ r.priceMin != null ? (r.priceMin | number) : '—' }}
+              </div>
+
+              <div class="hb-td w-stock">
+                <span
+                  class="hb-pill"
+                  [class.hb-pill-danger]="r.inventoryTotal <= 0"
+                  [class.hb-pill-warn]="
+                    r.inventoryTotal > 0 && r.inventoryTotal <= vm.query.lowStockThreshold
+                  "
+                >
+                  {{ r.inventoryTotal }}
+                </span>
+              </div>
+
+              <div class="hb-td w-sold">{{ r.soldTotal }}</div>
+              <div class="hb-td w-rate">{{ r.ratingAvg != null ? r.ratingAvg : '—' }}</div>
+
+              <!-- edit icon -->
+              <div class="hb-td w-edit text-center" (click)="stopEvent($event)">
+                <button
+                  class="hb-icon-btn"
+                  type="button"
+                  (click)="stopEvent($event); openEdit(r.id)"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </div>
+
+              <!-- delete icon -->
+              <div class="hb-td w-del text-center" (click)="stopEvent($event)">
+                <button
+                  class="hb-icon-btn danger"
+                  type="button"
+                  (click)="softDelete(r.id); stopEvent($event)"
+                >
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination (sticky bottom trong card) -->
+        <div class="hb-pagination" *ngIf="vm$ | async as vm">
+          <button
+            class="hb-page-btn"
+            type="button"
+            [disabled]="vm.page <= 1"
+            (click)="patchQuery({ page: vm.page - 1 })"
+          >
+            ‹
+          </button>
+
+          <div class="hb-page-info">
+            <span>Page</span>
+            <b>{{ vm.page }}</b>
+            <span>/</span>
+            <span>{{ vm.totalPages }}</span>
+          </div>
+
+          <button
+            class="hb-page-btn"
+            type="button"
+            [disabled]="vm.page >= vm.totalPages"
+            (click)="patchQuery({ page: vm.page + 1 })"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- DETAIL / EDIT -->
+    <ng-container *ngIf="mode !== 'list'">
+      <div class="card hb-card hb-card-pad" *ngIf="detail$ | async as d; else editNewOrNoDetail">
+        <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+          <div>
+            <div class="hb-detail-title">{{ d.product.product_name }}</div>
+            <div class="text-muted small">
+              ID: <span class="fw-semibold">{{ d.product.product_id }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 flex-wrap">
+            <div class="hb-stat">
+              <div class="k">Giá (min-max)</div>
+              <div class="v">
+                {{
+                  d.priceMin != null ? (d.priceMin | number) + ' - ' + (d.priceMax | number) : '—'
+                }}
+              </div>
+            </div>
+
+            <div class="hb-stat">
+              <div class="k">Tồn tổng</div>
+              <div class="v">{{ d.inventoryTotal }}</div>
+            </div>
+
+            <div class="hb-stat">
+              <div class="k">Bảo hành</div>
+              <div class="v">{{ d.product.warranty }} tháng</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="hb-tabs mt-3">
+          <div
+            class="hb-tab"
+            [class.active]="detailTab === 'overview'"
+            (click)="detailTab = 'overview'"
+          >
+            Tổng quan
+          </div>
+          <div
+            class="hb-tab"
+            [class.active]="detailTab === 'variants'"
+            (click)="detailTab = 'variants'"
+          >
+            Giá & Kho
+          </div>
+          <div
+            class="hb-tab"
+            [class.active]="detailTab === 'comments'"
+            (click)="detailTab = 'comments'"
+          >
+            Reviews
+          </div>
+        </div>
+
+        <!-- OVERVIEW -->
+        <div class="mt-3" *ngIf="detailTab === 'overview'">
+          <!-- VIEW MODE -->
+          <ng-container *ngIf="mode === 'detail'">
+            <div class="row g-3">
+              <div class="col-12 col-lg-6">
+                <div class="hb-section-title">Thông tin</div>
+
+                <div class="hb-kv">
+                  <div class="k">Brand</div>
+                  <div class="v">{{ d.product.brand_name }}</div>
+                </div>
+
+                <div class="hb-kv">
+                  <div class="k">Discount</div>
+                  <div class="v">{{ d.product.discount_percent }}%</div>
+                </div>
+
+                <div class="hb-kv">
+                  <div class="k">Assembly</div>
+                  <div class="v">{{ d.product.is_assembly ? 'Có' : 'Không' }}</div>
+                </div>
+
+                <div class="hb-kv">
+                  <div class="k">Tags</div>
+                  <div class="v">
+                    <span class="hb-tag me-1" *ngFor="let t of d.product.tags">{{ t }}</span>
+                  </div>
+                </div>
+
+                <div class="hb-section-title mt-3">Mô tả</div>
+                <div class="text-muted" *ngIf="!d.product.description">Chưa có mô tả.</div>
+                <div class="hb-desc" *ngIf="d.product.description">{{ d.product.description }}</div>
+              </div>
+
+              <div class="col-12 col-lg-6">
+                <div class="hb-section-title">Hình ảnh</div>
+                <div class="hb-gallery">
+                  <div class="hb-gitem" *ngFor="let im of d.images | slice: 0 : 10">
+                    <img [src]="im.url" alt="img" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- EDIT MODE -->
+          <ng-container *ngIf="mode === 'edit' && editForm">
+            <div class="row g-3">
+              <div class="col-12 col-lg-6">
+                <div class="hb-section-title">Thông tin cơ bản</div>
+
+                <label class="form-label mt-2">Tên sản phẩm</label>
+                <input
+                  class="form-control"
+                  [(ngModel)]="editForm.product_name"
+                  (ngModelChange)="onEditChange()"
+                />
+
+                <div class="row g-2 mt-1">
+                  <div class="col-6">
+                    <label class="form-label mt-2">Brand</label>
+                    <input
+                      class="form-control"
+                      [(ngModel)]="editForm.brand_name"
+                      (ngModelChange)="onEditChange()"
+                    />
+                  </div>
+
+                  <div class="col-6">
+                    <label class="form-label mt-2">Bảo hành (tháng)</label>
+                    <input
+                      class="form-control"
+                      type="number"
+                      [(ngModel)]="editForm.warranty"
+                      (ngModelChange)="onEditChange()"
+                    />
+                  </div>
+                </div>
+
+                <div class="row g-2 mt-1">
+                  <div class="col-6">
+                    <label class="form-label mt-2">Giảm giá (%)</label>
+                    <input
+                      class="form-control"
+                      type="number"
+                      [(ngModel)]="editForm.discount_percent"
+                      (ngModelChange)="onEditChange()"
+                    />
+                  </div>
+
+                  <div class="col-6 d-flex align-items-end">
+                    <div class="form-check mt-4">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="editForm.is_assembly"
+                        (ngModelChange)="onEditChange()"
+                      />
+                      <label class="form-check-label">Cần lắp ráp</label>
+                    </div>
+                  </div>
+                </div>
+
+                <label class="form-label mt-3">Tags (ngăn cách bằng dấu phẩy)</label>
+                <input
+                  class="form-control"
+                  [(ngModel)]="editForm.tagsText"
+                  (ngModelChange)="onEditChange()"
+                />
+
+                <label class="form-label mt-3">Mô tả</label>
+                <textarea
+                  class="form-control"
+                  rows="5"
+                  [(ngModel)]="editForm.description"
+                  (ngModelChange)="onEditChange()"
+                ></textarea>
+
+                <div class="text-muted small mt-2" *ngIf="isDirty">* Bạn có thay đổi chưa lưu.</div>
+              </div>
+
+              <div class="col-12 col-lg-6">
+                <div class="hb-section-title d-flex align-items-center justify-content-between">
+                  <div>Hình ảnh</div>
+                  <div>
+                    <label class="btn btn-sm btn-hb-outline mb-0">
+                      <i class="bi bi-upload me-1"></i> Upload
+                      <input
+                        type="file"
+                        class="d-none"
+                        multiple
+                        accept="image/*"
+                        (change)="onUploadImages($event)"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div class="hb-gallery">
+                  <div class="hb-gitem hb-gitem-edit" *ngFor="let im of editImages; let i = index">
+                    <img [src]="im.url" alt="img" />
+                    <button class="hb-img-remove" type="button" (click)="removeEditImage(i)">
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="text-muted small mt-2">
+                  (Mock) Upload chỉ lưu tạm ở front-end. Backend xong thay API.
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- VARIANTS -->
+        <div class="mt-3" *ngIf="detailTab === 'variants'">
+          <div class="hb-section-title">Giá & Tồn kho theo Variant</div>
+
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Variant ID</th>
+                  <th class="text-end">Giá</th>
+                  <th class="text-end">Tồn</th>
+                  <th class="text-end">Đã bán</th>
+                  <th class="text-end">Rating</th>
+                  <th>Delivery</th>
+                </tr>
+              </thead>
+
+              <tbody *ngIf="mode === 'detail'">
+                <tr *ngFor="let v of d.variants">
+                  <td class="text-muted">{{ v.product_varant_id }}</td>
+                  <td class="text-end">{{ v.price | number }}</td>
+                  <td class="text-end">{{ v.num_inventory }}</td>
+                  <td class="text-end">{{ v.num_selled }}</td>
+                  <td class="text-end">{{ v.rating }}</td>
+                  <td>{{ v.expected_delivery }}</td>
+                </tr>
+              </tbody>
+
+              <tbody *ngIf="mode === 'edit'">
+                <tr *ngFor="let v of editVariants">
+                  <td class="text-muted">{{ v.product_varant_id }}</td>
+
+                  <td class="text-end">
+                    <input
+                      class="form-control form-control-sm text-end"
+                      type="number"
+                      [(ngModel)]="v.price"
+                      (ngModelChange)="onVariantChange()"
+                    />
+                  </td>
+
+                  <td class="text-end">
+                    <input
+                      class="form-control form-control-sm text-end"
+                      type="number"
+                      [(ngModel)]="v.num_inventory"
+                      (ngModelChange)="onVariantChange()"
+                    />
+                  </td>
+
+                  <td class="text-end">{{ v.num_selled }}</td>
+                  <td class="text-end">{{ v.rating }}</td>
+
+                  <td>
+                    <input
+                      class="form-control form-control-sm"
+                      [(ngModel)]="v.expected_delivery"
+                      (ngModelChange)="onVariantChange()"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="text-muted small mt-2" *ngIf="mode === 'edit'">
+            * Chỉnh giá / tồn kho ngay tại đây. Lưu sẽ cập nhật vào mock data.
+          </div>
+        </div>
+
+        <!-- COMMENTS -->
+        <div class="mt-3" *ngIf="detailTab === 'comments'">
+          <div class="hb-section-title">Đánh giá gần đây</div>
+
+          <ng-container *ngFor="let c of d.comments">
+            <div class="hb-comment" [class.is-hidden]="c.hidden">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="fw-semibold">{{ c.userName }}</div>
+                <div class="text-muted small">
+                  ★ {{ c.rating }}/5 • {{ c.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+
+              <div class="mt-2">{{ c.content }}</div>
+
+              <div class="mt-2 d-flex gap-2" *ngIf="mode === 'edit'">
+                <button
+                  class="btn btn-sm btn-hb-outline"
+                  type="button"
+                  (click)="toggleCommentHidden(c.id)"
+                >
+                  <i class="bi" [class.bi-eye]="c.hidden" [class.bi-eye-slash]="!c.hidden"></i>
+                  {{ c.hidden ? 'Hiện' : 'Ẩn' }}
+                </button>
+
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  type="button"
+                  (click)="deleteComment(c.id)"
+                >
+                  <i class="bi bi-trash3 me-1"></i> Xóa
+                </button>
+              </div>
+
+              <div class="text-muted small mt-2" *ngIf="mode === 'detail' && c.hidden">
+                (Đang ẩn)
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="text-muted small mt-2">
+            * Review mock. Khi có backend: map theo productId.
+          </div>
+        </div>
+      </div>
+
+      <!-- CREATE NEW or NOT FOUND -->
+      <ng-template #editNewOrNoDetail>
+        <div
+          class="card hb-card hb-card-pad"
+          *ngIf="mode === 'edit' && selectedProductId === 'new' && editForm"
+        >
+          <div class="hb-detail-title">Tạo sản phẩm mới</div>
+          <div class="text-muted small mb-3">ID sẽ tự tạo khi bấm Lưu</div>
+
+          <div class="hb-tabs mb-3">
+            <div
+              class="hb-tab"
+              [class.active]="detailTab === 'overview'"
+              (click)="detailTab = 'overview'"
+            >
+              Thông tin
+            </div>
+            <div
+              class="hb-tab"
+              [class.active]="detailTab === 'variants'"
+              (click)="detailTab = 'variants'"
+            >
+              Giá & Kho
+            </div>
+            <div
+              class="hb-tab"
+              [class.active]="detailTab === 'comments'"
+              (click)="detailTab = 'comments'"
+            >
+              Reviews
+            </div>
+          </div>
+
+          <!-- reuse edit blocks -->
+          <div *ngIf="detailTab === 'overview'">
+            <div class="row g-3">
+              <div class="col-12 col-lg-6">
+                <label class="form-label">Tên sản phẩm</label>
+                <input
+                  class="form-control"
+                  [(ngModel)]="editForm.product_name"
+                  (ngModelChange)="onEditChange()"
+                />
+
+                <div class="row g-2 mt-1">
+                  <div class="col-6">
+                    <label class="form-label mt-2">Thương hiệu</label>
+                    <input
+                      class="form-control"
+                      [(ngModel)]="editForm.brand_name"
+                      (ngModelChange)="onEditChange()"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label mt-2">Bảo hành (tháng)</label>
+                    <input
+                      class="form-control"
+                      type="number"
+                      [(ngModel)]="editForm.warranty"
+                      (ngModelChange)="onEditChange()"
+                    />
+                  </div>
+                </div>
+
+                <div class="row g-2 mt-1">
+                  <div class="col-6">
+                    <label class="form-label mt-2">Giảm giá (%)</label>
+                    <input
+                      class="form-control"
+                      type="number"
+                      [(ngModel)]="editForm.discount_percent"
+                      (ngModelChange)="onEditChange()"
+                    />
+                  </div>
+                  <div class="col-6 d-flex align-items-end">
+                    <div class="form-check mt-4">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        [(ngModel)]="editForm.is_assembly"
+                        (ngModelChange)="onEditChange()"
+                      />
+                      <label class="form-check-label">Cần lắp ráp</label>
+                    </div>
+                  </div>
+                </div>
+
+                <label class="form-label mt-3">Tags</label>
+                <input
+                  class="form-control"
+                  [(ngModel)]="editForm.tagsText"
+                  (ngModelChange)="onEditChange()"
+                />
+
+                <label class="form-label mt-3">Mô tả</label>
+                <textarea
+                  class="form-control"
+                  rows="5"
+                  [(ngModel)]="editForm.description"
+                  (ngModelChange)="onEditChange()"
+                ></textarea>
+              </div>
+
+              <div class="col-12 col-lg-6">
+                <div class="hb-section-title d-flex align-items-center justify-content-between">
+                  <div>Hình ảnh</div>
+                  <div>
+                    <label class="btn btn-sm btn-hb-outline mb-0">
+                      <i class="bi bi-upload me-1"></i> Upload
+                      <input
+                        type="file"
+                        class="d-none"
+                        multiple
+                        accept="image/*"
+                        (change)="onUploadImages($event)"
+                      />
+                    </label>
+                  </div>
+                </div>
+
+                <div class="hb-gallery">
+                  <div class="hb-gitem hb-gitem-edit" *ngFor="let im of editImages; let i = index">
+                    <img [src]="im.url" alt="img" />
+                    <button class="hb-img-remove" type="button" (click)="removeEditImage(i)">
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="detailTab === 'variants'">
+            <div class="hb-section-title">Giá & Tồn kho</div>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Variant ID</th>
+                    <th class="text-end">Giá</th>
+                    <th class="text-end">Tồn</th>
+                    <th>Delivery</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let v of editVariants">
+                    <td class="text-muted">{{ v.product_varant_id }}</td>
+                    <td class="text-end">
+                      <input
+                        class="form-control form-control-sm text-end"
+                        type="number"
+                        [(ngModel)]="v.price"
+                        (ngModelChange)="onVariantChange()"
+                      />
+                    </td>
+                    <td class="text-end">
+                      <input
+                        class="form-control form-control-sm text-end"
+                        type="number"
+                        [(ngModel)]="v.num_inventory"
+                        (ngModelChange)="onVariantChange()"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        class="form-control form-control-sm"
+                        [(ngModel)]="v.expected_delivery"
+                        (ngModelChange)="onVariantChange()"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div *ngIf="detailTab === 'comments'">
+            <div class="text-muted">Sản phẩm mới chưa có review.</div>
+          </div>
+        </div>
+
+        <div
+          class="alert alert-light border"
+          *ngIf="!(mode === 'edit' && selectedProductId === 'new')"
+        >
+          Không tìm thấy sản phẩm.
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

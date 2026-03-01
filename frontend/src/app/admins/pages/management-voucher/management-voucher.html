@@ -1,1 +1,480 @@
-<p>management-voucher works!</p>
+<div class="hb-page-shell">
+  <!-- HEADER -->
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title">QUẢN LÝ KHUYẾN MÃI</div>
+      <div class="hb-sub text-muted">
+        Tổng: <b>{{ (vm$ | async)?.total || 0 }}</b> voucher
+      </div>
+    </div>
+
+    <div class="hb-header-actions">
+      <!-- LIST -->
+      <ng-container *ngIf="mode === 'list'">
+        <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
+
+        <button class="btn btn-hb" type="button" (click)="exportCsvSnapshot()">
+          <i class="bi bi-download me-1"></i>
+          Xuất CSV
+        </button>
+
+        <a class="btn btn-hb-accent" routerLink="/admin/vouchers/create">
+          <i class="bi bi-plus-lg me-1"></i>
+          Thêm khuyến mãi
+        </a>
+      </ng-container>
+
+      <!-- DETAIL -->
+      <ng-container *ngIf="mode === 'detail'">
+        <ng-container *ngIf="detail">
+          <button class="btn btn-hb-outline" type="button" (click)="backToList()">
+            <i class="bi bi-arrow-left me-1"></i>
+            Quay lại
+          </button>
+
+          <button class="btn btn-hb" type="button" (click)="enterEdit()">
+            <i class="bi bi-pencil-square me-1"></i>
+            Sửa
+          </button>
+
+          <button
+            class="btn btn-hb-outline-danger"
+            type="button"
+            (click)="hardDelete(detail.voucher_id)"
+          >
+            <i class="bi bi-trash3 me-1"></i>
+            Xóa
+          </button>
+        </ng-container>
+      </ng-container>
+
+      <!-- EDIT -->
+      <ng-container *ngIf="mode === 'edit'">
+        <ng-container *ngIf="detail">
+          <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Hủy</button>
+          <button class="btn btn-hb" type="button" (click)="saveEdit()">
+            <i class="bi bi-check2 me-1"></i>
+            Lưu
+          </button>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="hb-page-body" *ngIf="vm$ | async as vm">
+    <!-- ===================== LIST ===================== -->
+    <ng-container *ngIf="mode === 'list'">
+      <div class="card hb-card hb-card-pad mb-3">
+        <div class="hb-filterbar">
+          <input
+            class="form-control"
+            [(ngModel)]="q"
+            (ngModelChange)="onChangeQ($event)"
+            placeholder="Mã / Tên / ID voucher"
+          />
+
+          <select
+            class="form-select"
+            [(ngModel)]="f_status"
+            (ngModelChange)="onChangeStatus($event)"
+          >
+            <option value="">Tất cả trạng thái</option>
+            <option value="active">Hoạt động</option>
+            <option value="paused">Tạm dừng</option>
+            <option value="expired">Hết hạn</option>
+            <option value="deleted">Đã ẩn</option>
+          </select>
+
+          <select class="form-select" [(ngModel)]="f_type" (ngModelChange)="onChangeType($event)">
+            <option value="">Tất cả loại</option>
+            <option value="percent">Giảm %</option>
+            <option value="fixed">Giảm tiền</option>
+            <option value="freeship">Free ship</option>
+          </select>
+
+          <select
+            class="form-select"
+            [(ngModel)]="pageSize"
+            (ngModelChange)="onChangePageSize($event)"
+          >
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="20">20</option>
+            <option [ngValue]="50">50</option>
+          </select>
+
+          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
+            Reset
+          </button>
+
+          <div class="hb-filter-meta">
+            <span class="badge hb-badge-soft"
+              >Hiển thị: <b>{{ vm.rows.length }}</b> / {{ vm.total }}</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="card hb-card hb-table-card">
+        <div class="hb-table-wrap">
+          <div class="hb-table">
+            <!-- HEAD -->
+            <div class="hb-table-head">
+              <div class="hb-th w-stt">
+                <div class="th-content justify-center">STT</div>
+              </div>
+
+              <div class="hb-th w-code" (click)="toggleSort('code')">
+                <div class="th-content">
+                  <span>Mã KM</span>
+                  <i class="fas" [ngClass]="sortIcon('code')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-name" (click)="toggleSort('voucher_name')">
+                <div class="th-content">
+                  <span>Tên</span>
+                  <i class="fas" [ngClass]="sortIcon('voucher_name')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-type">
+                <div class="th-content"><span>Loại</span></div>
+              </div>
+
+              <div class="hb-th w-value" (click)="toggleSort('value')">
+                <div class="th-content">
+                  <span>Giá trị</span>
+                  <i class="fas" [ngClass]="sortIcon('value')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-end" (click)="toggleSort('end_date')">
+                <div class="th-content">
+                  <span>Hết hạn</span>
+                  <i class="fas" [ngClass]="sortIcon('end_date')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-usage" (click)="toggleSort('used_count')">
+                <div class="th-content">
+                  <span>Đã dùng</span>
+                  <i class="fas" [ngClass]="sortIcon('used_count')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th w-status">
+                <div class="th-content"><span>Trạng thái</span></div>
+              </div>
+
+              <div class="hb-th w-edit">
+                <div class="th-content justify-center">Sửa</div>
+              </div>
+              <div class="hb-th w-del">
+                <div class="th-content justify-center">Xóa</div>
+              </div>
+            </div>
+
+            <!-- ROWS -->
+            <div
+              class="hb-table-row is-clickable"
+              *ngFor="let v of vm.rows"
+              (click)="openDetail(v.voucher_id)"
+              [class.is-active]="v.voucher_id === selectedId"
+              [class.is-deleted]="v.computed_status === 'deleted'"
+            >
+              <div class="hb-td w-stt td-center fw-bold">{{ v.stt }}</div>
+
+              <div class="hb-td w-code">
+                <div class="fw-bold">{{ v.code }}</div>
+                <div class="text-muted small">ID: {{ v.voucher_id }}</div>
+              </div>
+
+              <div class="hb-td w-name">
+                <div class="fw-semibold hb-ellipsis">{{ v.voucher_name }}</div>
+                <div class="text-muted small">Còn: {{ v.remaining }}</div>
+              </div>
+
+              <div class="hb-td w-type">
+                <span class="badge hb-badge">{{ v.typeLabel }}</span>
+              </div>
+
+              <div class="hb-td w-value">
+                <span class="badge hb-badge hb-badge-accent">{{ v.valueText }}</span>
+              </div>
+
+              <div class="hb-td w-end text-muted">{{ v.end_date }}</div>
+
+              <div class="hb-td w-usage">
+                <div class="fw-semibold">{{ v.used_count }}/{{ v.usage_limit }}</div>
+                <div class="text-muted small">Còn: {{ v.remaining }}</div>
+              </div>
+
+              <div class="hb-td w-status">
+                <span class="badge hb-badge" [ngClass]="statusBadgeClass(v.computed_status)">
+                  {{ statusLabel(v.computed_status) }}
+                </span>
+              </div>
+
+              <!-- EDIT -->
+              <div class="hb-td w-edit td-center">
+                <button
+                  class="hb-icon-btn"
+                  type="button"
+                  (click)="stopEvent($event); openDetail(v.voucher_id); enterEdit()"
+                  title="Sửa"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </div>
+
+              <!-- DELETE -->
+              <div class="hb-td w-del td-center">
+                <button
+                  class="hb-icon-btn danger"
+                  type="button"
+                  (click)="stopEvent($event); hardDelete(v.voucher_id)"
+                  title="Xóa vĩnh viễn"
+                >
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="hb-empty" *ngIf="vm.rows.length === 0">
+              Không có dữ liệu phù hợp bộ lọc.
+            </div>
+          </div>
+        </div>
+
+        <div class="hb-pagination">
+          <button
+            class="hb-page-btn"
+            type="button"
+            [disabled]="vm.page <= 1"
+            (click)="setPage(vm.page - 1)"
+          >
+            ‹
+          </button>
+
+          <div class="hb-page-info">
+            <span>Page</span>
+            <b>{{ vm.page }}</b>
+            <span>/</span>
+            <span>{{ vm.totalPages }}</span>
+          </div>
+
+          <button
+            class="hb-page-btn"
+            type="button"
+            [disabled]="vm.page >= vm.totalPages"
+            (click)="setPage(vm.page + 1)"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ===================== DETAIL ===================== -->
+    <ng-container *ngIf="mode === 'detail'">
+      <ng-container *ngIf="detail as d">
+        <div class="hb-detail-shell">
+          <!-- MAIN -->
+          <div class="card hb-card hb-card-pad">
+            <div class="hb-detail-top">
+              <div class="hb-detail-title">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <div class="hb-h1 mb-0">{{ d.code }}</div>
+                  <span class="badge hb-badge">{{ d.typeLabel }}</span>
+                  <span class="badge hb-badge" [ngClass]="statusBadgeClass(d.computed_status)">
+                    {{ statusLabel(d.computed_status) }}
+                  </span>
+                </div>
+                <div class="text-muted mt-1">
+                  ID: <b>{{ d.voucher_id }}</b>
+                </div>
+              </div>
+
+              <div class="hb-dual-date">
+                <div class="hb-date-box">
+                  <div class="small text-muted">Ngày bắt đầu</div>
+                  <div class="fw-bold">{{ d.start_date }}</div>
+                </div>
+                <div class="hb-date-box">
+                  <div class="small text-muted">Ngày hết hạn</div>
+                  <div class="fw-bold">{{ d.end_date }}</div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="hb-hr" />
+
+            <div class="hb-kv">
+              <div class="kv-item">
+                <div class="kv-label">Tên khuyến mãi</div>
+                <div class="kv-value">{{ d.voucher_name }}</div>
+              </div>
+
+              <div class="kv-item">
+                <div class="kv-label">Giá trị</div>
+                <div class="kv-value">
+                  <span class="badge hb-badge hb-badge-accent">{{ d.valueText }}</span>
+                </div>
+              </div>
+
+              <div class="kv-item">
+                <div class="kv-label">Đơn tối thiểu</div>
+                <div class="kv-value">{{ d.minOrderText }}</div>
+              </div>
+
+              <div class="kv-item">
+                <div class="kv-label">Giới hạn sử dụng</div>
+                <div class="kv-value">
+                  {{ d.used_count }}/{{ d.usage_limit }} (còn {{ d.remaining }})
+                </div>
+              </div>
+
+              <div class="kv-item">
+                <div class="kv-label">Ngày tạo</div>
+                <div class="kv-value">{{ d.created_at }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIDE -->
+          <div class="card hb-card hb-card-pad hb-side-card">
+            <div class="hb-section-title">Hành động nhanh</div>
+
+            <button
+              class="btn btn-hb-outline w-100 mb-2"
+              type="button"
+              [disabled]="d.computed_status === 'expired' || d.computed_status === 'deleted'"
+              (click)="toggleActivePaused(d.voucher_id)"
+            >
+              <i class="bi bi-arrow-repeat me-1"></i>
+              Tạm dừng / Kích hoạt
+            </button>
+
+            <button
+              class="btn btn-hb-outline w-100 mb-2"
+              type="button"
+              [disabled]="d.computed_status === 'expired' || d.computed_status === 'deleted'"
+              (click)="
+                d.computed_status === 'frozen' ? unfreeze(d.voucher_id) : freeze(d.voucher_id)
+              "
+            >
+              <i class="bi bi-snow me-1"></i>
+              Đóng băng / Mở băng
+            </button>
+
+            <button class="btn btn-hb w-100 mb-2" type="button" (click)="enterEdit()">
+              <i class="bi bi-pencil-square me-1"></i>
+              Sửa voucher
+            </button>
+
+            <button
+              class="btn btn-hb-outline-danger w-100"
+              type="button"
+              (click)="hardDelete(d.voucher_id)"
+            >
+              <i class="bi bi-trash3 me-1"></i>
+              Xóa vĩnh viễn
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- ===================== EDIT ===================== -->
+    <ng-container *ngIf="mode === 'edit'">
+      <ng-container *ngIf="detail as d">
+        <ng-container *ngIf="editModel as em">
+          <div class="hb-detail-shell">
+            <!-- MAIN -->
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-detail-top">
+                <div class="hb-detail-title">
+                  <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <div class="hb-h1 mb-0">Chỉnh sửa: {{ d.code }}</div>
+                    <span class="badge hb-badge" [ngClass]="statusBadgeClass(d.computed_status)">
+                      {{ statusLabel(d.computed_status) }}
+                    </span>
+                  </div>
+                  <div class="text-muted mt-1">
+                    Chỉ sửa: Giá trị, Đơn tối thiểu, Số lượng, Ngày hết hạn
+                  </div>
+                </div>
+
+                <div class="hb-dual-date">
+                  <div class="hb-date-box">
+                    <div class="small text-muted">Bắt đầu</div>
+                    <div class="fw-bold">{{ d.start_date }}</div>
+                  </div>
+                  <div class="hb-date-box">
+                    <div class="small text-muted">Hết hạn</div>
+                    <div class="fw-bold">{{ d.end_date }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="hb-hr" />
+
+              <div class="hb-form-grid">
+                <div class="hb-field">
+                  <label class="form-label fw-bold">Giá trị</label>
+                  <input class="form-control" type="number" [(ngModel)]="em.value" />
+                  <div class="hb-help">* % hoặc tiền tùy loại voucher</div>
+                </div>
+
+                <div class="hb-field">
+                  <label class="form-label fw-bold">Đơn tối thiểu</label>
+                  <input class="form-control" type="number" [(ngModel)]="em.min_order_value" />
+                  <div class="hb-help">* 0 = không giới hạn</div>
+                </div>
+
+                <div class="hb-field">
+                  <label class="form-label fw-bold">Số lượng (Usage limit)</label>
+                  <input class="form-control" type="number" [(ngModel)]="em.usage_limit" />
+                  <div class="hb-help">* used_count giữ nguyên</div>
+                </div>
+
+                <div class="hb-field">
+                  <label class="form-label fw-bold">Ngày hết hạn</label>
+                  <input
+                    class="form-control"
+                    type="date"
+                    [(ngModel)]="em.end_date"
+                    [min]="todayISO"
+                  />
+                  <div class="hb-help">* Ngày hết hạn phải ≥ hôm nay</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SIDE -->
+            <div class="card hb-card hb-card-pad hb-side-card">
+              <div class="hb-section-title">Thao tác</div>
+
+              <button class="btn btn-hb w-100 mb-2" type="button" (click)="saveEdit()">
+                <i class="bi bi-check2 me-1"></i>
+                Lưu thay đổi
+              </button>
+
+              <button class="btn btn-hb-outline w-100" type="button" (click)="cancelEdit()">
+                Hủy
+              </button>
+
+              <div class="hb-side-note">
+                <div class="fw-bold mb-1">Lưu ý</div>
+                <ul class="mb-0">
+                  <li>Không sửa code / tên / loại (theo BA)</li>
+                  <li>Khi có backend MongoDB: validate server-side</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

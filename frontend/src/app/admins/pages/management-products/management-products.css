@@ -1,0 +1,591 @@
+:root {
+  --hb-primary: #3d529d;
+  --hb-accent: #ff911f;
+
+  /* giống mockup figma: bo vừa phải */
+  --hb-radius: 16px;
+  --hb-radius-sm: 12px;
+
+  --hb-border: rgba(0, 0, 0, 0.12);
+  --hb-text: rgba(0, 0, 0, 0.78);
+  --hb-muted: rgba(0, 0, 0, 0.55);
+}
+
+/* ===== PAGE SHELL (không tràn height) =====
+   Lưu ý: main layout đã scroll ở .hb-admin-main
+   => page không nên max-height:100vh nữa, chỉ cần height:100% và chia vùng.
+*/
+.hb-page-shell {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER sticky trong vùng content */
+.hb-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 8px 0 14px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.hb-header-left {
+  min-width: 0;
+}
+
+.hb-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* BODY chiếm phần còn lại */
+.hb-page-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== TYPO ===== */
+.hb-title {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  color: var(--hb-primary);
+}
+
+.hb-sub {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--hb-muted);
+}
+
+/* ===== CARD ===== */
+.hb-card {
+  border-radius: var(--hb-radius);
+  border: 1px solid var(--hb-border);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
+  background: #fff;
+}
+
+.hb-card-pad {
+  padding: 16px;
+}
+
+/* table card cần flex để table scroll nội bộ */
+.hb-table-card {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden; /* để sticky pagination không tràn */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== BUTTONS ===== */
+.btn-hb {
+  background: var(--hb-primary);
+  border-color: var(--hb-primary);
+  color: #fff;
+  font-weight: 800;
+  border-radius: var(--hb-radius-sm);
+}
+
+.btn-hb:hover {
+  filter: brightness(0.95);
+  color: #fff;
+}
+
+.btn-hb-outline {
+  border: 1px solid rgba(61, 82, 157, 0.32);
+  color: var(--hb-primary);
+  font-weight: 800;
+  background: #fff;
+  border-radius: var(--hb-radius-sm);
+}
+
+.btn-hb-outline:hover {
+  background: rgba(61, 82, 157, 0.06);
+  color: var(--hb-primary);
+}
+
+.btn-hb-accent {
+  background: var(--hb-accent);
+  border-color: var(--hb-accent);
+  color: #1f1f1f;
+  font-weight: 900;
+  border-radius: var(--hb-radius-sm);
+}
+
+.btn-hb-accent:hover {
+  filter: brightness(0.96);
+  color: #1f1f1f;
+}
+
+/* ===== INPUT ===== */
+.form-control,
+.form-select {
+  border-radius: var(--hb-radius-sm);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(255, 145, 31, 0.55);
+  box-shadow: 0 0 0 0.2rem rgba(255, 145, 31, 0.16);
+}
+
+.hb-input-sm {
+  height: 34px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+
+/* ===== FILTERBAR (giống mockup, gọn trong khung) ===== */
+.hb-filterbar {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr 1fr 0.8fr 0.8fr 0.7fr auto;
+  gap: 10px;
+  align-items: center;
+
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--hb-radius);
+  background: rgba(61, 82, 157, 0.03);
+}
+
+.hb-filter-reset {
+  white-space: nowrap;
+}
+
+.hb-low-stock {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===== TABLE WRAP (scroll nội bộ card) ===== */
+.hb-table-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  width: 100%;
+}
+
+/* table grid */
+.hb-table {
+  width: 100%;
+  min-width: 0;
+}
+
+.hb-table-head,
+.hb-table-row {
+  display: grid;
+  grid-template-columns:
+    70px
+    minmax(260px, 2.2fr)
+    minmax(140px, 1.1fr)
+    minmax(130px, 1fr)
+    120px
+    80px
+    80px
+    80px
+    56px
+    56px;
+  align-items: center;
+}
+
+/* enable ellipsis inside grid */
+.hb-td,
+.hb-th-label {
+  min-width: 0;
+}
+
+.hb-name,
+.hb-td.w-brand,
+.hb-td.w-room {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* HEADER row */
+.hb-table-head {
+  background: rgba(61, 82, 157, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 12px 0;
+  font-weight: 900;
+}
+
+.hb-th {
+  padding: 0 12px;
+  cursor: pointer;
+  user-select: none;
+  color: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+}
+
+.hb-th.w-edit,
+.hb-th.w-del {
+  justify-content: center;
+  cursor: default;
+}
+
+/* header content (đúng kiểu m đưa: icon không lệch) */
+.th-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.th-content.justify-center {
+  justify-content: center;
+}
+
+.th-content i.fas {
+  font-size: 13px;
+  opacity: 0.75;
+  line-height: 1;
+  transform: translateY(1px);
+  color: rgba(0, 0, 0, 0.55);
+}
+
+/* ROW */
+.hb-table-row {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.hb-row-click {
+  cursor: pointer;
+}
+
+.hb-row-click:hover {
+  background: rgba(255, 145, 31, 0.08); /* accent hover */
+}
+
+.hb-td {
+  padding: 0 12px;
+  color: var(--hb-text);
+}
+
+.hb-name-block {
+  min-width: 0;
+}
+
+/* cover */
+.hb-cover {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  flex: 0 0 auto;
+}
+
+.hb-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* badge / tag */
+.hb-badge {
+  background: rgba(255, 145, 31, 0.18);
+  border: 1px solid rgba(255, 145, 31, 0.32);
+  color: rgba(160, 88, 0, 1);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.hb-tag {
+  background: rgba(61, 82, 157, 0.07);
+  border: 1px solid rgba(61, 82, 157, 0.16);
+  color: rgba(61, 82, 157, 0.95);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+/* pill */
+.hb-pill {
+  display: inline-flex;
+  min-width: 52px;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-weight: 900;
+}
+
+.hb-pill-warn {
+  background: rgba(255, 145, 31, 0.16);
+  border-color: rgba(255, 145, 31, 0.3);
+  color: rgba(160, 88, 0, 1);
+}
+
+.hb-pill-danger {
+  background: rgba(255, 0, 0, 0.08);
+  border-color: rgba(255, 0, 0, 0.18);
+  color: rgba(160, 0, 0, 1);
+}
+
+/* icon buttons */
+.hb-icon-btn {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.hb-icon-btn:hover {
+  background: rgba(255, 145, 31, 0.1);
+  border-color: rgba(255, 145, 31, 0.3);
+}
+
+.hb-icon-btn:active {
+  transform: translateY(1px);
+}
+
+.hb-icon-btn.danger {
+  border-color: rgba(255, 0, 0, 0.22);
+  color: rgba(160, 0, 0, 1);
+}
+
+.hb-icon-btn.danger:hover {
+  background: rgba(255, 0, 0, 0.06);
+  border-color: rgba(255, 0, 0, 0.28);
+}
+
+/* ===== PAGINATION (sticky bottom trong card) ===== */
+.hb-pagination {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 12px 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fff;
+}
+
+.hb-page-btn {
+  min-width: 38px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.72);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.hb-page-btn:hover {
+  border-color: rgba(255, 145, 31, 0.45);
+  background: rgba(255, 145, 31, 0.12);
+}
+
+.hb-page-btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.hb-page-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 800;
+}
+
+.hb-page-info b {
+  color: rgba(0, 0, 0, 0.78);
+}
+
+/* ===== DETAIL blocks ===== */
+.hb-detail-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--hb-primary);
+}
+
+.hb-stat {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: var(--hb-radius-sm);
+  padding: 10px 12px;
+  min-width: 170px;
+  background: rgba(61, 82, 157, 0.03);
+}
+
+.hb-stat .k {
+  font-size: 12px;
+  color: var(--hb-muted);
+}
+
+.hb-stat .v {
+  margin-top: 2px;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.82);
+}
+
+.hb-tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.hb-tab {
+  padding: 8px 14px;
+  border-radius: var(--hb-radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.65);
+  background: #fff;
+}
+
+.hb-tab:hover {
+  border-color: rgba(255, 145, 31, 0.35);
+  background: rgba(255, 145, 31, 0.08);
+}
+
+.hb-tab.active {
+  background: rgba(255, 145, 31, 0.18);
+  border-color: rgba(255, 145, 31, 0.38);
+  color: rgba(160, 88, 0, 1);
+}
+
+.hb-section-title {
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.78);
+  margin-bottom: 10px;
+}
+
+.hb-kv {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.hb-kv .k {
+  color: var(--hb-muted);
+}
+
+.hb-desc {
+  color: rgba(0, 0, 0, 0.75);
+  line-height: 1.6;
+}
+
+/* gallery */
+.hb-gallery {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.hb-gitem {
+  border-radius: var(--hb-radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  height: 92px;
+  background: #fff;
+  position: relative;
+}
+
+.hb-gitem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hb-gitem-edit:hover {
+  outline: 2px solid rgba(255, 145, 31, 0.28);
+}
+
+.hb-img-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+}
+
+.hb-img-remove:hover {
+  background: rgba(255, 0, 0, 0.06);
+  border-color: rgba(255, 0, 0, 0.25);
+  color: rgba(160, 0, 0, 1);
+}
+
+/* comments */
+.hb-comment {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: var(--hb-radius-sm);
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.02);
+  margin-bottom: 10px;
+}
+
+.hb-comment.is-hidden {
+  opacity: 0.55;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .hb-filterbar {
+    grid-template-columns: 1.6fr 1fr 1fr 0.9fr 0.9fr 0.8fr auto;
+  }
+}
+
+@media (max-width: 992px) {
+  .hb-filterbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hb-table {
+    min-width: 920px; /* nhỏ màn thì scroll ngang */
+  }
+
+  .hb-gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
