@@ -38,6 +38,15 @@ const eventSchema = new Schema(
     title: String,
     slug: String,
     description: String,
+    images: [
+      {
+        url_image: { type: String },
+        is_main: { type: Boolean, default: false },
+      },
+    ],
+    category: {
+      type: String,
+    },
     // Các điểm nổi bật
     hightlight_des: [
       {
