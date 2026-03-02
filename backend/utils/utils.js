@@ -7,4 +7,16 @@ function normalize(str = "") {
     .toLowerCase();
 }
 
-module.exports = { normalize };
+function generateSlug(text) {
+  return text
+    .toString()
+    .normalize("NFD") // tách dấu tiếng Việt
+    .replace(/[\u0300-\u036f]/g, "") // xoá dấu
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "") // xoá ký tự đặc biệt
+    .replace(/\s+/g, "-") // space -> -
+    .replace(/-+/g, "-"); // bỏ -- dư
+}
+
+module.exports = { normalize, generateSlug };

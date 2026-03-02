@@ -3,7 +3,7 @@ const { roles } = require("../constants/constants");
 
 const checkDuplicatedEmail = async (req, res, next) => {
   try {
-    const user = User.findOne({
+    const user = await User.findOne({
       email: req.body.email,
     });
     if (user) {
@@ -28,6 +28,7 @@ const checkRolesExisted = (req, res, next) => {
     }
     next();
   }
+  next();
 };
 const verifySignUp = {
   checkDuplicatedEmail,

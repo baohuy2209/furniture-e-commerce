@@ -23,6 +23,7 @@ class ProductController {
           if (!mainProductVariant) {
             return res.status(500).json({
               message: `Lỗi server: Không tìm thấy variant mặc định cho sản phẩm ${product.product_name}`,
+              data: null,
             });
           }
           const mainImageDefaultProduct =
@@ -32,6 +33,7 @@ class ProductController {
           if (!mainImageDefaultProduct) {
             return res.status(500).json({
               message: `Lỗi server: Không tìm thấy ảnh mặc định cho variant ${mainProductVariant._id}`,
+              data: null,
             });
           }
           return {
@@ -48,14 +50,17 @@ class ProductController {
         }),
       );
 
-      res.json(listProductInfo);
+      return res
+        .status(200)
+        .json({ data: listProductInfo, message: "Lấy dữ liệu thành công" });
     } catch (error) {
       console.error(error);
       return res
         .status(500)
-        .json({ message: "Lỗi server", error: error.message });
+        .json({ message: "Lỗi server" + error, data: null });
     }
   }
+  // [GET] /api/products/:id
   async getProductById(req, res) {
     try {
       const productId = req.params.id;
@@ -66,16 +71,21 @@ class ProductController {
         await productService.getAllDefaultProductVariantImage(
           defaultProductVariant._id,
         );
-      return res.json({
+      return res.status(200).json({
         message: `Get product with id ${req.params.id}`,
-        productInfo,
-        defaultProductVariant,
-        listMainImageDefaultProduct,
+        data: {
+          productInfo,
+          defaultProductVariant,
+          listMainImageDefaultProduct,
+        },
       });
     } catch (e) {
-      return res.status(500).json({ message: "Lỗi server", error: e.message });
+      console.error(e);
+      return res.status(500).json({ message: "Lỗi server" + e, data: null });
     }
   }
+  // [POST] /api/products
+  //
 }
 
 module.exports = new ProductController();

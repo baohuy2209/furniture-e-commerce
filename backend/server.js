@@ -9,9 +9,10 @@ const swaggerUi = require("swagger-ui-express");
 const cookieSession = require("cookie-session");
 const fs = require("fs");
 const cloudinary = require("cloudinary").v2;
-dotenv.config();
+dotenv.config({
+  path: require("path").resolve(__dirname, ".env"),
+});
 const PORT = process.env.PORT || 3000;
-
 app.use(
   cors({
     origin: "http://localhost:4200",
