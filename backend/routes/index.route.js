@@ -7,6 +7,7 @@ const productCategoryRoute = require("./productCategory.routes");
 const productTagsRoute = require("./productTag.routes");
 const brandRoute = require("./brand.routes");
 const blogAuthorRoute = require("./blogAuthor.routes");
+const blogTagRoute = require("./blogTags.routes");
 function route(app) {
   app.use("/api/auth", authRoute);
   app.use("/api/products", productRoute);
@@ -17,5 +18,6 @@ function route(app) {
   app.use("/api/product-tags", productTagsRoute);
   app.use("/api/brands", brandRoute);
   app.use("/api/blog-author", blogAuthorRoute);
+  app.use("/api/blog-tags", blogTagRoute);
 }
 module.exports = route;
