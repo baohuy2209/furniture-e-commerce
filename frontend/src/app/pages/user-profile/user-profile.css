@@ -1,0 +1,88 @@
+/* Styling cho các địa chỉ giao hàng trong user-profile.html */
+.address-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  background-color: var(--color-white);
+}
+
+.address-card.default {
+  border-color: var(--color-primary); /* Viền màu xanh cho địa chỉ mặc định */
+}
+
+.default-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0.3em 0.7em;
+  font-size: 0.75rem;
+  border-radius: 5px;
+  background-color: var(--color-primary) !important;
+  color: var(--color-white);
+  font-weight: 600;
+}
+
+.address-card h6 {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.address-card p {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
+
+.address-card p i {
+  color: var(--color-primary);
+}
+
+.btn-group .btn-outline-primary {
+  /* Nút Sửa */
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background-color: var(--color-white);
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+}
+.btn-group .btn-outline-primary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+.btn-group .btn-outline-danger {
+  /* Nút Xóa */
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+  background-color: var(--color-white);
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+}
+.btn-group .btn-outline-danger:hover {
+  background-color: var(--danger-color);
+  color: var(--color-white);
+}
+.btn-group .btn-outline-secondary {
+  /* Nút "Đặt làm mặc định" */
+  color: var(--color-text-light); /* Màu chữ xám nhạt */
+  border-color: var(--color-primary); /* Viền màu border */
+  background-color: var(--color-white);
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+}
+.btn-group .btn-outline-secondary:hover {
+  background-color: var(--color-primary); /* Màu nền xanh khi hover */
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
+
+.readonly-field {
+  background-color: #f2f2f2 !important; /* Màu xám */
+  color: #999 !important;
+  cursor: not-allowed;
+  pointer-events: none; /* <== Dòng này giúp người dùng ko click vào được */
+  border-color: #e0e0e0 !important;
+}

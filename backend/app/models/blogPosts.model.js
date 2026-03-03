@@ -1,10 +1,8 @@
 const mongoose = require("mongoose");
-const slug = require("mongoose-slug-generator");
-mongoose.plugin(slug);
 const blogPostsSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    slug: { type: String, slug: "title", unique: true },
+    slug: { type: String, unique: true },
     thumbnail_url: { url: { type: String, required: true }, alt: String },
     description: { type: String, maxlength: 250 },
     content: [
@@ -12,16 +10,27 @@ const blogPostsSchema = new mongoose.Schema(
         _id: false,
         type: {
           type: String,
-          enum: ["paragraph", "image", "heading", "list", "code", "embed"],
+          enum: [
+            "paragraph",
+            "image",
+            "heading",
+            "list",
+            "code",
+            "embed",
+            "quote",
+          ],
           required: true,
         },
         data: mongoose.Schema.Types.Mixed,
         order: Number,
       },
     ],
-    tags: {
-      type: String,
-    },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "BlogTags",
+      },
+    ],
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "BlogAuthor",
@@ -41,9 +50,12 @@ const blogPostsSchema = new mongoose.Schema(
         default: 0,
       },
     },
-    comments: {
-      type: String,
-    },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "BlogComment",
+      },
+    ],
     draft: {
       type: Boolean,
       default: false,

@@ -1,1 +1,30 @@
-<p>faq works!</p>
+<section class="faq-section">
+  <div class="container">
+    <div class="faq-header">
+      <div class="faq-label">CÂU HỎI THƯỜNG GẶP</div>
+      <h2 class="faq-title">Có Thắc Mắc? <span class="highlight">Xem Tại Đây</span></h2>
+    </div>
+
+    <div class="faq-list">
+      @for (item of faqItems; track $index; let i = $index) {
+        <div class="faq-item" [class.active]="item.isOpen">
+          <div class="faq-question" (click)="toggleFaq(i)">
+            <div class="question-icon">
+              <i class="far fa-question-circle"></i>
+            </div>
+            <span>{{ item.question }}</span>
+            <div class="toggle-icon">
+              <i class="fas" [class.fa-minus]="item.isOpen" [class.fa-plus]="!item.isOpen"></i>
+            </div>
+          </div>
+
+          <div class="faq-answer-wrapper" [style.height]="item.isOpen ? 'auto' : '0'">
+            <div class="faq-answer">
+              <p>{{ item.answer }}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

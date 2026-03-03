@@ -1,0 +1,130 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- CLOSE BUTTON -->
+    <button class="btn-close" (click)="closeModal()">
+      <i class="bi bi-x-circle"></i>
+    </button>
+
+    <!-- FORM STEP -->
+    @if (step === 'form') {
+      <div class="modal-content form-content">
+        <div class="modal-header">
+          <div class="logo-placeholder">
+            <!-- Ideally the HomeBase logo -->
+            <img src="/logo_white.png" alt="HomeBase" style="height: 40px" />
+          </div>
+          <h2>Đăng Ký Tham Dự Sự Kiện</h2>
+          <p>Điền thông tin để nhận vé tham dự miễn phí</p>
+        </div>
+
+        <form (ngSubmit)="submitForm()" class="reg-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label><i class="bi bi-person"></i> HỌ VÀ TÊN</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.fullname"
+                name="fullname"
+                placeholder="Nguyễn Văn A"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label><i class="bi bi-envelope"></i> EMAIL</label>
+              <input
+                type="email"
+                [(ngModel)]="formData.email"
+                name="email"
+                placeholder="email@example.com"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label><i class="bi bi-telephone"></i> SỐ ĐIỆN THOẠI</label>
+              <input
+                type="tel"
+                [(ngModel)]="formData.phone"
+                name="phone"
+                placeholder="0901234567"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label><i class="bi bi-geo-alt"></i> ĐỊA CHỈ</label>
+              <input
+                type="text"
+                [(ngModel)]="formData.address"
+                name="address"
+                placeholder="Phường ABC, TP.HCM"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label><i class="bi bi-people"></i> SỐ NGƯỜI THAM DỰ</label>
+            <select [(ngModel)]="formData.quantity" name="quantity">
+              <option [value]="1">1 người</option>
+              <option [value]="2">2 người</option>
+              <option [value]="3">3 người</option>
+              <option [value]="4">4 người</option>
+              <option [value]="5">5 - 10 người</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label><i class="bi bi-chat-text"></i> GHI CHÚ (TÙY CHỌN)</label>
+            <textarea
+              [(ngModel)]="formData.note"
+              name="note"
+              rows="3"
+              placeholder="Bạn có câu hỏi hoặc yêu cầu đặc biệt?"
+            ></textarea>
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" id="terms" [(ngModel)]="formData.agreed" name="agreed" />
+            <label for="terms"
+              >Tôi đồng ý với <a href="#">điều khoản và điều kiện</a> của HomeBase Events</label
+            >
+          </div>
+
+          <button type="submit" class="btn-submit">ĐĂNG KÝ NGAY</button>
+        </form>
+      </div>
+    }
+
+    <!-- SUCCESS STEP -->
+    @if (step === 'success') {
+      <div class="modal-content success-content">
+        <div class="success-icon">
+          <i class="bi bi-check-lg"></i>
+        </div>
+
+        <h2>Đăng Ký Thành Công</h2>
+        <p>Chúng tôi đã gửi email xác nhận và vé tham dự đến hộp thư của bạn</p>
+
+        <div class="success-steps">
+          <div class="step-item">
+            <i class="bi bi-envelope-check"></i>
+            <span>Kiểm tra email để nhận vé</span>
+          </div>
+          <div class="step-item">
+            <i class="bi bi-calendar-check"></i>
+            <span>Nhớ lưu lịch sự kiện</span>
+          </div>
+          <div class="step-item">
+            <i class="bi bi-phone"></i>
+            <span>Chúng tôi sẽ liên hệ trước sự kiện</span>
+          </div>
+        </div>
+
+        <button class="btn-finish" (click)="finish()">HOÀN TẤT</button>
+      </div>
+    }
+  </div>
+</div>

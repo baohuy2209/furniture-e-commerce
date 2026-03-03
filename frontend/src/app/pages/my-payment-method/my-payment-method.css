@@ -1,0 +1,397 @@
+/* src/app/pages/my-payment-method/my-payment-method.css */
+
+/* --- 1. TỔNG QUÁT & MÀU FIGMA --- */
+:root {
+  --payment-dark: #2c3143;
+  --payment-blue-header: #7689f1;
+  --figma-light-brown: #b07d4a;
+}
+
+.payment-page-container {
+  color: #2c2c2c;
+}
+
+/* --- 2. STYLE TOOLBAR (Thanh công cụ trên cùng) --- */
+.reviews-toolbar {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.custom-check-toolbar .form-check-input {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  cursor: pointer;
+}
+
+/* Nút xóa không viền, màu nâu đỏ tinh tế */
+.btn-delete-toolbar {
+  background: none;
+  border: none;
+  color: var(--figma-light-brown);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: 0.2s;
+  padding: 0;
+}
+
+.btn-delete-toolbar:hover {
+  color: #dc3545;
+}
+
+/* Ô tìm kiếm bo tròn cao cấp */
+.search-bar-luxury {
+  position: relative;
+  width: 320px;
+}
+
+.search-bar-luxury i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.search-bar-luxury input {
+  width: 100%;
+  padding: 10px 15px 10px 45px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+/* --- 3. DANH SÁCH PHƯƠNG THỨC (Khung chính) --- */
+.payment-card-main {
+  background: white;
+  border-radius: 25px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  margin-top: 20px;
+}
+
+.card-header-dark {
+  background: var(--color-primary);
+  color: white;
+  padding: 18px 30px;
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+.payment-item {
+  transition: 0.3s;
+}
+
+/* Icon trong danh sách */
+.method-icon-container {
+  width: 70px;
+  height: 70px;
+  background: #f5f1ea;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.payment-display-icon {
+  font-size: 2.2rem;
+  color: #3d529d;
+}
+
+.btn-set-default {
+  color: #666;
+  text-decoration: underline;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.smaller-text {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* --- 4. CHECKBOX CHẤM ĐỎ (Red Dot) --- */
+.red-dot-checkbox {
+  width: 24px;
+  height: 24px;
+  appearance: none;
+  border: 2px solid #ddd;
+  border-radius: 50% !important;
+  cursor: pointer;
+  position: relative;
+  transition: 0.2s;
+  background-color: white;
+}
+
+.red-dot-checkbox:checked {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.red-dot-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* --- 5. NÚT "THÊM MỚI" --- */
+.btn-add-payment {
+  background: #3d529d;
+  color: white;
+  border: none;
+  padding: 14px 35px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(61, 82, 157, 0.3);
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.btn-add-payment:hover {
+  background: #2c3143;
+  transform: translateY(-2px);
+}
+
+/* --- 6. STYLE CHO POP-UP (Modal) --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+.modal-luxury {
+  background: white;
+  width: 650px;
+  border-radius: 35px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.add-header-blue {
+  background: var(--payment-blue-header);
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.form-control-luxury {
+  width: 100%;
+  padding: 15px;
+  border-radius: 15px;
+  border: 2px solid #eef0f5;
+  background: #f9fbff;
+  font-size: 1rem;
+  outline: none;
+}
+
+.payment-type-option {
+  border: 2px solid #eef0f5;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.payment-type-option.selected {
+  border-color: #dc3545;
+  background-color: #fffafa;
+}
+
+.btn-cancel-luxury {
+  background: white;
+  border: 2.5px solid #dc3545;
+  color: #dc3545;
+  padding: 12px 35px;
+  border-radius: 40px;
+  font-weight: 800;
+}
+
+.btn-save-luxury {
+  background: #3d529d;
+  border: none;
+  color: white;
+  padding: 12px 45px;
+  border-radius: 40px;
+  font-weight: 800;
+}
+
+.deleted-list-container {
+  background: #fff1f0;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+/* Animations */
+.animate-pop {
+  animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.fw-800 {
+  font-weight: 800;
+}
+
+/* TOAST THÔNG BÁO */
+.toast-custom {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 30px;
+  border-radius: 50px;
+  z-index: 10000;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.toast-custom.success {
+  background: #03875b;
+}
+.toast-custom.error {
+  background: #dc3545;
+}
+
+/* BADGE MẶC ĐỊNH */
+.badge-default-active {
+  background: #e6f7ef;
+  color: #03875b;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.btn-set-default:hover {
+  color: #3d529d;
+  background: #f0f2ff;
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+
+/* HIỆU ỨNG DÒNG MẶC ĐỊNH */
+.is-default-row {
+  background-color: #fcfdfe;
+  border-left: 5px solid #03875b;
+}
+
+.payment-type-option.selected {
+  border: 2px solid #3d529d !important;
+  background-color: #f0f4ff !important;
+}
+
+/* Slide Down Animation cho Toast */
+.animate-slide-down {
+  animation: slideDown 0.4s ease-out;
+}
+@keyframes slideDown {
+  from {
+    top: -100px;
+    opacity: 0;
+  }
+  to {
+    top: 20px;
+    opacity: 1;
+  }
+}
+
+/* --- SEARCHABLE DROPDOWN LUXURY --- */
+.searchable-dropdown {
+  position: relative;
+}
+
+.dropdown-arrow-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  pointer-events: none; /* Click xuyên qua icon vào input */
+}
+
+/* Bảng danh sách */
+.dropdown-list-luxury {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  width: 100%;
+  max-height: 250px; /* Độ cao tối đa để kích hoạt scroll */
+  overflow-y: auto; /* Cho phép cuộn */
+  background: white;
+  border: 1px solid #eef0f5;
+  border-radius: 15px;
+  z-index: 1000;
+  padding: 10px 0;
+}
+
+/* Từng dòng trong danh sách */
+.dropdown-item-luxury {
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.dropdown-item-luxury:hover {
+  background-color: #f0f4ff;
+  color: #3d529d;
+  padding-left: 25px; /* Hiệu ứng đẩy chữ nhẹ khi hover */
+}
+
+/* Tùy chỉnh thanh cuộn (scrollbar) cho đẹp */
+.dropdown-list-luxury::-webkit-scrollbar {
+  width: 6px;
+}
+.dropdown-list-luxury::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 10px;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

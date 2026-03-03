@@ -1,0 +1,29 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-events-hero',
+  imports: [],
+  templateUrl: './events-hero.html',
+  styleUrl: './events-hero.css',
+})
+export class EventsHero {
+  scrollToEvent() {
+    const el = document.getElementById('featured-event');
+    if (el) {
+      el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }
+
+  scrollToVideo() {
+    const el = document.getElementById('video-section');
+    if (el) {
+      el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }
+}

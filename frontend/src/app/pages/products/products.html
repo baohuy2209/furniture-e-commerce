@@ -1,1 +1,251 @@
-<p>products works!</p>
+<section class="hero-banner">
+  <!-- Background Image -->
+  <div class="hero-bg">
+    <img src="images/hero-section/P1.png" alt="Phòng Khách" />
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="hero-content">
+    <h1 class="hero-title">PHÒNG KHÁCH</h1>
+    <a href="/" class="hero-btn">Trang chủ / Sản phẩm</a>
+  </div>
+</section>
+<div class="category-nav mt-4 mb-4">
+  <div class="container">
+    <nav class="nav-container">
+      <div class="nav-item">
+        <a href="#" class="nav-link active"><span>Tất cả</span></a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Phòng khách</a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Phòng ngủ</a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Phòng ăn</a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Ngoài trời</a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Đồ trang trí</a>
+      </div>
+      <div class="nav-item">
+        <a href="#" class="nav-link">Phụ kiện</a>
+      </div>
+    </nav>
+  </div>
+</div>
+<div class="container-product mx-auto mt-4 mb-4">
+  <div class="row w-fit-content g-0 mx-auto mt-4">
+    <div class="col-lg-2 col-md-4 p-2">
+      <!-- filter-sidebar.component.html -->
+      <aside class="fs-wrap">
+        <!-- ── Title card ── -->
+        <div class="fs-title-card">
+          <svg
+            class="fs-title-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+          >
+            <path d="M3 6h18M7 12h10M11 18h2" />
+          </svg>
+          <span>BỘ LỌC TÌM KIẾM</span>
+        </div>
+
+        <!-- ── Card: Loại sản phẩm ── -->
+        <div class="fs-card" style="--delay: 0.05s">
+          <div class="fs-card-head">
+            <span class="fs-card-dot"></span>
+            <h3 class="fs-card-title">Loại sản phẩm</h3>
+          </div>
+          <div class="fs-options">
+            <label class="fs-radio">
+              <input type="radio" name="category" value="sofa" checked />
+              <span class="fs-radio-ring"></span>
+              <span class="fs-radio-label">Sofa</span>
+            </label>
+            <label class="fs-radio">
+              <input type="radio" name="category" value="ban-tra" />
+              <span class="fs-radio-ring"></span>
+              <span class="fs-radio-label">Bàn trà</span>
+            </label>
+            <label class="fs-radio">
+              <input type="radio" name="category" value="ke-tv" />
+              <span class="fs-radio-ring"></span>
+              <span class="fs-radio-label">Kệ TV</span>
+            </label>
+            <label class="fs-radio">
+              <input type="radio" name="category" value="ghe-thu-gian" />
+              <span class="fs-radio-ring"></span>
+              <span class="fs-radio-label">Ghế thư giãn</span>
+            </label>
+            <label class="fs-radio">
+              <input type="radio" name="category" value="tham" />
+              <span class="fs-radio-ring"></span>
+              <span class="fs-radio-label">Thảm</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ── Card: Màu sắc ── -->
+        <div class="fs-card" style="--delay: 0.1s">
+          <div class="fs-card-head">
+            <span class="fs-card-dot"></span>
+            <h3 class="fs-card-title">Màu sắc</h3>
+          </div>
+          <div class="fs-colors">
+            <label class="fs-color" title="Xám">
+              <input type="radio" name="color" value="xam" checked />
+              <span class="fs-swatch" style="--c: #9e9e9e"></span>
+              <span class="fs-color-name">Xám</span>
+            </label>
+            <label class="fs-color" title="Nâu">
+              <input type="radio" name="color" value="nau" />
+              <span class="fs-swatch" style="--c: #795548"></span>
+              <span class="fs-color-name">Nâu</span>
+            </label>
+            <label class="fs-color" title="Be">
+              <input type="radio" name="color" value="be" />
+              <span class="fs-swatch" style="--c: #d7c4a3"></span>
+              <span class="fs-color-name">Be</span>
+            </label>
+            <label class="fs-color" title="Trắng">
+              <input type="radio" name="color" value="trang" />
+              <span class="fs-swatch fs-swatch--outlined" style="--c: #f5f5f0"></span>
+              <span class="fs-color-name">Trắng</span>
+            </label>
+            <label class="fs-color" title="Đen">
+              <input type="radio" name="color" value="den" />
+              <span class="fs-swatch" style="--c: #212121"></span>
+              <span class="fs-color-name">Đen</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ── Card: Khoảng giá ── -->
+        <div class="fs-card" style="--delay: 0.15s">
+          <div class="fs-card-head">
+            <span class="fs-card-dot"></span>
+            <h3 class="fs-card-title">Khoảng giá</h3>
+          </div>
+          <div class="fs-price-body">
+            <div class="fs-price-display">
+              <span class="fs-price-badge" id="priceValue">100.000.000đ</span>
+            </div>
+            <input
+              type="range"
+              class="fs-slider"
+              id="priceSlider"
+              min="0"
+              max="400000000"
+              step="500000"
+              value="100000000"
+            />
+            <div class="fs-price-limits">
+              <span>0đ</span>
+              <span>400.000.000đ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card: Đánh giá ── -->
+        <div class="fs-card" style="--delay: 0.2s">
+          <div class="fs-card-head">
+            <span class="fs-card-dot"></span>
+            <h3 class="fs-card-title">Đánh giá</h3>
+          </div>
+          <div class="fs-options">
+            <label class="fs-radio fs-star-row">
+              <input type="radio" name="rating" value="5" checked />
+              <span class="fs-radio-ring"></span>
+              <span class="fs-stars">
+                <i class="s f">★</i><i class="s f">★</i><i class="s f">★</i><i class="s f">★</i
+                ><i class="s f">★</i>
+              </span>
+              <span class="fs-count">(128)</span>
+            </label>
+            <label class="fs-radio fs-star-row">
+              <input type="radio" name="rating" value="4" />
+              <span class="fs-radio-ring"></span>
+              <span class="fs-stars">
+                <i class="s f">★</i><i class="s f">★</i><i class="s f">★</i><i class="s f">★</i
+                ><i class="s e">★</i>
+              </span>
+              <span class="fs-count">(94)</span>
+            </label>
+            <label class="fs-radio fs-star-row">
+              <input type="radio" name="rating" value="3" />
+              <span class="fs-radio-ring"></span>
+              <span class="fs-stars">
+                <i class="s f">★</i><i class="s f">★</i><i class="s f">★</i><i class="s e">★</i
+                ><i class="s e">★</i>
+              </span>
+              <span class="fs-count">(47)</span>
+            </label>
+            <label class="fs-radio fs-star-row">
+              <input type="radio" name="rating" value="2" />
+              <span class="fs-radio-ring"></span>
+              <span class="fs-stars">
+                <i class="s f">★</i><i class="s f">★</i><i class="s e">★</i><i class="s e">★</i
+                ><i class="s e">★</i>
+              </span>
+              <span class="fs-count">(12)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- ── Actions ── -->
+        <button class="fs-btn-apply">
+          Áp dụng bộ lọc
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <button class="fs-btn-reset">Xóa tất cả bộ lọc</button>
+      </aside>
+    </div>
+    <div class="col-lg-10 col-md-8 p-2">
+      <div class="row g-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <app-card-product></app-card-product>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

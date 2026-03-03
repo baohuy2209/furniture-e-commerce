@@ -1,0 +1,225 @@
+/* Container */
+.signin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+}
+
+/* Card Style */
+.signin-card {
+  background: #fff;
+  width: 450px;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+/* Title */
+.title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  color: #3b4fa3;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 0px #cbd2f0;
+}
+form {
+  overflow: visible;
+}
+/* Form Group */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.required {
+  color: red;
+  margin-left: 0.5px;
+}
+
+/* Input Group with Icon */
+.input-group {
+  position: relative;
+  width: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 16px;
+  z-index: 1;
+}
+
+input {
+  width: 100%;
+  padding: 10px 15px 10px 40px;
+  font-size: 14px;
+  outline: none;
+  background: #fdfdfd;
+  border: none;
+}
+
+.input-group:focus-within {
+  border-color: #3b4fa3;
+  background: #fff;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+.error-border {
+  border-color: #ff4d4f;
+}
+
+.error-text {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+  padding-left: 10px;
+}
+
+/* Forgot Password */
+.forgot-pass {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.forgot-pass a {
+  color: #555;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.forgot-pass a:hover {
+  text-decoration: underline;
+}
+
+/* Google Button */
+.btn-google {
+  width: 100%;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.2s;
+}
+
+.btn-google:hover {
+  background: #f7f7f7;
+}
+
+/* Login Button */
+.btn-login {
+  width: 100%;
+  padding: 10px;
+  background: #3b4fa3;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    transform 0.1s;
+  margin-bottom: 15px;
+}
+
+.btn-login:hover {
+  opacity: 0.9;
+}
+
+.btn-login:disabled {
+  background: #ccc;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* Signup Text */
+.signup-text {
+  text-align: center;
+  font-size: 13px;
+  color: #555;
+}
+
+.signup-text a {
+  color: #333;
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.signup-text a:hover {
+  text-decoration: underline;
+}
+
+/* Password Requirements */
+.password-requirements {
+  margin-top: 8px;
+  background: #f9f9f9;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.password-requirements p {
+  margin: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.password-requirements .invalid {
+  color: #ff4d4f;
+}
+
+.password-requirements .valid {
+  color: #52c41a;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .signin-card {
+    width: 100%;
+    padding: 20px;
+  }
+}

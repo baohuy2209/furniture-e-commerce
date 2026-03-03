@@ -8,16 +8,18 @@ const route = require("./routes/index.route");
 const swaggerUi = require("swagger-ui-express");
 const cookieSession = require("cookie-session");
 const fs = require("fs");
-dotenv.config();
+const cloudinary = require("cloudinary").v2;
+dotenv.config({
+  path: require("path").resolve(__dirname, ".env"),
+});
 const PORT = process.env.PORT || 3000;
-
 app.use(
   cors({
     origin: "http://localhost:4200",
     credentials: true,
   }),
 );
-app.use(morgan("dev"));
+app.use(morgan("combined"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -29,6 +31,12 @@ app.use(
     secure: false,
   }),
 );
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 app.get("/", (req, res) => {
   res.send("Welcome to furniture e-commerce");
 });
@@ -39,3 +47,4 @@ route(app);
 app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
 });
+module.exports = { cloudinary };

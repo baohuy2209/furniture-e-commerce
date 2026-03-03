@@ -1,0 +1,142 @@
+/* blog-card.component.css */
+
+.bc-card {
+  --accent: #c8553d;
+  --accent-lt: #fbf0ed;
+  --text-dark: #1e1610;
+  --text-mid: #6b5e52;
+  --text-lt: #a8998e;
+  --border: #ede4dc;
+  --bg: #ffffff;
+  --radius: 18px;
+  --shadow: 0 4px 24px rgba(42, 33, 24, 0.1);
+  --shadow-hover: 0 12px 36px rgba(42, 33, 24, 0.16);
+
+  background: var(--bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  width: 100%;
+  cursor: pointer;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+  animation: cardIn 0.4s ease both;
+}
+
+.bc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Thumbnail ──────────────────────────────────── */
+.bc-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.bc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.bc-card:hover .bc-img {
+  transform: scale(1.04);
+}
+
+/* Category badge */
+.bc-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--accent);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(200, 85, 61, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Body ───────────────────────────────────────── */
+.bc-body {
+  padding: 16px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bc-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1.35;
+  color: var(--text-dark);
+  margin: 0;
+  transition: color 0.18s ease;
+}
+
+.bc-card:hover .bc-title {
+  color: var(--accent);
+}
+
+.bc-excerpt {
+  font-size: 0.82rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--text-mid);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Meta ───────────────────────────────────────── */
+.bc-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}
+
+.bc-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--text-lt);
+}
+
+.bc-meta-item svg {
+  width: 13px;
+  height: 13px;
+  stroke: var(--text-lt);
+  flex-shrink: 0;
+}

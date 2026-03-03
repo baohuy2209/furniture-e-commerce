@@ -1,0 +1,174 @@
+/* src/app/pages/support/support.css */
+
+.support-page {
+  max-width: 1000px;
+}
+
+/* Typography Tiêu đề kiểu Playfair Display */
+.support-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 800;
+  font-size: 3rem;
+  color: #2c3143;
+  line-height: 1.2;
+}
+
+.text-accent {
+  color: var(--color-primary); /* Dùng màu xanh đậm làm điểm nhấn */
+}
+
+.support-subtitle {
+  max-width: 600px;
+  font-size: 1rem;
+}
+
+/* Card Form */
+.support-form-card {
+  background: #ffffff;
+  padding: 50px;
+  border-radius: 30px;
+  border: 1px solid #f0f2f5;
+  background-image: radial-gradient(#f1f1f1 1px, transparent 1px); /* Họa tiết chấm bi mờ nhẹ */
+  background-size: 20px 20px;
+}
+
+/* Custom Input Style */
+.form-label-luxury {
+  display: block;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.form-input-luxury,
+.form-select-luxury {
+  width: 100%;
+  padding: 12px 0; /* Chỉ padding đứng */
+  border: none;
+  border-bottom: 2px solid #e0e0e0; /* Đường kẻ ngang như trang vở Huy gửi */
+  background: transparent;
+  font-size: 1rem;
+  color: #2c3143;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-input-luxury:focus,
+.form-select-luxury:focus {
+  border-bottom-color: var(--color-accent); /* Chuyển sang cam khi click vào */
+}
+
+/* Placeholder mờ */
+.form-input-luxury::placeholder {
+  color: #bbb;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+/* Nút gửi sang trọng */
+.btn-submit-support {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 15px 80px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  box-shadow: 0 10px 20px rgba(61, 82, 157, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-submit-support:hover:not(:disabled) {
+  background-color: #2c3143;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.btn-submit-support:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Link chính sách */
+.text-brown {
+  color: #b07d4a;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.privacy-note {
+  font-size: 0.85rem;
+}
+
+/* Animation */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Lớp phủ nền tối và làm mờ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px); /* Làm mờ nền sau cực sang */
+  z-index: 10000;
+}
+
+/* Card Pop-up bo góc lớn */
+.support-success-modal {
+  background: white;
+  width: 550px;
+  border-radius: 40px;
+}
+
+.success-icon-circle {
+  width: 80px;
+  height: 80px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+
+/* Hộp thông tin liên lạc */
+.contact-info-box {
+  background-color: #f8faff;
+  border: 1px dashed #ced4da;
+}
+
+.fw-800 {
+  font-weight: 800;
+}
+
+/* Hiệu ứng Pop-up bung ra */
+.animate-pop {
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -214,22 +214,6 @@
     ]
   },
   {
-    "product_id": "45",
-    "product_name": "Sweet art bowl",
-    "brand_name": "Sweet art",
-    "description": "",
-    "discount_percent": 5,
-    "is_assembly": false,
-    "warranty": 12,
-    "tags": ["bowl", "kitchen", "sweet art"],
-    "important_function": "",
-    "image_url": [
-      "images/products/kitchen/sweet_art_bowl/image1.png",
-      "images/products/kitchen/sweet_art_bowl/image2.png",
-      "images/products/kitchen/sweet_art_bowl/image3.png"
-    ]
-  },
-  {
     "product_id": "46",
     "product_name": "Princeton barstool",
     "brand_name": "Princeton",
@@ -247,32 +231,6 @@
     },
     "important_function": "",
     "image_url": ["images/products/dining_room/princeton_barstool/image1.png"]
-  },
-  {
-    "product_id": "47",
-    "product_name": "Princeton armchair",
-    "brand_name": "Princeton",
-    "description": "",
-    "discount_percent": 10,
-    "is_assembly": true,
-    "warranty": 12,
-    "tags": ["armchair", "outdoor", "princeton"],
-    "product_component": {
-      "ulphostery": [
-        "Belge Arezzo Fabric 3331",
-        "Camel Lucca Fabric 3324",
-        "Sand Bologna Fabric 3254"
-      ]
-    },
-    "important_function": "",
-    "image_url": [
-      "images/products/outdoor/princeton_armchair/image1.png",
-      "images/products/outdoor/princeton_armchair/image2.png",
-      "images/products/outdoor/princeton_armchair/image3.png",
-      "images/products/outdoor/princeton_armchair/image4.png",
-      "images/products/outdoor/princeton_armchair/image5.png",
-      "images/products/outdoor/princeton_armchair/image6.png"
-    ]
   },
   {
     "product_id": "47",

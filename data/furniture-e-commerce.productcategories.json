@@ -1,0 +1,195 @@
+[{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf0"
+  },
+  "name": "Sofas",
+  "slug": "sofas",
+  "type": "product_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.745Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.745Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf1"
+  },
+  "name": "Chairs",
+  "slug": "chairs",
+  "type": "product_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf3"
+  },
+  "name": "Beds",
+  "slug": "beds",
+  "type": "product_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf5"
+  },
+  "name": "Lamps",
+  "slug": "lamps",
+  "type": "product_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf6"
+  },
+  "name": "Rugs",
+  "slug": "rugs",
+  "type": "product_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf7"
+  },
+  "name": "Accessories",
+  "slug": "accessories",
+  "type": "product_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf8"
+  },
+  "name": "Living Room",
+  "slug": "living-room",
+  "type": "room_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf9"
+  },
+  "name": "Bedroom",
+  "slug": "bedroom",
+  "type": "room_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cfa"
+  },
+  "name": "Dining Room",
+  "slug": "dining-room",
+  "type": "room_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cfb"
+  },
+  "name": "Bathroom",
+  "slug": "bathroom",
+  "type": "room_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cfc"
+  },
+  "name": "Outdoor",
+  "slug": "outdoor",
+  "type": "room_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf2"
+  },
+  "name": "Tables",
+  "slug": "tables",
+  "type": "product_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d49ee6d5cf60b02c67cf4"
+  },
+  "name": "Storage",
+  "slug": "storage",
+  "type": "product_type",
+  "createdAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+}]

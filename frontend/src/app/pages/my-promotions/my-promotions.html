@@ -1,1 +1,103 @@
-<p>my-promotions works!</p>
+<div class="container py-5 promo-page">
+  <!-- HEADER: Tên và VIP -->
+  <div class="d-flex align-items-center justify-content-between mb-5">
+    <div class="d-flex align-items-center">
+      <div class="avatar-wrapper me-4">
+        <img [src]="'assets/images/user-profile-avatar.png'" class="avatar-img shadow-sm" />
+      </div>
+      <div>
+        <h1 class="display-name mb-0">Nguyễn Bảo Huy</h1>
+        <p class="text-muted mb-0 small">huynguyen2311@gmail.com</p>
+      </div>
+    </div>
+    <div class="vip-status-box text-end">
+      <span class="vip-label">Vip</span>
+      <span class="vip-number">3</span>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR: Thanh tiến trình điểm thưởng -->
+  <div class="points-container mb-5">
+    <div class="custom-progress-wrapper mb-4">
+      <div class="progress-line">
+        <!-- Thanh màu nâu chạy từ 1 đến 3 (tương đương 30%) -->
+        <div class="progress-filled" style="width: 30%"></div>
+
+        <!-- Các nút thắt -->
+        <div class="node node-1 active"><span>1</span></div>
+        <div class="node node-3 active"><span>3</span></div>
+        <div class="node node-10"><span>10</span></div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-start pt-2">
+      <div class="benefit-list">
+        <p class="fw-bold italic text-dark mb-2">Quyền lợi hiện tại:</p>
+        <ul class="text-success small-list">
+          <li>Giảm 5% phí ship.</li>
+          <li>Giảm 1% tổng giá trị đơn hàng.</li>
+        </ul>
+      </div>
+      <div class="points-info text-end">
+        <h3 class="points-display-text">
+          Điểm hiện có <span class="points-highlight">{{ userPoints().currentPoints }}</span>
+        </h3>
+
+        <div class="points-formula-box mb-2">
+          <span class="badge bg-light text-dark border small">
+            <i class="bi bi-info-circle me-1"></i> Cách tính: {{ userPoints().formula }}
+          </span>
+          <br />
+          <span class="text-brown smaller-text fw-bold">
+            Quy đổi: {{ userPoints().redeemRule }}
+          </span>
+        </div>
+
+        <p class="text-muted italic smaller-text">
+          Còn thiếu
+          <span class="text-danger fw-bold">{{ userPoints().pointsNeededForNext }} điểm</span> nữa
+          để đạt VIP 4
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOUCHER SECTION -->
+  <div class="voucher-card-luxury shadow-sm">
+    <div class="voucher-header-line">
+      <!-- ĐỔI TÊN CLASS NÀY -->
+      Voucher của bạn
+    </div>
+    <div class="p-4">
+      @for (v of vouchers(); track v.id; let last = $last) {
+        <div class="voucher-row d-flex align-items-center py-4" [class.border-bottom]="!last">
+          <div class="voucher-icon-gold me-4">
+            <i class="bi bi-ticket-perforated"></i>
+          </div>
+          <div class="flex-grow-1">
+            <h5 class="fw-bold mb-1">{{ v.title }}</h5>
+            <div class="voucher-details">
+              <span class="small fw-bold d-block mb-1">Điều kiện:</span>
+              <ul class="small text-muted mb-1 p-0 ms-3">
+                @for (cond of v.conditions; track cond) {
+                  <li>{{ cond }}</li>
+                }
+              </ul>
+              <span class="text-danger fw-bold smaller-text">Ngày hết hạn: {{ v.expiryDate }}</span>
+            </div>
+          </div>
+          <div class="voucher-value-text">
+            <span class="small text-dark me-2">Giá trị voucher:</span>
+            <span class="value-number">{{ v.value | number }} VND</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="#" class="footer-link"
+      >Xem thêm <b>Quy tắc Voucher và Điểm Thưởng</b> của HomeBase tại đây</a
+    >
+  </div>
+</div>

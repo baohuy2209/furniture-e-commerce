@@ -24,7 +24,7 @@
 }
 
 .section-title .highlight {
-  color: #d4a574;
+  color: var(--color-accent);
 }
 
 .section-description {
@@ -41,7 +41,7 @@
 }
 
 .btn-view-all {
-  background: #2d5f3f;
+  background: var(--color-primary); /* Blue */
   color: white;
   border: none;
   padding: 12px 32px;
@@ -51,17 +51,17 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow:
-    0 4px 12px rgba(45, 95, 63, 0.2),
-    0 0 0 0 rgba(45, 95, 63, 0.4);
+    0 4px 12px rgba(61, 82, 157, 0.2),
+    0 0 0 0 rgba(61, 82, 157, 0.4);
 }
 
 .btn-view-all:hover {
-  background: #1f4029;
+  background: #2a3b75; /* Darker Blue */
   transform: translateY(-2px);
   box-shadow:
-    0 0 20px rgba(45, 95, 63, 0.4),
-    0 0 40px rgba(45, 95, 63, 0.3),
-    0 8px 24px rgba(45, 95, 63, 0.3);
+    0 0 20px rgba(61, 82, 157, 0.4),
+    0 0 40px rgba(61, 82, 157, 0.3),
+    0 8px 24px rgba(61, 82, 157, 0.3);
 }
 
 /* Products Grid */
@@ -76,7 +76,7 @@
 .discount-banner {
   background:
     linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%),
-    url('/images/hero-section/P1.png');
+    url('../../../../../public/images/hero-section/P1.png');
   background-size: cover;
   background-position: center;
   border-radius: 20px;
@@ -115,14 +115,14 @@
 .banner-discount {
   font-size: 56px;
   font-weight: 700;
-  color: #d4a574;
+  color: var(--color-accent); /* Orange */
   line-height: 1;
   margin-bottom: 24px;
 }
 
 .banner-btn {
   background: white;
-  color: #2d5f3f;
+  color: var(--color-primary); /* Blue text */
   border: none;
   padding: 12px 24px;
   border-radius: 25px;
@@ -136,7 +136,7 @@
 }
 
 .banner-btn:hover {
-  background: #d4a574;
+  background: var(--color-accent); /* Orange */
   color: white;
   transform: translateX(4px);
 }
@@ -166,7 +166,7 @@
   position: absolute;
   top: 16px;
   right: 16px;
-  background: #2d5f3f;
+  background: var(--color-primary); /* Blue */
   color: white;
   padding: 6px 12px;
   border-radius: 20px;
@@ -197,7 +197,7 @@
 }
 
 .rating-stars-small {
-  color: #ffa500;
+  color: var(--color-accent); /* Orange */
   font-size: 13px;
 }
 
@@ -214,6 +214,7 @@
   margin-bottom: 12px;
   line-height: 1.4;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
