@@ -8,6 +8,8 @@ const productTagsRoute = require("./productTag.routes");
 const brandRoute = require("./brand.routes");
 const blogAuthorRoute = require("./blogAuthor.routes");
 const blogTagRoute = require("./blogTags.routes");
+const upholsteryRoute = require("./upholstery.routes");
+const blogCategoriesRoute = require("./blogCategory.routes");
 function route(app) {
   app.use("/api/auth", authRoute);
   app.use("/api/products", productRoute);
@@ -19,5 +21,7 @@ function route(app) {
   app.use("/api/brands", brandRoute);
   app.use("/api/blog-author", blogAuthorRoute);
   app.use("/api/blog-tags", blogTagRoute);
+  app.use("/api/upholstery", upholsteryRoute);
+  app.use("/api/blog-categories", blogCategoriesRoute);
 }
 module.exports = route;
