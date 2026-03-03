@@ -34,10 +34,10 @@
               Biến ngôi nhà của bạn thành tác phẩm nghệ thuật sống đích thực.
             </p>
             <div class="hero-buttons">
-              <a href="/auth/sign-in" class="btn-primary-hero">
+              <button (click)="scrollToFeatures()" class="btn-primary-hero">
                 Khám Phá Ngay
                 <i class="fas fa-arrow-right"></i>
-              </a>
+              </button>
               <a href="/products" class="btn-secondary-hero">
                 Xem Bộ Sưu Tập
                 <i class="fas fa-images"></i>
@@ -50,7 +50,11 @@
         <div class="col-lg-6">
           <div class="hero-gallery">
             @for (item of items; track item.id; let idx = $index) {
-              <div class="gallery-item" [class]="activeIndex() === idx ? 'active' : ''">
+              <div
+                class="gallery-item"
+                [class.active]="activeIndex() === idx"
+                (click)="setActiveIndex(idx)"
+              >
                 <img src="{{ item.image }}" alt="Các loại phòng" />
               </div>
             }

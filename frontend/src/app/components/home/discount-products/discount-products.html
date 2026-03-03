@@ -1,0 +1,50 @@
+<section class="discount-products-section">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <span class="sub-title">ƯU ĐÃI HÔM NAY</span>
+      <h2 class="main-title">Sản Phẩm <span class="highlight">Giảm Giá</span></h2>
+    </div>
+
+    <div class="row g-4">
+      @for (product of discount_products; track $index) {
+        <div class="col-lg-6">
+          <div
+            class="product-promo-card"
+            [class.beige-theme]="product.theme === 'beige'"
+            [class.blue-theme]="product.theme === 'blue'"
+          >
+            <div class="image-wrapper">
+              @if (product.theme === 'beige') {
+                <span class="badge sale-badge">SALE {{ product.discount_percent }}%</span>
+              } @else {
+                <span class="badge best-badge">{{ product.badge_text || 'BÁN CHẠY' }}</span>
+              }
+              <img [src]="product.image_url" [alt]="product.product_name" class="product-thumb" />
+            </div>
+            <div class="content-wrapper">
+              <div class="rating" [class.text-white]="product.theme === 'blue'">
+                <i class="fas fa-star"></i>
+                <span>{{ product.rating }}</span>
+              </div>
+              <h4 class="product-name">{{ product.product_name }}</h4>
+              <p class="product-desc">{{ product.description }}</p>
+              <div class="price-box">
+                <span class="new-price" [class.text-orange]="product.theme === 'blue'"
+                  >{{ product.price | number: '1.0-0' }}đ</span
+                >
+                @if (product.original_price) {
+                  <span class="old-price" [class.text-white-50]="product.theme === 'blue'"
+                    >{{ product.original_price | number: '1.0-0' }}đ</span
+                  >
+                }
+              </div>
+              <button class="btn-buy" [class.secondary]="product.theme === 'blue'">
+                Mua Ngay <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

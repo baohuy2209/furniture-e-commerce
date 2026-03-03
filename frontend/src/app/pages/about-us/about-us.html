@@ -1,0 +1,296 @@
+<div class="about-us-container">
+  <!-- Hero Section -->
+  <section
+    class="about-hero"
+    style="
+      background-image:
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/hero-section/P1.png');
+    "
+  >
+    <div class="hero-content">
+      <h1 class="hero-brand">HOMEBASE</h1>
+      <p class="hero-tagline">Style Your Nest</p>
+      <p class="hero-sub">Nơi Câu Chuyện Tổ Ấm Bắt Đầu</p>
+    </div>
+  </section>
+
+  <!-- Introduction Section -->
+  <section class="about-intro py-5">
+    <div class="container py-lg-5">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h2 class="section-title main-intro-title">Lời Giới Thiệu</h2>
+          <div class="brand-slogan mb-4">
+            <span class="brand-name">HOMEBASE</span> -
+            <span class="slogan-text">Nơi câu chuyện tổ ấm bắt đầu</span>
+          </div>
+          <p class="section-text mb-4">
+            Mỗi ngôi nhà không chỉ là những bức tường, mà là một "tổ ấm" (Nest) – nơi vỗ về tâm hồn
+            và thể hiện cá tính riêng biệt của bạn. Tại HOMEBASE, chúng tôi không chỉ bán nội thất;
+            chúng tôi cung cấp giải pháp để bạn tự tay kiến tạo không gian sống mơ ước.
+          </p>
+          <p class="section-text">
+            Ra đời với sứ mệnh giúp mọi người dễ dàng sở hữu không gian sống thẩm mỹ và tiện nghi,
+            HOMEBASE tập trung vào những thiết kế tinh tế, hiện đại nhưng vẫn giữ được sự ấm áp đặc
+            trưng của một gia đình.
+          </p>
+        </div>
+        <div class="col-lg-6">
+          <div class="intro-image-wrapper">
+            <img
+              src="images/hero-section/P2.png"
+              alt="Interior design"
+              class="img-fluid rounded-custom shadow-lg"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Journey Section -->
+  <section class="about-journey py-5 bg-light">
+    <div class="container py-lg-5">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <div class="journey-image-wrapper">
+            <img
+              src="images/hero-section/P3.png"
+              alt="Dining room"
+              class="img-fluid rounded-custom shadow-lg"
+            />
+          </div>
+        </div>
+        <div class="col-lg-6 pl-lg-5">
+          <div class="section-label">VỀ CHÚNG TÔI</div>
+          <h2 class="section-title">
+            Hành Trình Tạo Nên <span class="highlight">Không Gian Hoàn Hảo</span>
+          </h2>
+          <p class="section-text mb-4">
+            Từ một cửa hàng nhỏ tập trung vào việc lựa chọn những món đồ nội thất thủ công tinh xảo,
+            Homebase đã vươn mình trở thành thương hiệu dẫn đầu trong lĩnh vực nội thất tại Việt
+            Nam. Chúng tôi tự hào khi đã điểm tô cho hơn 15.000 không gian sống trên khắp cả nước.
+          </p>
+
+          <div class="stats-grid">
+            @for (stat of stats; track $index) {
+              <div class="stat-box">
+                <div class="stat-value">{{ stat.value }}</div>
+                <div class="stat-label">{{ stat.label }}</div>
+              </div>
+            }
+          </div>
+
+          <div class="founder-info mt-5 d-flex align-items-center">
+            <img src="user/image.png" alt="Founder" class="founder-img mr-3" />
+            <div class="founder-text">
+              <div class="founder-name">Trần Lê Bữu Tánh</div>
+              <div class="founder-title">Founder & CEO of Homebase</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Values Section -->
+  <section class="about-values py-5 bg-light-custom">
+    <div class="container py-lg-5">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h2 class="section-title main-intro-title uppercase-title">GIÁ TRỊ CỐT LÕI</h2>
+          <div class="brand-slogan mb-4">
+            <span class="brand-name">HOMEBASE</span> -
+            <span class="slogan-text">Style Your Nest</span>
+          </div>
+          <p class="section-text mb-4">
+            Để bạn hoàn toàn yên tâm khi "Style Your Nest", HOMEBASE cam kết 5 giá trị vàng:
+          </p>
+          <div class="values-list-custom">
+            @for (value of coreValues; track $index) {
+              <div class="value-item-custom mb-3">
+                <span class="value-title-bold">{{ value.title }}:</span>
+                <span class="value-desc-light">{{ value.description }}</span>
+              </div>
+            }
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="values-image-wrapper">
+            <img
+              src="images/hero-section/P1.png"
+              alt="Modern room"
+              class="img-fluid rounded-custom shadow-lg"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vision & Mission Section -->
+  <section class="vision-mission py-5">
+    <div class="container py-lg-5">
+      <div class="row">
+        <div class="col-md-6 mb-4 mb-md-0">
+          <div class="vm-card-custom vision-bg">
+            <div class="vm-text-side">
+              <h3 class="vm-title-custom">TẦM NHÌN</h3>
+              <p class="vm-desc-custom">
+                Trở thành điểm đến đầu tiên và tin cậy nhất cho người Việt mỗi khi muốn làm mới và
+                cá nhân hóa tổ ấm của mình.
+              </p>
+            </div>
+            <div class="vm-image-side">
+              <img
+                src="images/hero-section/P2.png"
+                alt="Vision"
+                class="img-fluid rounded-custom-sm"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="vm-card-custom mission-bg">
+            <div class="vm-text-side">
+              <h3 class="vm-title-custom text-white">SỨ MỆNH</h3>
+              <p class="vm-desc-custom text-white-70">
+                Tạo không gian nghỉ ngơi hoàn hảo với bộ sưu tập giường, tủ cao cấp từ HomeBase
+              </p>
+            </div>
+            <div class="vm-image-side">
+              <img
+                src="images/hero-section/P3.png"
+                alt="Mission"
+                class="img-fluid rounded-custom-sm"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-features py-5">
+    <div class="container py-lg-5">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <div class="features-main-image">
+            <img
+              src="images/hero-section/P1.png"
+              alt="Features"
+              class="img-fluid rounded-custom shadow-lg"
+            />
+          </div>
+        </div>
+        <div class="col-lg-6 pl-lg-5">
+          <div class="section-label">VỀ HOMEBASE</div>
+          <h2 class="section-title">Đặc quyền tại <span class="highlight">HOMEBASE</span></h2>
+          <p class="section-text mb-4">
+            Khi mua hàng tại HOMEBASE, khách hàng không chỉ nhận được một món quà cho tương lai kiến
+            tạo không gian sống lý tưởng mà còn nhận được đặc quyền:
+          </p>
+
+          <div class="features-grid-custom">
+            <div class="feature-card-custom">
+              <h4 class="feature-title-white">Giao hàng & Lắp đặt</h4>
+              <p class="feature-desc-white">Nhanh chóng, chuyên nghiệp</p>
+            </div>
+            <div class="feature-card-custom">
+              <h4 class="feature-title-white">Bảo hành</h4>
+              <p class="feature-desc-white">Lên đến 5 năm - An tâm sử dụng dài lâu</p>
+            </div>
+            <div class="feature-card-custom">
+              <h4 class="feature-title-white">Đổi trả 1-1</h4>
+              <p class="feature-desc-white">Nếu có lỗi từ nhà sản xuất</p>
+            </div>
+            <div class="feature-card-custom">
+              <h4 class="feature-title-white">Tư vấn cá nhân hóa</h4>
+              <p class="feature-desc-white">
+                Đội ngũ chuyên gia luôn sẵn sàng giúp bạn "Style Your Nest"
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certificates Section -->
+  <section class="about-certs py-5 bg-white">
+    <div class="container py-lg-5">
+      <div class="text-center mb-5">
+        <h2 class="section-title main-intro-title uppercase-title">CHỨNG CHỈ - CHỨNG NHẬN</h2>
+      </div>
+      <div class="row justify-content-center">
+        <!-- FSC Certificate -->
+        <div class="col-md-5 mb-4 px-4">
+          <div class="cert-card text-center">
+            <div class="cert-image-wrapper mb-4">
+              <img
+                src="images/about/fsc-cert.jpg"
+                alt="FSC Certificate"
+                class="img-fluid cert-img shadow-sm"
+              />
+            </div>
+            <h4 class="cert-title">FSC</h4>
+            <p class="cert-desc">Chứng nhận bảo vệ và phát triển tài nguyên rừng</p>
+          </div>
+        </div>
+        <!-- CARB P2 Certificate -->
+        <div class="col-md-5 mb-4 px-4">
+          <div class="cert-card text-center">
+            <div class="cert-image-wrapper mb-4">
+              <img
+                src="images/about/carb-cert.jpg"
+                alt="CARB P2 Certificate"
+                class="img-fluid cert-img shadow-sm"
+              />
+            </div>
+            <h4 class="cert-title">CARB P2</h4>
+            <p class="cert-desc">Chứng nhận của Mỹ về kiểm soát khí thải trong sản phẩm gỗ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Section -->
+  <section class="about-map py-5 bg-white">
+    <div class="container py-lg-5">
+      <div class="text-center mb-5">
+        <div class="section-label">ĐỊA CHỈ</div>
+        <h2 class="section-title main-intro-title uppercase-title">Nơi Chúng Tôi Tọa Lạc</h2>
+        <p class="section-text mx-auto" style="max-width: 700px">
+          Hãy ghé thăm showroom của HOMEBASE để trực tiếp trải nghiệm những sản phẩm nội thất tinh
+          tế và nhận tư vấn chuyên sâu từ đội ngũ kiến trúc sư của chúng tôi.
+        </p>
+      </div>
+      <div class="map-container-wrapper shadow-lg">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4206639906666!2d106.75411!3d10.855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175279603091937%3A0x64369e88d75037d2!2s669%20QL1A%2C%20Linh%20Xu%C3%A2n%2C%20Th%E1%BB%A7%20%C4%90%E1%BB%A9c%2C%20H%E1%BB%93%20Ch%C3%AD%20Minh!5e0!3m2!1sen!2svn!4v1677216644231!5m2!1sen!2svn"
+          width="100%"
+          height="500"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        >
+        </iframe>
+      </div>
+      <div class="map-info-footer mt-4 text-center">
+        <p class="mb-0">
+          <strong>Địa chỉ:</strong> 669 QL1A, khu phố 3, Thủ Đức, Thành phố Hồ Chí Minh, Việt Nam
+        </p>
+        <p class="mb-0">
+          <strong>Hotline:</strong> 1900 1234 | <strong>Email:</strong> contact@homebase.vn
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section (Reuse Existing) -->
+  <div class="about-faq-wrapper bg-light py-5">
+    <app-faq></app-faq>
+  </div>
+</div>

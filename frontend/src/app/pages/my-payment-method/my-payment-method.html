@@ -1,1 +1,265 @@
-<p>my-payment-method works!</p>
+<!-- src/app/pages/my-payment-method/my-payment-method.html -->
+
+<div class="container py-5 payment-page-container">
+  <!-- 1. TOAST THÔNG BÁO (Hiện khi lưu/xóa thành công) -->
+  @if (notification()) {
+    <div class="toast-custom animate-slide-down" [class]="notification()?.type">
+      <i
+        class="bi"
+        [class.bi-check-circle-fill]="notification()?.type === 'success'"
+        [class.bi-exclamation-circle-fill]="notification()?.type === 'error'"
+      ></i>
+      {{ notification()?.msg }}
+    </div>
+  }
+
+  <!-- 2. TOOLBAR (Tìm kiếm & Xóa mục chọn) -->
+  <div class="reviews-toolbar d-flex justify-content-between align-items-center mb-4 pb-3">
+    <div class="d-flex align-items-center gap-4">
+      <div class="form-check custom-check-toolbar">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="checkAll"
+          (change)="toggleSelectAll($event)"
+          [checked]="
+            selectedIds().length === paymentMethods().length && paymentMethods().length > 0
+          "
+        />
+        <label class="form-check-label text-dark fw-bold" for="checkAll">Chọn tất cả</label>
+      </div>
+      <button class="btn-delete-toolbar" (click)="openDeleteModal()">
+        <i class="bi bi-trash3"></i> Xóa các mục đã chọn
+      </button>
+    </div>
+    <div class="d-flex align-items-center gap-4">
+      <div class="search-bar-luxury">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          placeholder="Tìm kiếm phương thức thanh toán"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+        />
+      </div>
+      <div class="review-stats">
+        Phương thức đã chọn:
+        <span class="fw-bold">{{ selectedIds().length }}/{{ paymentMethods().length }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. DANH SÁCH (Dùng sortedMethods để tự động đưa mặc định lên đầu) -->
+  <div class="payment-card-main shadow-sm mb-5">
+    <div class="card-header-dark">Các phương thức thanh toán hiện tại</div>
+    <div class="card-body p-0">
+      @for (method of sortedMethods(); track method.id; let last = $last) {
+        <div
+          class="payment-item p-4 d-flex align-items-center"
+          [class.border-bottom]="!last"
+          [class.is-default-row]="method.isDefault"
+        >
+          <div class="method-icon-container me-4">
+            <i [class]="method.icon + ' payment-display-icon'"></i>
+          </div>
+
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between">
+              <!-- Hiển thị tiêu đề linh hoạt: Ngân hàng - ... hoặc Ví điện tử - ... -->
+              <h5 class="fw-bold mb-1">
+                {{
+                  method.type === 'cash'
+                    ? method.name
+                    : (method.type === 'bank' ? 'Ngân hàng - ' : 'Ví điện tử - ') + method.bankName
+                }}
+              </h5>
+
+              @if (method.isDefault) {
+                <span class="badge-default-active"
+                  ><i class="bi bi-check2-circle"></i> Mặc định</span
+                >
+              } @else {
+                <span class="btn-set-default" (click)="setDefault(method.id)"
+                  >Đặt làm mặc định</span
+                >
+              }
+            </div>
+
+            @if (method.type !== 'cash') {
+              <div class="small text-dark mb-1"><b>Số thẻ/ID:</b> {{ method.cardNumber }}</div>
+              <div class="small text-dark mb-2"><b>Chủ tài khoản:</b> {{ method.owner }}</div>
+            }
+            <div class="text-muted smaller-text">{{ method.description }}</div>
+          </div>
+
+          <div class="ms-4">
+            <input
+              type="checkbox"
+              class="red-dot-checkbox"
+              (change)="toggleSelect(method.id)"
+              [checked]="selectedIds().includes(method.id)"
+            />
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- 4. NÚT THÊM MỚI -->
+  <button class="btn-add-payment mb-5" (click)="openAddPopup()">
+    <i class="bi bi-plus-lg me-2"></i>Thêm phương thức thanh toán mới
+  </button>
+
+  <!-- 5. POP-UP THÊM MỚI (HÌNH 2) -->
+  @if (isAddingNew()) {
+    <div class="modal-overlay">
+      <div class="modal-luxury add-modal animate-pop">
+        <div class="add-header-blue">Bạn có muốn lưu những thay đổi sau?</div>
+        <div class="p-5">
+          <h3 class="fw-bold mb-4 text-dark text-center">Chọn phương thức thanh toán</h3>
+
+          <div class="payment-options-container mb-4">
+            <!-- Option Ngân hàng -->
+            <label
+              class="payment-type-option d-flex justify-content-between align-items-center p-3 mb-3"
+              [class.selected]="newMethodType() === 'bank'"
+            >
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-bank fs-3"></i> Ngân hàng
+              </div>
+              <input
+                type="radio"
+                name="pt"
+                class="red-dot-checkbox"
+                [ngModel]="newMethodType()"
+                (ngModelChange)="newMethodType.set($event); resetForm()"
+                value="bank"
+              />
+            </label>
+
+            <!-- Option Ví điện tử -->
+            <label
+              class="payment-type-option d-flex justify-content-between align-items-center p-3"
+              [class.selected]="newMethodType() === 'wallet'"
+            >
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-wallet2 fs-3"></i> Ví điện tử
+              </div>
+              <input
+                type="radio"
+                name="pt"
+                class="red-dot-checkbox"
+                [ngModel]="newMethodType()"
+                (ngModelChange)="newMethodType.set($event); resetForm()"
+                value="wallet"
+              />
+            </label>
+          </div>
+
+          <div class="mb-3 position-relative">
+            <label class="fw-bold mb-2 text-dark">
+              {{ newMethodType() === 'bank' ? 'Tên ngân hàng' : 'Tên ví điện tử' }}
+            </label>
+
+            <div class="searchable-dropdown">
+              <input
+                type="text"
+                class="form-control-luxury"
+                [placeholder]="
+                  'Nhập hoặc chọn ' + (newMethodType() === 'bank' ? 'ngân hàng' : 'ví')
+                "
+                [ngModel]="newMethodSubName()"
+                (ngModelChange)="newMethodSubName.set($event)"
+                (focus)="isDropdownOpen.set(true)"
+              />
+              <i class="bi bi-chevron-down dropdown-arrow-icon"></i>
+
+              <!-- Bảng danh sách xổ xuống -->
+              @if (isDropdownOpen() && filteredSubNames().length > 0) {
+                <div class="dropdown-list-luxury shadow-lg animate-fade-in">
+                  @for (name of filteredSubNames(); track name) {
+                    <div class="dropdown-item-luxury" (click)="selectSubName(name)">
+                      {{ name }}
+                    </div>
+                  }
+                </div>
+              } @else if (isDropdownOpen() && filteredSubNames().length === 0) {
+                <div class="dropdown-list-luxury p-3 text-muted small">
+                  Không tìm thấy kết quả...
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="fw-bold mb-2 text-dark">Số thẻ / Số tài khoản</label>
+            <input
+              type="text"
+              class="form-control-luxury"
+              placeholder="Vui lòng nhập số thẻ"
+              [ngModel]="newMethodCardNumber()"
+              (ngModelChange)="newMethodCardNumber.set($event)"
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="fw-bold mb-2 text-dark">Tên chủ sở hữu</label>
+            <input
+              type="text"
+              class="form-control-luxury"
+              [ngModel]="newMethodOwner()"
+              (ngModelChange)="newMethodOwner.set($event)"
+            />
+          </div>
+
+          <div class="form-check mb-5">
+            <input class="form-check-input" type="checkbox" id="terms" checked />
+            <label class="form-check-label small" for="terms"
+              >Tôi đã đọc và đồng ý với Điều khoản và Điều kiện của HomeBase</label
+            >
+          </div>
+
+          <div class="d-flex justify-content-center gap-3">
+            <button class="btn-cancel-luxury" (click)="isAddingNew.set(false)">Hủy thay đổi</button>
+            <button class="btn-save-luxury" (click)="saveNewMethod()">Lưu thay đổi</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- 6. POP-UP XÓA (HÌNH 3) -->
+  @if (showConfirmDelete()) {
+    <div class="modal-overlay">
+      <div class="modal-luxury delete-modal animate-pop">
+        <div class="add-header-blue">Xác nhận xóa phương thức thanh toán</div>
+        <div class="p-4">
+          <h2 class="text-danger fw-800 mb-4 ps-3">Các phương thức thực bị xóa</h2>
+          <div class="deleted-list-container mb-4">
+            @for (m of methodsToDelete; track m.id) {
+              <div class="deleted-item p-3 d-flex align-items-center">
+                <i [class]="m.icon + ' fs-2 me-3 text-dark'"></i>
+                <div>
+                  <h6 class="fw-bold mb-0 text-dark">
+                    {{
+                      m.type === 'cash'
+                        ? m.name
+                        : (m.type === 'bank' ? 'Ngân hàng - ' : 'Ví điện tử - ') + m.bankName
+                    }}
+                  </h6>
+                  <div class="smaller-text text-muted">Mã: {{ m.cardNumber || 'Tiền mặt' }}</div>
+                </div>
+              </div>
+            }
+          </div>
+          <div class="d-flex justify-content-center gap-3 mt-4">
+            <button class="btn-cancel-luxury" (click)="showConfirmDelete.set(false)">
+              Hủy thay đổi
+            </button>
+            <button class="btn-save-luxury" (click)="confirmDelete()">Lưu thay đổi</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
