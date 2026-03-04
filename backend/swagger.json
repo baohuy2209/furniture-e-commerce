@@ -14,7 +14,9 @@
     "/auth/signup": {
       "post": {
         "summary": "SignUp",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -50,7 +52,9 @@
       "post": {
         "summary": "SignIn",
         "description": "Log in với username và password. Trả về access token trong res và refresh token trong cookie.",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {
           "200": {
             "description": "User successfully signed in",
@@ -68,14 +72,23 @@
                       "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     }
                   },
-                  "required": ["message", "accessToken"]
+                  "required": [
+                    "message",
+                    "accessToken"
+                  ]
                 }
               }
             }
           },
-          "400": { "description": "Invalid input" },
-          "401": { "description": "Unauthorized" },
-          "500": { "description": "Internal server error" }
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         },
         "requestBody": {
           "content": {
@@ -91,7 +104,10 @@
                     "format": "color"
                   }
                 },
-                "required": ["username", "password"]
+                "required": [
+                  "username",
+                  "password"
+                ]
               }
             }
           }
@@ -101,31 +117,43 @@
     "/auth/signout": {
       "post": {
         "summary": "SignOut",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {
-          "200": { "description": "Success" },
-          "500": { "description": "Internal server error" }
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         }
       }
     },
     "/auth/refresh": {
       "post": {
         "summary": "RefreshToken",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {}
       }
     },
     "/users/me": {
       "get": {
         "summary": "AuthMe",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {}
       }
     },
     "/friends/requests": {
       "post": {
         "summary": "SendFriendRequest",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -147,21 +175,27 @@
       },
       "get": {
         "summary": "GetFriendRequests",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {}
       }
     },
     "/friends/requests/68faed19defb37e90657d7d6/accept": {
       "post": {
         "summary": "AcceptFriendRequest",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {}
       }
     },
     "/friends/requests/68fb124874f8418a6bc83ed1/decline": {
       "post": {
         "summary": "DeclineFriendRequest",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -177,14 +211,18 @@
     "/friends/": {
       "get": {
         "summary": "GetAllFriends",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {}
       }
     },
     "/messages/direct": {
       "post": {
         "summary": "SendDirectMessage",
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -208,7 +246,9 @@
     "/conversations/": {
       "post": {
         "summary": "CreateConversation",
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -236,21 +276,27 @@
       },
       "get": {
         "summary": "GetConversations",
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "responses": {}
       }
     },
     "/conversations/68fb2e6a19c501587577291c/messages": {
       "get": {
         "summary": "GetMessage",
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "responses": {}
       }
     },
     "/messages/group": {
       "post": {
         "summary": "SendGroupMessage",
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -267,6 +313,324 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/user/profile/{id}": {
+      "patch": {
+        "summary": "UpdateUserProfile",
+        "tags": [
+          "User Settings"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/user/change-password/{id}": {
+      "post": {
+        "summary": "ChangePassword",
+        "tags": [
+          "User Settings"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/reviews": {
+      "post": {
+        "summary": "SubmitReview",
+        "tags": [
+          "Reviews"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/reviews/product/{id}": {
+      "get": {
+        "summary": "GetReviewsByProduct",
+        "tags": [
+          "Reviews"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/inquiries": {
+      "post": {
+        "summary": "CreateTicket",
+        "tags": [
+          "Support"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/inquiries/user/{user_id}": {
+      "get": {
+        "summary": "GetUserTickets",
+        "tags": [
+          "Support"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/warranties": {
+      "post": {
+        "summary": "CreateWarrantyRequest",
+        "tags": [
+          "Warranty"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/warranties/user/{user_id}": {
+      "get": {
+        "summary": "GetUserWarranties",
+        "tags": [
+          "Warranty"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/orders/user/{user_id}": {
+      "get": {
+        "summary": "GetUserOrders",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "summary": "GetOrderDetail",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/payment-methods/user/{user_id}": {
+      "get": {
+        "summary": "GetPaymentMethods",
+        "tags": [
+          "Payments"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/payment-methods": {
+      "post": {
+        "summary": "AddPaymentMethod",
+        "tags": [
+          "Payments"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/payment-methods/{id}": {
+      "delete": {
+        "summary": "DeletePaymentMethod",
+        "tags": [
+          "Payments"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/payment-methods/{id}/default": {
+      "patch": {
+        "summary": "SetDefaultPayment",
+        "tags": [
+          "Payments"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/promotions/vouchers": {
+      "get": {
+        "summary": "GetVouchers",
+        "tags": [
+          "Promotions"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/promotions/points/{user_id}": {
+      "get": {
+        "summary": "GetUserPoints",
+        "tags": [
+          "Promotions"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
           }
         }
       }
