@@ -20,7 +20,7 @@ const checkDuplicatedEmail = async (req, res, next) => {
 const checkRolesExisted = (req, res, next) => {
   if (req.body.roles) {
     for (let i = 0; i < req.body.roles.length; i++) {
-      if (roles.includes(req.body.roles[i])) {
+      if (!roles.includes(req.body.roles[i])) {
         return res.status(400).json({
           message: "Role của người dùng không tồn tại",
         });

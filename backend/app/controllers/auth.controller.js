@@ -117,3 +117,42 @@ exports.logout = async (req, res) => {
     return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
   }
 };
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: "Vui lòng nhập email", data: null });
+    }
+
+    const { data, message } = await authService.forgotPassword(email);
+    if (!data) {
+      return res.status(400).json({ message, data: null });
+    }
+
+    return res.status(200).json({ message, data });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, otpCode, newPassword } = req.body;
+
+    if (!email || !otpCode || !newPassword) {
+      return res.status(400).json({ message: "Vui lòng nhập đầy đủ email, mã OTP và mật khẩu mới", data: null });
+    }
+
+    const { data, message } = await authService.resetPassword(email, otpCode, newPassword);
+    if (!data) {
+      return res.status(400).json({ message, data: null });
+    }
+
+    return res.status(200).json({ message, data });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
+  }
+};

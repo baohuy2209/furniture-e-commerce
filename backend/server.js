@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
     name: "session",
-    secret: process.env.SECRET_KEY,
+    secret: process.env.SECRET_KEY || "SECRET_KEY_FALLBACK_FOR_TESTING",
     httpOnly: true,
     sameSite: "lax",
     secure: false,
