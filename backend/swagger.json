@@ -270,6 +270,191 @@
           }
         }
       }
+    },
+    "/stock-items": {
+      "get": {
+        "summary": "GetAllStockItems",
+        "tags": ["Stock"],
+        "responses": {
+          "200": { "description": "Lấy dữ liệu tồn kho thành công" }
+        }
+      },
+      "post": {
+        "summary": "CreateStockItem",
+        "tags": ["Stock"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_variant_id": { "type": "string" },
+                  "warehouse_id": { "type": "string" },
+                  "quantity_on_hand": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Tạo vật phẩm tồn kho thành công" }
+        }
+      }
+    },
+    "/stock-movements": {
+      "get": {
+        "summary": "GetAllStockMovements",
+        "tags": ["Stock"],
+        "responses": {
+          "200": { "description": "Lấy lịch sử biến động kho thành công" }
+        }
+      },
+      "post": {
+        "summary": "CreateStockMovement",
+        "tags": ["Stock"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "warehouse_id": { "type": "string" },
+                  "product_variant_id": { "type": "string" },
+                  "reference_id": { "type": "string" },
+                  "reference_type": { "type": "string", "enum": ["purchase_order", "customer_order", "transfer", "adjustment"] },
+                  "quantity_change": { "type": "number" },
+                  "reason": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Cập nhật biến động kho thành công" }
+        }
+      }
+    },
+    "/events": {
+      "get": {
+        "summary": "GetAllEvents",
+        "tags": ["Events"],
+        "responses": {
+          "200": { "description": "Lấy dữ liệu các sự kiện thành công" }
+        }
+      },
+      "post": {
+        "summary": "CreateNewEvent",
+        "tags": ["Events"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Tạo sự kiện mới thành công" }
+        }
+      }
+    },
+    "/events/{id}": {
+      "get": {
+        "summary": "GetDetailEvent",
+        "tags": ["Events"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Lấy dữ liệu thành công" }
+        }
+      },
+      "patch": {
+        "summary": "UpdateInfoEvent",
+        "tags": ["Events"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "type": "object" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Cập nhật sự kiện thành công" }
+        }
+      },
+      "delete": {
+        "summary": "DeleteEvent",
+        "tags": ["Events"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Xóa dữ liệu thành công" }
+        }
+      }
+    },
+    "/brands": {
+      "get": {
+        "summary": "GetAllBrands",
+        "tags": ["Brands"],
+        "responses": {
+          "200": { "description": "Load dữ liệu thành công" }
+        }
+      },
+      "post": {
+        "summary": "CreateNewBrand",
+        "tags": ["Brands"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "address": { "type": "string" },
+                  "phone": { "type": "string" },
+                  "contact_email": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Tạo nhà cung cấp mới thành công" }
+        }
+      }
+    },
+    "/brands/{id}": {
+      "get": {
+        "summary": "GetBrandDetails",
+        "tags": ["Brands"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Load dữ liệu thành công" }
+        }
+      },
+      "patch": {
+        "summary": "UpdateInfoBrand",
+        "tags": ["Brands"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "type": "object" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Đã cập nhật thành công loại sản phẩm" }
+        }
+      },
+      "delete": {
+        "summary": "DeleteBrand",
+        "tags": ["Brands"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": { "description": "Xóa dữ liệu thành công" }
+        }
+      }
     }
   },
   "components": {

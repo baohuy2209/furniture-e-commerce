@@ -5,9 +5,9 @@ const stockMovementSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Warehouse",
     },
-    product_id: {
+    product_variant_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+      ref: "ProductVariant",
     },
     reference_id: {
       type: String,
