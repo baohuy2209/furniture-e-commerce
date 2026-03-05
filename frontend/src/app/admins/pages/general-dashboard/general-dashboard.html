@@ -1,282 +1,265 @@
-<div class="hb-wrap">
-  <div class="hb-titlebar">
-    <h1 class="hb-title">DASHBOARD</h1>
+<div class="hb-page-shell">
+  <!-- PAGE HEADER (sticky) -->
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title" routerLink="/admin" style="cursor: pointer;">DASHBOARD</div>
+    </div>
+
+    <!-- HEADER ACTIONS -->
+    <div class="hb-header-actions">
+      <button class="btn btn-hb-outline" (click)="resetGlobalFilters()">
+        <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+      </button>
+      <button class="btn btn-hb-accent" (click)="seedMockDomainData()">
+        <i class="bi bi-lightning-charge me-1"></i> Làm mới dữ liệu
+      </button>
+    </div>
   </div>
 
-  <div class="hb-card">
-    <div class="hb-card-body">
-      <!-- KPI ROW -->
-      <div class="hb-kpi-row">
-        <div class="hb-kpi">
-          <div class="hb-kpi-icon">$</div>
-          <div>
-            <div class="hb-kpi-label">Tổng doanh thu</div>
-            <div class="hb-kpi-value">{{ fmtVND(vm.revenue) }}</div>
-          </div>
+  <div class="hb-page-body">
+    <!-- QUICK DATE & GLOBAL FILTERS -->
+    <div class="card hb-card hb-card-pad mt-3 mb-3">
+      <div class="hb-filterbar d-flex align-items-center gap-3">
+        <div class="btn-group">
+          <button class="btn btn-sm btn-hb-outline" [class.active]="isGlobalPresetActive(7)" (click)="applyGlobalPreset(7)">7 ngày</button>
+          <button class="btn btn-sm btn-hb-outline" [class.active]="isGlobalPresetActive(30)" (click)="applyGlobalPreset(30)">30 ngày</button>
+          <button class="btn btn-sm btn-hb-outline" [class.active]="isGlobalPresetActive(90)" (click)="applyGlobalPreset(90)">90 ngày</button>
+        </div>
+        
+        <div class="hb-filter-divider"></div>
+
+        <div class="hb-filter-group">
+          <span class="hb-filter-label">TỪ NGÀY:</span>
+          <input type="date" class="form-control hb-date-input" [(ngModel)]="g_from_date" (ngModelChange)="onGlobalDateChange()" [attr.max]="todayStr">
         </div>
 
-        <div class="hb-kpi">
-          <div class="hb-kpi-icon">🧾</div>
-          <div>
-            <div class="hb-kpi-label">Tổng đơn hàng</div>
-            <div class="hb-kpi-value">{{ vm.totalOrders }}</div>
-          </div>
+        <div class="hb-filter-group">
+          <span class="hb-filter-label">ĐẾN NGÀY:</span>
+          <input type="date" class="form-control hb-date-input" [(ngModel)]="g_to_date" (ngModelChange)="onGlobalDateChange()" [attr.min]="g_from_date" [attr.max]="todayStr">
         </div>
+      </div>
+    </div>
 
-        <div class="hb-kpi">
-          <div class="hb-kpi-icon">🚚</div>
-          <div>
-            <div class="hb-kpi-label">Đơn đang xử lý</div>
-            <div class="hb-kpi-value">{{ vm.activeOrders }}</div>
-          </div>
+    <!-- SUMMARY KPI ROW -->
+    <section class="hb-summary-row">
+      <div class="hb-summary-card">
+        <div class="hb-sc-icon revenue"><i class="bi bi-currency-dollar"></i></div>
+        <div>
+          <div class="hb-sc-label">Doanh thu</div>
+          <div class="hb-sc-value">{{ fmtVND(vm.revenue) }}</div>
         </div>
+      </div>
+      <div class="hb-summary-card">
+        <div class="hb-sc-icon orders"><i class="bi bi-cart-check"></i></div>
+        <div>
+          <div class="hb-sc-label">Tổng đơn hàng</div>
+          <div class="hb-sc-value">{{ vm.totalOrders }}</div>
+        </div>
+      </div>
+      <div class="hb-summary-card">
+        <div class="hb-sc-icon active"><i class="bi bi-truck-flatbed"></i></div>
+        <div>
+          <div class="hb-sc-label">Đang xử lý</div>
+          <div class="hb-sc-value">{{ vm.activeOrders }}</div>
+        </div>
+      </div>
+      <div class="hb-summary-card">
+        <div class="hb-sc-icon customers"><i class="bi bi-people"></i></div>
+        <div>
+          <div class="hb-sc-label">Khách hàng</div>
+          <div class="hb-sc-value">{{ vm.customers }}</div>
+        </div>
+      </div>
+    </section>
 
-        <div class="hb-kpi">
-          <div class="hb-kpi-icon">👥</div>
-          <div>
-            <div class="hb-kpi-label">Số khách hàng</div>
-            <div class="hb-kpi-value">{{ vm.customers }}</div>
+    <!-- DASHBOARD MAIN GRID -->
+    <div class="hb-dashboard-grid pb-4">
+      
+      <!-- COLUMN LEFT -->
+      <div class="d-flex flex-column gap-3">
+        
+        <!-- REVENUE TREND CHART -->
+        <article class="hb-panel">
+          <header class="hb-panel-head">
+            <h2 class="hb-panel-title">Xu hướng doanh thu & Đơn hàng</h2>
+          </header>
+
+          <div class="hb-chart-legend mb-3 d-flex gap-4">
+            <div class="d-flex align-items-center gap-2">
+              <span style="display:inline-block; width:12px; height:3px; background:#3d529d;"></span>
+              <span class="small fw-bold text-muted uppercase" style="font-size: 10px;">Doanh thu</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span style="display:inline-block; width:12px; height:3px; background:#ff911f;"></span>
+              <span class="small fw-bold text-muted uppercase" style="font-size: 10px;">Số đơn hàng</span>
+            </div>
+          </div>
+
+          <svg class="hb-chart-svg" [attr.viewBox]="'0 0 ' + vm.series.svg.width + ' ' + vm.series.svg.height">
+            <line x1="18" [attr.y1]="vm.series.svg.height - 18" [attr.x2]="vm.series.svg.width - 18" [attr.y2]="vm.series.svg.height - 18" style="stroke:rgba(0,0,0,0.1); stroke-width:1"></line>
+            
+            <polyline fill="none" stroke="#3d529d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+              [attr.points]="vm.series.svg.revPoints"></polyline>
+            
+            <polyline fill="none" stroke="#ff911f" stroke-width="2" stroke-dasharray="4,4" stroke-linecap="round"
+              [attr.points]="vm.series.svg.ordPoints"></polyline>
+          </svg>
+
+          <div class="hb-chart-x-axis">
+            <span *ngFor="let b of vm.series.buckets" class="hb-x-label">{{ b.label }}</span>
+          </div>
+        </article>
+
+        <!-- RECENT ORDERS TABLE -->
+        <article class="hb-panel">
+          <header class="hb-panel-head">
+            <h2 class="hb-panel-title">Đơn hàng mới trong kỳ</h2>
+            <a class="btn btn-sm btn-link text-decoration-none fw-bold text-primary" href="/admin/management-orders">Xem tất cả <i class="bi bi-chevron-right"></i></a>
+          </header>
+          
+          <div class="hb-table-container">
+            <table class="hb-dashboard-table">
+              <thead>
+                <tr>
+                  <th>Mã đơn</th>
+                  <th>Khách hàng</th>
+                  <th class="text-end">Giá trị</th>
+                  <th class="text-center">Thời gian</th>
+                  <th class="text-center">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let o of vm.recent">
+                  <td class="fw-bold text-primary">{{ o.order_number }}</td>
+                  <td class="hb-customer-cell">
+                    <div class="hb-mini-avatar">{{ o.customer_name.slice(0,1).toUpperCase() }}</div>
+                    <div>
+                      <div class="fw-bold">{{ o.customer_name }}</div>
+                      <div class="small text-muted">{{ o.customer_phone }}</div>
+                    </div>
+                  </td>
+                  <td class="fw-bold text-end">{{ fmtVND(o.total_amount) }}</td>
+                  <td class="text-muted text-center" style="font-size: 11px;">{{ fmtDateTime(o.created_at) }}</td>
+                  <td class="text-center">
+                    <span class="hb-pill" [ngClass]="statusPillClass(o.status)">{{ statusLabel(o.status) }}</span>
+                  </td>
+                </tr>
+                <tr *ngIf="vm.recent.length === 0">
+                  <td colspan="5" class="text-center py-5 text-muted fw-bold">Không tìm thấy dữ liệu trong khoảng thời gian này</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <!-- DUAL ROW (REVIEWS & STOCK) -->
+        <div class="row g-3">
+          <div class="col-md-7">
+            <article class="hb-panel h-100">
+              <h2 class="hb-panel-title mb-3">Đánh giá khách hàng</h2>
+              <div class="hb-table-container">
+                <table class="hb-dashboard-table">
+                  <tbody>
+                    <tr *ngFor="let r of vm.recentReviews">
+                      <td style="width: 50px;">
+                        <img [src]="r.product_image || '/assets/img/placeholder-prod.png'" class="hb-product-img-tiny">
+                      </td>
+                      <td>
+                        <div class="fw-bold text-truncate" style="max-width: 150px;">{{ r.product_name }}</div>
+                        <div class="small text-muted fst-italic text-truncate" style="max-width: 180px;">"{{ r.comment }}"</div>
+                      </td>
+                      <td class="text-end">
+                        <div class="text-warning mb-1" style="font-size: 10px;">{{ stars(r.rating) }}</div>
+                        <div class="text-muted small fw-bold">{{ r.customer_name }}</div>
+                      </td>
+                    </tr>
+                    <tr *ngIf="vm.recentReviews.length === 0">
+                      <td colspan="3" class="text-center py-4 text-muted">Chưa có đánh giá nào</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-5">
+            <article class="hb-panel h-100">
+              <h2 class="hb-panel-title mb-3">Cảnh báo tồn kho</h2>
+              <div class="hb-alert-list">
+                <div class="hb-alert-item" *ngFor="let alert of vm.lowStockAlerts">
+                  <div class="d-flex align-items-center gap-2">
+                    <img [src]="alert.image_url || '/assets/img/placeholder-prod.png'" class="hb-product-img-tiny">
+                    <span class="hb-alert-text text-truncate" style="max-width: 120px;">{{ alert.product_name }}</span>
+                  </div>
+                  <span class="hb-alert-count">Tồn: {{ alert.stock }}</span>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </div>
 
-      <!-- MAIN GRID -->
-      <div class="hb-grid">
-        <!-- LEFT: LINE CHART -->
-        <div class="hb-panel">
-          <div class="hb-panel-head">
-            <div class="hb-panel-title">Doanh thu</div>
-
-            <div class="hb-range-tabs">
-              <button
-                class="hb-range-btn"
-                [class.is-active]="rangeMode === 'day'"
-                (click)="setRangeMode('day')"
-              >
-                Ngày
-              </button>
-              <button
-                class="hb-range-btn"
-                [class.is-active]="rangeMode === 'week'"
-                (click)="setRangeMode('week')"
-              >
-                Tuần
-              </button>
-              <button
-                class="hb-range-btn"
-                [class.is-active]="rangeMode === 'month'"
-                (click)="setRangeMode('month')"
-              >
-                Tháng
-              </button>
-            </div>
-
-            <div class="hb-range-dates">
-              <span class="hb-date-label">Từ:</span>
-              <input
-                type="date"
-                class="form-control hb-date-input"
-                [(ngModel)]="from_date"
-                (ngModelChange)="onFromChange()"
-                [attr.max]="todayStr"
-              />
-              <span class="hb-date-label">Đến:</span>
-              <input
-                type="date"
-                class="form-control hb-date-input"
-                [(ngModel)]="to_date"
-                (ngModelChange)="onToChange()"
-                [attr.min]="from_date"
-                [attr.max]="todayStr"
-              />
-            </div>
-          </div>
-
-          <div class="hb-chart-legend">
-            <div class="hb-legend-item"><span class="hb-dot hb-dot-a"></span> Doanh thu (VND)</div>
-            <div class="hb-legend-item"><span class="hb-dot hb-dot-b"></span> Số lượng đơn</div>
-          </div>
-
-          <div class="hb-chart-wrap">
-            <svg
-              class="hb-chart"
-              [attr.viewBox]="'0 0 ' + vm.series.svg.width + ' ' + vm.series.svg.height"
-            >
-              <polyline
-                class="hb-line hb-line-a"
-                [attr.points]="vm.series.svg.revPoints"
-              ></polyline>
-              <polyline
-                class="hb-line hb-line-b"
-                [attr.points]="vm.series.svg.ordPoints"
-              ></polyline>
-
-              <line
-                x1="18"
-                [attr.y1]="vm.series.svg.height - 18"
-                [attr.x2]="vm.series.svg.width - 18"
-                [attr.y2]="vm.series.svg.height - 18"
-                class="hb-axis"
-              ></line>
-            </svg>
-
-            <div class="hb-chart-x">
-              <span
-                *ngFor="let b of vm.series.buckets; let i = index"
-                class="hb-xlab"
-                [style.width.%]="100 / vm.series.buckets.length"
-              >
-                {{ b.label }}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: DONUT -->
-        <div class="hb-panel">
-          <div class="hb-panel-head">
-            <div class="hb-panel-title">Trạng thái đơn hàng</div>
-          </div>
-
-          <div class="hb-donut-wrap">
-            <svg class="hb-donut" viewBox="0 0 180 180">
+      <!-- COLUMN RIGHT -->
+      <div class="d-flex flex-column gap-3">
+        
+        <!-- DONUT CHART -->
+        <article class="hb-panel">
+          <h2 class="hb-panel-title mb-4">Trạng thái đơn hàng</h2>
+          <div class="hb-donut-container">
+            <svg class="hb-donut-svg" viewBox="0 0 180 180">
               <g transform="translate(90,90) rotate(-90)">
-                <circle r="64" cx="0" cy="0" class="hb-donut-track"></circle>
-
-                <ng-container *ngFor="let s of vm.donut.segments; let idx = index">
-                  <circle
-                    r="64"
-                    cx="0"
-                    cy="0"
-                    class="hb-donut-seg"
-                    [attr.data-k]="s.key"
-                    [attr.stroke-dasharray]="s.dash"
-                    [attr.stroke-dashoffset]="-s.offset"
-                  ></circle>
-                </ng-container>
+                <circle r="64" cx="0" cy="0" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="20"></circle>
+                <circle *ngFor="let s of vm.donut.segments"
+                  r="64" cx="0" cy="0" fill="none" stroke-width="20"
+                  class="hb-donut-seg"
+                  [attr.data-k]="s.key"
+                  [attr.stroke-dasharray]="s.dash"
+                  [attr.stroke-dashoffset]="-s.offset"></circle>
               </g>
-              <text x="90" y="92" text-anchor="middle" class="hb-donut-center">
-                {{ vm.donut.total }}
-              </text>
-              <text x="90" y="112" text-anchor="middle" class="hb-donut-sub">đơn</text>
+              <text x="90" y="90" text-anchor="middle" dy="0.3em" style="font-size: 24px; font-weight: 950; fill: var(--hb-primary);">{{ vm.donut.total }}</text>
+              <text x="90" y="110" text-anchor="middle" dy="0.3em" style="font-size: 11px; font-weight: 800; fill: #999;">ĐƠN HÀNG</text>
             </svg>
 
             <div class="hb-donut-legend">
-              <div class="hb-leg" *ngFor="let s of vm.donut.segments">
+              <div *ngFor="let s of vm.donut.segments" class="hb-legend-row">
                 <span class="hb-leg-dot" [attr.data-k]="s.key"></span>
                 <span class="hb-leg-text">{{ s.label }}</span>
                 <span class="hb-leg-val">{{ s.value }}</span>
               </div>
             </div>
           </div>
-        </div>
+        </article>
 
-        <!-- BOTTOM LEFT: RECENT ORDERS -->
-        <div class="hb-panel">
-          <div class="hb-panel-head">
-            <div class="hb-panel-title">Đơn hàng gần đây</div>
-            <button class="btn btn-sm btn-outline-secondary" (click)="resetFilters()">
-              Đặt lại
-            </button>
-          </div>
-
-          <div class="hb-table-wrap">
-            <table class="table hb-table align-middle">
-              <thead>
-                <tr>
-                  <th style="width: 140px">Mã đơn</th>
-                  <th>Khách hàng</th>
-                  <th style="width: 160px">Tổng tiền</th>
-                  <th style="width: 160px">Ngày</th>
-                  <th style="width: 170px">Trạng thái</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr *ngFor="let o of vm.recent">
-                  <td class="hb-name">{{ o.order_number }}</td>
-                  <td>
-                    <div class="hb-name">{{ o.customer_name }}</div>
-                    <div class="hb-sub">{{ o.customer_phone }}</div>
-                  </td>
-                  <td>{{ fmtVND(o.total_amount) }}</td>
-                  <td class="hb-sub">{{ fmtDateTime(o.created_at) }}</td>
-                  <td>
-                    <span class="hb-pill" [ngClass]="statusPillClass(o.status)">
-                      {{ statusLabel(o.status) }}
-                    </span>
-                  </td>
-                </tr>
-
-                <tr *ngIf="vm.recent.length === 0">
-                  <td colspan="5" class="text-center py-4 text-muted">Không có dữ liệu</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- BOTTOM RIGHT: TOP PRODUCTS -->
-        <div class="hb-panel">
-          <div class="hb-panel-head">
-            <div class="hb-panel-title">Sản phẩm được mua nhiều nhất</div>
-          </div>
-
-          <div class="hb-toplist">
-            <div class="hb-topitem" *ngFor="let p of vm.topProducts">
-              <div class="hb-thumb" [class.is-empty]="!p.image_url">
-                <img *ngIf="p.image_url" [src]="p.image_url" alt="" />
+        <!-- TOP PRODUCTS -->
+        <article class="hb-panel">
+          <header class="hb-panel-head">
+            <h2 class="hb-panel-title">Sản phẩm bán chạy</h2>
+          </header>
+          <div class="hb-top-products">
+            <div class="hb-product-item" *ngFor="let p of vm.topProducts">
+              <img [src]="p.image_url || '/assets/img/placeholder-prod.png'" class="hb-product-img-tiny">
+              <div class="hb-prod-info">
+                <div class="hb-prod-name">{{ p.product_name }}</div>
+                <div class="hb-prod-id">#{{ p.product_id }}</div>
               </div>
-              <div class="hb-topmeta">
-                <div class="hb-name">{{ p.product_name }}</div>
-                <div class="hb-sub">ID: {{ p.product_id }}</div>
-              </div>
-              <div class="hb-topqty">{{ p.qty }} lượt</div>
+              <div class="hb-prod-stat">{{ p.qty }} <small class="text-muted">SL</small></div>
             </div>
-
-            <div *ngIf="vm.topProducts.length === 0" class="text-muted">Chưa có dữ liệu</div>
           </div>
-        </div>
+        </article>
 
-        <!-- EXTRA: RECENT REVIEWS -->
-        <div class="hb-panel">
-          <div class="hb-panel-head">
-            <div class="hb-panel-title">Đánh giá gần đây</div>
+        <!-- PROMO CARD -->
+        <article class="hb-panel text-white" style="background: linear-gradient(135deg, #3d529d 0%, #1a2a5e 100%); border: none;">
+          <div class="d-flex align-items-center gap-3">
+            <div style="font-size: 24px; opacity: 0.8;"><i class="bi bi-graph-up-arrow"></i></div>
+            <div>
+              <div class="fw-bold" style="font-size: 14px;">BÁO CÁO HIỆU SUẤT</div>
+              <div class="small" style="opacity: 0.7; font-size: 11px;">Tăng trưởng 12% so với tháng trước.</div>
+            </div>
           </div>
+          <button class="btn btn-sm btn-light mt-3 fw-bold w-100" style="color: #3d529d; border-radius: 8px;">Chi tiết <i class="bi bi-chevron-right"></i></button>
+        </article>
 
-          <div class="hb-table-wrap">
-            <table class="table hb-table align-middle">
-              <thead>
-                <tr>
-                  <th>Sản phẩm</th>
-                  <th style="width: 190px">Khách hàng</th>
-                  <th style="width: 120px">Rating</th>
-                  <th style="width: 160px">Ngày</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr *ngFor="let r of vm.recentReviews">
-                  <td>
-                    <div class="hb-name">{{ r.product_name }}</div>
-                    <div class="hb-sub hb-ellipsis">{{ r.comment }}</div>
-                  </td>
-                  <td class="hb-sub">{{ r.customer_name }}</td>
-                  <td>
-                    <span class="hb-stars">{{ stars(r.rating) }}</span>
-                    <span class="hb-sub">({{ r.rating }}/5)</span>
-                  </td>
-                  <td class="hb-sub">{{ fmtDateTime(r.created_at) }}</td>
-                </tr>
-
-                <tr *ngIf="vm.recentReviews.length === 0">
-                  <td colspan="4" class="text-center py-4 text-muted">Chưa có đánh giá</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
+
     </div>
   </div>
 </div>

@@ -1,35 +1,55 @@
-<!-- MANAGEMENT CUSTOMERS -->
 <div class="hb-page-shell">
   <!-- LIST MODE -->
   <ng-container *ngIf="listVm$ | async as vm">
     <ng-container *ngIf="vm.mode === 'list'">
-      <!-- HEADER -->
+      <!-- PAGE HEADER (sticky) -->
       <div class="hb-page-header">
         <div class="hb-header-left">
-          <div class="hb-title">QUẢN LÝ KHÁCH HÀNG</div>
-          <div class="hb-sub text-muted">
-            Tổng: <b>{{ vm.total }}</b> khách hàng
-          </div>
+          <div class="hb-title" routerLink="/admin/management-customers" style="cursor: pointer;">QUẢN LÝ KHÁCH HÀNG</div>
         </div>
 
         <div class="hb-header-actions">
           <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
-
           <button class="btn btn-hb" type="button" (click)="exportCustomersCsv(vm)">
-            <i class="bi bi-download me-1"></i>
-            Xuất CSV
+            <i class="bi bi-download me-1"></i> Xuất CSV
           </button>
         </div>
       </div>
 
-      <!-- BODY -->
+      <!-- PAGE BODY -->
       <div class="hb-page-body">
-        <!-- FILTER BAR (same style as Products) -->
+        <div class="hb-summary-row" *ngIf="vm.summary">
+          <div class="hb-summary-card">
+            <div class="hb-sc-icon"><i class="bi bi-people"></i></div>
+            <div>
+              <div class="hb-sc-label">Tổng khách hàng</div>
+              <div class="hb-sc-value">{{ vm.summary.totalCustomers }}</div>
+            </div>
+          </div>
+
+          <div class="hb-summary-card">
+            <div class="hb-sc-icon ok"><i class="bi bi-person-plus"></i></div>
+            <div>
+              <div class="hb-sc-label">Mới trong tháng</div>
+              <div class="hb-sc-value">{{ vm.summary.newThisMonth }}</div>
+            </div>
+          </div>
+
+          <div class="hb-summary-card">
+            <div class="hb-sc-icon danger"><i class="bi bi-lock"></i></div>
+            <div>
+              <div class="hb-sc-label">Tài khoản bị khóa</div>
+              <div class="hb-sc-value">{{ vm.summary.lockedCount }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILTER BAR -->
         <div class="card hb-card hb-card-pad mb-3">
           <div class="hb-filterbar">
             <input
               class="form-control"
-              placeholder="Tìm (Tên / ID / Email / SĐT)"
+              placeholder="Tìm tên, ID, email hoặc SĐT..."
               [ngModel]="vm.q"
               (ngModelChange)="onSearchChange($event)"
             />
@@ -40,228 +60,154 @@
               <option value="locked">Tạm khóa</option>
             </select>
 
-            <select
-              class="form-select"
-              [ngModel]="vm.pageSize"
-              (ngModelChange)="setPageSize($event)"
-            >
-              <option [ngValue]="10">10</option>
-              <option [ngValue]="20">20</option>
-              <option [ngValue]="50">50</option>
+            <select class="form-select" [ngModel]="vm.pageSize" (ngModelChange)="setPageSize($event)">
+              <option [ngValue]="10">10 / trang</option>
+              <option [ngValue]="20">20 / trang</option>
+              <option [ngValue]="50">50 / trang</option>
             </select>
 
-            <button
-              class="btn btn-hb-outline hb-filter-reset"
-              type="button"
-              (click)="resetFilters()"
-            >
-              Reset
-            </button>
+            <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">Reset</button>
           </div>
         </div>
 
         <!-- TABLE CARD -->
         <div class="card hb-card hb-table-card">
           <div class="hb-table-wrap">
-            <table class="table hb-table">
-              <thead>
-                <tr>
-                  <!-- CUSTOMER -->
-                  <th class="hb-th w-customer">
-                    <button
-                      class="hb-th-sort"
-                      type="button"
-                      (click)="toggleSort('name')"
-                      [class.is-active]="vm.sortKey === 'name'"
-                    >
-                      <span>Khách hàng</span>
+            <div class="hb-table">
+              <!-- HEAD -->
+              <div class="hb-table-head hb-grid-customers">
+                <div class="hb-th">
+                  <div class="th-content"><span>STT</span></div>
+                </div>
 
-                      <i class="fas fa-sort hb-sort-ic" *ngIf="vm.sortKey !== 'name'"></i>
-                      <i
-                        class="fas fa-sort-up hb-sort-ic"
-                        *ngIf="vm.sortKey === 'name' && vm.sortDir === 'asc'"
-                      ></i>
-                      <i
-                        class="fas fa-sort-down hb-sort-ic"
-                        *ngIf="vm.sortKey === 'name' && vm.sortDir === 'desc'"
-                      ></i>
-                    </button>
-                  </th>
+                <div class="hb-th" (click)="toggleSort('name')">
+                  <div class="th-content">
+                    <span>KHÁCH HÀNG</span>
+                    <i class="fas" [ngClass]="sortIcon('name')"></i>
+                  </div>
+                </div>
 
-                  <!-- STATUS -->
-                  <th class="hb-th">
-                    <button
-                      class="hb-th-sort"
-                      type="button"
-                      (click)="toggleSort('status')"
-                      [class.is-active]="vm.sortKey === 'status'"
-                    >
-                      <span>Trạng thái</span>
+                <div class="hb-th">
+                  <div class="th-content"><span>SĐT</span></div>
+                </div>
 
-                      <i class="fas fa-sort hb-sort-ic" *ngIf="vm.sortKey !== 'status'"></i>
-                      <i
-                        class="fas fa-sort-up hb-sort-ic"
-                        *ngIf="vm.sortKey === 'status' && vm.sortDir === 'asc'"
-                      ></i>
-                      <i
-                        class="fas fa-sort-down hb-sort-ic"
-                        *ngIf="vm.sortKey === 'status' && vm.sortDir === 'desc'"
-                      ></i>
-                    </button>
-                  </th>
+                <div class="hb-th">
+                  <div class="th-content"><span>HẠNG</span></div>
+                </div>
 
-                  <!-- ORDERS -->
-                  <th class="hb-th">
-                    <button
-                      class="hb-th-sort"
-                      type="button"
-                      (click)="toggleSort('orders')"
-                      [class.is-active]="vm.sortKey === 'orders'"
-                    >
-                      <span>Đơn</span>
+                <div class="hb-th">
+                  <div class="th-content"><span>TRẠNG THÁI</span></div>
+                </div>
 
-                      <i class="fas fa-sort hb-sort-ic" *ngIf="vm.sortKey !== 'orders'"></i>
-                      <i
-                        class="fas fa-sort-up hb-sort-ic"
-                        *ngIf="vm.sortKey === 'orders' && vm.sortDir === 'asc'"
-                      ></i>
-                      <i
-                        class="fas fa-sort-down hb-sort-ic"
-                        *ngIf="vm.sortKey === 'orders' && vm.sortDir === 'desc'"
-                      ></i>
-                    </button>
-                  </th>
+                <div class="hb-th" (click)="toggleSort('orders')">
+                  <div class="th-content">
+                    <span>ĐƠN HÀNG</span>
+                    <i class="fas" [ngClass]="sortIcon('orders')"></i>
+                  </div>
+                </div>
 
-                  <!-- SPENT -->
-                  <th class="hb-th">
-                    <button
-                      class="hb-th-sort"
-                      type="button"
-                      (click)="toggleSort('spent')"
-                      [class.is-active]="vm.sortKey === 'spent'"
-                    >
-                      <span>Tổng chi</span>
+                <div class="hb-th" (click)="toggleSort('spent')">
+                  <div class="th-content">
+                    <span>TỔNG CHI</span>
+                    <i class="fas" [ngClass]="sortIcon('spent')"></i>
+                  </div>
+                </div>
 
-                      <i class="fas fa-sort hb-sort-ic" *ngIf="vm.sortKey !== 'spent'"></i>
-                      <i
-                        class="fas fa-sort-up hb-sort-ic"
-                        *ngIf="vm.sortKey === 'spent' && vm.sortDir === 'asc'"
-                      ></i>
-                      <i
-                        class="fas fa-sort-down hb-sort-ic"
-                        *ngIf="vm.sortKey === 'spent' && vm.sortDir === 'desc'"
-                      ></i>
-                    </button>
-                  </th>
+                <div class="hb-th">
+                  <div class="th-content"><span>NGÀY TẠO</span></div>
+                </div>
 
-                  <!-- CREATED -->
-                  <th class="hb-th">
-                    <button
-                      class="hb-th-sort"
-                      type="button"
-                      (click)="toggleSort('created_at')"
-                      [class.is-active]="vm.sortKey === 'created_at'"
-                    >
-                      <span>Ngày tạo</span>
+                <div class="hb-th"><span>KHÓA</span></div>
+                <div class="hb-th"><span>CHI TIẾT</span></div>
+              </div>
 
-                      <i class="fas fa-sort hb-sort-ic" *ngIf="vm.sortKey !== 'created_at'"></i>
-                      <i
-                        class="fas fa-sort-up hb-sort-ic"
-                        *ngIf="vm.sortKey === 'created_at' && vm.sortDir === 'asc'"
-                      ></i>
-                      <i
-                        class="fas fa-sort-down hb-sort-ic"
-                        *ngIf="vm.sortKey === 'created_at' && vm.sortDir === 'desc'"
-                      ></i>
-                    </button>
-                  </th>
+              <!-- ROWS -->
+              <div
+                class="hb-table-row hb-grid-customers"
+                *ngFor="let r of vm.items; let i = index"
+                (click)="openDetail(r.user.user_id)"
+              >
+                <div class="hb-td hb-td-center text-muted fw-bold">
+                  {{ r.stt }}
+                </div>
 
-                  <!-- DETAIL -->
-                  <th class="hb-th text-center">Chi tiết</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr
-                  class="hb-row"
-                  *ngFor="let r of vm.items"
-                  (click)="openDetail(r.user.user_id)"
-                  role="button"
-                  tabindex="0"
-                >
-                  <td class="w-customer">
-                    <div class="hb-customer">
-                      <div class="hb-avatar">
-                        <span>{{ r.initials }}</span>
+                <div class="hb-td">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="hb-avatar">
+                      <span>{{ r.initials }}</span>
+                    </div>
+                    <div class="hb-name-block">
+                      <div class="hb-text-truncate">
+                        <span class="hb-name fw-bold">{{ r.display_name }}</span>
+                        <span class="hb-id">#{{ r.user.user_id }}</span>
                       </div>
-
-                      <div class="hb-customer-meta">
-                        <div class="hb-name">
-                          {{ r.display_name }}
-                          <span class="hb-id">#{{ r.user.user_id }}</span>
-                        </div>
-
-                        <div class="hb-subline">
-                          {{ r.user.email }} · {{ r.user.phone }} · Điểm:
-                          <b>{{ r.points_balance.toLocaleString('vi-VN') }}</b>
-                          · Voucher active: <b>{{ r.voucher_active_count }}</b>
-                        </div>
+                      <div class="hb-subline hb-text-truncate">
+                        {{ r.user.email }}
                       </div>
                     </div>
-                  </td>
+                  </div>
+                </div>
 
-                  <td>
-                    <span class="hb-pill" [class.is-locked]="r.user.status === 'locked'">
-                      {{ statusLabel(r.user.status) }}
-                    </span>
-                  </td>
+                <div class="hb-td hb-td-center text-muted fw-semibold">
+                  {{ r.user.phone }}
+                </div>
 
-                  <td class="hb-num">{{ r.orders_count }}</td>
-                  <td class="hb-num">{{ formatMoney(r.total_spent) }}</td>
-                  <td class="hb-date">{{ r.user.created_at | date: 'dd/MM/yyyy' }}</td>
+                <div class="hb-td hb-td-center">
+                  <span class="hb-pill" [ngClass]="r.rankClass">{{ r.rank }}</span>
+                </div>
 
-                  <td class="text-center">
-                    <button
-                      class="hb-icon-btn"
-                      type="button"
-                      (click)="$event.stopPropagation(); openDetail(r.user.user_id)"
-                      title="Open detail"
-                    >
-                      <i class="bi bi-pencil-square"></i>
-                    </button>
-                  </td>
-                </tr>
+                <div class="hb-td hb-td-center">
+                  <span class="hb-pill" [class.is-locked]="r.user.status === 'locked'" [class.is-soft]="r.user.status === 'active'">
+                    {{ statusLabel(r.user.status) }}
+                  </span>
+                </div>
 
-                <tr *ngIf="vm.items.length === 0">
-                  <td colspan="6" class="hb-empty">Không có dữ liệu phù hợp bộ lọc.</td>
-                </tr>
-              </tbody>
-            </table>
+                <div class="hb-td hb-td-center">
+                  <span class="fw-bold">{{ r.orders_count }}</span>
+                </div>
+
+                <div class="hb-td hb-td-num">
+                  {{ formatMoney(r.total_spent) }}
+                </div>
+
+                <div class="hb-td hb-td-center text-muted">
+                  {{ r.user.created_at | date: 'dd/MM/yyyy' }}
+                </div>
+
+                <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
+                  <button
+                    class="hb-icon-btn"
+                    [class.danger]="r.user.status === 'active'"
+                    (click)="toggleLock(r.user.user_id)"
+                    [title]="r.user.status === 'active' ? 'Khóa tài khoản' : 'Mở khóa'"
+                  >
+                    <i class="bi" [ngClass]="r.user.status === 'active' ? 'bi-lock' : 'bi-unlock-fill'"></i>
+                  </button>
+                </div>
+
+                <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
+                  <button class="hb-icon-btn" (click)="openDetail(r.user.user_id)" title="Xem chi tiết">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="p-5 text-center text-muted fw-semibold" *ngIf="vm.items.length === 0">
+                Không tìm thấy khách hàng phù hợp.
+              </div>
+            </div>
           </div>
 
-          <!-- PAGINATION (sticky bottom like Products) -->
+          <!-- Pagination -->
           <div class="hb-pagination">
-            <button
-              class="hb-page-btn"
-              type="button"
-              [disabled]="vm.page <= 1"
-              (click)="setPage(vm.page - 1)"
-            >
-              ‹
-            </button>
-
-            <div class="hb-page-mid">
-              Page <b>{{ vm.page }}</b> / {{ vm.pageCount }}
+            <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">‹</button>
+            <div class="hb-page-info">
+              <span>Trang</span>
+              <b>{{ vm.page }}</b>
+              <span>/</span>
+              <span>{{ vm.pageCount }}</span>
             </div>
-
-            <button
-              class="hb-page-btn"
-              type="button"
-              [disabled]="vm.page >= vm.pageCount"
-              (click)="setPage(vm.page + 1)"
-            >
-              ›
-            </button>
+            <button class="hb-page-btn" [disabled]="vm.page >= vm.pageCount" (click)="setPage(vm.page + 1)">›</button>
           </div>
         </div>
       </div>
@@ -271,383 +217,188 @@
   <!-- DETAIL MODE -->
   <ng-container *ngIf="detailVm$ | async as dvm">
     <ng-container *ngIf="dvm?.mode === 'detail'">
-      <!-- HEADER -->
       <div class="hb-page-header">
         <div class="hb-header-left">
-          <div class="hb-title">CHI TIẾT KHÁCH HÀNG</div>
+          <div class="hb-title" routerLink="/admin/management-customers" style="cursor: pointer;">CHI TIẾT KHÁCH HÀNG</div>
           <div class="hb-sub text-muted">
-            {{ dvm.display_name }} · <b>#{{ dvm.user.user_id }}</b>
+            Customer ID: <b>#{{ dvm.user.user_id }}</b>
+            <span class="mx-2">•</span>
+            Username: <b>{{ dvm.user.username }}</b>
           </div>
         </div>
 
         <div class="hb-header-actions">
-          <button class="btn btn-hb-outline" type="button" (click)="backToList()">
-            <i class="bi bi-arrow-left me-1"></i>
-            Quay lại
+          <button class="btn btn-hb-outline" (click)="backToList()">
+            <i class="bi bi-arrow-left me-1"></i> Quay lại
           </button>
-
-          <button class="btn btn-hb-accent" type="button" (click)="toggleLock(dvm.user.user_id)">
-            <i
-              class="bi me-1"
-              [class.bi-unlock]="dvm.user.status === 'locked'"
-              [class.bi-lock]="dvm.user.status !== 'locked'"
-            ></i>
-            {{ dvm.user.status === 'locked' ? 'Mở khóa' : 'Tạm khóa' }}
+          <button class="btn btn-hb-accent" (click)="toggleLock(dvm.user.user_id)">
+            <i class="bi me-1" [class.bi-unlock]="dvm.user.status === 'locked'" [class.bi-lock]="dvm.user.status !== 'locked'"></i>
+            {{ dvm.user.status === 'locked' ? 'Mở khóa tài khoản' : 'Tạm khóa tài khoản' }}
           </button>
         </div>
       </div>
 
-      <!-- BODY -->
-      <div class="hb-page-body">
-        <div class="card hb-card">
-          <div class="hb-detail-card">
-            <div class="hb-detail-grid">
-              <!-- LEFT PROFILE -->
-              <aside class="hb-profile">
-                <div class="hb-profile-card">
-                  <div class="hb-profile-top">
-                    <div class="hb-avatar hb-avatar-lg">
-                      <span>{{ dvm.initials }}</span>
-                    </div>
-
-                    <div class="hb-profile-meta">
-                      <div class="hb-profile-name">{{ dvm.display_name }}</div>
-                      <div class="hb-profile-id">Customer ID #{{ dvm.user.user_id }}</div>
-
-                      <div class="hb-profile-pills">
-                        <span class="hb-pill" [class.is-locked]="dvm.user.status === 'locked'">
-                          {{ statusLabel(dvm.user.status) }}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="hb-profile-stats">
-                    <div class="hb-stat">
-                      <div class="hb-stat-num">{{ dvm.orders_count }}</div>
-                      <div class="hb-stat-label">Đơn hàng</div>
-                    </div>
-                    <div class="hb-stat">
-                      <div class="hb-stat-num">{{ formatMoney(dvm.total_spent) }}</div>
-                      <div class="hb-stat-label">Tổng chi</div>
-                    </div>
-                  </div>
-
-                  <div class="hb-profile-kv">
-                    <div class="hb-kv">
-                      <div class="hb-k">Username</div>
-                      <div class="hb-v">{{ dvm.user.username }}</div>
-                    </div>
-                    <div class="hb-kv">
-                      <div class="hb-k">Email</div>
-                      <div class="hb-v">{{ dvm.user.email }}</div>
-                    </div>
-                    <div class="hb-kv">
-                      <div class="hb-k">SĐT</div>
-                      <div class="hb-v">{{ dvm.user.phone }}</div>
-                    </div>
-                    <div class="hb-kv">
-                      <div class="hb-k">Last login</div>
-                      <div class="hb-v">
-                        {{
-                          dvm.user.last_login
-                            ? (dvm.user.last_login | date: 'dd/MM/yyyy HH:mm')
-                            : '—'
-                        }}
-                      </div>
-                    </div>
-                    <div class="hb-kv">
-                      <div class="hb-k">Điểm hiện có</div>
-                      <div class="hb-v hb-num">
-                        {{ dvm.points_balance.toLocaleString('vi-VN') }}
-                      </div>
-                    </div>
-                  </div>
+      <div class="hb-page-body mt-4">
+        <div class="hb-detail-grid">
+          <!-- ASIDE PROFILE -->
+          <aside class="hb-aside">
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-profile-top">
+                <div class="hb-avatar hb-avatar-lg">
+                  <span>{{ dvm.initials }}</span>
                 </div>
-              </aside>
+                <div class="hb-profile-name">{{ dvm.display_name }}</div>
+                <span class="hb-pill" [class.is-locked]="dvm.user.status === 'locked'" [class.is-soft]="dvm.user.status === 'active'">
+                  {{ statusLabel(dvm.user.status) }}
+                </span>
+              </div>
 
-              <!-- RIGHT CONTENT -->
-              <section class="hb-detail">
-                <div class="hb-tabs">
-                  <button
-                    class="hb-tab"
-                    type="button"
-                    [class.is-active]="dvm.tab === 'overview'"
-                    (click)="setDetailTab('overview')"
-                  >
-                    Tổng quan
-                  </button>
-                  <button
-                    class="hb-tab"
-                    type="button"
-                    [class.is-active]="dvm.tab === 'voucher_points'"
-                    (click)="setDetailTab('voucher_points')"
-                  >
-                    Điểm & Voucher
-                  </button>
-                  <button
-                    class="hb-tab"
-                    type="button"
-                    [class.is-active]="dvm.tab === 'orders'"
-                    (click)="setDetailTab('orders')"
-                  >
-                    Đơn hàng
-                  </button>
-                  <button
-                    class="hb-tab"
-                    type="button"
-                    [class.is-active]="dvm.tab === 'reports'"
-                    (click)="setDetailTab('reports')"
-                  >
-                    Báo cáo
-                  </button>
+              <div class="hb-profile-stats">
+                <div class="hb-stat">
+                  <div class="hb-stat-num">{{ dvm.orders_count }}</div>
+                  <div class="hb-stat-label">Đơn hàng</div>
                 </div>
+                <div class="hb-stat">
+                  <div class="hb-stat-num">{{ formatMoney(dvm.total_spent) }}</div>
+                  <div class="hb-stat-label">Tổng chi</div>
+                </div>
+              </div>
 
-                <ng-container [ngSwitch]="dvm.tab">
-                  <!-- OVERVIEW -->
-                  <div *ngSwitchCase="'overview'" class="hb-tab-panel">
-                    <div class="hb-panels">
-                      <div class="hb-mini-card">
-                        <div class="hb-mini-title">Điểm hiện có</div>
-                        <div class="hb-mini-value">
-                          {{ dvm.points_balance.toLocaleString('vi-VN') }}
-                        </div>
-                        <div class="hb-mini-sub">Tổng điểm = cộng dồn lịch sử điểm</div>
-                      </div>
-
-                      <div class="hb-mini-card">
-                        <div class="hb-mini-title">Voucher đang hoạt động</div>
-                        <div class="hb-mini-value">{{ dvm.active_voucher_count }}</div>
-                        <div class="hb-mini-sub">Số voucher active (mock)</div>
-                      </div>
-
-                      <div class="hb-mini-card">
-                        <div class="hb-mini-title">Tạo tài khoản</div>
-                        <div class="hb-mini-value">
-                          {{ dvm.user.created_at | date: 'dd/MM/yyyy' }}
-                        </div>
-                        <div class="hb-mini-sub">
-                          Cập nhật: {{ dvm.user.updated_at | date: 'dd/MM/yyyy' }}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="hb-subtitle-row">
-                      <div class="hb-subtitle">Đơn hàng gần đây</div>
-                    </div>
-
-                    <div class="hb-table-wrap hb-table-wrap-small">
-                      <table class="table hb-table">
-                        <thead>
-                          <tr>
-                            <th class="hb-th">Order</th>
-                            <th class="hb-th">Date</th>
-                            <th class="hb-th">Payment</th>
-                            <th class="hb-th">Status</th>
-                            <th class="hb-th text-end">Amount</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let o of dvm.orders.slice(0, 6)">
-                            <td class="hb-mono">{{ o.order_number }}</td>
-                            <td>{{ o.created_at | date: 'dd/MM/yyyy' }}</td>
-                            <td>
-                              <span class="hb-pill is-soft">{{
-                                payStatusLabel(o.payment_status)
-                              }}</span>
-                            </td>
-                            <td>
-                              <span class="hb-pill is-soft">{{ orderStatusLabel(o.status) }}</span>
-                            </td>
-                            <td class="text-end hb-num">{{ formatMoney(o.total_amount) }}</td>
-                          </tr>
-
-                          <tr *ngIf="dvm.orders.length === 0">
-                            <td colspan="5" class="hb-empty">Chưa có đơn hàng.</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <!-- VOUCHER + POINTS -->
-                  <div *ngSwitchCase="'voucher_points'" class="hb-tab-panel">
-                    <div class="hb-subtitle-row">
-                      <div class="hb-subtitle">Theo dõi lịch sử điểm</div>
-                    </div>
-
-                    <div class="hb-table-wrap hb-table-wrap-small">
-                      <table class="table hb-table">
-                        <thead>
-                          <tr>
-                            <th class="hb-th">Time</th>
-                            <th class="hb-th">Type</th>
-                            <th class="hb-th text-end">Points</th>
-                            <th class="hb-th">Note</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let t of dvm.point_history">
-                            <td>{{ t.created_at | date: 'dd/MM/yyyy HH:mm' }}</td>
-                            <td>
-                              <span class="hb-pill is-soft">{{ t.type }}</span>
-                            </td>
-                            <td class="text-end hb-num">{{ t.points.toLocaleString('vi-VN') }}</td>
-                            <td class="hb-ellipsis" title="{{ t.note }}">{{ t.note }}</td>
-                          </tr>
-
-                          <tr *ngIf="dvm.point_history.length === 0">
-                            <td colspan="4" class="hb-empty">Chưa có lịch sử điểm.</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <div class="hb-subtitle-row">
-                      <div class="hb-subtitle">Theo dõi tình trạng voucher</div>
-                    </div>
-
-                    <div class="hb-table-wrap hb-table-wrap-small">
-                      <table class="table hb-table">
-                        <thead>
-                          <tr>
-                            <th class="hb-th">Code</th>
-                            <th class="hb-th">Title</th>
-                            <th class="hb-th">Type</th>
-                            <th class="hb-th text-end">Value</th>
-                            <th class="hb-th">Status</th>
-                            <th class="hb-th">Range</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let v of dvm.vouchers">
-                            <td class="hb-mono">{{ v.code }}</td>
-                            <td class="hb-ellipsis" title="{{ v.title }}">{{ v.title }}</td>
-                            <td>
-                              <span class="hb-pill is-soft">{{ v.discount_type }}</span>
-                            </td>
-                            <td class="text-end hb-num">
-                              {{
-                                v.discount_type === 'percent'
-                                  ? v.discount_value + '%'
-                                  : formatMoney(v.discount_value)
-                              }}
-                            </td>
-                            <td>
-                              <span class="hb-pill" [class.is-locked]="v.status !== 'active'">{{
-                                v.status
-                              }}</span>
-                            </td>
-                            <td>
-                              {{ v.start_at | date: 'dd/MM' }} - {{ v.end_at | date: 'dd/MM' }}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <div class="hb-subtitle-row">
-                      <div class="hb-subtitle">Báo cáo hiệu quả voucher (top)</div>
-                    </div>
-
-                    <div class="hb-table-wrap hb-table-wrap-small">
-                      <table class="table hb-table">
-                        <thead>
-                          <tr>
-                            <th class="hb-th">Code</th>
-                            <th class="hb-th">Title</th>
-                            <th class="hb-th text-end">Used</th>
-                            <th class="hb-th text-end">Total discount</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let e of dvm.voucher_effect">
-                            <td class="hb-mono">{{ e.code }}</td>
-                            <td class="hb-ellipsis" title="{{ e.title }}">{{ e.title }}</td>
-                            <td class="text-end hb-num">{{ e.used_count }}</td>
-                            <td class="text-end hb-num">{{ formatMoney(e.total_discount) }}</td>
-                          </tr>
-
-                          <tr *ngIf="dvm.voucher_effect.length === 0">
-                            <td colspan="4" class="hb-empty">Chưa có dữ liệu usage.</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <!-- ORDERS -->
-                  <div *ngSwitchCase="'orders'" class="hb-tab-panel">
-                    <div class="hb-subtitle-row">
-                      <div class="hb-subtitle">Xem lịch sử đơn hàng</div>
-                    </div>
-
-                    <div class="hb-table-wrap">
-                      <table class="table hb-table">
-                        <thead>
-                          <tr>
-                            <th class="hb-th">Order</th>
-                            <th class="hb-th">Date</th>
-                            <th class="hb-th">Payment</th>
-                            <th class="hb-th">Status</th>
-                            <th class="hb-th text-end">Amount</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let o of dvm.orders">
-                            <td class="hb-mono">{{ o.order_number }}</td>
-                            <td>{{ o.created_at | date: 'dd/MM/yyyy' }}</td>
-                            <td>
-                              <span class="hb-pill is-soft">{{
-                                payStatusLabel(o.payment_status)
-                              }}</span>
-                            </td>
-                            <td>
-                              <span class="hb-pill is-soft">{{ orderStatusLabel(o.status) }}</span>
-                            </td>
-                            <td class="text-end hb-num">{{ formatMoney(o.total_amount) }}</td>
-                          </tr>
-
-                          <tr *ngIf="dvm.orders.length === 0">
-                            <td colspan="5" class="hb-empty">Chưa có đơn hàng.</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <!-- REPORTS -->
-                  <div *ngSwitchCase="'reports'" class="hb-tab-panel">
-                    <div class="hb-panels">
-                      <div class="hb-mini-card">
-                        <div class="hb-mini-title">Tổng giá trị mua sắm</div>
-                        <div class="hb-mini-value">{{ formatMoney(dvm.total_spent) }}</div>
-                      </div>
-
-                      <div class="hb-mini-card">
-                        <div class="hb-mini-title">Số đơn hàng</div>
-                        <div class="hb-mini-value">{{ dvm.orders_count }}</div>
-                      </div>
-
-                      <div class="hb-mini-card">
-                        <div class="hb-mini-title">Điểm hiện có</div>
-                        <div class="hb-mini-value">
-                          {{ dvm.points_balance.toLocaleString('vi-VN') }}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="hb-mini-card" style="margin-top: 12px">
-                      <div class="hb-mini-title">Ghi chú</div>
-                      <div class="hb-mini-sub"></div>
-                    </div>
-                  </div>
-
-                  <div *ngSwitchDefault class="hb-tab-panel"></div>
-                </ng-container>
-              </section>
+              <div class="hb-profile-kv">
+                <div class="hb-kv">
+                  <div class="hb-k">Email</div>
+                  <div class="hb-v">{{ dvm.user.email }}</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Số điện thoại</div>
+                  <div class="hb-v">{{ dvm.user.phone }}</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Địa chỉ mặc định</div>
+                  <div class="hb-v text-muted italic">Chưa liên kết địa chỉ</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Ngày tham gia</div>
+                  <div class="hb-v">{{ dvm.user.created_at | date: 'dd/MM/yyyy' }}</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Đăng nhập lần cuối</div>
+                  <div class="hb-v">{{ dvm.user.last_login ? (dvm.user.last_login | date: 'dd/MM/yyyy HH:mm') : 'Chưa đăng nhập' }}</div>
+                </div>
+              </div>
             </div>
-          </div>
+          </aside>
+
+          <!-- MAIN CONTENT TABS -->
+          <section class="hb-main">
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-tabs">
+                <button class="hb-tab" [class.is-active]="dvm.tab === 'overview'" (click)="setDetailTab('overview')">Tổng quan</button>
+                <button class="hb-tab" [class.is-active]="dvm.tab === 'orders'" (click)="setDetailTab('orders')">Lịch sử đơn hàng</button>
+                <button class="hb-tab" [class.is-active]="dvm.tab === 'voucher_points'" (click)="setDetailTab('voucher_points')">Điểm & Voucher</button>
+                <button class="hb-tab" [class.is-active]="dvm.tab === 'reports'" (click)="setDetailTab('reports')">Báo cáo</button>
+              </div>
+
+              <ng-container [ngSwitch]="dvm.tab">
+                <!-- PANEL OVERVIEW -->
+                <div *ngSwitchCase="'overview'">
+                  <div class="hb-panels">
+                    <div class="hb-mini-card">
+                      <div class="hb-mini-title">Điểm tích lũy</div>
+                      <div class="hb-mini-value">{{ dvm.points_balance.toLocaleString('vi-VN') }} pt</div>
+                    </div>
+                    <div class="hb-mini-card">
+                      <div class="hb-mini-title">Hạng thành viên</div>
+                      <div class="hb-mini-value text-accent">Bạc</div>
+                    </div>
+                    <div class="hb-mini-card">
+                      <div class="hb-mini-title">Voucher sở hữu</div>
+                      <div class="hb-mini-value">{{ dvm.active_voucher_count }}</div>
+                    </div>
+                  </div>
+
+                  <div class="hb-subtitle">Đơn hàng gần đây</div>
+                  <div class="hb-table-wrap-small">
+                    <div class="hb-table-small-header d-flex justify-content-between">
+                      <span style="width: 140px">Mã đơn</span>
+                      <span style="width: 120px">Ngày tạo</span>
+                      <span style="width: 140px">Thanh toán</span>
+                      <span style="width: 140px">Trạng thái</span>
+                      <span class="text-end" style="width: 140px">Tổng tiền</span>
+                    </div>
+                    <div class="hb-table-small-row d-flex justify-content-between" *ngFor="let o of dvm.orders.slice(0, 5)">
+                      <span class="hb-mono" style="width: 140px">{{ o.order_number }}</span>
+                      <span style="width: 120px">{{ o.created_at | date: 'dd/MM/yyyy' }}</span>
+                      <span style="width: 140px"><span class="hb-pill is-soft">{{ payStatusLabel(o.payment_status) }}</span></span>
+                      <span style="width: 140px"><span class="hb-pill is-soft">{{ orderStatusLabel(o.status) }}</span></span>
+                      <span class="fw-bold text-end" style="width: 140px">{{ formatMoney(o.total_amount) }}</span>
+                    </div>
+                    <div class="hb-empty" *ngIf="dvm.orders.length === 0">Khách hàng chưa có đơn hàng nào.</div>
+                  </div>
+                </div>
+
+                <!-- PANEL ORDERS -->
+                <div *ngSwitchCase="'orders'">
+                  <div class="hb-subtitle">Tất cả đơn hàng</div>
+                  <div class="hb-table-wrap-small">
+                    <div class="hb-table-small-header d-flex justify-content-between">
+                      <span style="width: 140px">Mã đơn</span>
+                      <span style="width: 120px">Ngày đặt</span>
+                      <span style="width: 150px">Thanh toán</span>
+                      <span style="width: 150px">Trạng thái</span>
+                      <span class="text-end" style="width: 150px">Tổng thanh toán</span>
+                    </div>
+                    <div class="hb-table-small-row d-flex justify-content-between" *ngFor="let o of dvm.orders">
+                      <span class="hb-mono" style="width: 140px">{{ o.order_number }}</span>
+                      <span style="width: 120px">{{ o.created_at | date: 'dd/MM/yyyy' }}</span>
+                      <span style="width: 150px"><span class="hb-pill is-soft">{{ payStatusLabel(o.payment_status) }}</span></span>
+                      <span style="width: 150px"><span class="hb-pill is-soft">{{ orderStatusLabel(o.status) }}</span></span>
+                      <span class="fw-bold text-end" style="width: 150px">{{ formatMoney(o.total_amount) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PANEL POINTS -->
+                <div *ngSwitchCase="'voucher_points'">
+                  <div class="hb-subtitle">Lịch sử tích điểm</div>
+                  <div class="hb-table-wrap-small">
+                    <div class="hb-table-small-header d-flex justify-content-between">
+                      <span style="width: 150px">Thời gian</span>
+                      <span style="width: 100px">Hành động</span>
+                      <span class="text-end" style="width: 100px">Điểm</span>
+                      <span class="ms-4 flex-grow-1">Ghi chú</span>
+                    </div>
+                    <div class="hb-table-small-row d-flex justify-content-between" *ngFor="let t of dvm.point_history">
+                      <span style="width: 150px">{{ t.created_at | date: 'dd/MM/yyyy HH:mm' }}</span>
+                      <span style="width: 100px"><span class="hb-pill is-soft">{{ t.type }}</span></span>
+                      <span class="fw-bold text-end" style="width: 100px" [class.text-danger]="t.points < 0">{{ t.points > 0 ? '+' : '' }}{{ t.points }}</span>
+                      <span class="ms-4 flex-grow-1 text-muted">{{ t.note }}</span>
+                    </div>
+                    <div class="hb-empty" *ngIf="dvm.point_history.length === 0">Không có lịch sử điểm.</div>
+                  </div>
+                </div>
+
+                <!-- PANEL REPORTS -->
+                <div *ngSwitchCase="'reports'">
+                  <div class="hb-subtitle">Số liệu thống kê</div>
+                  <div class="hb-panels">
+                    <div class="hb-mini-card">
+                      <div class="hb-mini-title">Mua sắm tích lũy</div>
+                      <div class="hb-mini-value">{{ formatMoney(dvm.total_spent) }}</div>
+                    </div>
+                    <div class="hb-mini-card">
+                      <div class="hb-mini-title">Phí vận chuyển đã chi</div>
+                      <div class="hb-mini-value">250.000đ</div>
+                    </div>
+                    <div class="hb-mini-card">
+                      <div class="hb-mini-title">Tỷ lệ hoàn thành đơn</div>
+                      <div class="hb-mini-value">92%</div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </section>
         </div>
       </div>
     </ng-container>

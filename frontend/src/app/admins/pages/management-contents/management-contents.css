@@ -11,6 +11,11 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  position: sticky;
+  top: 0;
+  background: #f6f8fb;
+  z-index: 50;
+  padding: 10px 0;
 }
 
 .hb-title {

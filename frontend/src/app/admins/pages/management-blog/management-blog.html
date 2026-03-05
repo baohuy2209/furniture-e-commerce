@@ -1,627 +1,382 @@
 <div class="hb-page-shell" *ngIf="vm$ | async as vm">
-  <!-- HEADER -->
+  <!-- PAGE HEADER (sticky) -->
   <div class="hb-page-header">
     <div class="hb-header-left">
-      <div class="hb-title">QUẢN LÝ BÀI VIẾT</div>
-
-      <div class="hb-sub text-muted" *ngIf="vm.mode === 'list'">
-        Tổng: <b>{{ vm.total }}</b>
-        <span class="hb-dot">•</span>
-        Hiển thị: <b>{{ vm.showingFrom }}-{{ vm.showingTo }}</b
-        >/<b>{{ vm.total }}</b>
-      </div>
-
+      <div class="hb-title" routerLink="/admin/management-blog" style="cursor: pointer;">QUẢN LÝ BÀI VIẾT</div>
       <div class="hb-sub text-muted" *ngIf="vm.mode !== 'list' && vm.detail as d">
-        /{{ d.blog.slug }}
-        <span class="hb-dot">•</span>
-        ID: <b>{{ d.blog.blog_id }}</b>
+        {{ d.blog.title }} <span class="mx-2">/</span> ID: <b>#{{ d.blog.blog_id }}</b>
       </div>
     </div>
 
-    <!-- ACTIONS -->
+    <!-- LIST ACTIONS -->
     <div class="hb-header-actions" *ngIf="vm.mode === 'list'">
       <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
-
       <button class="btn btn-hb" type="button" (click)="exportCsv()">
-        <i class="bi bi-download me-1"></i>
-        Xuất CSV
+        <i class="bi bi-download me-1"></i> Xuất CSV
       </button>
-
       <button class="btn btn-hb-accent" type="button" (click)="createNew()">
-        <i class="bi bi-plus-lg me-1"></i>
-        Tạo bài viết
+        <i class="bi bi-plus-lg me-1"></i> Tạo bài viết
       </button>
     </div>
 
+    <!-- DETAIL ACTIONS -->
     <div class="hb-header-actions" *ngIf="vm.mode === 'detail'">
       <button class="btn btn-hb-outline" type="button" (click)="goList()">
-        <i class="bi bi-arrow-left me-1"></i>
-        Quay lại
+        <i class="bi bi-arrow-left me-1"></i> Quay lại
       </button>
-
       <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
-        <i class="bi bi-pencil-square me-1"></i>
-        Sửa
+        <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
       </button>
     </div>
 
+    <!-- EDIT ACTIONS -->
     <div class="hb-header-actions" *ngIf="vm.mode === 'edit'">
-      <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Huỷ</button>
-
+      <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Hủy</button>
       <button class="btn btn-hb" type="button" (click)="saveEdit()">
-        <i class="bi bi-check2-circle me-1"></i>
-        Lưu
+        <i class="bi bi-save2 me-1"></i> Lưu bài viết
       </button>
     </div>
   </div>
 
+  <!-- PAGE BODY -->
   <div class="hb-page-body">
-    <!-- ===== LIST ===== -->
+    <!-- LIST MODE -->
     <ng-container *ngIf="vm.mode === 'list'">
-      <!-- KPI -->
+      <!-- SUMMARY BOARD -->
       <div class="hb-summary-row">
         <div class="hb-summary-card">
-          <div class="hb-sc-icon"><i class="bi bi-journals"></i></div>
+          <div class="hb-sc-icon"><i class="bi bi-file-earmark-text"></i></div>
           <div>
             <div class="hb-sc-label">Tổng bài viết</div>
             <div class="hb-sc-value">{{ vm.kpiTotal }}</div>
           </div>
         </div>
-
         <div class="hb-summary-card">
-          <div class="hb-sc-icon ok"><i class="bi bi-eye"></i></div>
+          <div class="hb-sc-icon ok"><i class="bi bi-globe"></i></div>
           <div>
-            <div class="hb-sc-label">Tổng lượt xem</div>
-            <div class="hb-sc-value">{{ vm.kpiViewsText }}</div>
+            <div class="hb-sc-label">Đã xuất bản</div>
+            <div class="hb-sc-value">{{ vm.kpiPublished }}</div>
           </div>
         </div>
-
         <div class="hb-summary-card">
-          <div class="hb-sc-icon warn"><i class="bi bi-file-earmark-text"></i></div>
+          <div class="hb-sc-icon warn"><i class="bi bi-file-earmark"></i></div>
           <div>
-            <div class="hb-sc-label">Published / Draft</div>
-            <div class="hb-sc-value">{{ vm.kpiPublished }} / {{ vm.kpiDraft }}</div>
+            <div class="hb-sc-label">Bản nháp</div>
+            <div class="hb-sc-value">{{ vm.kpiDraft }}</div>
+          </div>
+        </div>
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon"><i class="bi bi-eye"></i></div>
+          <div>
+            <div class="hb-sc-label">Lượt xem tổng</div>
+            <div class="hb-sc-value">{{ vm.kpiViewsText }}</div>
           </div>
         </div>
       </div>
 
-      <!-- FILTER -->
+      <!-- FILTER BAR -->
       <div class="card hb-card hb-card-pad mb-3">
-        <div class="hb-filterbar hb-filterbar-blog">
+        <div class="hb-filterbar">
           <input
             class="form-control"
             [ngModel]="q"
             (ngModelChange)="onChangeQ($event)"
-            placeholder="Tìm theo title / slug / category / tag / author..."
+            placeholder="Tìm theo tiêu đề, slug, tác giả..."
           />
 
           <select class="form-select" [ngModel]="f_status" (ngModelChange)="onChangeStatus($event)">
-            <option value="">Trạng thái: Tất cả</option>
-            <option value="published">Published</option>
-            <option value="draft">Draft</option>
-            <option value="archived">Archived</option>
+            <option value="">-- Trạng thái --</option>
+            <option value="published">Đã xuất bản (Published)</option>
+            <option value="draft">Bản nháp (Draft)</option>
+            <option value="archived">Lưu trữ (Archived)</option>
           </select>
 
-          <select
-            class="form-select"
-            [ngModel]="f_category"
-            (ngModelChange)="onChangeCategory($event)"
-          >
-            <option value="">Category: Tất cả</option>
+          <select class="form-select" [ngModel]="f_category" (ngModelChange)="onChangeCategory($event)">
+            <option value="">-- Danh mục --</option>
             <option *ngFor="let c of vm.categories" [value]="c">{{ c }}</option>
           </select>
 
           <select class="form-select" [ngModel]="f_author" (ngModelChange)="onChangeAuthor($event)">
-            <option value="">Author: Tất cả</option>
+            <option value="">-- Tác giả --</option>
             <option *ngFor="let a of vm.authors" [value]="a">{{ a }}</option>
           </select>
 
-          <select
-            class="form-select"
-            [ngModel]="f_featured"
-            (ngModelChange)="onChangeFeatured($event)"
-          >
-            <option value="">Featured: Tất cả</option>
-            <option value="true">Featured</option>
+          <select class="form-select" [ngModel]="f_featured" (ngModelChange)="onChangeFeatured($event)">
+            <option value="">-- Nổi bật --</option>
+            <option value="true">Có</option>
             <option value="false">Không</option>
           </select>
 
-          <input
-            class="form-control"
-            type="date"
-            [ngModel]="f_from"
-            (ngModelChange)="onChangeFrom($event)"
-          />
-          <input
-            class="form-control"
-            type="date"
-            [ngModel]="f_to"
-            (ngModelChange)="onChangeTo($event)"
-          />
+          <input class="form-control" type="date" [ngModel]="f_from" (ngModelChange)="onChangeFrom($event)" placeholder="Từ ngày" />
+          <input class="form-control" type="date" [ngModel]="f_to" (ngModelChange)="onChangeTo($event)" placeholder="Đến ngày" />
 
-          <select
-            class="form-select"
-            [ngModel]="pageSize"
-            (ngModelChange)="onChangePageSize($event)"
-          >
-            <option [ngValue]="10">10</option>
-            <option [ngValue]="20">20</option>
-            <option [ngValue]="50">50</option>
-          </select>
-
-          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
-            Reset
-          </button>
+          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">Reset</button>
         </div>
       </div>
 
-      <!-- TABLE -->
+      <!-- TABLE CARD -->
       <div class="card hb-card hb-table-card">
         <div class="hb-table-wrap">
-          <div class="hb-grid-table hb-grid-blog">
-            <!-- HEAD (FIX: add hb-grid-blog here) -->
-            <div class="hb-grid-head hb-grid-blog">
+          <div class="hb-table">
+            <!-- HEAD -->
+            <div class="hb-table-head hb-grid-blogs">
+              <div class="hb-th">
+                <div class="th-content"><span>STT</span></div>
+              </div>
+
               <div class="hb-th" (click)="toggleSort('title')">
-                <div class="th-content"><span>Tiêu đề</span><i class="fas fa-sort"></i></div>
+                <div class="th-content">
+                  <span>BÀI VIẾT</span>
+                  <i class="fas" [ngClass]="sortIcon('title')"></i>
+                </div>
               </div>
               <div class="hb-th" (click)="toggleSort('category')">
-                <div class="th-content"><span>Category</span><i class="fas fa-sort"></i></div>
+                <div class="th-content">
+                  <span>DANH MỤC</span>
+                  <i class="fas" [ngClass]="sortIcon('category')"></i>
+                </div>
               </div>
               <div class="hb-th" (click)="toggleSort('author')">
-                <div class="th-content"><span>Author</span><i class="fas fa-sort"></i></div>
+                <div class="th-content">
+                  <span>TÁC GIẢ</span>
+                  <i class="fas" [ngClass]="sortIcon('author')"></i>
+                </div>
               </div>
-              <div class="hb-th" (click)="toggleSort('status')">
-                <div class="th-content"><span>Trạng thái</span><i class="fas fa-sort"></i></div>
-              </div>
+              <div class="hb-th"><span>TRẠNG THÁI</span></div>
               <div class="hb-th" (click)="toggleSort('views')">
-                <div class="th-content"><span>Lượt xem</span><i class="fas fa-sort"></i></div>
+                <div class="th-content">
+                  <span>VIEWS</span>
+                  <i class="fas" [ngClass]="sortIcon('views')"></i>
+                </div>
               </div>
               <div class="hb-th" (click)="toggleSort('published_at')">
-                <div class="th-content"><span>Publish</span><i class="fas fa-sort"></i></div>
+                <div class="th-content">
+                  <span>NGÀY ĐĂNG</span>
+                  <i class="fas" [ngClass]="sortIcon('published_at')"></i>
+                </div>
               </div>
-              <div class="hb-th" (click)="toggleSort('updated_at')">
-                <div class="th-content"><span>Cập nhật</span><i class="fas fa-sort"></i></div>
-              </div>
-              <div class="hb-th hb-th-center">Sửa</div>
+              <div class="hb-th"><span>SỬA</span></div>
             </div>
 
-            <!-- ROWS (FIX: add hb-grid-blog here) -->
+            <!-- ROWS -->
             <div
-              class="hb-grid-row hb-row-click hb-grid-blog"
-              *ngFor="let r of vm.rows; let i = index"
+              class="hb-table-row hb-grid-blogs"
+              *ngFor="let r of vm.rows"
               (click)="openDetail(r.blog_id)"
-              [class.is-active]="r.blog_id === vm.selectedId"
-              [class.is-alt]="i % 2 === 1"
             >
-              <div class="hb-td hb-td-title">
-                <div class="hb-title-line">
-                  <img class="hb-cover" [src]="r.cover_url" alt="" />
-                  <div>
-                    <div class="hb-name clamp-2">{{ r.title }}</div>
-                    <div class="hb-subline">/{{ r.slug }}</div>
+              <div class="hb-td hb-td-center text-muted fw-bold">
+                {{ r.stt }}
+              </div>
 
-                    <div class="hb-tags" *ngIf="r.tagsText">
-                      <span
-                        class="hb-tag-pill"
-                        *ngFor="let t of r.tagsText.split(',') | slice: 0 : 3"
-                      >
-                        {{ t.trim() }}
-                      </span>
+              <div class="hb-td">
+                <div class="d-flex align-items-center gap-3 w-100">
+                  <div class="hb-cover">
+                    <img [src]="r.cover_url" alt="cover" />
+                  </div>
+                  <div class="min-w-0">
+                    <div class="hb-name fw-bold hb-text-truncate">{{ r.title }}</div>
+                    <div class="hb-subline hb-text-truncate">/{{ r.slug }}</div>
+                    <div class="hb-tag-list mt-1">
+                      <span class="hb-tag" *ngFor="let t of r.tagsText.split(',') | slice: 0:2">{{ t.trim() }}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="hb-td">{{ r.category || '—' }}</div>
-              <div class="hb-td">{{ r.author_name || '—' }}</div>
-
-              <div class="hb-td">
-                <span class="hb-badge-soft" [ngClass]="r.statusClass">{{ r.statusLabel }}</span>
+              <div class="hb-td hb-td-center">
+                <span class="fw-bold">{{ r.category || '—' }}</span>
               </div>
 
-              <div class="hb-td">{{ r.viewsText }}</div>
-              <div class="hb-td">{{ r.publishedAtText }}</div>
-              <div class="hb-td hb-muted">{{ r.updatedAtText }}</div>
+              <div class="hb-td hb-td-center">
+                <span class="fw-semibold text-muted">{{ r.author_name || '—' }}</span>
+              </div>
+
+              <div class="hb-td hb-td-center">
+                <span class="hb-pill" [ngClass]="r.statusClass">{{ r.statusLabel }}</span>
+              </div>
+
+              <div class="hb-td hb-td-center fw-bold">
+                {{ r.viewsText }}
+              </div>
+
+              <div class="hb-td hb-td-center text-muted fw-semibold">
+                {{ r.publishedAtText }}
+              </div>
 
               <div class="hb-td hb-td-center" (click)="stopEvent($event)">
-                <button
-                  class="hb-icon-btn"
-                  type="button"
-                  title="Sửa bài viết"
-                  (click)="stopEvent($event); openDetail(r.blog_id); enterEdit()"
-                >
+                <button class="hb-icon-btn" (click)="openDetail(r.blog_id); enterEdit()">
                   <i class="bi bi-pencil-square"></i>
                 </button>
               </div>
             </div>
 
-            <div class="hb-empty" *ngIf="vm.rows.length === 0">Không có dữ liệu</div>
+            <div class="p-5 text-center text-muted fw-semibold" *ngIf="vm.rows.length === 0">
+              Không có bài viết nào phù hợp.
+            </div>
           </div>
         </div>
 
+        <!-- Pagination -->
         <div class="hb-pagination">
-          <button
-            class="hb-page-btn"
-            type="button"
-            [disabled]="vm.page === 1"
-            (click)="setPage(vm.page - 1)"
-          >
-            ‹
-          </button>
+          <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">‹</button>
           <div class="hb-page-info">
-            <span>Trang</span> <b>{{ vm.page }}</b> <span>/</span> <span>{{ vm.totalPages }}</span>
+            <span>Trang</span>
+            <b>{{ vm.page }}</b>
+            <span>/</span>
+            <span>{{ vm.totalPages }}</span>
           </div>
-          <button
-            class="hb-page-btn"
-            type="button"
-            [disabled]="vm.page === vm.totalPages"
-            (click)="setPage(vm.page + 1)"
-          >
-            ›
-          </button>
+          <button class="hb-page-btn" [disabled]="vm.page >= vm.totalPages" (click)="setPage(vm.page + 1)">›</button>
         </div>
       </div>
     </ng-container>
 
-    <!-- ===== DETAIL ===== -->
+    <!-- DETAIL MODE -->
     <ng-container *ngIf="vm.mode === 'detail' && vm.detail as d">
-      <div class="hb-summary-row hb-summary-row-compact">
-        <div class="hb-summary-card">
-          <div class="hb-sc-icon"><i class="bi bi-bookmark-star"></i></div>
-          <div>
-            <div class="hb-sc-label">Trạng thái</div>
-            <div class="hb-sc-value">{{ vm.kpiDetailStatusLabel }}</div>
+      <div class="hb-detail-grid">
+        <div class="hb-main">
+          <div class="card hb-card hb-card-pad">
+            <img class="hb-detail-hero-cover" [src]="d.blog.cover_url" alt="Hero Cover" />
+            <div class="hb-section-title">Nội dung chi tiết (Xem trước)</div>
+            <div class="hb-content-preview border rounded p-4 bg-light" [innerHTML]="d.blog.content_html"></div>
           </div>
         </div>
 
-        <div class="hb-summary-card">
-          <div class="hb-sc-icon ok"><i class="bi bi-eye"></i></div>
-          <div>
-            <div class="hb-sc-label">Lượt xem</div>
-            <div class="hb-sc-value">{{ vm.kpiDetailViewsText }}</div>
-          </div>
-        </div>
-
-        <div class="hb-summary-card">
-          <div class="hb-sc-icon warn"><i class="bi bi-clock"></i></div>
-          <div>
-            <div class="hb-sc-label">Reading time</div>
-            <div class="hb-sc-value">{{ vm.kpiDetailReadingText }}</div>
+        <div class="hb-aside">
+          <div class="card hb-card hb-card-pad">
+            <div class="hb-section-title">Thông tin bài viết</div>
+            <div class="hb-kv">
+              <div class="hb-k">Trạng thái</div>
+              <div class="hb-v"><span class="hb-pill" [ngClass]="d.statusClass">{{ d.statusLabel }}</span></div>
+            </div>
+            <div class="hb-kv">
+              <div class="hb-k">Danh mục</div>
+              <div class="hb-v">{{ d.blog.category || '—' }}</div>
+            </div>
+            <div class="hb-kv">
+              <div class="hb-k">Tác giả</div>
+              <div class="hb-v fw-bold">{{ d.blog.author_name || '—' }}</div>
+            </div>
+            <div class="hb-kv">
+              <div class="hb-k">Thời gian đọc</div>
+              <div class="hb-v text-accent">{{ d.readingText }}</div>
+            </div>
+            <div class="hb-kv">
+              <div class="hb-k">Lượt xem</div>
+              <div class="hb-v">{{ d.viewsText }}</div>
+            </div>
+            <div class="hb-kv">
+              <div class="hb-k">Ngày đăng</div>
+              <div class="hb-v">{{ d.publishedAtText }}</div>
+            </div>
+            <div class="hb-kv">
+              <div class="hb-k">Cập nhật cuối</div>
+              <div class="hb-v">{{ d.updatedAtText }}</div>
+            </div>
+            <div class="hb-kv border-0">
+              <div class="hb-k">Tags</div>
+              <div class="hb-tag-list mt-2">
+                <span class="hb-tag" *ngFor="let t of d.blog.tags">{{ t }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </ng-container>
 
+    <!-- EDIT MODE -->
+    <ng-container *ngIf="vm.mode === 'edit' && vm.editModel as em">
       <div class="row g-3">
         <div class="col-12 col-xl-8">
           <div class="card hb-card hb-card-pad">
-            <div class="hb-detail-hero">
-              <img class="hb-detail-cover" [src]="d.blog.cover_url" alt="" />
-              <div class="hb-detail-meta">
-                <div class="d-flex gap-2 flex-wrap">
-                  <span class="hb-badge-soft" [ngClass]="d.statusClass">{{ d.statusLabel }}</span>
-                  <span class="hb-pill"
-                    >Category: <b>{{ d.blog.category }}</b></span
-                  >
-                  <span class="hb-pill"
-                    >Read: <b>{{ d.readingText }}</b></span
-                  >
-                  <span class="hb-pill"
-                    >Views: <b>{{ d.viewsText }}</b></span
-                  >
-                  <span class="hb-pill"
-                    >Publish: <b>{{ d.publishedAtText }}</b></span
-                  >
+            <div class="hb-section-title">Nội dung chính</div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Tiêu đề bài viết *</label>
+              <input class="form-control form-control-lg" [(ngModel)]="$any(em).title" placeholder="Ví dụ: 10 cách trang trí phòng ngủ..." />
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Slug URL</label>
+                <div class="input-group">
+                  <span class="input-group-text">/blog/</span>
+                  <input class="form-control" [(ngModel)]="$any(em).slug" placeholder="tieu-de-bai-viet" />
                 </div>
-                <div class="hb-detail-title">{{ d.blog.title }}</div>
-                <div class="hb-sub text-muted">/{{ d.blog.slug }}</div>
-                <div class="hb-sub text-muted">Tags: {{ d.tagsText }}</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Trạng thái</label>
+                <select class="form-select" [(ngModel)]="$any(em).status">
+                  <option value="draft">Bản nháp (Draft)</option>
+                  <option value="published">Xuất bản (Published)</option>
+                  <option value="archived">Lưu trữ (Archived)</option>
+                </select>
               </div>
             </div>
 
-            <div class="hb-divider"></div>
-
-            <div class="hb-kv">
-              <div class="k">Author</div>
-              <div class="v">{{ d.blog.author_name }}</div>
-            </div>
-            <div class="hb-kv">
-              <div class="k">Published</div>
-              <div class="v">{{ d.publishedAtText }}</div>
-            </div>
-            <div class="hb-kv">
-              <div class="k">Updated</div>
-              <div class="v">{{ d.updatedAtText }}</div>
+            <div class="mt-4">
+              <label class="form-label fw-bold">Ảnh bìa (Cover URL)</label>
+              <input class="form-control" [(ngModel)]="$any(em).cover_url" placeholder="https://..." />
+              <div class="hb-upload-row mt-2">
+                <input class="form-control form-control-sm w-auto" type="file" (change)="onCoverFileSelected(em, $event)" />
+                <span class="text-muted small align-self-center" *ngIf="coverUploadName">Đang chọn: {{ coverUploadName }}</span>
+              </div>
             </div>
 
-            <div class="hb-divider"></div>
-
-            <div class="hb-title" style="font-size: 18px">Nội dung (preview)</div>
-
-            <div class="hb-divider"></div>
-
-            <div class="hb-content-preview" [innerHTML]="d.blog.content_html"></div>
+            <div class="mt-4">
+              <label class="form-label fw-bold">Trình soạn thảo nội dung</label>
+              <div class="hb-editor">
+                <div class="hb-editor-toolbar">
+                  <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('bold')"><b>B</b></button>
+                  <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('italic')"><i>I</i></button>
+                  <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('underline')"><u>U</u></button>
+                  <span class="hb-ed-sep"></span>
+                  <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('formatBlock', 'h2')">H2</button>
+                  <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('formatBlock', 'h3')">H3</button>
+                  <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('formatBlock', 'p')">P</button>
+                  <span class="hb-ed-sep"></span>
+                  <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('insertUnorderedList')"><i class="bi bi-list-ul"></i></button>
+                  <button type="button" class="hb-ed-btn" (click)="promptLink()"><i class="bi bi-link-45deg"></i></button>
+                </div>
+                <div #editor class="hb-editor-surface" contenteditable="true" [innerHTML]="$any(em).content_html" (input)="onEditorInput(editor)"></div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="col-12 col-xl-4">
-          <div class="card hb-card hb-card-pad">
-            <div class="hb-title" style="font-size: 18px">Tác vụ</div>
-            <div class="hb-divider"></div>
-
-            <button class="btn btn-hb-outline w-100 mb-2" type="button" (click)="goList()">
-              <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
-            </button>
-
-            <button class="btn btn-hb-accent w-100 mb-2" type="button" (click)="enterEdit()">
-              <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
-            </button>
-
+          <div class="card hb-card hb-card-pad sticky-top" style="top: 80px; z-index: 10;">
+            <div class="hb-section-title">Phân loại & Thuộc tính</div>
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label fw-bold">Danh mục</label>
+                <input class="form-control" [(ngModel)]="$any(em).category" placeholder="Ví dụ: Phối màu" />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-bold">Tác giả</label>
+                <input class="form-control" [(ngModel)]="$any(em).author_name" placeholder="Admin" />
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-bold">Phút đọc</label>
+                <input type="number" class="form-control" [(ngModel)]="$any(em).reading_minutes" />
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-bold">Nổi bật</label>
+                <select class="form-select" [(ngModel)]="$any(em).featured">
+                  <option [ngValue]="true">Có</option>
+                  <option [ngValue]="false">Không</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-bold">Tags (cách nhau dấu phẩy)</label>
+                <input class="form-control" [ngModel]="getTagsText(em)" (ngModelChange)="onTagsInput(em, $event)" placeholder="tag1, tag2..." />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-bold">Tóm tắt ngắn (Excerpt)</label>
+                <textarea class="form-control" rows="4" [(ngModel)]="$any(em).excerpt" placeholder="Hiển thị ở trang danh sách bài viết..."></textarea>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </ng-container>
-
-    <!-- ===== EDIT ===== -->
-    <ng-container *ngIf="vm.mode === 'edit'">
-      <ng-container *ngIf="vm.editModel as em">
-        <div class="hb-summary-row hb-summary-row-compact">
-          <div class="hb-summary-card">
-            <div class="hb-sc-icon"><i class="bi bi-pencil"></i></div>
-            <div>
-              <div class="hb-sc-label">Chế độ</div>
-              <div class="hb-sc-value">Đang chỉnh sửa</div>
-            </div>
-          </div>
-          <div class="hb-summary-card">
-            <div class="hb-sc-icon ok"><i class="bi bi-eye"></i></div>
-            <div>
-              <div class="hb-sc-label">Lượt xem</div>
-              <div class="hb-sc-value">{{ vm.kpiDetailViewsText || '0' }}</div>
-            </div>
-          </div>
-          <div class="hb-summary-card">
-            <div class="hb-sc-icon warn"><i class="bi bi-clock"></i></div>
-            <div>
-              <div class="hb-sc-label">Reading time</div>
-              <div class="hb-sc-value">{{ vm.kpiDetailReadingText || '—' }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row g-3">
-          <div class="col-12 col-xl-8">
-            <div class="card hb-card hb-card-pad">
-              <div class="hb-title" style="font-size: 18px">Chỉnh sửa bài viết</div>
-              <div class="hb-sub text-muted">
-                Query: <b>?mode=edit&id={{ $any(em).blog_id }}</b>
-              </div>
-
-              <div class="hb-divider"></div>
-
-              <div class="row g-3">
-                <div class="col-12">
-                  <label class="form-label fw-semibold">Title *</label>
-                  <input
-                    class="form-control"
-                    [(ngModel)]="$any(em).title"
-                    placeholder="Nhập tiêu đề..."
-                  />
-                </div>
-
-                <div class="col-12 col-lg-6">
-                  <label class="form-label fw-semibold">Slug</label>
-                  <input
-                    class="form-control"
-                    [(ngModel)]="$any(em).slug"
-                    placeholder="tu-khoa-bai-viet"
-                  />
-                </div>
-
-                <div class="col-12 col-lg-6">
-                  <label class="form-label fw-semibold">Status</label>
-                  <select class="form-select" [(ngModel)]="$any(em).status">
-                    <option [ngValue]="'draft'">Draft</option>
-                    <option [ngValue]="'published'">Published</option>
-                    <option [ngValue]="'archived'">Archived</option>
-                  </select>
-                </div>
-
-                <div class="col-12">
-                  <label class="form-label fw-semibold">Cover URL</label>
-                  <input
-                    class="form-control"
-                    [(ngModel)]="$any(em).cover_url"
-                    placeholder="https://..."
-                  />
-
-                  <div class="hb-upload-row">
-                    <input
-                      class="hb-file"
-                      type="file"
-                      accept="image/png,image/jpeg,image/webp,image/gif"
-                      (change)="onCoverFileSelected(em, $event)"
-                    />
-                    <div class="hb-upload-meta">
-                      <div class="hb-upload-name" *ngIf="coverUploadName">
-                        Đã chọn: <b>{{ coverUploadName }}</b>
-                      </div>
-                      <div class="hb-upload-err" *ngIf="coverUploadError">
-                        {{ coverUploadError }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-12 col-lg-6">
-                  <label class="form-label fw-semibold">Category *</label>
-                  <input
-                    class="form-control"
-                    [(ngModel)]="$any(em).category"
-                    placeholder="Phối màu / Decor / Xu hướng..."
-                  />
-                </div>
-
-                <div class="col-12 col-lg-6">
-                  <label class="form-label fw-semibold">Author</label>
-                  <input
-                    class="form-control"
-                    [(ngModel)]="$any(em).author_name"
-                    placeholder="Admin..."
-                  />
-                </div>
-
-                <div class="col-12 col-lg-4">
-                  <label class="form-label fw-semibold">Reading minutes</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="120"
-                    class="form-control"
-                    [(ngModel)]="$any(em).reading_minutes"
-                  />
-                </div>
-
-                <div class="col-12 col-lg-4">
-                  <label class="form-label fw-semibold">Featured</label>
-                  <select class="form-select" [(ngModel)]="$any(em).featured">
-                    <option [ngValue]="false">Không</option>
-                    <option [ngValue]="true">Featured</option>
-                  </select>
-                </div>
-
-                <div class="col-12 col-lg-4">
-                  <label class="form-label fw-semibold">Published at</label>
-                  <input
-                    type="datetime-local"
-                    class="form-control"
-                    [ngModel]="$any(em).published_at ? ($any(em).published_at | slice: 0 : 16) : ''"
-                    (ngModelChange)="$any(em).published_at = $event"
-                  />
-                </div>
-
-                <div class="col-12">
-                  <label class="form-label fw-semibold">Tags (ngăn cách bởi dấu ,)</label>
-                  <input
-                    class="form-control"
-                    [ngModel]="getTagsText(em)"
-                    (ngModelChange)="onTagsInput(em, $event)"
-                    placeholder="phoi-mau, noi-that, modern..."
-                  />
-                </div>
-
-                <div class="col-12">
-                  <label class="form-label fw-semibold">Đoạn trích ngắn</label>
-                  <textarea class="form-control" rows="3" [(ngModel)]="$any(em).excerpt"></textarea>
-                </div>
-
-                <div class="col-12">
-                  <label class="form-label fw-semibold">Nội dung bài viết</label>
-
-                  <div class="hb-editor">
-                    <div class="hb-editor-toolbar">
-                      <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('bold')">
-                        <b>B</b>
-                      </button>
-                      <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('italic')">
-                        <i>I</i>
-                      </button>
-                      <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('underline')">
-                        <u>U</u>
-                      </button>
-
-                      <span class="hb-ed-sep"></span>
-
-                      <button
-                        type="button"
-                        class="hb-ed-btn"
-                        (click)="applyEditorCmd('formatBlock', 'h1')"
-                      >
-                        H1
-                      </button>
-                      <button
-                        type="button"
-                        class="hb-ed-btn"
-                        (click)="applyEditorCmd('formatBlock', 'h2')"
-                      >
-                        H2
-                      </button>
-                      <button
-                        type="button"
-                        class="hb-ed-btn"
-                        (click)="applyEditorCmd('formatBlock', 'p')"
-                      >
-                        P
-                      </button>
-
-                      <span class="hb-ed-sep"></span>
-
-                      <button
-                        type="button"
-                        class="hb-ed-btn"
-                        (click)="applyEditorCmd('insertUnorderedList')"
-                      >
-                        • List
-                      </button>
-                      <button
-                        type="button"
-                        class="hb-ed-btn"
-                        (click)="applyEditorCmd('insertOrderedList')"
-                      >
-                        1. List
-                      </button>
-
-                      <span class="hb-ed-sep"></span>
-
-                      <button type="button" class="hb-ed-btn" (click)="promptLink()">Link</button>
-                      <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('unlink')">
-                        Unlink
-                      </button>
-
-                      <span class="hb-ed-sep"></span>
-
-                      <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('undo')">
-                        Undo
-                      </button>
-                      <button type="button" class="hb-ed-btn" (click)="applyEditorCmd('redo')">
-                        Redo
-                      </button>
-                    </div>
-
-                    <div
-                      #editor
-                      class="hb-editor-surface"
-                      contenteditable="true"
-                      [innerHTML]="$any(em).content_html"
-                      (input)="onEditorInput(editor)"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-12 col-xl-4">
-            <div class="card hb-card hb-card-pad">
-              <div class="hb-title" style="font-size: 18px">Preview</div>
-              <div class="hb-divider"></div>
-
-              <img
-                class="hb-preview-cover"
-                [src]="$any(em).cover_url"
-                alt=""
-                *ngIf="$any(em).cover_url"
-              />
-              <div class="hb-preview-title">{{ $any(em).title || '—' }}</div>
-              <div class="hb-sub text-muted">/{{ $any(em).slug || '—' }}</div>
-
-              <div class="hb-divider"></div>
-
-              <div class="hb-sub text-muted">Render:</div>
-              <div class="hb-content-preview" [innerHTML]="$any(em).content_html"></div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
     </ng-container>
   </div>
 </div>

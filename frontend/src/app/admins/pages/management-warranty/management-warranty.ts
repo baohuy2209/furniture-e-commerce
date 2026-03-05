@@ -65,6 +65,7 @@ type WarrantyRequestDetailVM = Omit<WarrantyRequest, 'createdAt' | 'expectedDone
 
 interface ListRowVM {
   id: string;
+  type: RequestType;
 
   status: RequestStatus;
   statusLabel: string;
@@ -74,9 +75,13 @@ interface ListRowVM {
   productName: string;
   variantLabel: string;
 
+  customerName: string;
+  customerPhone: string;
+
   supplier?: string;
   assignee?: string;
 
+  stt: number;
   expectedDoneAt: Date;
   slaLabel: string;
 }
@@ -204,7 +209,7 @@ export class ManagementWarranty implements OnInit, OnDestroy {
       let filtered = rowsAll.slice();
       const q = (query.q || '').trim().toLowerCase();
 
-      if (q) {
+      if (q.length >= 3) {
         filtered = filtered.filter((r) => {
           const hay =
             `${r.id} ${r.orderId} ${r.productName} ${r.variantLabel} ${r.assignee ?? ''} ${r.supplier ?? ''}`.toLowerCase();
@@ -241,7 +246,10 @@ export class ManagementWarranty implements OnInit, OnDestroy {
 
       const start = (page - 1) * query.pageSize;
       const end = start + query.pageSize;
-      const rows = filtered.slice(start, end);
+      const rows = filtered.slice(start, end).map((r, i) => ({
+        ...r,
+        stt: start + i + 1,
+      }));
 
       const supplierOptions = Array.from(
         new Set(rowsAll.map((x) => x.supplier).filter(Boolean) as string[]),
@@ -258,6 +266,7 @@ export class ManagementWarranty implements OnInit, OnDestroy {
       return {
         query: { ...query, page },
         rows,
+        totalCount: rowsAll.length,
         total,
         totalPages,
         rangeLabel,
@@ -311,6 +320,11 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     } else {
       this.query$.next({ ...q, sortKey: key, sortDir: 'asc' });
     }
+  }
+
+  sortIcon(key: keyof ListRowVM): string {
+    if (this.query$.value.sortKey !== key) return 'fa-sort';
+    return this.query$.value.sortDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
   isSortKey(key: keyof ListRowVM): boolean {
@@ -547,6 +561,25 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     }
   }
 
+  fmtDate(iso: string | undefined): string {
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return iso;
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      return `${dd}/${mm}/${yyyy}`;
+    } catch {
+      return iso;
+    }
+  }
+
+  formatNumber(n: number | undefined): string {
+    if (n === undefined || n === null) return '0';
+    return n.toLocaleString('vi-VN');
+  }
+
   exportCsv(rows: ListRowVM[]): void {
     const header = [
       'id',
@@ -595,6 +628,7 @@ function toRowVM(x: WarrantyRequest): ListRowVM {
 
   return {
     id: x.id,
+    type: x.type,
     status: x.status,
     statusLabel: statusLabel(x.status),
 
@@ -603,11 +637,15 @@ function toRowVM(x: WarrantyRequest): ListRowVM {
     productName: x.productName,
     variantLabel: x.variantLabel,
 
+    customerName: x.customerName,
+    customerPhone: x.customerPhone,
+
     supplier: x.supplier,
     assignee: x.assignee,
 
     expectedDoneAt,
     slaLabel,
+    stt: 0, // Injected later
   };
 }
 

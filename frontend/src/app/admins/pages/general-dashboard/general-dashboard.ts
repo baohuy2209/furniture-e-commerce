@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 type RangeMode = 'day' | 'week' | 'month';
 
@@ -113,16 +114,16 @@ function uuid(): string {
 @Component({
   standalone: true,
   selector: 'general-dashboard',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './general-dashboard.html',
   styleUrls: ['./general-dashboard.css'],
 })
 export class GeneralDashboard implements OnInit {
-  rangeMode: RangeMode = 'day';
+  // Global filter – affects KPIs and all tables
+  activePreset: number | null = 30;
+  g_from_date = '';
+  g_to_date = '';
 
-  /** date inputs (yyyy-MM-dd) */
-  from_date = '';
-  to_date = '';
   todayStr = isoDate(new Date().toISOString());
 
   // stores (local only)
@@ -133,148 +134,134 @@ export class GeneralDashboard implements OnInit {
   reviews: REVIEW[] = [];
 
   ngOnInit(): void {
-    this.applyPresetRange('day'); // start = today
+    this.applyGlobalPreset(30); 
     this.seedMockDomainData();
     void this.tryLoadProducts();
   }
 
+  private initGlobalDates() {
+    const d = new Date();
+    this.g_to_date = isoDate(d.toISOString());
+    const start = addDays(d, -30);
+    this.g_from_date = isoDate(start.toISOString());
+  }
+
   // ===== UI actions =====
-  setRangeMode(m: RangeMode) {
-    this.rangeMode = m;
-    this.applyPresetRange(m);
+
+
+  resetGlobalFilters() {
+    this.applyGlobalPreset(30);
   }
 
-  resetFilters() {
-    this.applyPresetRange(this.rangeMode);
-  }
-
-  /** preset theo rule */
-  private applyPresetRange(m: RangeMode) {
+  applyGlobalPreset(days: number) {
+    this.activePreset = days;
     const today = new Date();
-    let from = today;
-
-    if (m === 'day') from = today;
-    if (m === 'week') from = addDays(today, -7);
-    if (m === 'month') from = addDays(today, -30);
-
-    this.from_date = isoDate(from.toISOString());
-    this.to_date = isoDate(today.toISOString());
-    this.normalizeDateRange();
+    this.g_to_date = isoDate(today.toISOString());
+    const start = addDays(today, -(days - 1));
+    this.g_from_date = isoDate(start.toISOString());
+    this.normalizeGlobalDates();
   }
 
-  /** user changed from */
-  onFromChange() {
-    this.normalizeDateRange();
+  isGlobalPresetActive(days: number): boolean {
+    return this.activePreset === days;
   }
 
-  /** user changed to */
-  onToChange() {
-    this.normalizeDateRange();
+
+
+  onGlobalDateChange() {
+    this.activePreset = null; // Clear preset since user changed dates manually
+    this.normalizeGlobalDates();
   }
 
-  /** enforce:
-   * - from/to không vượt hôm nay
-   * - to >= from
-   */
-  private normalizeDateRange() {
+  private normalizeGlobalDates() {
     const today = startOfDay(new Date()).getTime();
-
-    let from = this.from_date ? startOfDay(new Date(this.from_date)).getTime() : today;
-    let to = this.to_date ? startOfDay(new Date(this.to_date)).getTime() : today;
-
-    if (Number.isNaN(from)) from = today;
-    if (Number.isNaN(to)) to = today;
+    let from = this.g_from_date ? startOfDay(new Date(this.g_from_date)).getTime() : today;
+    let to = this.g_to_date ? startOfDay(new Date(this.g_to_date)).getTime() : today;
 
     if (from > today) from = today;
     if (to > today) to = today;
-
     if (to < from) to = from;
 
-    this.from_date = isoDate(new Date(from).toISOString());
-    this.to_date = isoDate(new Date(to).toISOString());
-    this.todayStr = isoDate(new Date().toISOString());
+    this.g_from_date = isoDate(new Date(from).toISOString());
+    this.g_to_date = isoDate(new Date(to).toISOString());
   }
+
+
 
   // ===== computed =====
   get vm() {
-    const from = this.from_date ? startOfDay(new Date(this.from_date)) : startOfDay(new Date());
-    const to = this.to_date ? endOfDay(new Date(this.to_date)) : endOfDay(new Date());
+    // GLOBAL RANGE
+    const gFrom = this.g_from_date ? startOfDay(new Date(this.g_from_date)) : startOfDay(new Date());
+    const gTo = this.g_to_date ? endOfDay(new Date(this.g_to_date)) : endOfDay(new Date());
 
-    const inRange = this.orders.filter((o) => {
+    // Filtered data for KPIs and Tables
+    const ordersInRange = this.orders.filter((o) => {
       const t = new Date(o.created_at).getTime();
-      return t >= from.getTime() && t <= to.getTime();
+      return t >= gFrom.getTime() && t <= gTo.getTime();
     });
 
-    // revenue: exclude cancelled
-    const revenue = inRange
+    const reviewsInRange = this.reviews.filter((r) => {
+      const t = new Date(r.created_at).getTime();
+      return t >= gFrom.getTime() && t <= gTo.getTime();
+    });
+
+    // Dashboard KPIs
+    const revenue = ordersInRange
       .filter((o) => o.status !== 'cancelled')
       .reduce((sum, o) => sum + n(o.total_amount), 0);
 
-    const totalOrders = inRange.length;
-
-    // "đơn đang xử lý": pending/packed/shipping/return_requested/exchange_requested
-    const activeOrders = inRange.filter((o) =>
-      ['pending', 'packed', 'shipping', 'return_requested', 'exchange_requested'].includes(
-        o.status,
-      ),
+    const totalOrders = ordersInRange.length;
+    
+    const activeOrders = ordersInRange.filter((o) =>
+      ['pending', 'packed', 'shipping', 'return_requested', 'exchange_requested'].includes(o.status),
     ).length;
 
-    // customers: unique user in all orders
-    const customers = new Set(this.orders.map((o) => o.user_id)).size;
+    const customersCount = new Set(ordersInRange.map((o) => o.user_id)).size;
 
-    // status distribution
+    // Status distribution (Global)
     const statusCount: Record<OrderStatus, number> = {
-      pending: 0,
-      packed: 0,
-      shipping: 0,
-      delivered: 0,
-      cancelled: 0,
-      return_requested: 0,
-      returned: 0,
-      exchange_requested: 0,
-      exchanged: 0,
+      pending: 0, packed: 0, shipping: 0, delivered: 0, cancelled: 0,
+      return_requested: 0, returned: 0, exchange_requested: 0, exchanged: 0,
     };
-    for (const o of inRange) statusCount[o.status]++;
-
+    for (const o of ordersInRange) statusCount[o.status]++;
     const donut = this.buildDonut(statusCount);
 
-    // recent orders: 5
-    const recent = [...inRange]
+    // Recent orders (Max 5) - Global Filtered
+    const recentOrders = [...ordersInRange]
       .sort((a, b) => safeText(b.created_at).localeCompare(safeText(a.created_at)))
       .slice(0, 5)
       .map((o) => {
         const u = this.users.find((x) => x.user_id === o.user_id);
         return {
           ...o,
-          customer_name: u ? `${u.first_name} ${u.last_name}`.trim() : '(unknown)',
+          customer_name: u ? `${u.first_name} ${u.last_name}`.trim() : 'Khách vãng lai',
           customer_phone: u?.phone ?? '',
         };
       });
 
-    // top products by quantity in-range
-    const orderIds = new Set(inRange.map((o) => o.order_id));
-    const itemsInRange = this.orderItems.filter((it) => orderIds.has(it.order_id));
-
+    // Top selling products (Global Filtered)
+    const gOrderIds = new Set(ordersInRange.map((o) => o.order_id));
+    const gItems = this.orderItems.filter((it) => gOrderIds.has(it.order_id));
     const qtyByProduct = new Map<string, number>();
-    for (const it of itemsInRange) {
+    for (const it of gItems) {
       qtyByProduct.set(it.product_id, (qtyByProduct.get(it.product_id) ?? 0) + n(it.quantity, 0));
     }
 
     const topProducts = [...qtyByProduct.entries()]
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 6)
+      .slice(0, 5)
       .map(([product_id, qty]) => {
         const p = this.products.find((x) => x.product_id === product_id);
         return {
           product_id,
-          product_name: p?.product_name ?? `Product ${product_id}`,
+          product_name: p?.product_name ?? `Sản phẩm ${product_id}`,
           image_url: p?.image_url ?? '',
           qty,
         };
       });
 
-    // recent reviews: 5 latest
-    const recentReviews = [...this.reviews]
+    // Recent reviews (Global Filtered)
+    const recentRev = [...reviewsInRange]
       .sort((a, b) => safeText(b.created_at).localeCompare(safeText(a.created_at)))
       .slice(0, 5)
       .map((r) => {
@@ -282,26 +269,40 @@ export class GeneralDashboard implements OnInit {
         const p = this.products.find((x) => x.product_id === r.product_id);
         return {
           ...r,
-          customer_name: u ? `${u.first_name} ${u.last_name}`.trim() : '(unknown)',
-          product_name: p?.product_name ?? `Product ${r.product_id}`,
+          customer_name: u ? `${u.first_name} ${u.last_name}`.trim() : 'Người dùng FB',
+          product_name: p?.product_name ?? `Sản phẩm ${r.product_id}`,
+          product_image: p?.image_url ?? '',
         };
       });
 
-    // series for chart
-    const series = this.buildSeries(inRange, from, to, this.rangeMode);
+    // Inventory Alerts (Static placeholder data for expansion)
+    const lowStockAlerts = this.products.slice(10, 15).map(p => ({
+      product_id: p.product_id,
+      product_name: p.product_name,
+      image_url: p.image_url,
+      stock: Math.floor(Math.random() * 5) + 1,
+      threshold: 10
+    }));
+
+    // CHART RANGE (Follow Global)
+    const diffDays = Math.ceil((gTo.getTime() - gFrom.getTime()) / (1000 * 60 * 60 * 24));
+    let mode: RangeMode = 'day';
+    if (diffDays > 14 && diffDays <= 60) mode = 'week';
+    if (diffDays > 60) mode = 'month';
+
+    const series = this.buildSeries(ordersInRange, gFrom, gTo, mode);
 
     return {
-      from,
-      to,
       revenue,
       totalOrders,
       activeOrders,
-      customers,
+      customers: customersCount,
       statusCount,
       donut,
-      recent,
+      recent: recentOrders,
       topProducts,
-      recentReviews,
+      recentReviews: recentRev,
+      lowStockAlerts,
       series,
     };
   }
@@ -311,22 +312,23 @@ export class GeneralDashboard implements OnInit {
     type Bucket = { key: string; label: string; revenue: number; orders: number };
     const buckets: Bucket[] = [];
 
+    const startOfTo = startOfDay(to);
+    const startOfFrom = startOfDay(from);
+
     if (mode === 'day') {
-      // show 7 days ending today
-      const end = startOfDay(new Date(this.to_date || new Date().toISOString()));
-      const start = addDays(end, -6);
-      for (let i = 0; i < 7; i++) {
-        const d = addDays(start, i);
+      const days = Math.floor((startOfTo.getTime() - startOfFrom.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+      const count = Math.min(31, days); // limit buckets for safety
+      for (let i = 0; i < count; i++) {
+        const d = addDays(startOfFrom, i);
         const k = isoDate(d.toISOString());
         buckets.push({ key: k, label: k.slice(5), revenue: 0, orders: 0 });
       }
     } else if (mode === 'week') {
-      // show 8 weeks
-      const count = 8;
-      const end = startOfDay(new Date(this.to_date || new Date().toISOString()));
-      for (let i = count - 1; i >= 0; i--) {
-        const wEnd = addDays(end, -7 * i);
-        const wStart = addDays(wEnd, -6);
+      let current = new Date(startOfFrom);
+      while (current <= startOfTo) {
+        // find start of week (Monday or simply chunk by 7 days)
+        const wStart = new Date(current);
+        const wEnd = addDays(wStart, 6) > startOfTo ? new Date(startOfTo) : addDays(wStart, 6);
         const key = `${isoDate(wStart.toISOString())}_${isoDate(wEnd.toISOString())}`;
         buckets.push({
           key,
@@ -336,23 +338,23 @@ export class GeneralDashboard implements OnInit {
           revenue: 0,
           orders: 0,
         });
+        current = addDays(wEnd, 1);
+        if (buckets.length > 20) break; 
       }
     } else {
-      // show 6 months
-      const count = 6;
-      const end = new Date(this.to_date || new Date().toISOString());
-      const y0 = end.getFullYear();
-      const m0 = end.getMonth();
-      for (let i = count - 1; i >= 0; i--) {
-        const d = new Date(y0, m0 - i, 1);
-        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      let current = new Date(startOfFrom.getFullYear(), startOfFrom.getMonth(), 1);
+      const endMonth = new Date(startOfTo.getFullYear(), startOfTo.getMonth(), 1);
+      while (current <= endMonth) {
+        const key = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, '0')}`;
         buckets.push({ key, label: key, revenue: 0, orders: 0 });
+        current.setMonth(current.getMonth() + 1);
+        if (buckets.length > 24) break;
       }
     }
 
     for (const o of orders) {
       const t = new Date(o.created_at);
-      if (t < from || t > to) continue;
+      const tStart = startOfDay(t);
 
       let bucketKey = '';
       if (mode === 'day') {
@@ -442,8 +444,13 @@ export class GeneralDashboard implements OnInit {
   }
 
   // ===== seed & load =====
-  private seedMockDomainData() {
-    if (this.orders.length) return;
+  public seedMockDomainData() {
+    // Clear existing for a fresh seed
+    this.users = [];
+    this.orders = [];
+    this.orderItems = [];
+    this.products = [];
+    this.reviews = [];
 
     this.users = [
       { user_id: 'u_01', first_name: 'Lê Thị', last_name: 'Duy Nhất', phone: '0987654321' },

@@ -93,6 +93,9 @@ type CustomerRowVM = {
   total_spent: number;
   points_balance: number;
   voucher_active_count: number;
+  rank: string;
+  rankClass: string;
+  stt: number;
 };
 
 type ListVM = {
@@ -106,6 +109,11 @@ type ListVM = {
   pageSize: number;
   pageCount: number;
   items: Array<CustomerRowVM>;
+  summary?: {
+    totalCustomers: number;
+    newThisMonth: number;
+    lockedCount: number;
+  };
 };
 
 type VoucherEffectVM = {
@@ -208,6 +216,12 @@ export class ManagementCustomers {
 
         const voucher_active_count = vouchers.filter((v) => v.status === 'active').length;
 
+        let rank = 'Đồng';
+        let rankClass = 'rank-bronze';
+        if (total_spent >= 30000000) { rank = 'Kim cương'; rankClass = 'rank-diamond'; }
+        else if (total_spent >= 15000000) { rank = 'Vàng'; rankClass = 'rank-gold'; }
+        else if (total_spent >= 5000000) { rank = 'Bạc'; rankClass = 'rank-silver'; }
+
         return {
           user: u,
           display_name,
@@ -216,6 +230,9 @@ export class ManagementCustomers {
           total_spent,
           points_balance,
           voucher_active_count,
+          rank,
+          rankClass,
+          stt: 0,
         } as CustomerRowVM;
       });
     }),
@@ -244,10 +261,32 @@ export class ManagementCustomers {
           pageSize,
           pageCount: 1,
           items: [],
+          summary: { totalCustomers: 0, newThisMonth: 0, lockedCount: 0 }
         } as ListVM;
       }
 
       const qNorm = (q || '').trim().toLowerCase();
+
+      // Summary
+      let newThisMonth = 0;
+      let lockedCount = 0;
+      
+      const now = new Date();
+      // First day of current month in ISO format
+      const currentYear = now.getFullYear();
+      const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+      const firstDayThisMonth = `${currentYear}-${currentMonth}-01T00:00:00.000Z`;
+
+      rows.forEach(r => {
+        if (r.user.status === 'locked') lockedCount++;
+        if (r.user.created_at >= firstDayThisMonth) newThisMonth++;
+      });
+
+      const summary = {
+        totalCustomers: rows.length,
+        newThisMonth,
+        lockedCount
+      };
 
       let filtered = rows.filter((r) => {
         const u = r.user;
@@ -270,7 +309,10 @@ export class ManagementCustomers {
       const pageCount = Math.max(1, Math.ceil(total / pageSize));
       const safePage = Math.max(1, Math.min(page, pageCount));
       const start = (safePage - 1) * pageSize;
-      const items = filtered.slice(start, start + pageSize);
+      const items = filtered.slice(start, start + pageSize).map((r, i) => ({
+        ...r,
+        stt: start + i + 1,
+      }));
 
       return {
         mode: 'list',
@@ -283,6 +325,7 @@ export class ManagementCustomers {
         pageSize,
         pageCount,
         items,
+        summary
       } as ListVM;
     }),
   );
@@ -389,9 +432,23 @@ export class ManagementCustomers {
     }
   }
 
-  sortIcon(curKey: SortKey, curDir: SortDir, key: SortKey) {
-    if (curKey !== key) return '↕';
-    return curDir === 'asc' ? '↑' : '↓';
+  sortIcon(key: SortKey): string {
+    const cur = this.sort$.value;
+    if (cur.key !== key) return 'fa-sort';
+    return cur.dir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+  }
+
+  private fmtDate(iso: string) {
+    try {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return iso;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${dd}/${mm}/${yyyy}`;
+    } catch {
+      return iso;
+    }
   }
 
   setPage(p: number) {

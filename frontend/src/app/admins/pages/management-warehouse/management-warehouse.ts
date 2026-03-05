@@ -88,6 +88,7 @@ interface StockRowVM {
 
   statusLabel: string;
   statusPillClass: string;
+  stt: number;
 }
 
 interface MovementRowVM {
@@ -287,9 +288,10 @@ export class ManagementWarehouse implements OnInit {
             updated_at: si.updated_at,
             updatedAtText: fmtDate(si.updated_at),
             qtyText: String(si.quantity_on_hand),
-            statusLabel,
-            statusPillClass: statusClass,
-          };
+             statusLabel,
+             statusPillClass: statusClass,
+             stt: 0,
+           };
         });
 
         const totalSkus = baseStock.length;
@@ -332,7 +334,12 @@ export class ManagementWarehouse implements OnInit {
         const from = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
         const to = Math.min(total, safePage * pageSize);
 
-        const pageRows = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
+        const pageRows = filtered
+          .slice((safePage - 1) * pageSize, safePage * pageSize)
+          .map((r, i) => ({
+            ...r,
+            stt: (safePage - 1) * pageSize + i + 1,
+          }));
 
         let detailVM: StockDetailVM | null = null;
         if (selectedId) {
@@ -608,6 +615,7 @@ export class ManagementWarehouse implements OnInit {
         qtyText: String(si.quantity_on_hand),
         statusLabel: low ? 'Low stock' : 'Ổn định',
         statusPillClass: low ? 'pill-warn' : 'pill-ok',
+        stt: 0,
       };
     });
 
@@ -670,9 +678,7 @@ function fmtDate(iso: string) {
   const dd = String(d.getDate()).padStart(2, '0');
   const mm = String(d.getMonth() + 1).padStart(2, '0');
   const yyyy = d.getFullYear();
-  const hh = String(d.getHours()).padStart(2, '0');
-  const mi = String(d.getMinutes()).padStart(2, '0');
-  return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
+  return `${dd}/${mm}/${yyyy}`;
 }
 
 function money(v: number) {

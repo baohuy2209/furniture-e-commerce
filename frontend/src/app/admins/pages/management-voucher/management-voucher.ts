@@ -41,6 +41,8 @@ type VoucherRowVM = Voucher & {
   remaining: number;
   typeLabel: string;
   stt: number;
+  startDateText: string;
+  endDateText: string;
 };
 
 type PageMode = 'list' | 'detail' | 'edit';
@@ -220,6 +222,20 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     map(([data, st]) => {
       let rows = [...data];
 
+      // Summary calculations
+      let activeCount = 0;
+      let pausedCount = 0;
+      let expiredCount = 0;
+
+      data.forEach(v => {
+        const s = this.computeStatus(v);
+        if (s === 'active' || s === 'frozen') activeCount++;
+        else if (s === 'paused') pausedCount++;
+        else if (s === 'expired') expiredCount++;
+      });
+
+      const summary = { activeCount, pausedCount, expiredCount };
+
       // search
       const keyword = st.q.trim().toLowerCase();
       if (keyword) {
@@ -260,6 +276,9 @@ export class ManagementVoucher implements OnInit, OnDestroy {
         total,
         page,
         totalPages,
+        summary,
+        startIndex: startIndex + 1,
+        endIndex: startIndex + pageRows.length
       };
     }),
   );
@@ -528,7 +547,17 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       remaining: Math.max(0, v.usage_limit - v.used_count),
       typeLabel,
       stt,
+      startDateText: this.fmtISODate(v.start_date),
+      endDateText: this.fmtISODate(v.end_date),
     };
+  }
+
+  private fmtISODate(iso: string): string {
+    if (!iso) return '—';
+    // iso is yyyy-mm-dd
+    const parts = iso.split('-');
+    if (parts.length !== 3) return iso;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
   }
 
   private toISODate(d: Date): string {

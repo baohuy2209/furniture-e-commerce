@@ -1,9 +1,9 @@
 <div class="hb-wrap">
   <!-- TITLE -->
   <div class="hb-titlebar">
-    <h1 class="hb-title">QUẢN LÝ BÀI VIẾT</h1>
+    <h1 class="hb-title" routerLink="/admin/management-contents" style="cursor: pointer;">QUẢN LÝ NỘI DUNG</h1>
     <div class="hb-actions" *ngIf="mode === 'list'">
-      <button class="btn btn-primary" (click)="goCreate()">+ Thêm bài viết</button>
+      <button class="btn btn-primary" (click)="goCreate()">+ Thêm nội dung</button>
     </div>
   </div>
 

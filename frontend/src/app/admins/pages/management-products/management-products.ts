@@ -76,6 +76,7 @@ interface ProductRowVM {
 
   roomLabel: string;
   imageCover: string | null;
+  stt: number;
 }
 
 interface ListQuery {
@@ -142,6 +143,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
   private originalProductSnapshot: Product | null = null;
   isDirty = false;
   saving = false;
+  localSearchTerm = '';
 
   // for create flow
   isCreateMode = false;
@@ -212,6 +214,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
           ratingAvg,
           roomLabel,
           imageCover: coverUrl,
+          stt: 0,
         };
         return row;
       });
@@ -264,8 +267,17 @@ export class ManagementProducts implements OnInit, OnDestroy {
       const totalPages = Math.max(1, Math.ceil(total / pageSize));
       const page = clamp(query.page, 1, totalPages);
 
-      const start = (page - 1) * pageSize;
-      const rows = filtered.slice(start, start + pageSize);
+       const start = (page - 1) * pageSize;
+       const rows: ProductRowVM[] = filtered.slice(start, start + pageSize).map((r, i) => ({
+         ...r,
+         stt: start + i + 1,
+       }));
+
+      const summary = {
+        totalProducts: rowsAll.length,
+        lowStockProducts: rowsAll.filter((r) => r.inventoryTotal <= query.lowStockThreshold).length,
+        totalSold: rowsAll.reduce((s, r) => s + r.soldTotal, 0)
+      };
 
       return {
         rows,
@@ -275,6 +287,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
         totalPages,
         query,
         roomOptions,
+        summary,
       };
     }),
   );
@@ -432,6 +445,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
   }
 
   resetFilters(): void {
+    this.localSearchTerm = '';
     const keepSort = { sortKey: this.query$.value.sortKey, sortDir: this.query$.value.sortDir };
     this.query$.next({
       q: '',
@@ -444,6 +458,13 @@ export class ManagementProducts implements OnInit, OnDestroy {
       page: 1,
       pageSize: 10,
     });
+  }
+
+  onSearchChange(val: string): void {
+    this.localSearchTerm = val;
+    if (val.length === 0 || val.length >= 3) {
+      this.patchQuery({ q: val });
+    }
   }
 
   toggleSort(key: ListQuery['sortKey']): void {

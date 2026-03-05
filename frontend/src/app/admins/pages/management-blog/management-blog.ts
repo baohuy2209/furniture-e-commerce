@@ -65,6 +65,7 @@ interface BlogRowVM {
 
   cover_url: string;
   excerpt: string;
+  stt: number;
 }
 
 interface BlogDetailVM {
@@ -250,6 +251,7 @@ export class ManagementBlog implements OnInit {
           updatedAtText: fmtDate(b.updated_at),
           cover_url: b.cover_url,
           excerpt: b.excerpt,
+          stt: 0,
         }));
 
         // Filters
@@ -302,7 +304,12 @@ export class ManagementBlog implements OnInit {
         const safePage = Math.min(Math.max(1, page), totalPages);
         const fromIdx = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
         const toIdx = Math.min(total, safePage * pageSize);
-        const rows = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
+        const rows = filtered
+          .slice((safePage - 1) * pageSize, safePage * pageSize)
+          .map((r, i) => ({
+            ...r,
+            stt: (safePage - 1) * pageSize + i + 1,
+          }));
 
         // Detail/Edit summary cards
         const d = detail;
@@ -481,6 +488,13 @@ export class ManagementBlog implements OnInit {
       this.sortBy$.next(key);
       this.sortDir$.next('asc');
     }
+  }
+
+  sortIcon(key: SortKey): string {
+    const curKey = this.sortBy$.value;
+    const curDir = this.sortDir$.value;
+    if (curKey !== key) return 'fa-sort';
+    return curDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
   // ===== route actions
@@ -718,13 +732,16 @@ function uniq(arr: string[]) {
 }
 
 function fmtDate(iso: string) {
-  const d = new Date(iso);
-  const dd = String(d.getDate()).padStart(2, '0');
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const yyyy = d.getFullYear();
-  const hh = String(d.getHours()).padStart(2, '0');
-  const mi = String(d.getMinutes()).padStart(2, '0');
-  return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
+  try {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yyyy = d.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  } catch {
+    return iso;
+  }
 }
 
 function formatNumber(v: any) {

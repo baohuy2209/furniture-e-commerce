@@ -2,10 +2,7 @@
   <!-- PAGE HEADER (sticky trong vùng content) -->
   <div class="hb-page-header">
     <div class="hb-header-left">
-      <div class="hb-title">QUẢN LÝ SẢN PHẨM</div>
-      <div class="hb-sub text-muted">
-        Tổng: <b>{{ (vm$ | async)?.total || 0 }}</b> sản phẩm
-      </div>
+      <div class="hb-title" routerLink="/admin/management-products" style="cursor: pointer;">QUẢN LÝ SẢN PHẨM</div>
     </div>
 
     <!-- LIST ACTIONS -->
@@ -58,14 +55,41 @@
   <div class="hb-page-body">
     <!-- LIST -->
     <ng-container *ngIf="mode === 'list'">
-      <!-- Filters -->
-      <div class="card hb-card hb-card-pad mb-3" *ngIf="vm$ | async as vm">
-        <div class="hb-filterbar">
+      <ng-container *ngIf="vm$ | async as vm">
+        <div class="hb-summary-row">
+          <div class="hb-summary-card">
+            <div class="hb-sc-icon"><i class="bi bi-box-seam"></i></div>
+            <div>
+              <div class="hb-sc-label">Tổng sản phẩm</div>
+              <div class="hb-sc-value">{{ vm.summary.totalProducts }}</div>
+            </div>
+          </div>
+
+          <div class="hb-summary-card">
+            <div class="hb-sc-icon warn"><i class="bi bi-exclamation-triangle"></i></div>
+            <div>
+              <div class="hb-sc-label">Hết / Sắp hết hàng</div>
+              <div class="hb-sc-value">{{ vm.summary.lowStockProducts }}</div>
+            </div>
+          </div>
+
+          <div class="hb-summary-card">
+            <div class="hb-sc-icon ok"><i class="bi bi-cart-check"></i></div>
+            <div>
+              <div class="hb-sc-label">Tổng lượt bán ra</div>
+              <div class="hb-sc-value">{{ vm.summary.totalSold }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card hb-card hb-card-pad mb-3">
+          <div class="hb-filterbar">
           <input
             class="form-control"
             placeholder="Mã / Tên / Brand / Tag"
-            [(ngModel)]="vm.query.q"
-            (ngModelChange)="patchQuery({ q: $event })"
+            [(ngModel)]="localSearchTerm"
+            (ngModelChange)="onSearchChange($event)"
           />
 
           <select
@@ -132,7 +156,7 @@
       </div>
 
       <!-- Table Card -->
-      <div class="card hb-card hb-table-card" *ngIf="vm$ | async as vm">
+      <div class="card hb-card hb-table-card">
         <!-- scroll nội bộ -->
         <div class="hb-table-wrap">
           <div class="hb-table">
@@ -140,7 +164,7 @@
             <div class="hb-table-head">
               <div class="hb-th w-id" (click)="toggleSort('id')">
                 <div class="th-content">
-                  <span>ID</span>
+                  <span>STT</span>
                   <i
                     class="fas fa-sort"
                     [class.fa-sort-up]="isSortKey('id') && isSortDir('asc')"
@@ -151,7 +175,7 @@
 
               <div class="hb-th w-name" (click)="toggleSort('name')">
                 <div class="th-content">
-                  <span>Tên sản phẩm</span>
+                  <span>TÊN SẢN PHẨM</span>
                   <i
                     class="fas fa-sort"
                     [class.fa-sort-up]="isSortKey('name') && isSortDir('asc')"
@@ -162,7 +186,7 @@
 
               <div class="hb-th w-brand" (click)="toggleSort('brand')">
                 <div class="th-content">
-                  <span>Brand</span>
+                  <span>THƯƠNG HIỆU</span>
                   <i
                     class="fas fa-sort"
                     [class.fa-sort-up]="isSortKey('brand') && isSortDir('asc')"
@@ -173,7 +197,7 @@
 
               <div class="hb-th w-room" (click)="toggleSort('roomLabel')">
                 <div class="th-content">
-                  <span>Khu vực</span>
+                  <span>KHU VỰC</span>
                   <i
                     class="fas fa-sort"
                     [class.fa-sort-up]="isSortKey('roomLabel') && isSortDir('asc')"
@@ -184,7 +208,7 @@
 
               <div class="hb-th w-price" (click)="toggleSort('priceMin')">
                 <div class="th-content">
-                  <span>Giá</span>
+                  <span>GIÁ</span>
                   <i
                     class="fas fa-sort"
                     [class.fa-sort-up]="isSortKey('priceMin') && isSortDir('asc')"
@@ -195,7 +219,7 @@
 
               <div class="hb-th w-stock" (click)="toggleSort('inventoryTotal')">
                 <div class="th-content">
-                  <span>Tồn</span>
+                  <span>TỒN</span>
                   <i
                     class="fas fa-sort"
                     [class.fa-sort-up]="isSortKey('inventoryTotal') && isSortDir('asc')"
@@ -206,7 +230,7 @@
 
               <div class="hb-th w-sold" (click)="toggleSort('soldTotal')">
                 <div class="th-content">
-                  <span>Đã bán</span>
+                  <span>ĐÃ BÁN</span>
                   <i
                     class="fas fa-sort"
                     [class.fa-sort-up]="isSortKey('soldTotal') && isSortDir('asc')"
@@ -217,7 +241,7 @@
 
               <div class="hb-th w-rate" (click)="toggleSort('ratingAvg')">
                 <div class="th-content">
-                  <span>Đánh giá</span>
+                  <span>ĐÁNH GIÁ</span>
                   <i
                     class="fas fa-sort"
                     [class.fa-sort-up]="isSortKey('ratingAvg') && isSortDir('asc')"
@@ -227,14 +251,14 @@
               </div>
 
               <div class="hb-th w-edit text-center">
-                <div class="th-content justify-center">
-                  <span>Sửa</span>
+                <div class="th-content">
+                  <span>SỬA</span>
                 </div>
               </div>
 
               <div class="hb-th w-del text-center">
-                <div class="th-content justify-center">
-                  <span>Xóa</span>
+                <div class="th-content">
+                  <span>XÓA</span>
                 </div>
               </div>
             </div>
@@ -246,46 +270,42 @@
               (click)="openDetail(r)"
               title="Xem chi tiết"
             >
-              <div class="hb-td w-id text-muted fw-semibold">{{ r.id }}</div>
+              <div class="hb-td w-id hb-td-center text-muted fw-bold">{{ r.stt }}</div>
 
               <div class="hb-td w-name">
-                <div class="d-flex align-items-center gap-2">
-                  <div class="hb-cover" *ngIf="r.imageCover">
+                <div class="d-flex align-items-center gap-2 min-w-0">
+                  <div class="hb-cover flex-shrink-0" *ngIf="r.imageCover">
                     <img [src]="r.imageCover" alt="cover" />
                   </div>
-
-                  <div class="hb-name-block">
-                    <div class="fw-semibold hb-name">{{ r.name }}</div>
-                    <div class="d-flex flex-wrap gap-1 mt-1">
-                      <span class="hb-badge" *ngIf="r.discountPercent > 0"
-                        >-{{ r.discountPercent }}%</span
-                      >
-                      <span class="hb-tag" *ngFor="let t of r.tags | slice: 0 : 3">{{ t }}</span>
-                    </div>
+                  <div class="hb-name-block min-w-0">
+                    <div class="fw-bold hb-name hb-text-truncate">{{ r.name }}</div>
+                    <div class="text-muted" style="font-size: 10px;">ID: {{ r.id }}</div>
                   </div>
                 </div>
               </div>
 
-              <div class="hb-td w-brand">{{ r.brand }}</div>
-              <div class="hb-td w-room">{{ r.roomLabel }}</div>
-              <div class="hb-td w-price">
-                {{ r.priceMin != null ? (r.priceMin | number) : '—' }}
+              <div class="hb-td w-brand"><span class="hb-text-truncate">{{ r.brand }}</span></div>
+              <div class="hb-td w-room"><span class="hb-text-truncate">{{ r.roomLabel }}</span></div>
+              <div class="hb-td w-price hb-td-num">
+                {{ r.priceMin != null ? (r.priceMin | number) : '—' }} ₫
               </div>
 
-              <div class="hb-td w-stock">
+              <div class="hb-td w-stock hb-td-center ml-2">
                 <span
                   class="hb-pill"
                   [class.hb-pill-danger]="r.inventoryTotal <= 0"
                   [class.hb-pill-warn]="
-                    r.inventoryTotal > 0 && r.inventoryTotal <= vm.query.lowStockThreshold
-                  "
+                    r.inventoryTotal > 0 && r.inventoryTotal <= vm.query.lowStockThreshold"
                 >
                   {{ r.inventoryTotal }}
                 </span>
               </div>
 
-              <div class="hb-td w-sold">{{ r.soldTotal }}</div>
-              <div class="hb-td w-rate">{{ r.ratingAvg != null ? r.ratingAvg : '—' }}</div>
+              <div class="hb-td w-sold hb-td-center text-muted fw-normal">{{ r.soldTotal }}</div>
+              <div class="hb-td w-rate hb-td-center text-muted fw-normal">
+                <i class="fas fa-star text-warning me-1"></i>
+                {{ r.ratingAvg != null ? r.ratingAvg : '—' }}
+              </div>
 
               <!-- edit icon -->
               <div class="hb-td w-edit text-center" (click)="stopEvent($event)">
@@ -313,7 +333,7 @@
         </div>
 
         <!-- Pagination (sticky bottom trong card) -->
-        <div class="hb-pagination" *ngIf="vm$ | async as vm">
+        <div class="hb-pagination">
           <button
             class="hb-page-btn"
             type="button"
@@ -340,6 +360,7 @@
           </button>
         </div>
       </div>
+      </ng-container>
     </ng-container>
 
     <!-- DETAIL / EDIT -->

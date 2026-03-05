@@ -130,6 +130,7 @@ interface VMListRow extends OrderListRow {
 
   paymentLabel: string;
   payPillClass: string;
+  stt: number;
 }
 
 interface TimelineItemVM {
@@ -202,6 +203,11 @@ interface VM {
   detail: OrderDetailVM | null;
 
   editModel: Partial<OrderEntity> | null;
+  summary?: {
+    totalRevenue: string;
+    pendingCount: number;
+    shippingCount: number;
+  };
 }
 
 interface OrderDetailRaw {
@@ -289,8 +295,9 @@ export class ManagementOrders implements OnInit, OnDestroy {
       ]) => {
         const regions = this.buildRegions(rows);
 
-        const computedRows: VMListRow[] = rows.map((r) => ({
+        const computedRows: VMListRow[] = rows.map((r, i) => ({
           ...r,
+          stt: (page - 1) * pageSize + (i + 1),
           createdAtText: this.fmtDate(r.created_at),
           totalText: money(r.total_amount),
           statusLabel: this.statusLabel(r.status),
@@ -301,7 +308,7 @@ export class ManagementOrders implements OnInit, OnDestroy {
 
         const key = q.trim().toLowerCase();
         let filtered = computedRows.filter((r) => {
-          if (key) {
+          if (key.length >= 3) {
             const hit =
               r.order_number.toLowerCase().includes(key) ||
               r.customer.toLowerCase().includes(key) ||
@@ -327,6 +334,12 @@ export class ManagementOrders implements OnInit, OnDestroy {
         const showingFrom = total === 0 ? 0 : start + 1;
         const showingTo = total === 0 ? 0 : Math.min(total, start + paged.length);
 
+        const summary = {
+          totalRevenue: money(rows.reduce((s, r) => s + r.total_amount, 0)),
+          pendingCount: rows.filter(r => r.status === 'pending' || r.status === 'packed').length,
+          shippingCount: rows.filter(r => r.status === 'shipping').length
+        };
+
         const vm: VM = {
           mode,
           rows: paged,
@@ -343,6 +356,7 @@ export class ManagementOrders implements OnInit, OnDestroy {
           selectedId,
           detail: mode !== 'list' ? detail : null,
           editModel: mode === 'edit' ? editModel : null,
+          summary,
         };
         return vm;
       },
@@ -751,12 +765,17 @@ export class ManagementOrders implements OnInit, OnDestroy {
       const yyyy = d.getFullYear();
       const mm = String(d.getMonth() + 1).padStart(2, '0');
       const dd = String(d.getDate()).padStart(2, '0');
-      const hh = String(d.getHours()).padStart(2, '0');
-      const mi = String(d.getMinutes()).padStart(2, '0');
-      return `${dd}/${mm}/${yyyy} ${hh}:${mi}`;
+      return `${dd}/${mm}/${yyyy}`;
     } catch {
       return iso;
     }
+  }
+
+  sortIcon(key: SortKey): string {
+    const st = this.sortKey$.value;
+    const dir = this.sortDir$.value;
+    if (st !== key) return 'fa-sort';
+    return dir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
   private isWithin7Days(deliveredAt: string | null, requestAt?: string) {
@@ -872,7 +891,7 @@ export class ManagementOrders implements OnInit, OnDestroy {
       case 'pending':
         return 'pill-pending';
       case 'packed':
-        return 'pill-packed';
+        return 'pill-confirmed';
       case 'shipping':
         return 'pill-shipping';
       case 'delivered':
@@ -880,11 +899,13 @@ export class ManagementOrders implements OnInit, OnDestroy {
       case 'cancelled':
         return 'pill-cancelled';
       case 'return_requested':
-      case 'exchange_requested':
-        return 'pill-warn';
+        return 'pill-return-req';
       case 'returned':
+        return 'pill-returned';
+      case 'exchange_requested':
+        return 'pill-exchange-req';
       case 'exchanged':
-        return 'pill-info';
+        return 'pill-confirmed';
       default:
         return '';
     }

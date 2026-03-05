@@ -1,73 +1,80 @@
 <div class="hb-page-shell" *ngIf="vm$ | async as vm">
-  <!-- PAGE HEADER (sticky riêng) -->
+  <!-- PAGE HEADER (sticky) -->
   <div class="hb-page-header">
     <div class="hb-header-left">
-      <!-- title changes by mode -->
-      <div class="hb-title" *ngIf="vm.mode === 'list'">QUẢN LÝ ĐƠN HÀNG</div>
-      <div class="hb-title" *ngIf="vm.mode === 'detail'">CHI TIẾT ĐƠN HÀNG</div>
-      <div class="hb-title" *ngIf="vm.mode === 'edit'">CHỈNH SỬA ĐƠN HÀNG</div>
-
-      <!-- subtitle -->
-      <div class="hb-sub text-muted" *ngIf="vm.mode === 'list'">
-        Tổng: <b>{{ vm.total }}</b> đơn
-        <span class="hb-dot">•</span>
-        Hiển thị: <b>{{ vm.showingFrom }}-{{ vm.showingTo }}</b
-        >/<b>{{ vm.total }}</b>
-      </div>
-
+      <div class="hb-title" routerLink="/admin/management-orders" style="cursor: pointer;">QUẢN LÝ ĐƠN HÀNG</div>
       <div class="hb-sub text-muted" *ngIf="vm.mode !== 'list' && vm.detail">
-        <b>{{ vm.detail.order.order_number }}</b>
+        Order: <b>{{ vm.detail.order.order_number }}</b>
         <span class="hb-dot">•</span>
         ID: <b>{{ vm.detail.order.order_id }}</b>
       </div>
     </div>
 
-    <!-- LIST ACTIONS -->
-    <div class="hb-header-actions" *ngIf="vm.mode === 'list'">
-      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
+    <div class="hb-header-actions">
+      <!-- LIST ACTIONS -->
+      <ng-container *ngIf="vm.mode === 'list'">
+        <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
+        <button class="btn btn-hb" type="button" (click)="exportCsv(vm.exportRows)">
+          <i class="bi bi-download me-1"></i> Xuất CSV
+        </button>
+      </ng-container>
 
-      <button class="btn btn-hb" type="button" (click)="exportCsv(vm.exportRows)">
-        <i class="bi bi-download me-1"></i>
-        Xuất CSV
-      </button>
-    </div>
+      <!-- DETAIL ACTIONS -->
+      <ng-container *ngIf="vm.mode === 'detail'">
+        <button class="btn btn-hb-outline" type="button" (click)="goList()">
+          <i class="bi bi-arrow-left me-1"></i> Quay lại
+        </button>
+        <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
+          <i class="bi bi-pencil-square me-1"></i> Sửa ghi chú
+        </button>
+      </ng-container>
 
-    <!-- DETAIL ACTIONS (NO DELETE) -->
-    <div class="hb-header-actions" *ngIf="vm.mode === 'detail'">
-      <button class="btn btn-hb-outline" type="button" (click)="goList()">
-        <i class="bi bi-arrow-left me-1"></i>
-        Quay lại
-      </button>
-
-      <button class="btn btn-hb-accent" type="button" [disabled]="!vm.detail" (click)="enterEdit()">
-        <i class="bi bi-pencil-square me-1"></i>
-        Sửa
-      </button>
-    </div>
-
-    <!-- EDIT ACTIONS -->
-    <div class="hb-header-actions" *ngIf="vm.mode === 'edit'">
-      <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Huỷ</button>
-
-      <button class="btn btn-hb" type="button" (click)="saveEdit()">
-        <i class="bi bi-check2-circle me-1"></i>
-        Lưu
-      </button>
+      <!-- EDIT ACTIONS -->
+      <ng-container *ngIf="vm.mode === 'edit'">
+        <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Huỷ</button>
+        <button class="btn btn-hb" type="button" (click)="saveEdit()">
+          <i class="bi bi-check2-circle me-1"></i> Lưu thay đổi
+        </button>
+      </ng-container>
     </div>
   </div>
 
-  <!-- PAGE BODY -->
   <div class="hb-page-body">
-    <!-- ===== LIST ===== -->
+    <!-- ===== LIST VIEW ===== -->
     <ng-container *ngIf="vm.mode === 'list'">
-      <!-- Filters -->
+      <div class="hb-summary-row" *ngIf="vm.summary">
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon ok"><i class="bi bi-currency-dollar"></i></div>
+          <div>
+            <div class="hb-sc-label">Tổng doanh thu</div>
+            <div class="hb-sc-value">{{ vm.summary.totalRevenue }}</div>
+          </div>
+        </div>
+
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon warn"><i class="bi bi-clock-history"></i></div>
+          <div>
+            <div class="hb-sc-label">Chờ xử lý / Đã XN</div>
+            <div class="hb-sc-value">{{ vm.summary.pendingCount }}</div>
+          </div>
+        </div>
+
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon"><i class="bi bi-truck"></i></div>
+          <div>
+            <div class="hb-sc-label">Đang giao hàng</div>
+            <div class="hb-sc-value">{{ vm.summary.shippingCount }}</div>
+          </div>
+        </div>
+      </div>
+
       <div class="card hb-card hb-card-pad mb-3">
         <div class="hb-filterbar hb-filterbar-orders">
           <input
             class="form-control"
             [ngModel]="q"
             (ngModelChange)="onChangeQ($event)"
-            placeholder="Mã đơn / Khách hàng / SĐT / Khu vực"
+            placeholder="Tìm đơn hàng, khách hàng, SĐT..."
           />
 
           <select class="form-select" [ngModel]="f_status" (ngModelChange)="onChangeStatus($event)">
@@ -77,17 +84,10 @@
             <option value="shipping">Đang giao</option>
             <option value="delivered">Đã giao</option>
             <option value="cancelled">Đã huỷ</option>
-            <option value="return_requested">Y/c trả hàng</option>
             <option value="returned">Đã trả hàng</option>
-            <option value="exchange_requested">Y/c đổi hàng</option>
-            <option value="exchanged">Đã đổi hàng</option>
           </select>
 
-          <select
-            class="form-select"
-            [ngModel]="f_payment"
-            (ngModelChange)="onChangePayment($event)"
-          >
+          <select class="form-select" [ngModel]="f_payment" (ngModelChange)="onChangePayment($event)">
             <option value="">Thanh toán</option>
             <option value="unpaid">Chưa thanh toán</option>
             <option value="paid">Đã thanh toán</option>
@@ -99,492 +99,243 @@
             <option *ngFor="let r of vm.regions" [value]="r">{{ r }}</option>
           </select>
 
-          <select
-            class="form-select"
-            [ngModel]="pageSize"
-            (ngModelChange)="onChangePageSize($event)"
-          >
-            <option [ngValue]="10">10</option>
-            <option [ngValue]="20">20</option>
-            <option [ngValue]="50">50</option>
+          <select class="form-select" [ngModel]="pageSize" (ngModelChange)="onChangePageSize($event)">
+            <option [ngValue]="10">10 / trang</option>
+            <option [ngValue]="20">20 / trang</option>
           </select>
 
-          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
-            Reset
-          </button>
-
-          <div class="hb-filter-meta">
-            <span class="badge hb-badge-soft">
-              Hiển thị: <b>{{ vm.showingFrom }}-{{ vm.showingTo }}</b
-              >/<b>{{ vm.total }}</b>
-            </span>
-
-          </div>
+          <button class="btn btn-hb-outline hb-filter-reset" (click)="resetFilters()">Reset</button>
         </div>
       </div>
 
-      <!-- Table Card -->
       <div class="card hb-card hb-table-card">
         <div class="hb-table-wrap">
-          <div class="hb-table hb-table-orders">
-            <!-- head -->
-            <div class="hb-table-head">
+          <div class="hb-table">
+            <div class="hb-table-head hb-grid-orders">
+              <div class="hb-th"><span>STT</span></div>
               <div class="hb-th" (click)="toggleSort('order_number')">
                 <div class="th-content">
-                  <span>Mã đơn</span>
-                  <i
-                    class="fas fa-sort"
-                    [class.fa-sort-up]="vm.sortKey === 'order_number' && vm.sortDir === 'asc'"
-                    [class.fa-sort-down]="vm.sortKey === 'order_number' && vm.sortDir === 'desc'"
-                  ></i>
+                  <span>MÃ ĐƠN</span>
+                  <i class="fas" [ngClass]="sortIcon('order_number')"></i>
                 </div>
               </div>
-
               <div class="hb-th" (click)="toggleSort('customer')">
                 <div class="th-content">
-                  <span>Khách hàng</span>
-                  <i
-                    class="fas fa-sort"
-                    [class.fa-sort-up]="vm.sortKey === 'customer' && vm.sortDir === 'asc'"
-                    [class.fa-sort-down]="vm.sortKey === 'customer' && vm.sortDir === 'desc'"
-                  ></i>
+                  <span>KHÁCH HÀNG</span>
+                  <i class="fas" [ngClass]="sortIcon('customer')"></i>
                 </div>
               </div>
-
-              <div class="hb-th" (click)="toggleSort('phone')">
-                <div class="th-content">
-                  <span>SĐT</span>
-                  <i
-                    class="fas fa-sort"
-                    [class.fa-sort-up]="vm.sortKey === 'phone' && vm.sortDir === 'asc'"
-                    [class.fa-sort-down]="vm.sortKey === 'phone' && vm.sortDir === 'desc'"
-                  ></i>
-                </div>
-              </div>
-
-              <div class="hb-th" (click)="toggleSort('region')">
-                <div class="th-content">
-                  <span>Khu vực</span>
-                  <i
-                    class="fas fa-sort"
-                    [class.fa-sort-up]="vm.sortKey === 'region' && vm.sortDir === 'asc'"
-                    [class.fa-sort-down]="vm.sortKey === 'region' && vm.sortDir === 'desc'"
-                  ></i>
-                </div>
-              </div>
-
-              <div class="hb-th" (click)="toggleSort('status')">
-                <div class="th-content">
-                  <span>Trạng thái</span>
-                  <i
-                    class="fas fa-sort"
-                    [class.fa-sort-up]="vm.sortKey === 'status' && vm.sortDir === 'asc'"
-                    [class.fa-sort-down]="vm.sortKey === 'status' && vm.sortDir === 'desc'"
-                  ></i>
-                </div>
-              </div>
-
-              <div class="hb-th" (click)="toggleSort('payment_status')">
-                <div class="th-content">
-                  <span>Thanh toán</span>
-                  <i
-                    class="fas fa-sort"
-                    [class.fa-sort-up]="vm.sortKey === 'payment_status' && vm.sortDir === 'asc'"
-                    [class.fa-sort-down]="vm.sortKey === 'payment_status' && vm.sortDir === 'desc'"
-                  ></i>
-                </div>
-              </div>
-
+              <div class="hb-th"><span>KHU VỰC</span></div>
+              <div class="hb-th"><span>TRẠNG THÁI</span></div>
+              <div class="hb-th"><span>THANH TOÁN</span></div>
               <div class="hb-th" (click)="toggleSort('created_at')">
                 <div class="th-content">
-                  <span>Ngày đặt</span>
-                  <i
-                    class="fas fa-sort"
-                    [class.fa-sort-up]="vm.sortKey === 'created_at' && vm.sortDir === 'asc'"
-                    [class.fa-sort-down]="vm.sortKey === 'created_at' && vm.sortDir === 'desc'"
-                  ></i>
+                  <span>NGÀY ĐẶT</span>
+                  <i class="fas" [ngClass]="sortIcon('created_at')"></i>
                 </div>
               </div>
-
-              <div class="hb-th text-end" (click)="toggleSort('total_amount')">
-                <div class="th-content justify-content-end">
-                  <span>Tổng tiền</span>
-                  <i
-                    class="fas fa-sort"
-                    [class.fa-sort-up]="vm.sortKey === 'total_amount' && vm.sortDir === 'asc'"
-                    [class.fa-sort-down]="vm.sortKey === 'total_amount' && vm.sortDir === 'desc'"
-                  ></i>
+              <div class="hb-th" (click)="toggleSort('total_amount')">
+                <div class="th-content">
+                  <span>TỔNG TIỀN</span>
+                  <i class="fas" [ngClass]="sortIcon('total_amount')"></i>
                 </div>
               </div>
-
-              <div class="hb-th th-center">Sửa</div>
+              <div class="hb-th"><span>SỬA</span></div>
             </div>
 
-            <!-- rows -->
+            <!-- ROWS -->
             <div
-              class="hb-table-row hb-row-click"
+              class="hb-table-row hb-grid-orders"
               *ngFor="let r of vm.rows"
               (click)="openDetail(r.order_id)"
               [class.is-active]="r.order_id === vm.selectedId"
             >
-              <div class="hb-td hb-cell-order">
-                <div class="hb-name hb-ellipsis">{{ r.order_number }}</div>
-                <div class="text-muted small hb-ellipsis">ID: {{ r.order_id }}</div>
-              </div>
-
-              <div class="hb-td hb-cell-customer">
-                <div class="hb-name hb-wrap">{{ r.customer }}</div>
-                <div class="text-muted small hb-wrap">{{ r.email }}</div>
-              </div>
-
-              <div class="hb-td hb-ellipsis">{{ r.phone }}</div>
-              <div class="hb-td hb-ellipsis">{{ r.region }}</div>
-
+              <div class="hb-td hb-td-center text-muted fw-bold">{{ r.stt }}</div>
               <div class="hb-td">
+                <div class="hb-text-truncate">
+                  <div class="fw-semibold text-primary">{{ r.order_number }}</div>
+                  <div class="text-muted" style="font-size: 10px;">ID: {{ r.order_id }}</div>
+                </div>
+              </div>
+              <div class="hb-td">
+                <div class="hb-text-truncate">
+                  <div class="fw-semibold">{{ r.customer }}</div>
+                  <div class="text-muted small">{{ r.phone }}</div>
+                </div>
+              </div>
+              <div class="hb-td hb-td-center text-muted fw-normal">{{ r.region }}</div>
+              <div class="hb-td hb-td-center">
                 <span class="hb-pill" [ngClass]="r.statusPillClass">{{ r.statusLabel }}</span>
               </div>
-
-              <div class="hb-td">
+              <div class="hb-td hb-td-center">
                 <span class="hb-pill" [ngClass]="r.payPillClass">{{ r.paymentLabel }}</span>
               </div>
-
-              <div class="hb-td hb-cell-date text-muted">
-                <span class="hb-ellipsis">{{ r.createdAtText }}</span>
-              </div>
-
-              <div class="hb-td text-end fw-semibold hb-ellipsis">{{ r.totalText }}</div>
-
-              <div class="hb-td td-center" (click)="stopEvent($event)">
-                <button
-                  class="hb-icon-btn"
-                  type="button"
-                  title="Sửa"
-                  (click)="stopEvent($event); openDetail(r.order_id); enterEdit()"
-                >
+              <div class="hb-td hb-td-center text-muted fw-normal">{{ r.createdAtText }}</div>
+              <div class="hb-td hb-td-num">{{ r.totalText }}</div>
+              <div class="hb-td hb-td-center">
+                <button class="hb-icon-btn" (click)="stopEvent($event); openDetail(r.order_id); enterEdit()">
                   <i class="bi bi-pencil-square"></i>
                 </button>
               </div>
             </div>
-
-            <div class="hb-empty" *ngIf="vm.rows.length === 0">Không có dữ liệu</div>
           </div>
         </div>
 
-        <!-- Pagination sticky bottom -->
         <div class="hb-pagination">
-          <button
-            class="hb-page-btn"
-            type="button"
-            [disabled]="vm.page === 1"
-            (click)="setPage(vm.page - 1)"
-          >
-            ‹
-          </button>
-
-          <div class="hb-page-info">
-            <span>Trang</span>
-            <b>{{ vm.page }}</b>
-            <span>/</span>
-            <span>{{ vm.totalPages }}</span>
-          </div>
-
-          <button
-            class="hb-page-btn"
-            type="button"
-            [disabled]="vm.page === vm.totalPages"
-            (click)="setPage(vm.page + 1)"
-          >
-            ›
-          </button>
+          <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">‹</button>
+          <div class="hb-page-info">Trang <b>{{ vm.page }}</b> / <b>{{ vm.totalPages }}</b></div>
+          <button class="hb-page-btn" [disabled]="vm.page >= vm.totalPages" (click)="setPage(vm.page + 1)">›</button>
         </div>
       </div>
     </ng-container>
 
-    <!-- ===== DETAIL ===== -->
+    <!-- ===== DETAIL VIEW ===== -->
     <ng-container *ngIf="vm.mode === 'detail' && vm.detail as d">
-      <div class="row g-3">
-        <div class="col-12 col-xl-8">
-          <!-- Quick actions -->
-          <div class="card hb-card hb-card-pad mb-3">
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-              <div class="d-flex gap-2 flex-wrap">
-                <span class="hb-pill" [ngClass]="d.statusPillClass">{{ d.statusLabel }}</span>
-                <span class="hb-pill" [ngClass]="d.payPillClass">{{ d.paymentLabel }}</span>
-              </div>
-
-              <div class="d-flex gap-2 flex-wrap">
-                <button
-                  class="btn btn-outline-danger"
-                  type="button"
-                  *ngIf="d.canCancel"
-                  (click)="confirmCancel(d.order.order_id)"
-                >
-                  <i class="bi bi-x-circle me-1"></i>
-                  Xác nhận huỷ đơn
-                </button>
-
-                <button
-                  class="btn btn-hb-accent"
-                  type="button"
-                  *ngIf="d.canApproveRequest"
-                  (click)="approveRequest(d.order.order_id)"
-                >
-                  <i class="bi bi-check2-circle me-1"></i>
-                  Duyệt yêu cầu
-                </button>
-
-                <button
-                  class="btn btn-hb-outline"
-                  type="button"
-                  *ngIf="d.canRejectRequest"
-                  (click)="rejectRequest(d.order.order_id)"
-                >
-                  Từ chối yêu cầu
-                </button>
-
-                <button
-                  class="btn btn-hb"
-                  type="button"
-                  *ngIf="d.canMarkCompleted"
-                  (click)="markRequestCompleted(d.order.order_id)"
-                >
-                  <i class="bi bi-check2-square me-1"></i>
-                  Hoàn tất đổi/trả
-                </button>
-              </div>
+      <div class="hb-detail-shell">
+        <div class="card hb-card hb-detail-main-card">
+          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <h1 class="hb-h1 mb-0">{{ d.order.order_number }}</h1>
+            <div class="d-flex gap-2">
+              <span class="hb-pill" [ngClass]="d.statusPillClass">{{ d.statusLabel }}</span>
+              <span class="hb-pill" [ngClass]="d.payPillClass">{{ d.paymentLabel }}</span>
             </div>
           </div>
 
-          <!-- Items -->
-          <div class="card hb-card hb-card-pad">
-            <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-              <div class="hb-h2">Sản phẩm trong đơn</div>
-            </div>
+          <div class="hb-divider"></div>
 
-            <div class="hb-table-wrap hb-table-wrap-inner">
-              <table class="table hb-inner-table align-middle mb-0">
-                <thead>
-                  <tr>
-                    <th>Products</th>
-                    <th style="width: 140px">Giá</th>
-                    <th style="width: 90px">SL</th>
-                    <th style="width: 160px" class="text-end">Thành tiền</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let it of d.items">
-                    <td>
-                      <div class="hb-prod">
-                        <img class="hb-prod-img" [src]="it.product_image_url" alt="" />
-                        <div>
-                          <div class="hb-name">{{ it.product_name }}</div>
-                          <div class="text-muted small">Variant: {{ it.product_variant_id }}</div>
-                        </div>
+          <!-- Items Table -->
+          <div class="hb-h2 mb-2">Danh sách sản phẩm</div>
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr class="small text-muted text-uppercase fw-bold">
+                  <th>Sản phẩm</th>
+                  <th class="text-center">Đơn giá</th>
+                  <th class="text-center">Số lượng</th>
+                  <th class="text-end">Thành tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let it of d.items">
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img [src]="it.product_image_url" class="rounded" style="width: 44px; height: 44px; object-fit: cover;">
+                      <div>
+                        <div class="fw-bold">{{ it.product_name }}</div>
+                        <div class="text-muted small">Variant: {{ it.product_variant_id }}</div>
                       </div>
-                    </td>
-                    <td>{{ it.unitPriceText }}</td>
-                    <td>{{ it.quantity }}</td>
-                    <td class="text-end">{{ it.subtotalText }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="hb-divider"></div>
-
-            <div class="row g-2">
-              <div class="col-6 col-lg-4">
-                <div class="hb-kv">
-                  <div class="k">Tạm tính</div>
-                  <div class="v">{{ d.beforeTotalText }}</div>
-                </div>
-              </div>
-              <div class="col-6 col-lg-4">
-                <div class="hb-kv">
-                  <div class="k">Giảm giá</div>
-                  <div class="v">{{ d.discountTotalText }}</div>
-                </div>
-              </div>
-              <div class="col-6 col-lg-4">
-                <div class="hb-kv">
-                  <div class="k">Phí ship</div>
-                  <div class="v">{{ d.shippingFeeText }}</div>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="hb-kv">
-                  <div class="k fw-bold">Tổng thanh toán</div>
-                  <div class="v fw-bold hb-total">{{ d.totalText }}</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="text-muted small mt-2" *ngIf="d.deliveredAtText">
-              Ngày giao: <b>{{ d.deliveredAtText }}</b> • Quy định đổi/trả: <b>7 ngày</b>
-            </div>
+                    </div>
+                  </td>
+                  <td class="text-center">{{ it.unitPriceText }}</td>
+                  <td class="text-center">{{ it.quantity }}</td>
+                  <td class="text-end fw-bold">{{ it.subtotalText }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
-          <!-- Activity -->
-          <div class="card hb-card hb-card-pad mt-3">
-            <div class="hb-h2">Lịch sử trạng thái</div>
+          <div class="hb-divider"></div>
 
-            <div class="hb-timeline mt-3">
-              <div class="hb-tl-item" *ngFor="let t of d.timeline">
-                <div class="hb-tl-dot" [class.is-done]="t.done"></div>
-                <div>
-                  <div class="hb-tl-title">{{ t.title }}</div>
-                  <div class="text-muted small">{{ t.desc }}</div>
-                </div>
-                <div class="hb-tl-time text-muted small">{{ t.atText }}</div>
+          <!-- Totals -->
+          <div class="row justify-content-end">
+            <div class="col-md-5">
+              <div class="hb-kv d-flex justify-content-between">
+                <span class="k">Tạm tính:</span>
+                <span class="v">{{ d.beforeTotalText }}</span>
+              </div>
+              <div class="hb-kv d-flex justify-content-between">
+                <span class="k">Giảm giá:</span>
+                <span class="v text-danger">- {{ d.discountTotalText }}</span>
+              </div>
+              <div class="hb-kv d-flex justify-content-between">
+                <span class="k">Phí vận chuyển:</span>
+                <span class="v">{{ d.shippingFeeText }}</span>
+              </div>
+              <div class="hb-divider"></div>
+              <div class="hb-kv d-flex justify-content-between">
+                <span class="k hb-total fw-bold">TỔNG CỘNG:</span>
+                <span class="v hb-total fw-bold">{{ d.totalText }}</span>
               </div>
             </div>
           </div>
 
-          <!-- Return/Exchange note -->
-          <div class="card hb-card hb-card-pad mt-3" *ngIf="d.request">
-            <div class="hb-h2">Yêu cầu đổi/trả</div>
+          <div class="hb-divider"></div>
 
-            <div class="hb-kv mt-2">
-              <div class="k">Loại yêu cầu</div>
-              <div class="v">
-                <span
-                  class="hb-pill"
-                  [ngClass]="d.request.type === 'return' ? 'pill-warn' : 'pill-info'"
-                >
-                  {{ d.request.type === 'return' ? 'Trả hàng' : 'Đổi hàng' }}
-                </span>
+          <!-- Timeline -->
+          <div class="hb-h2 mb-3">Lịch sử xử lý đơn hàng</div>
+          <div class="hb-timeline">
+            <div class="hb-tl-item" *ngFor="let t of d.timeline">
+              <div class="hb-tl-dot" [class.is-done]="t.done"></div>
+              <div>
+                <div class="hb-tl-title">{{ t.title }}</div>
+                <div class="text-muted small">{{ t.desc }}</div>
               </div>
-            </div>
-
-            <div class="hb-kv">
-              <div class="k">Lý do</div>
-              <div class="v">{{ d.request.reason || '—' }}</div>
-            </div>
-
-            <div class="hb-kv">
-              <div class="k">Ghi chú</div>
-              <div class="v">{{ d.request.note || '—' }}</div>
-            </div>
-
-            <div class="hb-kv">
-              <div class="k">Tạo lúc</div>
-              <div class="v">{{ d.request.createdAtText }}</div>
-            </div>
-
-            <div class="text-muted small mt-2" *ngIf="!d.request.isWithin7Days">
-              * Quá 7 ngày: yêu cầu này chỉ để tham khảo / xử lý ngoại lệ theo CS.
+              <div class="text-muted small">{{ t.atText }}</div>
             </div>
           </div>
         </div>
 
-        <!-- Right panel -->
-        <div class="col-12 col-xl-4">
-          <div class="card hb-card hb-card-pad hb-side-card">
-            <div class="hb-h2">Khách hàng</div>
-
-            <div class="mt-2">
-              <div class="hb-name">{{ d.userFullName }}</div>
-              <div class="text-muted small">User: {{ d.user?.user_id || '—' }}</div>
-              <div class="text-muted small">Phone: {{ d.user?.phone || '—' }}</div>
-              <div class="text-muted small">Email: {{ d.user?.email || '—' }}</div>
+        <!-- Right Side: Logistics & Customer -->
+        <div class="hb-side-card">
+          <div class="card hb-card hb-card-pad mb-3">
+            <div class="hb-h2 mb-3">Thông tin khách hàng</div>
+            <div class="hb-kv">
+              <div class="k">Họ tên:</div>
+              <div class="v">{{ d.userFullName }}</div>
             </div>
+            <div class="hb-kv">
+              <div class="k">Số điện thoại:</div>
+              <div class="v">{{ d.user?.phone || '—' }}</div>
+            </div>
+            <div class="hb-kv">
+              <div class="k">Địa chỉ nhận hàng:</div>
+              <div class="v small" style="white-space: pre-line;">{{ d.addressText }}</div>
+            </div>
+          </div>
 
+          <div class="card hb-card hb-card-pad">
+            <div class="hb-h2 mb-3">Ghi chú & Phản hồi</div>
+            <div class="hb-kv">
+              <div class="k">Ghi chú từ khách:</div>
+              <div class="v small text-muted">{{ d.order.note || 'Không có' }}</div>
+            </div>
+            <div class="hb-kv mt-2">
+              <div class="k">Ghi chú nội bộ:</div>
+              <div class="v small text-muted italic">{{ d.order.admin_note || 'Chưa có ghi chú' }}</div>
+            </div>
             <div class="hb-divider"></div>
-
-            <div class="hb-h2">Địa chỉ giao</div>
-            <div class="text-muted mt-2" style="white-space: pre-line">{{ d.addressText }}</div>
-
-            <div class="hb-divider"></div>
-
-            <div class="hb-h2">Ghi chú khách</div>
-            <div class="text-muted mt-2">{{ d.order.note || '—' }}</div>
-
-            <div class="hb-divider"></div>
-
-            <div class="hb-h2">Ghi chú nội bộ</div>
-            <div class="text-muted mt-2">{{ d.order.admin_note || '—' }}</div>
-
-            <div class="hb-divider"></div>
-
-            <div class="hb-h2">Huỷ đơn</div>
-            <div class="text-muted mt-2" *ngIf="!d.order.cancel_reason">Chưa có</div>
-            <div class="text-muted mt-2" *ngIf="d.order.cancel_reason">
-              {{ d.order.cancel_reason }}
+            <div class="d-grid gap-2">
+              <button class="btn btn-hb-outline w-100" *ngIf="d.canCancel" (click)="confirmCancel(d.order.order_id)">
+                Huỷ đơn hàng
+              </button>
+              <button class="btn btn-hb-accent w-100" *ngIf="d.canApproveRequest" (click)="approveRequest(d.order.order_id)">
+                Duyệt đổi trả
+              </button>
             </div>
           </div>
         </div>
       </div>
     </ng-container>
 
-    <!-- ===== EDIT ===== -->
-    <ng-container *ngIf="vm.mode === 'edit'">
-      <ng-container *ngIf="vm.detail as d">
-        <ng-container *ngIf="vm.editModel as em">
-          <div class="row g-3">
-            <div class="col-12 col-xl-8">
-              <div class="card hb-card hb-card-pad">
-                <div class="hb-h2">Chỉnh sửa</div>
-                <div class="hb-sub text-muted">
-                  Chỉ chỉnh sửa ghi chú nội bộ (backend-ready patch).
-                </div>
-
-                <div class="hb-divider"></div>
-
-                <div class="mb-3">
-                  <label class="form-label fw-semibold">Ghi chú nội bộ (Admin/CS)</label>
-                  <textarea
-                    class="form-control"
-                    rows="6"
-                    placeholder="Nhập ghi chú nội bộ..."
-                    [(ngModel)]="$any(em).admin_note"
-                  ></textarea>
-                  <div class="text-muted small mt-1">Tối đa 500 ký tự.</div>
-                </div>
-
-                <div class="mb-0">
-                  <label class="form-label fw-semibold">Ghi chú khách (readonly)</label>
-                  <textarea
-                    class="form-control"
-                    rows="3"
-                    [ngModel]="d.order.note"
-                    disabled
-                  ></textarea>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12 col-xl-4">
-              <div class="card hb-card hb-card-pad hb-side-card">
-                <div class="hb-h2">Thông tin đơn</div>
-
-                <div class="hb-kv mt-2">
-                  <div class="k">Mã đơn</div>
-                  <div class="v">{{ d.order.order_number }}</div>
-                </div>
-
-                <div class="hb-kv">
-                  <div class="k">Trạng thái</div>
-                  <div class="v">
-                    <span class="hb-pill" [ngClass]="d.statusPillClass">{{ d.statusLabel }}</span>
-                  </div>
-                </div>
-
-                <div class="hb-kv">
-                  <div class="k">Thanh toán</div>
-                  <div class="v">
-                    <span class="hb-pill" [ngClass]="d.payPillClass">{{ d.paymentLabel }}</span>
-                  </div>
-                </div>
-
-                <div class="hb-kv">
-                  <div class="k">Tổng tiền</div>
-                  <div class="v">{{ d.totalText }}</div>
-                </div>
-              </div>
-            </div>
+    <!-- ===== EDIT VIEW ===== -->
+    <ng-container *ngIf="vm.mode === 'edit' && vm.editModel as em">
+      <div class="hb-detail-shell">
+        <div class="card hb-card hb-card-pad">
+          <h2 class="hb-h1 mb-4">Cập nhật đơn hàng</h2>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Ghi chú nội bộ</label>
+            <textarea class="form-control" rows="8" [(ngModel)]="$any(em).admin_note" placeholder="Nhập ghi chú cho nhân viên..."></textarea>
+            <div class="form-text mt-1 italic opacity-75">Thông tin này không hiển thị với khách hàng.</div>
           </div>
-        </ng-container>
-      </ng-container>
+        </div>
+        <div class="hb-side-card">
+          <div class="card hb-card hb-card-pad bg-light">
+            <div class="hb-h2 mb-2">Thao tác</div>
+            <button class="btn btn-hb w-100 mb-2" (click)="saveEdit()">Lưu ghi chú</button>
+            <button class="btn btn-hb-outline w-100" (click)="cancelEdit()">Hủy bỏ</button>
+          </div>
+        </div>
+      </div>
     </ng-container>
   </div>
 </div>

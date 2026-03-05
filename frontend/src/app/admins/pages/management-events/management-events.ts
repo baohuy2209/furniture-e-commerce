@@ -81,6 +81,11 @@ interface ListVM {
   page: number;
   pageSize: number;
   totalPages: number;
+  summary: {
+    totalCount: number;
+    ongoingCount: number;
+    upcomingCount: number;
+  };
 }
 
 @Component({
@@ -181,7 +186,13 @@ export class ManagementEvents implements OnInit, OnDestroy {
         };
       });
 
-      const vm: ListVM = { rows, total, page, pageSize: this.pageSize, totalPages };
+      const summary = {
+        totalCount: events.length,
+        ongoingCount: events.filter(e => this.computePhase(e.start_at, e.end_at) === 'ongoing').length,
+        upcomingCount: events.filter(e => this.computePhase(e.start_at, e.end_at) === 'upcoming').length,
+      };
+
+      const vm: ListVM = { rows, total, page, pageSize: this.pageSize, totalPages, summary };
       return vm;
     }),
   );
@@ -340,6 +351,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
       this.sortDir = 'asc';
     }
     this.refreshList();
+  }
+
+  sortIcon(key: SortKey): string {
+    if (this.sortBy !== key) return 'fa-sort';
+    return this.sortDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
   isSortKey(key: SortKey) {
@@ -665,11 +681,16 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   fmtDateOnly(iso: string) {
-    const d = new Date(iso);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    return `${dd}/${mm}/${yyyy}`;
+    try {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return iso;
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      return `${dd}/${mm}/${yyyy}`;
+    } catch {
+      return iso;
+    }
   }
 
   fmtDateRange(startISO: string, endISO: string) {
