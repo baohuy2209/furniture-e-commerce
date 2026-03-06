@@ -4,15 +4,6 @@
     <div class="hb-header-left">
       <div class="hb-title" routerLink="/admin/management-warehouse" style="cursor: pointer;">QUẢN LÝ TỒN KHO</div>
       
-      <ng-container *ngIf="vm.mode !== 'list' && vm.detail as d">
-        <div class="hb-sub text-muted">
-          SKU: <b>{{ d.variant?.sku || '—' }}</b>
-          <span class="hb-dot">•</span>
-          Variant: <b>{{ d.stock.product_variant_id }}</b>
-          <span class="hb-dot">•</span>
-          Panel: <b>{{ vm.currentPanel }}</b>
-        </div>
-      </ng-container>
     </div>
 
     <!-- LIST ACTIONS -->
@@ -30,9 +21,7 @@
         <i class="bi bi-arrow-left me-1"></i> Quay lại
       </button>
 
-      <button class="btn btn-hb-accent" type="button" *ngIf="vm.mode === 'detail'" (click)="enterEdit()">
-        <i class="bi bi-pencil-square me-1"></i> Nhập/Điều chỉnh
-      </button>
+
 
       <button class="btn btn-hb" type="button" *ngIf="vm.mode === 'edit'" (click)="saveEdit()">
         <i class="bi bi-check2-circle me-1"></i> Lưu
@@ -296,9 +285,7 @@
                   <span class="hb-pill" [ngClass]="d.statusPillClass">{{ d.statusLabel }}</span>
                 </div>
                 
-                <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
-                  <i class="bi bi-pencil-square me-1"></i> Nhập/Điều chỉnh
-                </button>
+
               </div>
             </div>
 
@@ -376,15 +363,12 @@
           <!-- Side Area Actions -->
           <div class="col-12 col-xl-4">
             <div class="card hb-card hb-card-pad">
-              <div class="hb-section-title fw-bold" style="font-size: 18px">Phím tắt nhanh</div>
+              <div class="hb-section-title fw-bold" style="font-size: 18px">Thao tác</div>
               <div class="hb-divider"></div>
               
               <div class="d-grid gap-2">
                 <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
-                  <i class="bi bi-plus-circle me-1"></i> Nhập/Điều chỉnh kho
-                </button>
-                <button class="btn btn-hb-outline" type="button" (click)="goList()">
-                  <i class="bi bi-list-ul me-1"></i> Danh sách tổng
+                  <i class="bi bi-plus-circle me-1"></i> Nhập / Điều chỉnh kho
                 </button>
                 <button class="btn btn-hb-outline" type="button" (click)="exportCsvStock()">
                   <i class="bi bi-file-earmark-spreadsheet me-1"></i> Trích xuất báo cáo
@@ -403,92 +387,112 @@
           <div class="row g-3">
             <div class="col-12 col-xl-8">
               <div class="card hb-card hb-card-pad">
-                <div class="hb-section-title fw-bold" style="font-size: 18px">Thực hiện nhập / Điều chỉnh</div>
-                <div class="text-muted small mb-3">Tác vụ ghi đè hoặc cộng dồn tồn kho.</div>
+                <div class="hb-section-title fw-bold" style="font-size: 18px">Thực hiện điều chuyển kho</div>
+                <div class="text-muted small mb-3">Ghi nhận biến động tồn kho cho SKU: <b>{{ d.variant?.sku }}</b></div>
                 <div class="hb-divider"></div>
 
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <label class="form-label fw-bold small text-muted">CHỌN PHƯƠNG THỨC</label>
-                    <select class="form-select" [(ngModel)]="em.adjustType">
-                      <option [ngValue]="'inbound'">Nhập hàng vào kho (+)</option>
-                      <option [ngValue]="'manual'">Hiệu chỉnh số dư (+/-)</option>
-                    </select>
+                <div class="row g-4">
+                  <!-- Movement Type Selection -->
+                  <div class="col-12">
+                    <label class="form-label fw-bold small text-muted">CHỌN NGHIỆP VỤ *</label>
+                    <div class="d-flex gap-2">
+                       <button type="button" class="btn flex-fill py-3" 
+                               [class]="em.adjustType === 'IN' ? 'btn-hb-success' : 'btn-hb-outline'"
+                               (click)="em.adjustType = 'IN'">
+                         <i class="bi bi-box-arrow-in-down me-2 fs-5"></i>
+                         <span>NHẬP KHO</span>
+                       </button>
+                       <button type="button" class="btn flex-fill py-3" 
+                               [class]="em.adjustType === 'ADJUST' ? 'btn-hb-warning' : 'btn-hb-outline'"
+                               (click)="em.adjustType = 'ADJUST'">
+                         <i class="bi bi-tools me-2 fs-5"></i>
+                         <span>KIỂM KÊ</span>
+                       </button>
+                    </div>
                   </div>
 
                   <div class="col-md-6">
                     <label class="form-label fw-bold small text-muted">SỐ LƯỢNG BIẾN ĐỘNG</label>
-                    <input class="form-control" type="number" min="0" [(ngModel)]="em.qtyAbs" />
-                  </div>
-
-                  <ng-container *ngIf="em.adjustType === 'manual'">
-                    <div class="col-md-6">
-                      <label class="form-label fw-bold small text-muted">CHIỀU ĐIỀU CHỈNH</label>
-                      <select class="form-select" [(ngModel)]="em.direction">
-                        <option [ngValue]="'increase'">Tăng tồn (Nhập thêm)</option>
-                        <option [ngValue]="'decrease'">Giảm tồn (Xuất/Huỷ)</option>
-                      </select>
+                    <div class="input-group">
+                      <span class="input-group-text px-3" [ngClass]="{
+                        'bg-success text-white border-success': em.adjustType === 'IN',
+                        'bg-warning text-dark border-warning': em.adjustType === 'ADJUST'
+                      }">
+                        {{ em.adjustType === 'IN' ? '+' : '+/-' }}
+                      </span>
+                      <input class="form-control form-control-lg fw-bold" type="number" [(ngModel)]="em.qtyAbs" placeholder="Số lượng..." />
                     </div>
-
-                    <div class="col-md-6">
-                      <label class="form-label fw-bold small text-muted">LÝ DO CẬP NHẬT</label>
-                      <input class="form-control" [(ngModel)]="em.reason" placeholder="VD: Kiểm kê định kỳ, hư hỏng..." />
-                    </div>
-                  </ng-container>
-
-                  <ng-container *ngIf="em.adjustType === 'inbound'">
-                    <div class="col-12">
-                      <label class="form-label fw-bold small text-muted">GHI CHÚ NHẬP KHO</label>
-                      <input class="form-control" [(ngModel)]="em.reason" placeholder="VD: Nhập thêm từ PO, nhập hàng trả..." />
-                    </div>
-                  </ng-container>
-
-                  <div class="col-md-6">
-                    <label class="form-label fw-bold small text-muted">LOẠI THAM CHIẾU</label>
-                    <select class="form-select" [(ngModel)]="em.reference_type">
-                      <option [ngValue]="'manual'">manual (Thủ công)</option>
-                      <option [ngValue]="'purchase_order'">purchase_order</option>
-                      <option [ngValue]="'order'">order</option>
-                      <option [ngValue]="'audit'">audit</option>
-                    </select>
                   </div>
 
                   <div class="col-md-6">
-                    <label class="form-label fw-bold small text-muted">MÃ THAM CHIẾU (REF ID)</label>
-                    <input class="form-control" [(ngModel)]="em.reference_id" placeholder="VD: PO_2024_001" />
+                    <label class="form-label fw-bold small text-muted">LÝ DO CHI TIẾT *</label>
+                    <input class="form-control form-control-lg" 
+                           [class.is-invalid]="!em.reason || !em.reason.trim()"
+                           [(ngModel)]="em.reason" 
+                           placeholder="Ví dụ: Nhập hàng mới, kiểm kho..." />
+                    <div class="invalid-feedback" *ngIf="!em.reason || !em.reason.trim()">
+                      Bắt buộc nhập lý do để ghi log hệ thống.
+                    </div>
                   </div>
                 </div>
 
-                <div class="hb-divider"></div>
+                <div class="hb-divider mt-5"></div>
 
                 <div class="d-flex gap-2 justify-content-end">
-                  <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Hủy bỏ</button>
-                  <button class="btn btn-hb" type="button" (click)="saveEdit()">
-                    <i class="bi bi-save2 me-1"></i> Xác nhận & Lưu
+                  <button class="btn btn-hb-outline px-4 py-2" type="button" (click)="cancelEdit()">Hủy bỏ</button>
+                  <button class="btn btn-hb px-5 py-2" type="button" (click)="saveEdit()" 
+                          [disabled]="(!em.qtyAbs && em.adjustType !== 'ADJUST') || !em.reason || !em.reason.trim()">
+                    <i class="bi bi-check2-circle me-1"></i> XÁC NHẬN LƯU
                   </button>
                 </div>
               </div>
             </div>
 
-            <!-- Current State Helper -->
+            <!-- Enhanced Current State Sidebar -->
             <div class="col-12 col-xl-4">
-              <div class="card hb-card hb-card-pad bg-light border-0">
-                <div class="hb-section-title fw-bold" style="font-size: 16px">Hiện trạng tại kho</div>
-                <div class="hb-divider"></div>
+              <div class="card hb-card border-0" style="background: #fdfdfd; box-shadow: none; border: 1px solid rgba(0,0,0,0.05) !important;">
+                <div class="p-4">
+                  <div class="text-muted small fw-bold mb-3">ĐỐI TƯỢNG ĐIỀU CHỈNH</div>
+                  
+                  <div class="mb-4">
+                     <div class="text-primary fw-bold" style="font-size: 32px; line-height: 1;">{{ d.variant?.sku || 'SKU —' }}</div>
+                     <div class="text-muted small mt-1">ID: {{ d.stock.product_variant_id }}</div>
+                  </div>
 
-                <div class="hb-kv bg-white">
-                  <div class="k">Tồn kho hiện hữu</div>
-                  <div class="v">{{ d.onHandText }}</div>
-                </div>
+                  <div class="hb-divider"></div>
 
-                <div class="hb-kv bg-white mt-2">
-                  <div class="k">Xác định lần cuối</div>
-                  <div class="v">{{ d.updatedAtText }}</div>
+                  <div class="d-flex flex-column gap-3">
+                    <div>
+                      <div class="text-muted small fw-bold">TỒN HIỆN TẠI</div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="fs-3 fw-bold">{{ d.onHandText }}</span>
+                        <span class="text-muted small">đơn vị</span>
+                      </div>
+                    </div>
+
+                    <div class="p-3 rounded" style="background: rgba(255,145,31,0.06); border: 1px dashed var(--hb-accent);">
+                      <div class="text-accent small fw-bold">DỰ KIẾN SAU THAY ĐỔI</div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="fs-2 fw-bold text-accent">{{ d.stock.quantity_on_hand + (em.qtyAbs || 0) }}</span>
+                        <span class="text-accent small fw-bold">đơn vị</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-4 pt-3 border-top">
+                    <div class="d-flex align-items-center gap-2 text-muted small">
+                       <i class="bi bi-geo-alt-fill text-primary"></i>
+                       <span>Tại kho: <b>{{ d.warehouse?.name }}</b></span>
+                    </div>
+                  </div>
                 </div>
-                
-                <div class="mt-3 p-2 bg-info bg-opacity-10 rounded border border-info border-opacity-20">
-                  <div class="small text-info fw-bold"><i class="bi bi-info-circle me-1"></i> Lưu ý:</div>
-                  <div class="small text-muted mt-1">Hệ thống sẽ ghi nhận logic: <b>Tồn mới = Tồn cũ +/- Biến động</b>. Hãy kiểm tra kỹ Ref ID trước khi lưu.</div>
+              </div>
+
+              <!-- Rule helper box -->
+              <div class="mt-3 p-3 rounded bg-white shadow-sm" style="border: 1px solid var(--hb-border);">
+                <div class="small fw-bold mb-2 text-primary"><i class="bi bi-info-circle me-1"></i> Ghi chú hệ thống:</div>
+                <div class="small text-muted" style="line-height: 1.6;">
+                  Mọi thay đổi sẽ được ghi nhật ký (log) vào lịch sử biến động kho tự động. Hãy đảm bảo số lượng kiểm kê khớp với thực tế.
                 </div>
               </div>
             </div>
@@ -497,4 +501,15 @@
       </ng-container>
     </ng-container>
   </div>
+
+  <!-- SAVE CONFIRM MODAL -->
+  <hb-confirm-modal
+    [isOpen]="saveModalOpen"
+    title="Xác nhận ghi sổ"
+    message="Hệ thống sẽ ghi nhận biến động kho và cập nhật số dư tồn kho. Tiếp tục?"
+    [type]="'info'"
+    confirmLabel="Xác nhận lưu"
+    (confirm)="executeSave()"
+    (cancel)="onCancelSave()">
+  </hb-confirm-modal>
 </div>

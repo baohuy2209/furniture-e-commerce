@@ -3,15 +3,6 @@
   <div class="hb-page-header">
     <div class="hb-header-left">
       <div class="hb-title" routerLink="/admin/management-voucher" style="cursor: pointer;">QUẢN LÝ KHUYẾN MÃI</div>
-      <ng-container *ngIf="mode !== 'list' && detail">
-        <div class="hb-sub text-muted">
-          Code: <b>{{ detail.code }}</b>
-          <span class="hb-dot">•</span>
-          ID: <b>{{ detail.voucher_id }}</b>
-          <span class="hb-dot">•</span>
-          Chế độ: <b>{{ mode === 'edit' ? 'Chỉnh sửa' : 'Chi tiết' }}</b>
-        </div>
-      </ng-container>
     </div>
 
     <div class="hb-header-actions">
@@ -30,12 +21,6 @@
       <ng-container *ngIf="mode !== 'list'">
         <button class="btn btn-hb-outline" type="button" (click)="backToList()">
           <i class="bi bi-arrow-left me-1"></i> Quay lại
-        </button>
-        <button class="btn btn-hb" type="button" *ngIf="mode === 'edit'" (click)="saveEdit()">
-          <i class="bi bi-check2 me-1"></i> Lưu thay đổi
-        </button>
-        <button class="btn btn-hb-outline" type="button" *ngIf="mode === 'edit'" (click)="cancelEdit()">
-          Hủy
         </button>
       </ng-container>
     </div>
@@ -273,107 +258,158 @@
       </div>
     </ng-container>
 
-    <!-- ===== DETAIL VIEW ===== -->
     <ng-container *ngIf="mode === 'detail'">
       <ng-container *ngIf="detail as d">
-        <div class="hb-detail-shell">
-          <!-- Main Content -->
-          <div class="card hb-card hb-detail-main-card">
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-              <div class="d-flex align-items-center gap-3">
-                <h1 class="hb-h1 mb-0">{{ d.code }}</h1>
-                <span class="hb-badge" [ngClass]="statusBadgeClass(d.computed_status)">
-                  {{ statusLabel(d.computed_status) }}
-                </span>
-                <span class="hb-badge hb-badge-soft">{{ d.typeLabel }}</span>
-              </div>
-              <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
-                <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa voucher
-              </button>
-            </div>
-
-            <div class="hb-divider"></div>
-
-            <div class="hb-kv-grid">
-              <div class="hb-kv">
-                <div class="k">Mã Voucher ID</div>
-                <div class="v">{{ d.voucher_id }}</div>
-              </div>
-              <div class="hb-kv">
-                <div class="k">Tên chiến dịch</div>
-                <div class="v">{{ d.voucher_name }}</div>
-              </div>
-              <div class="hb-kv">
-                <div class="k">Giá trị ưu đãi</div>
-                <div class="v"><span class="badge hb-badge-accent fs-6">{{ d.valueText }}</span></div>
-              </div>
-              <div class="hb-kv">
-                <div class="k">Giá trị đơn tối thiểu</div>
-                <div class="v">{{ d.minOrderText }}</div>
-              </div>
-              <div class="hb-kv">
-                <div class="k">Ngày hiệu lực</div>
-                <div class="v">{{ d.startDateText }}</div>
-              </div>
-              <div class="hb-kv">
-                <div class="k">Ngày hết hạn</div>
-                <div class="v">{{ d.endDateText }}</div>
-              </div>
-              <div class="hb-kv">
-                <div class="k">Hạn mức sử dụng</div>
-                <div class="v">{{ d.used_count }} / {{ d.usage_limit }} (Còn lại {{ d.remaining }})</div>
-              </div>
-              <div class="hb-kv">
-                <div class="k">Ngày tạo hệ thống</div>
-                <div class="v">{{ d.created_at }}</div>
+        <div class="row g-3">
+          <!-- Main Content (Left) -->
+          <div class="col-12 col-xl-8">
+            <div class="card hb-card hb-card-pad mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="hb-title" style="font-size: 24px">{{ d.code }}</div>
+                  <span class="hb-pill" [ngClass]="statusBadgeClass(d.computed_status)">{{ statusLabel(d.computed_status) }}</span>
+                </div>
               </div>
             </div>
-            
-            <div class="hb-divider"></div>
-            
-            <div class="mt-4 p-3 bg-light rounded shadow-sm border border-info border-opacity-10">
-              <div class="fw-bold text-primary mb-2 small"><i class="bi bi-info-circle-fill me-1"></i> LƯU Ý HỆ THỐNG:</div>
-              <div class="small text-muted">Voucher sau khi đã phát hành có thể bị đóng băng nếu phát hiện gian lận. Khi hết hạn, hệ thống sẽ tự động chuyển trạng thái về "Hết hạn".</div>
+
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-section-title fw-bold" style="font-size: 18px">Thông tin chi tiết voucher</div>
+              <div class="hb-divider"></div>
+
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="hb-kv">
+                    <div class="k">Mô tả chương trình</div>
+                    <div class="v" style="white-space: pre-line">{{ d.description || 'Chưa có mô tả chi tiết cho voucher này.' }}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="hb-kv">
+                    <div class="k">Mã Voucher ID</div>
+                    <div class="v">{{ d.voucher_id }}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="hb-kv">
+                    <div class="k">Loại ưu đãi</div>
+                    <div class="v">{{ d.typeLabel }}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="hb-kv text-accent">
+                    <div class="k">Giá trị</div>
+                    <div class="v fw-bold fs-5">{{ d.valueText }}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="hb-kv">
+                    <div class="k">Đơn tối thiểu</div>
+                    <div class="v">{{ d.minOrderText }}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="hb-kv">
+                    <div class="k">Ngày bắt đầu</div>
+                    <div class="v">{{ d.startDateText }}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="hb-kv">
+                    <div class="k">Ngày hết hạn</div>
+                    <div class="v">{{ d.endDateText }}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="hb-kv">
+                    <div class="k">Giới hạn sử dụng</div>
+                    <div class="v">{{ d.usage_limit }} đơn hàng</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="hb-kv">
+                    <div class="k">Đã sử dụng</div>
+                    <div class="v">{{ d.used_count }} đơn hàng</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="hb-divider"></div>
+              
+              <div class="mt-2 p-3 bg-light rounded shadow-sm border border-info border-opacity-10">
+                <div class="fw-bold text-primary mb-2 small"><i class="bi bi-info-circle-fill me-1"></i> LƯU Ý HỆ THỐNG:</div>
+                <div class="small text-muted">Voucher sau khi đã phát hành có thể bị đóng băng nếu phát hiện gian lận. Khi hết hạn, hệ thống sẽ tự động chuyển trạng thái về "Hết hạn".</div>
+              </div>
             </div>
           </div>
 
-          <!-- Actions Sidebar -->
-          <div class="hb-side-card">
-            <div class="card hb-card hb-card-pad">
-              <div class="fw-bold mb-3 text-uppercase small text-muted">Vận hành voucher</div>
+          <!-- Sidebar (Right) -->
+          <div class="col-12 col-xl-4">
+            <!-- Action Card -->
+            <div class="card hb-card hb-card-pad mb-3">
+              <div class="hb-section-title fw-bold" style="font-size: 18px">Thao tác</div>
+              <div class="hb-divider"></div>
+              
               <div class="d-grid gap-2">
+                <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
+                  <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa voucher
+                </button>
+                
                 <button
-                  class="btn btn-hb-outline w-100"
+                  class="btn btn-hb-outline"
                   type="button"
                   [disabled]="d.computed_status === 'expired' || d.computed_status === 'deleted'"
                   (click)="toggleActivePaused(d.voucher_id)"
                 >
-                  <i class="bi bi-pause-play me-1"></i> {{ d.status === 'paused' ? 'Kích hoạt lại' : 'Tạm dừng voucher' }}
-                </button>
-
-                <button
-                  class="btn btn-hb-outline w-100"
-                  type="button"
-                  [disabled]="d.computed_status === 'expired' || d.computed_status === 'deleted'"
-                  (click)="d.computed_status === 'frozen' ? unfreeze(d.voucher_id) : freeze(d.voucher_id)"
-                >
-                  <i class="bi bi-snow me-1"></i> {{ d.computed_status === 'frozen' ? 'Mở đóng băng' : 'Đóng băng mã' }}
-                </button>
-
-                <button class="btn btn-hb-accent w-100" type="button" (click)="enterEdit()">
-                  <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa voucher
+                  <i class="bi" [ngClass]="d.status === 'paused' ? 'bi-play-fill' : 'bi-pause-fill'"></i>
+                  {{ d.status === 'paused' ? 'Kích hoạt lại' : 'Tạm dừng voucher' }}
                 </button>
 
                 <div class="hb-divider my-2"></div>
 
                 <button
-                  class="btn btn-hb-outline-danger w-100"
+                  class="btn btn-hb-outline-danger"
                   type="button"
                   (click)="hardDelete(d.voucher_id)"
                 >
-                  <i class="bi bi-trash3 me-1"></i> Xóa vĩnh viễn voucher
+                  <i class="bi bi-trash3 me-1"></i> Xóa vĩnh viễn
                 </button>
               </div>
+            </div>
+
+            <!-- Insight Card -->
+            <div class="card hb-card border-0 mb-4" style="background: #fdfdfd; border: 1px solid rgba(0,0,0,0.05) !important;">
+               <div class="p-4">
+                  <div class="text-muted small fw-bold mb-3">HIỆU QUẢ CHƯƠNG TRÌNH</div>
+                  
+                  <div class="d-flex flex-column gap-4">
+                    <div class="item-stat p-3 rounded" style="background: rgba(255,145,31,0.06); border: 1px dashed var(--hb-accent);">
+                      <div class="text-accent small fw-bold text-uppercase mb-1">Doanh thu mang lại</div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="fs-2 fw-black text-accent">{{ d.revenueText || '0đ' }}</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="text-muted small fw-bold mb-1">TỶ LỆ SỬ DỤNG</div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="fs-3 fw-bold">{{ ((d.used_count / d.usage_limit) * 100) | number:'1.0-0' }}%</span>
+                        <span class="text-muted small">({{ d.used_count }}/{{ d.usage_limit }})</span>
+                      </div>
+                      <div class="progress mt-2" style="height: 6px;">
+                        <div class="progress-bar bg-accent" role="progressbar" [style.width]="((d.used_count / d.usage_limit) * 100) + '%'"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-4 pt-3 border-top">
+                    <div class="d-flex align-items-center justify-content-between">
+                       <span class="badge" [ngClass]="statusBadgeClass(d.computed_status)">
+                          {{ statusLabel(d.computed_status) }}
+                       </span>
+                       <span class="small text-muted">Hết hạn: <b>{{ d.endDateText }}</b></span>
+                    </div>
+                  </div>
+               </div>
             </div>
           </div>
         </div>
@@ -384,62 +420,89 @@
     <ng-container *ngIf="mode === 'edit'">
       <ng-container *ngIf="detail as d">
         <ng-container *ngIf="editModel as em">
-          <div class="hb-detail-shell">
-            <div class="card hb-card hb-card-pad">
-              <h2 class="hb-h1 mb-1">Hiệu chỉnh Voucher</h2>
-              <div class="text-muted small mb-4">Mã: <b>{{ d.code }}</b> | ID: <b>{{ d.voucher_id }}</b></div>
-              
-              <div class="hb-divider"></div>
+          <div class="row g-3">
+            <!-- Main Content (Left) -->
+            <div class="col-12 col-xl-8">
+              <div class="card hb-card hb-card-pad">
+                <div class="hb-section-title fw-bold" style="font-size: 18px">Hiệu chỉnh Voucher</div>
+                <div class="text-muted small mb-3">Cập nhật thông tin/điều kiện cho mã khuyến mãi: <b>{{ d.code }}</b></div>
+                
+                <div class="hb-divider"></div>
 
-              <div class="hb-form-grid">
-                <div class="hb-field">
-                  <label>GIÁ TRỊ ƯU ĐÃI</label>
-                  <input class="form-control" type="number" [(ngModel)]="em.value" />
-                  <div class="hb-help">* Áp dụng: {{ d.typeLabel }}</div>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold small text-muted">GIÁ TRỊ ƯU ĐÃI</label>
+                    <input class="form-control form-control-lg" type="number" [(ngModel)]="em.value" />
+                    <div class="hb-help small text-muted mt-1">* Loại hình: {{ d.typeLabel }}</div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold small text-muted">GIÁ TRỊ ĐƠN TỐI THIỂU (VNĐ)</label>
+                    <input class="form-control form-control-lg" type="number" [(ngModel)]="em.min_order_value" />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold small text-muted">HẠN MỨC (USAGE LIMIT)</label>
+                    <input class="form-control form-control-lg" type="number" [(ngModel)]="em.usage_limit" />
+                    <div class="hb-help small text-muted mt-1">* Đã dùng: {{ d.used_count }} lần</div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold small text-muted">NGÀY HẾT HẠN</label>
+                    <input
+                      class="form-control form-control-lg"
+                      type="date"
+                      [(ngModel)]="em.end_date"
+                      [min]="todayISO"
+                    />
+                  </div>
                 </div>
 
-                <div class="hb-field">
-                  <label>GIÁ TRỊ ĐƠN TỐI THIỂU</label>
-                  <input class="form-control" type="number" [(ngModel)]="em.min_order_value" />
-                  <div class="hb-help">* Sử dụng tiền VNĐ</div>
+                <div class="hb-divider mt-5"></div>
+
+                <div class="d-flex gap-2 justify-content-end">
+                  <button class="btn btn-hb-outline px-4 py-2" type="button" (click)="cancelEdit()">Hủy bỏ</button>
+                  <button class="btn btn-hb px-5 py-2" type="button" (click)="saveEdit()">
+                    <i class="bi bi-check2-circle me-1"></i> XÁC NHẬN CẬP NHẬT
+                  </button>
                 </div>
-
-                <div class="hb-field">
-                  <label>HẠN MỨC (USAGE LIMIT)</label>
-                  <input class="form-control" type="number" [(ngModel)]="em.usage_limit" />
-                  <div class="hb-help">* Hiện đã dùng: {{ d.used_count }} lần</div>
-                </div>
-
-                <div class="hb-field">
-                  <label>NGÀY HẾT HẠN</label>
-                  <input
-                    class="form-control"
-                    type="date"
-                    [(ngModel)]="em.end_date"
-                    [min]="todayISO"
-                  />
-                  <div class="hb-help">* Phải lớn hơn hoặc bằng ngày bắt đầu</div>
-                </div>
-              </div>
-
-              <div class="hb-divider"></div>
-
-              <div class="d-flex gap-2 justify-content-end">
-                <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Bỏ qua</button>
-                <button class="btn btn-hb" type="button" (click)="saveEdit()">
-                  <i class="bi bi-check2-circle me-1"></i> Cập nhật ngay
-                </button>
               </div>
             </div>
 
-            <!-- Side Help -->
-            <div class="hb-side-card">
-              <div class="card hb-card hb-card-pad bg-light border-0">
-                <div class="fw-bold mb-2 small text-uppercase">Quy định sửa voucher</div>
-                <div class="hb-divider"></div>
-                <div class="small text-muted">
-                  <p>Theo tài liệu BA, bạn không được phép thay đổi <b>Mã KM</b> hoặc <b>Loại voucher</b> sau khi đã phát hành thành công để đảm bảo tính nhất quán của dữ liệu đơn hàng.</p>
-                  <p>Các thay đổi về giá trị sẽ chỉ áp dụng cho các lượt sử dụng mới kể từ thời điểm Lưu.</p>
+            <!-- Enhanced Current State Sidebar -->
+            <div class="col-12 col-xl-4">
+              <div class="card hb-card border-0" style="background: #fdfdfd; box-shadow: none; border: 1px solid rgba(0,0,0,0.05) !important;">
+                <div class="p-4">
+                  <div class="text-muted small fw-bold mb-3">ĐỐI TƯỢNG ĐIỀU CHỈNH</div>
+                  
+                  <div class="mb-4">
+                     <div class="text-primary fw-bold" style="font-size: 32px; line-height: 1;">{{ d.code }}</div>
+                     <div class="text-muted small mt-1">ID: {{ d.voucher_id }}</div>
+                  </div>
+
+                  <div class="hb-divider"></div>
+
+                  <div class="d-flex flex-column gap-3">
+                    <div>
+                      <div class="text-muted small fw-bold mb-1">TỶ LỆ SỬ DỤNG (HIỆN TẠI)</div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="fs-3 fw-bold">{{ ((d.used_count / d.usage_limit) * 100) | number:'1.0-0' }}%</span>
+                        <span class="text-muted small">({{ d.used_count }}/{{ d.usage_limit }})</span>
+                      </div>
+                      <div class="progress mt-2" style="height: 6px;">
+                        <div class="progress-bar bg-accent" role="progressbar" [style.width]="((d.used_count / d.usage_limit) * 100) + '%'"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-4 pt-3 border-top">
+                    <div class="d-flex align-items-center justify-content-between">
+                       <span class="hb-pill" [ngClass]="statusBadgeClass(d.computed_status)">
+                          {{ statusLabel(d.computed_status) }}
+                       </span>
+                       <span class="small text-muted">Hết hạn: <b>{{ d.endDateText }}</b></span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -448,4 +511,26 @@
       </ng-container>
     </ng-container>
   </div>
+
+  <!-- SAVING MODAL -->
+  <hb-confirm-modal
+    [isOpen]="saveModalOpen"
+    title="Xác nhận cập nhật"
+    message="Dữ liệu voucher sẽ được thay đổi ngay lập tức. Bạn có chắc chắn muốn lưu?"
+    [type]="'info'"
+    confirmLabel="Đồng ý lưu"
+    (confirm)="executeSave()"
+    (cancel)="onCancelSave()">
+  </hb-confirm-modal>
+
+  <!-- DELETION MODAL -->
+  <hb-confirm-modal
+    [isOpen]="deleteModalOpen"
+    [title]="deleteModalTitle"
+    [message]="deleteModalMessage"
+    [type]="'danger'"
+    confirmLabel="Xóa vĩnh viễn"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+  </hb-confirm-modal>
 </div>

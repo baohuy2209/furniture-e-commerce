@@ -19,7 +19,12 @@
     Roboto,
     Arial,
     sans-serif;
+  --hb-radius-lg: 20px;
 }
+
+.fw-black { font-weight: 900 !important; }
+.fs-2 { font-size: 2rem !important; }
+.fs-3 { font-size: 1.5rem !important; }
 
 .hb-page-shell {
   height: 100%;
@@ -142,6 +147,45 @@
   color: #1f1f1f;
 }
 
+.btn-hb-success {
+  background: #198754;
+  border-color: #198754;
+  color: #fff;
+  font-weight: 800;
+  border-radius: var(--hb-radius-sm);
+}
+
+.btn-hb-success:hover {
+  filter: brightness(0.9);
+  color: #fff;
+}
+
+.btn-hb-danger {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+  font-weight: 800;
+  border-radius: var(--hb-radius-sm);
+}
+
+.btn-hb-danger:hover {
+  filter: brightness(0.9);
+  color: #fff;
+}
+
+.btn-hb-warning {
+  background: #ffc107;
+  border-color: #ffc107;
+  color: #1f1f1f;
+  font-weight: 800;
+  border-radius: var(--hb-radius-sm);
+}
+
+.btn-hb-warning:hover {
+  filter: brightness(0.9);
+  color: #1f1f1f;
+}
+
 /* ===== INPUT ===== */
 .form-control,
 .form-select {
@@ -150,8 +194,18 @@
 
 .form-control:focus,
 .form-select:focus {
-  border-color: rgba(255, 145, 31, 0.55);
-  box-shadow: 0 0 0 0.2rem rgba(255, 145, 31, 0.16);
+  border-color: var(--hb-primary);
+  box-shadow: 0 0 0 0.2rem rgba(61, 82, 157, 0.12);
+}
+
+.input-group-text {
+  border-radius: var(--hb-radius-sm) 0 0 var(--hb-radius-sm);
+  font-weight: 900;
+  border: 1px solid var(--hb-border);
+}
+
+.input-group .form-control {
+  border-radius: 0 var(--hb-radius-sm) var(--hb-radius-sm) 0;
 }
 
 /* ===== SUMMARY ROW ===== */

@@ -6,7 +6,21 @@
   --hb-border: rgba(0, 0, 0, 0.12);
   --hb-text: rgba(0, 0, 0, 0.78);
   --hb-muted: rgba(0, 0, 0, 0.55);
+  --hb-radius-lg: 20px;
 }
+
+.fw-black { font-weight: 900 !important; }
+.fs-2 { font-size: 2rem !important; }
+.fs-3 { font-size: 1.5rem !important; }
+
+/* Utility for sidebar stats */
+.item-stat {
+  transition: all 0.2s ease;
+}
+.item-stat:hover {
+  transform: scale(1.02);
+}
+
 
 :host {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -67,10 +81,11 @@
   color: var(--hb-muted);
 }
 
-.hb-h1 {
-  font-size: 26px;
-  font-weight: 900;
-  color: var(--hb-primary);
+.hb-detail-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--hb-text);
+  letter-spacing: -0.5px;
 }
 
 /* ===== CARDS ===== */
@@ -509,11 +524,12 @@
 }
 
 .hb-kv .k {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 900;
   color: var(--hb-muted);
   margin-bottom: 2px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .hb-kv .v {

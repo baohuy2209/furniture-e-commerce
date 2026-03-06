@@ -4,6 +4,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, combineLatest, forkJoin, map, takeUntil } from 'rxjs';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 type SortDir = 'asc' | 'desc';
 type ProductId = string;
@@ -120,7 +121,7 @@ interface VariantEditVM {
 @Component({
   selector: 'app-management-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule, NgIf, NgFor, DatePipe],
+  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule, NgIf, NgFor, DatePipe, ConfirmModal],
   templateUrl: './management-products.html',
   styleUrls: ['./management-products.css'],
 })
@@ -159,6 +160,15 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   // comments store (mock but editable)
   private commentsByProduct = new Map<ProductId, ProductComment[]>();
+
+  // Deletion Modal state
+  deleteModalOpen = false;
+  deleteItemId: string | null = null;
+  deleteItemType: 'product' | 'comment' = 'product';
+  deleteModalTitle = '';
+  deleteModalMessage = '';
+
+  saveModalOpen = false;
 
   query$ = new BehaviorSubject<ListQuery>({
     q: '',
@@ -635,10 +645,12 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   saveEdit(): void {
     if (!this.editForm) return;
+    this.saveModalOpen = true;
+  }
 
-    const ok = confirm('Lưu thay đổi?');
-    if (!ok) return;
-
+  executeSave(): void {
+    if (!this.editForm) return;
+    this.saveModalOpen = false;
     this.saving = true;
 
     if (this.isCreateMode) {
@@ -829,13 +841,36 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   // ================== DELETE (soft mock) ==================
   softDelete(productId: string): void {
-    const ok = confirm('Xóa sản phẩm? (mock: sẽ remove khỏi list)');
-    if (!ok) return;
+    this.deleteItemId = productId;
+    this.deleteItemType = 'product';
+    this.deleteModalTitle = 'Xác nhận xóa sản phẩm';
+    this.deleteModalMessage = 'Bạn có chắc chắn muốn xóa sản phẩm này? Dữ liệu sẽ bị gỡ khỏi danh sách quản lý.';
+    this.deleteModalOpen = true;
+  }
 
-    const next = this.products$.value.filter((p) => p.product_id !== productId);
-    this.products$.next(next);
+  onConfirmDelete(): void {
+    if (!this.deleteItemId) return;
 
-    if (this.selectedProductId === productId) this.backToList();
+    if (this.deleteItemType === 'product') {
+      const next = this.products$.value.filter((p) => p.product_id !== this.deleteItemId);
+      this.products$.next(next);
+      if (this.selectedProductId === this.deleteItemId) this.backToList();
+    } else {
+      // comment
+      if (this.selectedProductId && this.selectedProductId !== 'new') {
+        const list = this.getComments(this.selectedProductId).filter((x) => x.id !== this.deleteItemId);
+        this.commentsByProduct.set(this.selectedProductId, list);
+        this.isDirty = true;
+      }
+    }
+
+    this.deleteModalOpen = false;
+    this.deleteItemId = null;
+  }
+
+  onCancelDelete(): void {
+    this.deleteModalOpen = false;
+    this.deleteItemId = null;
   }
 
   // ================== COMMENTS MODERATION (mock) ==================
@@ -860,11 +895,11 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   deleteComment(cmtId: string): void {
     if (!this.selectedProductId || this.selectedProductId === 'new') return;
-    const ok = confirm('Xóa review này?');
-    if (!ok) return;
-    const list = this.getComments(this.selectedProductId).filter((x) => x.id !== cmtId);
-    this.commentsByProduct.set(this.selectedProductId, list);
-    this.isDirty = true;
+    this.deleteItemId = cmtId;
+    this.deleteItemType = 'comment';
+    this.deleteModalTitle = 'Xác nhận xóa đánh giá';
+    this.deleteModalMessage = 'Bạn có chắc chắn muốn xóa đánh giá này khỏi hệ thống?';
+    this.deleteModalOpen = true;
   }
 
   // ================== HELPERS ==================

@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 // =====================
 // Domain model (future MongoDB-friendly)
 // =====================
 
-type VoucherStatus = 'active' | 'paused' | 'expired' | 'deleted' | 'frozen';
+type VoucherStatus = 'active' | 'paused' | 'expired' | 'deleted';
 type VoucherType = 'percent' | 'fixed' | 'freeship';
 
 /**
@@ -32,11 +33,14 @@ interface Voucher {
   end_date: string; // yyyy-mm-dd
   status: VoucherStatus;
   created_at: string; // yyyy-mm-dd
+  description?: string;
+  revenue_generated?: number;
 }
 
 type VoucherRowVM = Voucher & {
   computed_status: VoucherStatus;
   valueText: string;
+  revenueText: string;
   minOrderText: string;
   remaining: number;
   typeLabel: string;
@@ -88,6 +92,8 @@ class InMemoryVoucherRepository implements VoucherRepository {
       end_date: '2025-05-03',
       status: 'active',
       created_at: '2025-01-01',
+      description: 'Chương trình tri ân khách hàng dịp lễ lớn, áp dụng cho tất cả các đơn hàng mua sản phẩm nội thất.',
+      revenue_generated: 154000000,
     },
     {
       voucher_id: 'V002',
@@ -102,6 +108,8 @@ class InMemoryVoucherRepository implements VoucherRepository {
       end_date: '2026-01-01',
       status: 'active',
       created_at: '2025-01-02',
+      description: 'Mã giảm giá dành riêng cho các khách hàng lần đầu mua sắm tại nền tảng HomeBase.',
+      revenue_generated: 45000000,
     },
     {
       voucher_id: 'V003',
@@ -116,6 +124,8 @@ class InMemoryVoucherRepository implements VoucherRepository {
       end_date: '2026-01-01',
       status: 'deleted',
       created_at: '2025-01-03',
+      description: 'Mã nội bộ không công khai, dành cho nhân viên công ty.',
+      revenue_generated: 2000000,
     },
   ]);
 
@@ -140,7 +150,7 @@ class InMemoryVoucherRepository implements VoucherRepository {
 @Component({
   standalone: true,
   selector: 'app-management-voucher',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ConfirmModal],
   templateUrl: './management-voucher.html',
   styleUrls: ['./management-voucher.css'],
 })
@@ -164,6 +174,13 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     usage_limit: number;
     end_date: string;
   } | null = null;
+  saveModalOpen = false;
+
+  // Deletion Modal state
+  deleteModalOpen = false;
+  deleteVoucherId: string | null = null;
+  deleteModalTitle = '';
+  deleteModalMessage = '';
 
   // ====== TODAY ISO for min date + expiration compare ======
   todayISO = this.toISODate(new Date());
@@ -229,7 +246,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
 
       data.forEach(v => {
         const s = this.computeStatus(v);
-        if (s === 'active' || s === 'frozen') activeCount++;
+        if (s === 'active') activeCount++;
         else if (s === 'paused') pausedCount++;
         else if (s === 'expired') expiredCount++;
       });
@@ -413,6 +430,16 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       return;
     }
 
+    this.saveModalOpen = true;
+  }
+
+  onCancelSave() {
+    this.saveModalOpen = false;
+  }
+
+  executeSave() {
+    if (!this.detail || !this.editModel) return;
+
     const id = this.detail.voucher_id;
     this.repo.update(id, {
       value: Number(this.editModel.value) || 0,
@@ -427,6 +454,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
 
     this.mode = 'detail';
     this.editModel = null;
+    this.saveModalOpen = false;
   }
 
   // ====== ACTIONS ======
@@ -442,31 +470,29 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     this.refreshDetailIfOpen(id);
   }
 
-  freeze(id: string) {
-    const v = this.repo.getSnapshot().find((x) => x.voucher_id === id);
-    if (!v) return;
-    if (this.computeStatus(v) === 'deleted') return;
-
-    this.repo.update(id, { status: 'frozen' });
-    this.refreshDetailIfOpen(id);
-  }
-
-  unfreeze(id: string) {
-    const v = this.repo.getSnapshot().find((x) => x.voucher_id === id);
-    if (!v) return;
-    if (this.computeStatus(v) === 'deleted') return;
-
-    // unfreeze -> active (rule can be changed later)
-    this.repo.update(id, { status: 'active' });
-    this.refreshDetailIfOpen(id);
-  }
-
   hardDelete(id: string) {
-    if (!confirm('Xóa vĩnh viễn voucher này?')) return;
+    this.deleteVoucherId = id;
+    this.deleteModalTitle = 'Xác nhận xóa Voucher';
+    this.deleteModalMessage = `Hệ thống sẽ xóa vĩnh viễn voucher này. Dữ liệu sẽ không thể khôi phục. Tiếp tục?`;
+    this.deleteModalOpen = true;
+  }
 
-    this.repo.deleteHard(id);
+  onConfirmDelete() {
+    if (!this.deleteVoucherId) return;
 
-    if (this.selectedId === id) this.backToList();
+    this.repo.deleteHard(this.deleteVoucherId);
+
+    if (this.selectedId === this.deleteVoucherId) {
+      this.backToList();
+    }
+    
+    this.deleteModalOpen = false;
+    this.deleteVoucherId = null;
+  }
+
+  onCancelDelete() {
+    this.deleteModalOpen = false;
+    this.deleteVoucherId = null;
   }
 
   exportCsvSnapshot() {
@@ -488,8 +514,6 @@ export class ManagementVoucher implements OnInit, OnDestroy {
         return 'Hoạt động';
       case 'paused':
         return 'Tạm dừng';
-      case 'frozen':
-        return 'Đóng băng';
       case 'expired':
         return 'Hết hạn';
       case 'deleted':
@@ -505,8 +529,6 @@ export class ManagementVoucher implements OnInit, OnDestroy {
         return 'hb-st-active';
       case 'paused':
         return 'hb-st-paused';
-      case 'frozen':
-        return 'hb-st-frozen';
       case 'expired':
         return 'hb-st-expired';
       case 'deleted':
@@ -539,8 +561,11 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     const typeLabel =
       v.type === 'percent' ? 'Giảm %' : v.type === 'fixed' ? 'Giảm tiền' : 'Free ship';
 
+    const revenueText = (v.revenue_generated || 0).toLocaleString('vi-VN') + 'đ';
+
     return {
       ...v,
+      revenueText,
       computed_status: computed,
       valueText,
       minOrderText: `${v.min_order_value.toLocaleString()}đ`,

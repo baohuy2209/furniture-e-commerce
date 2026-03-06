@@ -1,0 +1,107 @@
+.hb-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.hb-modal-container {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transform-origin: center;
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hb-modal-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+/* Color Types */
+.type-danger .hb-modal-icon { background: #fee2e2; color: #dc2626; }
+.type-warning .hb-modal-icon { background: #ffedd5; color: #ea580c; }
+.type-info .hb-modal-icon { background: #e0f2fe; color: #0284c7; }
+.type-success .hb-modal-icon { background: #dcfce7; color: #16a34a; }
+
+.hb-modal-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+.hb-modal-message {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.hb-modal-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.hb-modal-actions .btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.2s;
+  border: none;
+}
+
+.hb-btn-cancel {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.hb-btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.hb-btn-danger { background: #dc2626; color: #fff; }
+.hb-btn-danger:hover { background: #b91c1c; }
+
+.hb-btn-warning { background: #ea580c; color: #fff; }
+.hb-btn-warning:hover { background: #c2410c; }
+
+.hb-btn-info { background: #3d529d; color: #fff; }
+.hb-btn-info:hover { background: #2f3f7a; }
+
+.hb-btn-success { background: #16a34a; color: #fff; }
+.hb-btn-success:hover { background: #15803d; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}

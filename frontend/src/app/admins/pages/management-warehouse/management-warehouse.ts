@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 type SortDir = 'asc' | 'desc';
 type ReferenceType = 'purchase_order' | 'order' | 'manual' | 'audit';
 
-type AdjustType = 'inbound' | 'manual';
-type ManualDirection = 'increase' | 'decrease';
+type AdjustType = 'IN' | 'ADJUST';
 
 type StockSortKey =
   | 'product_variant_id'
@@ -127,12 +127,6 @@ interface StockDetailVM {
 interface StockAdjustDraft {
   adjustType: AdjustType;
   qtyAbs: number;
-
-  direction?: ManualDirection;
-
-  reference_type: ReferenceType;
-  reference_id: string;
-
   reason: string;
 }
 
@@ -168,7 +162,7 @@ interface VM {
 @Component({
   selector: 'app-management-warehouse',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConfirmModal],
   templateUrl: './management-warehouse.html',
   styleUrls: ['./management-warehouse.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -191,6 +185,8 @@ export class ManagementWarehouse implements OnInit {
   });
 
   private editModel$ = new BehaviorSubject<StockAdjustDraft | null>(null);
+
+  saveModalOpen = false;
 
   q = '';
   f_warehouse_id = '';
@@ -496,33 +492,48 @@ export class ManagementWarehouse implements OnInit {
 
   private seedAdjustDraft() {
     const draft: StockAdjustDraft = {
-      adjustType: 'inbound',
+      adjustType: 'IN',
       qtyAbs: 1,
-      direction: 'increase',
-      reference_type: 'manual',
-      reference_id: '',
       reason: '',
     };
     this.editModel$.next(draft);
   }
 
   saveEdit() {
+    const em = this.editModel$.value;
+    if (!em || !String(em.reason || '').trim()) {
+      alert('Vui lòng nhập lý do biến động để ghi nhật ký hệ thống.');
+      return;
+    }
+    this.saveModalOpen = true;
+  }
+
+  onCancelSave() {
+    this.saveModalOpen = false;
+  }
+
+  executeSave() {
     const selected = this.routeState$.value.id;
     const em = this.editModel$.value;
-    if (!selected || !em) return;
+    if (!selected || !em || !String(em.reason || '').trim()) {
+      this.saveModalOpen = false;
+      return;
+    }
 
     const stock = this.stockItems$.value.find((x) => x.stock_item_id === selected);
     if (!stock) return;
 
     const qtyAbs = Math.max(0, Number(em.qtyAbs ?? 0));
-    if (!qtyAbs) return;
+    if (!qtyAbs && em.adjustType !== 'ADJUST') {
+       this.saveModalOpen = false;
+       return;
+    }
 
-    if (em.adjustType === 'manual' && !String(em.reason ?? '').trim()) return;
-
-    let delta = qtyAbs;
-    if (em.adjustType === 'manual') {
-      const dir = (em.direction ?? 'increase') as ManualDirection;
-      delta = dir === 'decrease' ? -qtyAbs : qtyAbs;
+    let delta = 0;
+    if (em.adjustType === 'IN') delta = qtyAbs;
+    else {
+      // ADJUSTMENT
+      delta = Number(em.qtyAbs); 
     }
 
     const updatedStock: StockItemEntity = {
@@ -541,8 +552,8 @@ export class ManagementWarehouse implements OnInit {
       movement_id: `mv_${id16()}`,
       warehouse_id: stock.warehouse_id,
       product_variant_id: stock.product_variant_id,
-      reference_type: (em.reference_type ?? 'manual') as ReferenceType,
-      reference_id: String(em.reference_id ?? ''),
+      reference_type: 'manual',
+      reference_id: `ADJ-${id16().slice(0, 6)}`,
       quantity_changed: delta,
       reason: String(em.reason ?? ''),
       created_at: new Date().toISOString(),
@@ -551,6 +562,7 @@ export class ManagementWarehouse implements OnInit {
 
     this.movements$.next([mv, ...this.movements$.value]);
 
+    this.saveModalOpen = false;
     this.editModel$.next(null);
     this.openDetail(selected);
   }

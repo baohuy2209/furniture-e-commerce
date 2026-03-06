@@ -9,7 +9,21 @@
   --hb-border: rgba(0, 0, 0, 0.12);
   --hb-text: rgba(0, 0, 0, 0.78);
   --hb-muted: rgba(0, 0, 0, 0.55);
+  --hb-radius-lg: 20px;
 }
+
+.fw-black { font-weight: 900 !important; }
+.fs-2 { font-size: 2rem !important; }
+.fs-3 { font-size: 1.5rem !important; }
+
+/* Product SKU specific card */
+.hb-sku-card {
+  background: white;
+  padding: 12px;
+  border-radius: var(--hb-radius);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
 
 /* ===== PAGE SHELL (không tràn height) =====
    Lưu ý: main layout đã scroll ở .hb-admin-main
@@ -575,8 +589,9 @@
 /* ===== DETAIL blocks ===== */
 .hb-detail-title {
   font-size: 28px;
-  font-weight: 900;
-  color: var(--hb-primary);
+  font-weight: 800;
+  color: var(--hb-text);
+  letter-spacing: -0.5px;
 }
 
 .hb-stat {

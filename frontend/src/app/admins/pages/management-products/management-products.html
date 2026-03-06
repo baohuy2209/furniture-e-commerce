@@ -26,28 +26,7 @@
         <i class="bi bi-arrow-left me-1"></i> Quay lại
       </button>
 
-      <button class="btn btn-hb" type="button" *ngIf="mode === 'detail'" (click)="goEdit()">
-        <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
-      </button>
 
-      <button
-        class="btn btn-hb"
-        type="button"
-        *ngIf="mode === 'edit'"
-        [disabled]="saving || !isDirty"
-        (click)="saveEdit()"
-      >
-        <i class="bi bi-save2 me-1"></i> Lưu
-      </button>
-
-      <button
-        class="btn btn-hb-outline"
-        type="button"
-        *ngIf="mode === 'edit'"
-        (click)="cancelEdit()"
-      >
-        Hủy
-      </button>
     </div>
   </div>
 
@@ -365,61 +344,38 @@
 
     <!-- DETAIL / EDIT -->
     <ng-container *ngIf="mode !== 'list'">
-      <div class="card hb-card hb-card-pad" *ngIf="detail$ | async as d; else editNewOrNoDetail">
-        <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
-          <div>
-            <div class="hb-detail-title">{{ d.product.product_name }}</div>
-            <div class="text-muted small">
-              ID: <span class="fw-semibold">{{ d.product.product_id }}</span>
-            </div>
-          </div>
+      <div *ngIf="detail$ | async as d; else editNewOrNoDetail">
+        <div class="row g-4">
+          <!-- MAIN CONTENT (LEFT) -->
+          <div class="col-12 col-xl-8">
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-detail-title mb-1">{{ d.product.product_name }}</div>
+              <div class="text-muted small mb-3">Thông tin chi tiết và các biến thể sản phẩm.</div>
 
-          <div class="d-flex gap-2 flex-wrap">
-            <div class="hb-stat">
-              <div class="k">Giá (min-max)</div>
-              <div class="v">
-                {{
-                  d.priceMin != null ? (d.priceMin | number) + ' - ' + (d.priceMax | number) : '—'
-                }}
+              <!-- Tabs -->
+              <div class="hb-tabs">
+                <div
+                  class="hb-tab"
+                  [class.active]="detailTab === 'overview'"
+                  (click)="detailTab = 'overview'"
+                >
+                  Tổng quan
+                </div>
+                <div
+                  class="hb-tab"
+                  [class.active]="detailTab === 'variants'"
+                  (click)="detailTab = 'variants'"
+                >
+                  Giá & Kho
+                </div>
+                <div
+                  class="hb-tab"
+                  [class.active]="detailTab === 'comments'"
+                  (click)="detailTab = 'comments'"
+                >
+                  Reviews ({{ d.comments.length }})
+                </div>
               </div>
-            </div>
-
-            <div class="hb-stat">
-              <div class="k">Tồn tổng</div>
-              <div class="v">{{ d.inventoryTotal }}</div>
-            </div>
-
-            <div class="hb-stat">
-              <div class="k">Bảo hành</div>
-              <div class="v">{{ d.product.warranty }} tháng</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="hb-tabs mt-3">
-          <div
-            class="hb-tab"
-            [class.active]="detailTab === 'overview'"
-            (click)="detailTab = 'overview'"
-          >
-            Tổng quan
-          </div>
-          <div
-            class="hb-tab"
-            [class.active]="detailTab === 'variants'"
-            (click)="detailTab = 'variants'"
-          >
-            Giá & Kho
-          </div>
-          <div
-            class="hb-tab"
-            [class.active]="detailTab === 'comments'"
-            (click)="detailTab = 'comments'"
-          >
-            Reviews
-          </div>
-        </div>
 
         <!-- OVERVIEW -->
         <div class="mt-3" *ngIf="detailTab === 'overview'">
@@ -690,8 +646,11 @@
           <div class="text-muted small mt-2">
             * Review mock. Khi có backend: map theo productId.
           </div>
-        </div>
-      </div>
+        </div> <!-- close comments group 607 -->
+          </div> <!-- close card 351 -->
+        </div> <!-- close col 350 -->
+      </div> <!-- close row 348 -->
+    </div> <!-- close div 347 -->
 
       <!-- CREATE NEW or NOT FOUND -->
       <ng-template #editNewOrNoDetail>
@@ -883,4 +842,25 @@
       </ng-template>
     </ng-container>
   </div>
+
+  <!-- DELETION CONFIRM MODAL -->
+  <hb-confirm-modal
+    [isOpen]="deleteModalOpen"
+    [title]="deleteModalTitle"
+    [message]="deleteModalMessage"
+    [type]="'danger'"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+  </hb-confirm-modal>
+
+  <!-- SAVE CONFIRM MODAL -->
+  <hb-confirm-modal
+    [isOpen]="saveModalOpen"
+    title="Xác nhận lưu"
+    message="Bạn có chắc chắn muốn lưu các thay đổi này không?"
+    type="success"
+    confirmLabel="Lưu ngay"
+    (confirm)="executeSave()"
+    (cancel)="saveModalOpen = false">
+  </hb-confirm-modal>
 </div>

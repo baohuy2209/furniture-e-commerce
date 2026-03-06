@@ -1,0 +1,31 @@
+<div class="hb-modal-overlay" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="hb-modal-container" [class]="'type-' + type" (click)="$event.stopPropagation()">
+    <!-- Modal Icon -->
+    <div class="hb-modal-icon">
+      <i class="bi" [ngClass]="{
+        'bi-exclamation-triangle-fill': type === 'danger' || type === 'warning',
+        'bi-info-circle-fill': type === 'info',
+        'bi-check-circle-fill': type === 'success'
+      }"></i>
+    </div>
+
+    <!-- Modal Content -->
+    <div class="hb-modal-content">
+      <h3 class="hb-modal-title">{{ title }}</h3>
+      <p class="hb-modal-message">{{ message }}</p>
+    </div>
+
+    <!-- Modal Actions -->
+    <div class="hb-modal-actions">
+      <button class="btn hb-btn-cancel" (click)="onCancel()">{{ cancelLabel }}</button>
+      <button class="btn" [ngClass]="{
+        'hb-btn-danger': type === 'danger',
+        'hb-btn-warning': type === 'warning',
+        'hb-btn-info': type === 'info',
+        'hb-btn-success': type === 'success'
+      }" (click)="onConfirm()">
+        {{ confirmLabel }}
+      </button>
+    </div>
+  </div>
+</div>
