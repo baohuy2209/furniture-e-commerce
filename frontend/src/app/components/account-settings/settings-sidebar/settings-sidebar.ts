@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings-sidebar',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './settings-sidebar.html',
   styleUrl: './settings-sidebar.css',
@@ -71,7 +72,7 @@ export class SettingsSidebar {
       iconClass: 'fa-solid fa-person-circle-question',
     },
   ];
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
   getCurrentUrl() {
     const getCurrents = this.router.url.split('/');
     return getCurrents[1] == '' ? 'home' : getCurrents[1];
