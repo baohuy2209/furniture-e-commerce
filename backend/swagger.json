@@ -14,7 +14,9 @@
     "/auth/signup": {
       "post": {
         "summary": "SignUp",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -50,7 +52,9 @@
       "post": {
         "summary": "SignIn",
         "description": "Log in với username và password. Trả về access token trong res và refresh token trong cookie.",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {
           "200": {
             "description": "User successfully signed in",
@@ -68,14 +72,23 @@
                       "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     }
                   },
-                  "required": ["message", "accessToken"]
+                  "required": [
+                    "message",
+                    "accessToken"
+                  ]
                 }
               }
             }
           },
-          "400": { "description": "Invalid input" },
-          "401": { "description": "Unauthorized" },
-          "500": { "description": "Internal server error" }
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         },
         "requestBody": {
           "content": {
@@ -91,7 +104,10 @@
                     "format": "color"
                   }
                 },
-                "required": ["username", "password"]
+                "required": [
+                  "username",
+                  "password"
+                ]
               }
             }
           }
@@ -101,31 +117,43 @@
     "/auth/signout": {
       "post": {
         "summary": "SignOut",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {
-          "200": { "description": "Success" },
-          "500": { "description": "Internal server error" }
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         }
       }
     },
     "/auth/refresh": {
       "post": {
         "summary": "RefreshToken",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {}
       }
     },
     "/users/me": {
       "get": {
         "summary": "AuthMe",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {}
       }
     },
     "/friends/requests": {
       "post": {
         "summary": "SendFriendRequest",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -147,21 +175,27 @@
       },
       "get": {
         "summary": "GetFriendRequests",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {}
       }
     },
     "/friends/requests/68faed19defb37e90657d7d6/accept": {
       "post": {
         "summary": "AcceptFriendRequest",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {}
       }
     },
     "/friends/requests/68fb124874f8418a6bc83ed1/decline": {
       "post": {
         "summary": "DeclineFriendRequest",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -177,14 +211,18 @@
     "/friends/": {
       "get": {
         "summary": "GetAllFriends",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {}
       }
     },
     "/messages/direct": {
       "post": {
         "summary": "SendDirectMessage",
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -208,7 +246,9 @@
     "/conversations/": {
       "post": {
         "summary": "CreateConversation",
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -236,21 +276,27 @@
       },
       "get": {
         "summary": "GetConversations",
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "responses": {}
       }
     },
     "/conversations/68fb2e6a19c501587577291c/messages": {
       "get": {
         "summary": "GetMessage",
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "responses": {}
       }
     },
     "/messages/group": {
       "post": {
         "summary": "SendGroupMessage",
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -267,6 +313,462 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/cart": {
+      "get": {
+        "summary": "Lấy thông tin giỏ hàng",
+        "description": "Lấy giỏ hàng của user hiện tại",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lấy giỏ hàng thành công"
+          },
+          "401": {
+            "description": "Không tìm thấy thông tin user"
+          },
+          "500": {
+            "description": "Lỗi hệ thống"
+          }
+        }
+      }
+    },
+    "/cart/add": {
+      "post": {
+        "summary": "Thêm sản phẩm vào giỏ hàng",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_variant_id": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "example": 1
+                  }
+                },
+                "required": [
+                  "product_variant_id",
+                  "quantity"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Thêm sản phẩm vào giỏ hàng thành công"
+          },
+          "400": {
+            "description": "Dữ liệu đầu vào không hợp lệ hoặc Tồn kho không đủ"
+          },
+          "404": {
+            "description": "Không tìm thấy biến thể sản phẩm"
+          },
+          "500": {
+            "description": "Lỗi hệ thống"
+          }
+        }
+      }
+    },
+    "/cart/update": {
+      "put": {
+        "summary": "Cập nhật số lượng sản phẩm trong giỏ hàng (PUT)",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "quantity": {
+                    "type": "number",
+                    "example": 2
+                  },
+                  "item_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "item_id",
+                  "quantity"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cập nhật số lượng thành công"
+          },
+          "400": {
+            "description": "Dữ liệu đầu vào không hợp lệ"
+          },
+          "404": {
+            "description": "Không tìm thấy sản phẩm trong giỏ hàng"
+          },
+          "500": {
+            "description": "Lỗi hệ thống"
+          }
+        }
+      }
+    },
+    "/cart/remove/{itemId}": {
+      "delete": {
+        "summary": "Xóa sản phẩm khỏi giỏ hàng",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Xóa sản phẩm khỏi giỏ hàng thành công"
+          },
+          "404": {
+            "description": "Không tìm thấy sản phẩm trong giỏ hàng"
+          },
+          "500": {
+            "description": "Lỗi hệ thống"
+          }
+        }
+      }
+    },
+    "/cart/clear": {
+      "delete": {
+        "summary": "Xóa toàn bộ giỏ hàng",
+        "tags": [
+          "Cart"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Xóa toàn bộ giỏ hàng thành công"
+          },
+          "400": {
+            "description": "Không tìm thấy giỏ hàng"
+          },
+          "500": {
+            "description": "Lỗi hệ thống"
+          }
+        }
+      }
+    },
+    "/orders/checkout": {
+      "post": {
+        "summary": "Đặt hàng mới từ giỏ hàng",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "address_id": {
+                    "type": "string"
+                  },
+                  "shipping_method": {
+                    "type": "string"
+                  },
+                  "shipping_fee": {
+                    "type": "number"
+                  },
+                  "payment_method": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Đặt hàng thành công"
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "summary": "Lấy danh sách đơn hàng của User",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "summary": "Lấy chi tiết đơn hàng cho User",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          }
+        }
+      }
+    },
+    "/orders/{id}/cancel": {
+      "put": {
+        "summary": "Khách hàng hủy đơn hàng",
+        "tags": [
+          "Order"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cancel_reason": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Hủy thành công"
+          }
+        }
+      }
+    },
+    "/orders/admin/all": {
+      "get": {
+        "summary": "Lấy danh sách tất cả đơn hàng (Admin)",
+        "tags": [
+          "Admin Order Management"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          }
+        }
+      }
+    },
+    "/orders/admin/{id}": {
+      "get": {
+        "summary": "Lấy chi tiết đơn hàng (Admin)",
+        "tags": [
+          "Admin Order Management"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          }
+        }
+      }
+    },
+    "/orders/admin/item-status/{orderItemId}": {
+      "put": {
+        "summary": "Cập nhật trạng thái sản phẩm trong đơn (Admin)",
+        "tags": [
+          "Admin Order Management"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderItemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "pending",
+                      "packed",
+                      "shipped",
+                      "delivered",
+                      "cancelled",
+                      "returned"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cập nhật thành công"
+          }
+        }
+      }
+    },
+    "/orders/admin/payment-status/{paymentId}": {
+      "put": {
+        "summary": "Cập nhật trạng thái thanh toán (Admin)",
+        "tags": [
+          "Admin Order Management"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "pending",
+                      "completed",
+                      "failed"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cập nhật thành công"
           }
         }
       }
