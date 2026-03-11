@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const { generateUsernameFromEmail } = require("../utils/generateUsername");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
-
+const nodemailer = require("nodemailer");
 class AuthService {
   async createSession(refreshToken, userId) {
     try {
@@ -93,13 +93,105 @@ class AuthService {
         user.roles = [userRoles._id];
         await user.save();
       }
+      const safeUser = user;
+      safeUser.password_hash = null;
       return {
         message: "Đăng kí người dùng thành công",
-        data: user,
+        data: safeUser,
       };
     } catch (e) {
       console.log(e);
       return { message: "Có lỗi phía server" + e, data: null };
+    }
+  }
+  async forgotPassword(email) {
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return { message: "Người dùng không tồn tại", data: null };
+      }
+
+      // Tạo mã OTP 6 số ngẫu nhiên
+      const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // Lưu mã OTP vào database thay vì token dài
+      user.reset_password_token = otpCode;
+      user.reset_password_token_expire_at = Date.now() + 15 * 60 * 1000; // 15 phút
+      await user.save();
+      console.log(process.env.EMAIL_USER, process.env.EMAIL_PASS);
+      // Configure nodemailer
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL_SERVICE,
+        to: user.email,
+        subject: "Mã xác nhận đặt lại mật khẩu",
+        text: `Bạn đã yêu cầu đặt lại mật khẩu. Mã xác nhận (OTP) của bạn là: ${otpCode}\n\nMã này sẽ hết hạn sau 15 phút.`,
+      };
+
+      await transporter.sendMail(mailOptions);
+      return {
+        message: "Đã gửi mã xác nhận (OTP) đến email của bạn",
+        data: { email: user.email },
+      };
+    } catch (e) {
+      console.log(e);
+      return { message: "Có lỗi khi gửi email: " + e.message, data: null };
+    }
+  }
+  async resetPassword(email, otpCode, newPassword) {
+    try {
+      const user = await User.findOne({
+        email: email,
+        reset_password_token: otpCode,
+        reset_password_token_expire_at: { $gt: Date.now() },
+      });
+
+      if (!user) {
+        return { message: "Mã OTP không hợp lệ hoặc đã hết hạn", data: null };
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      user.password_hash = hashedPassword;
+      // Dọn dẹp token sau khi dùng xong
+      user.reset_password_token = undefined;
+      user.reset_password_token_expire_at = undefined;
+      await user.save();
+
+      return {
+        message: "Đặt lại mật khẩu thành công",
+        data: { email: user.email },
+      };
+    } catch (e) {
+      console.log(e);
+      return { message: "Có lỗi phía server: " + e.message, data: null };
+    }
+  }
+  async changePassword(user, oldPassword, newPassword) {
+    try {
+      const isMatch = await bcrypt.compare(oldPassword, user.password_hash);
+      if (!isMatch) {
+        return {
+          message: "Người dùng nhập sai mật khẩu cũ",
+          data: null,
+        };
+      }
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      user.password_hash = hashedPassword;
+      await user.save();
+      return {
+        data: user,
+        message: "Đổi password thành công",
+      };
+    } catch (e) {
+      console.log(e);
+      return { message: "Có lỗi phía server: " + e.message, data: null };
     }
   }
 }

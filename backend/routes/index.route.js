@@ -1,7 +1,7 @@
 const authRoute = require("./authentication.routes");
 const productRoute = require("./product.routes");
 const blogRoute = require("./blog.routes");
-const eventRoute = require("./event.route");
+const eventRoute = require("./event.routes");
 const userRoute = require("./user.route");
 const productCategoryRoute = require("./productCategory.routes");
 const productTagsRoute = require("./productTag.routes");
@@ -10,6 +10,14 @@ const blogAuthorRoute = require("./blogAuthor.routes");
 const blogTagRoute = require("./blogTags.routes");
 const upholsteryRoute = require("./upholstery.routes");
 const blogCategoriesRoute = require("./blogCategory.routes");
+const reviewRoute = require("./review.routes");
+const customerInquiryRoute = require("./customerInquiry.routes");
+const warrantyRoute = require("./warranty.routes");
+const orderRoute = require("./order.routes");
+const paymentMethodRoute = require("./paymentMethod.routes");
+const promotionRoute = require("./promotion.routes");
+const addressRoute = require("./address.routes");
+const cartRoute = require("./cart.routes");
 function route(app) {
   app.use("/api/auth", authRoute);
   app.use("/api/products", productRoute);
@@ -23,5 +31,13 @@ function route(app) {
   app.use("/api/blog-tags", blogTagRoute);
   app.use("/api/upholstery", upholsteryRoute);
   app.use("/api/blog-categories", blogCategoriesRoute);
+  app.use("/api/reviews", reviewRoute);
+  app.use("/api/inquiries", customerInquiryRoute);
+  app.use("/api/warranties", warrantyRoute);
+  app.use("/api/payment-methods", paymentMethodRoute);
+  app.use("/api/promotions", promotionRoute);
+  app.use("/api/addresses", addressRoute);
+  app.use("/api/cart", cartRoute);
+  app.use("/api/orders", orderRoute);
 }
 module.exports = route;

@@ -49,6 +49,10 @@ const User = mongoose.model(
       type: Date,
       select: false,
     },
+    points: {
+      type: Number,
+      default: 0,
+    },
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,

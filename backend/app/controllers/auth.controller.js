@@ -1,12 +1,12 @@
 const authService = require("../../services/auth.service");
 const crypto = require("crypto");
 const Session = require("../models/session.model");
+const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res) => {
   try {
     const { fullname, email, phone, password } = req.body;
-    console.log(req.body);
     if (!fullname || !email || !phone || !password) {
       return res.status(400).json({
         message: "Người dùng nhập thiếu trường dữ liệu",
@@ -112,6 +112,77 @@ exports.logout = async (req, res) => {
     }
 
     return res.status(200).json({ message: "Bạn đã đăng xuất", data: null });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
+  }
+};
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res
+        .status(400)
+        .json({ message: "Vui lòng nhập email", data: null });
+    }
+
+    const { data, message } = await authService.forgotPassword(email);
+    if (!data) {
+      return res.status(400).json({ message, data: null });
+    }
+
+    return res.status(200).json({ message, data });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
+  }
+};
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, otpCode, newPassword } = req.body;
+
+    if (!email || !otpCode || !newPassword) {
+      return res.status(400).json({
+        message: "Vui lòng nhập đầy đủ email, mã OTP và mật khẩu mới",
+        data: null,
+      });
+    }
+
+    const { data, message } = await authService.resetPassword(
+      email,
+      otpCode,
+      newPassword,
+    );
+    if (!data) {
+      return res.status(400).json({ message, data: null });
+    }
+
+    return res.status(200).json({ message, data });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
+  }
+};
+
+exports.changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User không tồn tại", data: null });
+    }
+    const { data, message } = await authService.changePassword(
+      user,
+      oldPassword,
+      newPassword,
+    );
+    if (!data) {
+      return res.status(404).json({ message, data: data });
+    }
+    return res.status(200).json({ message, data });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
