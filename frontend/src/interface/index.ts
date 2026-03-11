@@ -2,6 +2,27 @@ export interface IHeroItem {
   image: string;
 }
 
+export interface IUser {
+  _id: string;
+  username: string;
+  name: string;
+  email: string;
+  phone: string;
+  gender?: string;
+  avatar?: string;
+  status: string;
+  last_login?: Date;
+  is_verified?: boolean;
+  points: number;
+  roles: string[];
+}
+export interface ILogin {
+  id: string;
+  username: string;
+  email: string;
+  roles: string[];
+  accessToken: string;
+}
 export interface Iproduct {
   product_id: string;
   product_name: string;

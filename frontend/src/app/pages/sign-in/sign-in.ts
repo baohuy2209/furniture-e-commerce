@@ -2,58 +2,47 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
   imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './sign-in.html',
-  styleUrl: './sign-in.css'
+  styleUrl: './sign-in.css',
 })
 export class SignIn {
-
-  email = '';
-  password = '';
+  form = {
+    email: '',
+    password: '',
+  };
   error = '';
+  passwordVisible: boolean = false;
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {}
 
-  constructor(private router: Router) { }
-
-  login(form: any) {
-    if (form.invalid || !this.isPasswordValid) {
+  login(f: any) {
+    if (f.invalid) {
       this.error = 'Vui lòng kiểm tra lại thông tin đăng nhập';
       return;
     }
-
-    const user = {
-      email: this.email,
-      role: 'customer',
-      loginAt: new Date()
-    };
-
-    localStorage.setItem('userLogin', JSON.stringify(user));
-    alert('Đăng nhập thành công 🎉');
-    form.reset();
+    this.authService.login(this.form.email, this.form.password).subscribe({
+      next: (res) => {
+        if (!res.data) {
+          this.error = res.message;
+        }
+        alert(`${res.message}`);
+      },
+      error: (err) => {
+        this.error = err.message;
+      },
+    });
+    f.reset();
   }
-
-  get passwordErrorsList(): string[] {
-    if (!this.password) return [];
-    if (this.password.length < 8) {
-      return ['Tối thiểu 8 ký tự'];
-    }
-    if (!/[A-Z]/.test(this.password)) {
-      return ['Có chữ hoa'];
-    }
-    if (!/[a-z]/.test(this.password)) {
-      return ['Có chữ thường'];
-    }
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(this.password)) {
-      return ['Kí tự đặc biệt'];
-    }
-    return [];
-  }
-
-  get isPasswordValid() {
-    return this.passwordErrorsList.length === 0 && this.password.length > 0;
+  togglePasswordVisibility(): void {
+    this.passwordVisible = !this.passwordVisible;
   }
 
   loginWithGoogle() {
@@ -65,7 +54,7 @@ export class SignIn {
     const popup = window.open(
       '/mock-google-login',
       'GoogleSignIn',
-      `width=${width},height=${height},top=${top},left=${left}`
+      `width=${width},height=${height},top=${top},left=${left}`,
     );
 
     const messageHandler = (event: MessageEvent) => {
@@ -76,7 +65,7 @@ export class SignIn {
         const user = {
           ...googleUser,
           role: 'customer',
-          loginAt: new Date()
+          loginAt: new Date(),
         };
         localStorage.setItem('userLogin', JSON.stringify(user));
 

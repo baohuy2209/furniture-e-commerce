@@ -1,7 +1,6 @@
 const authService = require("../../services/auth.service");
 const crypto = require("crypto");
 const Session = require("../models/session.model");
-const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res) => {
@@ -37,7 +36,7 @@ exports.signin = async (req, res) => {
     }
     const { data, message } = await authService.handleLogin(req.body);
     if (!data) {
-      return res.status(404).json({ message: "Error:" + message, data: null });
+      return res.status(404).json({ message: message, data: null });
     }
     const refreshToken = crypto.randomBytes(64).toString("hex");
     const { session } = await authService.createSession(
@@ -137,22 +136,18 @@ exports.forgotPassword = async (req, res) => {
     return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
   }
 };
-exports.resetPassword = async (req, res) => {
+exports.checkOtpResetPassword = async (req, res) => {
   try {
-    const { email, otpCode, newPassword } = req.body;
+    const { otpCode } = req.body;
 
-    if (!email || !otpCode || !newPassword) {
+    if (!otpCode) {
       return res.status(400).json({
-        message: "Vui lòng nhập đầy đủ email, mã OTP và mật khẩu mới",
+        message: "Hãy nhập mã OTP",
         data: null,
       });
     }
 
-    const { data, message } = await authService.resetPassword(
-      email,
-      otpCode,
-      newPassword,
-    );
+    const { data, message } = await authService.checkOtp(otpCode);
     if (!data) {
       return res.status(400).json({ message, data: null });
     }
@@ -163,24 +158,15 @@ exports.resetPassword = async (req, res) => {
     return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
   }
 };
-
-exports.changePassword = async (req, res) => {
+exports.resetPassword = async (req, res) => {
   try {
-    const { oldPassword, newPassword } = req.body;
-    const userId = req.user.id;
-    const user = await User.findById(userId);
-    if (!user) {
-      return res
-        .status(404)
-        .json({ message: "User không tồn tại", data: null });
-    }
-    const { data, message } = await authService.changePassword(
-      user,
-      oldPassword,
+    const { newPassword, userId } = req.body;
+    const { data, message } = await authService.resetPassword(
       newPassword,
+      userId,
     );
     if (!data) {
-      return res.status(404).json({ message, data: data });
+      return res.status(404).json({ message, data });
     }
     return res.status(200).json({ message, data });
   } catch (e) {

@@ -15,7 +15,7 @@ const verifyToken = (req, res, next) => {
         message: "Unauthorized!",
       });
     }
-    res.userId = decoded.id;
+    req.userId = decoded.id;
     next();
   });
 };
@@ -34,7 +34,7 @@ const protectedRoute = (req, res, next) => {
           message: "Unauthorized!",
         });
       }
-      res.userId = decoded.id;
+      req.userId = decoded.id;
       next();
     });
   } catch (e) {

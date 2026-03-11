@@ -1,10 +1,10 @@
 const User = require("../models/user.model");
 
 class UserController {
-  // [GET] /api/user/:id
+  // [GET] /api/user/
   async getUserInfo(req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.userId;
       const user = await User.findById(id).select("-password_hash");
       if (!user) {
         return res.status(404).json({ message: "Không tìm thấy người dùng" });

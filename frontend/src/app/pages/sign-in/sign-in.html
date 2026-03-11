@@ -1,4 +1,10 @@
 <div class="signin-container">
+  @if (error !== '') {
+    <div class="alert-custom alert alert-warning alert-dismissible fade show" role="alert">
+      {{ error }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  }
   <div class="signin-card">
     <h2 class="title">ĐĂNG NHẬP</h2>
 
@@ -9,49 +15,58 @@
         <div class="input-group">
           <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
           <input
+            #email="ngModel"
             type="email"
+            id="email"
             name="email"
-            [(ngModel)]="email"
+            [(ngModel)]="form.email"
             required
-            email
             placeholder="Example@gmail.com"
-            #emailCtrl="ngModel"
-            [class.error-border]="emailCtrl.invalid && emailCtrl.touched"
+            [class.is-invalid]="email.invalid && email.touched"
+            [class.error-border]="email.invalid && email.touched"
           />
         </div>
-        <small class="error-text" *ngIf="emailCtrl.invalid && emailCtrl.touched">
-          Email không hợp lệ
-        </small>
+        @if (email.errors && email.invalid && email.touched) {
+          @if (email.errors['required']) {
+            <small class="text-danger"> Bạn chưa nhập email </small>
+          }
+          @if (email.errors['email']) {
+            <small class="text-danger"> Email không hợp lệ </small>
+          }
+        }
       </div>
 
       <!-- PASSWORD -->
       <div class="form-group">
         <label>Mật Khẩu <span class="required">*</span></label>
         <div class="input-group">
-          <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+          <span class="input-icon">
+            <i class="fa-solid fa-lock"></i>
+          </span>
           <input
-            type="password"
+            #password="ngModel"
+            [type]="passwordVisible ? 'text' : 'password'"
+            id="password"
             name="password"
-            [(ngModel)]="password"
-            required
-            placeholder="*****************"
-            #passCtrl="ngModel"
-            [class.error-border]="passCtrl.touched && !isPasswordValid"
+            [(ngModel)]="form.password"
+            placeholder="Nhập mật khẩu cũ của bạn"
+            [class.is-invalid]="password.invalid && password.touched"
+            [class.error-border]="email.invalid && email.touched"
           />
+          <span class="password-toggle-icon" (click)="togglePasswordVisibility()">
+            <i
+              class="fa-solid"
+              [class.fa-eye]="!passwordVisible"
+              [class.fa-eye-slash]="passwordVisible"
+            ></i>
+          </span>
         </div>
+        @if (password.errors && (password.invalid || password.touched)) {
+          @if (password.errors['required']) {
+            <small class="text-danger"> Vui lòng nhập mật khẩu</small>
+          }
+        }
       </div>
-
-      <!-- Password Strength Validation -->
-      <div
-        class="password-requirements"
-        *ngIf="(passCtrl.dirty || passCtrl.touched) && passwordErrorsList.length"
-      >
-        <p class="invalid">
-          <i class="fa-solid fa-xmark"></i>
-          {{ passwordErrorsList[0] }}
-        </p>
-      </div>
-
       <div class="forgot-pass">
         <a (click)="forgotPassword()">Quên mật khẩu?</a>
       </div>
@@ -63,9 +78,7 @@
       </button>
 
       <!-- SUBMIT BUTTON -->
-      <button type="submit" class="btn-login" [disabled]="f.invalid || isPasswordValid === false">
-        Đăng Nhập
-      </button>
+      <button type="submit" class="btn-login" [disabled]="f.invalid">Đăng Nhập</button>
 
       <div class="signup-text">
         Bạn chưa có tài khoản? <a routerLink="/auth/sign-up" class="signup-link">Đăng ký ngay</a>

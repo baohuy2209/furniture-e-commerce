@@ -41,10 +41,10 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
     this.cartUpdateListener = () => this.updateCartCount();
     window.addEventListener('cartUpdated', this.cartUpdateListener);
 
-    // Auth
-    this.authSubscription = this.authService.isLoggedIn$.subscribe(status => {
-      this.isLoggedIn = status;
-    });
+    // // Auth
+    // this.authSubscription = this.authService.isLoggedIn$.subscribe(status => {
+    //   this.isLoggedIn = status;
+    // });
   }
 
   ngOnDestroy(): void {

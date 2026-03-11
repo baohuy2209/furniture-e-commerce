@@ -9,7 +9,7 @@ const nodemailer = require("nodemailer");
 class AuthService {
   async createSession(refreshToken, userId) {
     try {
-      const session = await Session({
+      const session = await Session.create({
         userId: userId,
         refreshToken,
         expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
@@ -41,10 +41,7 @@ class AuthService {
           message: "Email người dùng không tồn tại",
         };
       }
-      const isValidPassword = await bcrypt.compare(
-        password,
-        userLogin.password_hash,
-      );
+      const isValidPassword = bcrypt.compare(password, userLogin.password_hash);
       if (!isValidPassword) {
         return {
           data: null,
@@ -118,7 +115,6 @@ class AuthService {
       user.reset_password_token = otpCode;
       user.reset_password_token_expire_at = Date.now() + 15 * 60 * 1000; // 15 phút
       await user.save();
-      console.log(process.env.EMAIL_USER, process.env.EMAIL_PASS);
       // Configure nodemailer
       const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -145,10 +141,9 @@ class AuthService {
       return { message: "Có lỗi khi gửi email: " + e.message, data: null };
     }
   }
-  async resetPassword(email, otpCode, newPassword) {
+  async checkOtp(otpCode) {
     try {
       const user = await User.findOne({
-        email: email,
         reset_password_token: otpCode,
         reset_password_token_expire_at: { $gt: Date.now() },
       });
@@ -157,37 +152,36 @@ class AuthService {
         return { message: "Mã OTP không hợp lệ hoặc đã hết hạn", data: null };
       }
 
-      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-      user.password_hash = hashedPassword;
+      // const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      // user.password_hash = hashedPassword;
       // Dọn dẹp token sau khi dùng xong
-      user.reset_password_token = undefined;
-      user.reset_password_token_expire_at = undefined;
-      await user.save();
+      // user.reset_password_token = undefined;
+      // user.reset_password_token_expire_at = undefined;
+      // await user.save();
 
       return {
-        message: "Đặt lại mật khẩu thành công",
-        data: { email: user.email },
+        message: "Mã OTP hợp lệ",
+        data: user,
       };
     } catch (e) {
       console.log(e);
       return { message: "Có lỗi phía server: " + e.message, data: null };
     }
   }
-  async changePassword(user, oldPassword, newPassword) {
+  async resetPassword(newPassword, userId) {
     try {
-      const isMatch = await bcrypt.compare(oldPassword, user.password_hash);
-      if (!isMatch) {
-        return {
-          message: "Người dùng nhập sai mật khẩu cũ",
-          data: null,
-        };
+      const user = await User.findById(userId);
+      if (!user) {
+        return { message: "Không tìm thấy user", data: null };
       }
-      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-      user.password_hash = hashedPassword;
+      const newHashedPassword = await bcrypt.hash(newPassword, saltRounds);
+      user.password_hash = newHashedPassword;
+      user.reset_password_token = undefined;
+      user.reset_password_token_expire_at = undefined;
       await user.save();
       return {
+        message: "Đổi pasword thành công",
         data: user,
-        message: "Đổi password thành công",
       };
     } catch (e) {
       console.log(e);
