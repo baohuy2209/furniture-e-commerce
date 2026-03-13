@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CardProduct } from '../../card-product/card-product';
 import { IListProducts } from '../../../../interface';
 import { Product } from '../../../services/product';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-new-product',
-  imports: [CardProduct],
+  imports: [CardProduct, RouterLink],
   templateUrl: './new-product.html',
   styleUrl: './new-product.css',
   standalone: true,
@@ -17,6 +18,7 @@ export class NewProduct implements OnInit {
   constructor(
     private cdr: ChangeDetectorRef,
     private productService: Product,
+    private router: Router,
   ) {}
   ngOnInit(): void {
     this.productService.getNewProducts().subscribe({
@@ -39,5 +41,8 @@ export class NewProduct implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+  onClick() {
+    this.router.navigate(['/products']);
   }
 }

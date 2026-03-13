@@ -1,15 +1,19 @@
 <div class="container">
   <div class="newest-section">
-    <div class="section-header">
-      <div class="section-label">HÀNG MỚI VỀ</div>
-      <h2 class="section-title">Sản Phẩm <span class="highlight">Mới Nhất</span></h2>
-    </div>
-    <p class="section-description">
-      Khám phá bộ sưu tập nội thất mới nhất với thiết kế hiện đại, chất lượng cao, phù hợp với mọi
-      không gian sống và làm việc theo tiêu chuẩn quốc tế
-    </p>
-    <div class="section-actions">
-      <button class="btn-view-all">Xem Tất Cả</button>
+    <div class="position-relative text-center mb-3">
+      <div>
+        <div class="section-header">
+          <div class="section-label">HÀNG MỚI VỀ</div>
+          <h2 class="section-title">Sản Phẩm <span class="highlight">Mới Nhất</span></h2>
+        </div>
+        <p class="section-description">
+          Khám phá bộ sưu tập nội thất mới nhất với thiết kế hiện đại, chất lượng cao, phù hợp với
+          mọi không gian sống và làm việc theo tiêu chuẩn quốc tế
+        </p>
+      </div>
+      <div class="section-actions position-absolute end-0 top-50 translate-middle-y">
+        <button class="btn-view-all" (click)="onClick()">Xem Tất Cả</button>
+      </div>
     </div>
 
     <!-- Products Grid -->
