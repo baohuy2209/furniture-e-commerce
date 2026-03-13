@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  ViewChild,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -22,7 +15,7 @@ import { AuthService } from '../../../services/auth';
 export class Header implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
-  isLoggedIn = false;
+  currentToken: string | null = null;
   cartCount = 0;
   isSearchOpen = false;
   searchQuery = '';
@@ -32,7 +25,7 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -41,10 +34,7 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
     this.cartUpdateListener = () => this.updateCartCount();
     window.addEventListener('cartUpdated', this.cartUpdateListener);
 
-    // // Auth
-    // this.authSubscription = this.authService.isLoggedIn$.subscribe(status => {
-    //   this.isLoggedIn = status;
-    // });
+    this.currentToken = this.authService.getAccessToken();
   }
 
   ngOnDestroy(): void {
@@ -62,10 +52,7 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
     const savedCart = localStorage.getItem('homebase_cart');
     if (savedCart) {
       const items = JSON.parse(savedCart);
-      this.cartCount = items.reduce(
-        (total: number, item: any) => total + item.quantity,
-        0
-      );
+      this.cartCount = items.reduce((total: number, item: any) => total + item.quantity, 0);
     } else {
       this.cartCount = 0;
     }
@@ -106,5 +93,6 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
+    window.location.reload();
   }
 }

@@ -36,6 +36,7 @@ exports.signin = async (req, res) => {
     }
     const { data, message } = await authService.handleLogin(req.body);
     if (!data) {
+      console.log(message, data);
       return res.status(404).json({ message: message, data: null });
     }
     const refreshToken = crypto.randomBytes(64).toString("hex");
@@ -148,6 +149,26 @@ exports.checkOtpResetPassword = async (req, res) => {
     }
 
     const { data, message } = await authService.checkOtp(otpCode);
+    if (!data) {
+      return res.status(400).json({ message, data: null });
+    }
+
+    return res.status(200).json({ message, data });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
+  }
+};
+exports.verifyEmail = async (req, res) => {
+  try {
+    const { otpCode } = req.body;
+    if (!otpCode) {
+      return res.status(400).json({
+        message: "Hãy nhập mã OTP",
+        data: null,
+      });
+    }
+    const { data, message } = await authService.checkVerifyOtp(otpCode);
     if (!data) {
       return res.status(400).json({ message, data: null });
     }

@@ -1,10 +1,4 @@
 <div class="signin-container">
-  @if (error !== '') {
-    <div class="alert-custom alert alert-warning alert-dismissible fade show" role="alert">
-      {{ error }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-  }
   <div class="signin-card">
     <h2 class="title">ĐĂNG NHẬP</h2>
 
@@ -67,6 +61,18 @@
           }
         }
       </div>
+      @if (error !== '') {
+        <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3" role="alert">
+          <i class="bi bi-exclamation-circle-fill"></i>
+          <span>{{ error }}</span>
+        </div>
+      }
+      @if (success !== '') {
+        <div class="alert alert-success d-flex align-items-center gap-2 py-2 px-3" role="alert">
+          <i class="bi bi-check-circle-fill"></i>
+          <span>{{ success }}</span>
+        </div>
+      }
       <div class="forgot-pass">
         <a (click)="forgotPassword()">Quên mật khẩu?</a>
       </div>

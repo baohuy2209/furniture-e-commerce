@@ -1,7 +1,7 @@
 const User = require("../app/models/user.model");
 const Role = require("../app/models/role.model");
 const Session = require("../app/models/session.model");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { generateUsernameFromEmail } = require("../utils/generateUsername");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
@@ -41,7 +41,11 @@ class AuthService {
           message: "Email người dùng không tồn tại",
         };
       }
-      const isValidPassword = bcrypt.compare(password, userLogin.password_hash);
+      const isValidPassword = bcrypt.compareSync(
+        password,
+        userLogin.password_hash,
+      );
+      console.log(isValidPassword);
       if (!isValidPassword) {
         return {
           data: null,
@@ -72,7 +76,9 @@ class AuthService {
     try {
       const { fullname, email, phone, password, roles } = rawData;
       const username = generateUsernameFromEmail(email);
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      console.log(hashedPassword);
       const user = new User({
         username: username,
         email,
@@ -90,11 +96,35 @@ class AuthService {
         user.roles = [userRoles._id];
         await user.save();
       }
-      const safeUser = user;
-      safeUser.password_hash = null;
+      // Tạo mã OTP 6 số ngẫu nhiên đẻ xác thực email
+      const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // Lưu mã OTP vào database thay vì token dài
+      user.verification_token = otpCode;
+      user.verification_token_expire_at = Date.now() + 15 * 60 * 1000; // 15 phút
+      await user.save();
+      // Configure nodemailer
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL_SERVICE,
+        to: user.email,
+        subject: "Mã xác nhận (OTP) email",
+        text: `Bạn đã đăng kí tài khoản mới. Mã xác thực email (OTP) của bạn là: ${otpCode}\n\nMã này sẽ hết hạn sau 15 phút.`,
+      };
+
+      await transporter.sendMail(mailOptions);
       return {
         message: "Đăng kí người dùng thành công",
-        data: safeUser,
+        data: user,
       };
     } catch (e) {
       console.log(e);
@@ -118,6 +148,8 @@ class AuthService {
       // Configure nodemailer
       const transporter = nodemailer.createTransport({
         service: "gmail",
+        port: 587,
+        secure: false,
         auth: {
           user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASS,
@@ -152,13 +184,29 @@ class AuthService {
         return { message: "Mã OTP không hợp lệ hoặc đã hết hạn", data: null };
       }
 
-      // const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-      // user.password_hash = hashedPassword;
-      // Dọn dẹp token sau khi dùng xong
-      // user.reset_password_token = undefined;
-      // user.reset_password_token_expire_at = undefined;
-      // await user.save();
+      return {
+        message: "Mã OTP hợp lệ",
+        data: user,
+      };
+    } catch (e) {
+      console.log(e);
+      return { message: "Có lỗi phía server: " + e.message, data: null };
+    }
+  }
+  async checkVerifyOtp(otpCode) {
+    try {
+      const user = await User.findOne({
+        verification_token: otpCode,
+        verification_token_expire_at: { $gt: Date.now() },
+      });
 
+      if (!user) {
+        return { message: "Mã OTP không hợp lệ hoặc đã hết hạn", data: null };
+      }
+      user.verification_token = undefined;
+      user.verification_token_expire_at = undefined;
+      user.is_verified = true;
+      await user.save();
       return {
         message: "Mã OTP hợp lệ",
         data: user,

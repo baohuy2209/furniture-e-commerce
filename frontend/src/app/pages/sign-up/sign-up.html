@@ -1,95 +1,142 @@
 <div class="auth-container">
-    <div class="auth-card">
+  <div class="auth-card">
+    <h2 class="title orange">ĐĂNG KÝ</h2>
 
-        <h2 class="title orange">ĐĂNG KÝ</h2>
-
-        <!-- Full Name -->
-        <div class="form-group">
-            <label>Họ và Tên <span class="required">*</span></label>
-            <div class="input-group">
-                <span class="input-icon"><i class="fa-regular fa-user"></i></span>
-                <input type="text" [(ngModel)]="fullName" placeholder="Nguyễn Văn A" />
-            </div>
-        </div>
-
-        <!-- Email -->
-        <div class="form-group">
-            <label>Email <span class="required">*</span></label>
-            <div class="input-group">
-                <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
-                <input type="email" [(ngModel)]="email" placeholder="example@gmail.com"
-                    [class.error-border]="email && emailError" />
-            </div>
-            <p class="field-error" *ngIf="email && emailError">{{ emailError }}</p>
-        </div>
-
-        <!-- Phone -->
-        <div class="form-group">
-            <label>Số Điện Thoại <span class="required">*</span></label>
-            <div class="input-group">
-                <span class="input-icon"><i class="fa-solid fa-phone"></i></span>
-                <input type="tel" [(ngModel)]="phone" placeholder="0901234567"
-                    [class.error-border]="phone && phoneError" />
-            </div>
-            <p class="field-error" *ngIf="phone && phoneError">{{ phoneError }}</p>
-        </div>
-
-        <!-- Password -->
-        <div class="form-group">
-            <label>Mật Khẩu <span class="required">*</span></label>
-            <div class="input-group">
-                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-                <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password"
-                    placeholder="*****************" [class.error-border]="password && !isPasswordValid" />
-                <span class="toggle-password" (click)="togglePassword()">
-                    <i class="fa-regular" [class.fa-eye]="!showPassword" [class.fa-eye-slash]="showPassword"></i>
-                </span>
-            </div>
-        </div>
-
-        <!-- Password Requirements -->
-        <div class="password-requirements" *ngIf="password">
-            <p [class.valid]="!passwordErrors.minLength" [class.invalid]="passwordErrors.minLength">
-                <i class="fa-solid" [class.fa-check]="!passwordErrors.minLength"
-                    [class.fa-xmark]="passwordErrors.minLength"></i> Tối thiểu 8 ký tự
-            </p>
-            <p [class.valid]="!passwordErrors.hasUpper" [class.invalid]="passwordErrors.hasUpper">
-                <i class="fa-solid" [class.fa-check]="!passwordErrors.hasUpper"
-                    [class.fa-xmark]="passwordErrors.hasUpper"></i> Có chữ hoa
-            </p>
-            <p [class.valid]="!passwordErrors.hasLower" [class.invalid]="passwordErrors.hasLower">
-                <i class="fa-solid" [class.fa-check]="!passwordErrors.hasLower"
-                    [class.fa-xmark]="passwordErrors.hasLower"></i> Có chữ thường
-            </p>
-            <p [class.valid]="!passwordErrors.hasSpecial" [class.invalid]="passwordErrors.hasSpecial">
-                <i class="fa-solid" [class.fa-check]="!passwordErrors.hasSpecial"
-                    [class.fa-xmark]="passwordErrors.hasSpecial"></i> Kí tự đặc biệt
-            </p>
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="form-group">
-            <label>Xác Nhận Mật Khẩu <span class="required">*</span></label>
-            <div class="input-group">
-                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-                <input [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword"
-                    placeholder="*****************" [class.error-border]="confirmPassword && confirmPasswordError" />
-                <span class="toggle-password" (click)="toggleConfirmPassword()">
-                    <i class="fa-regular" [class.fa-eye]="!showConfirmPassword"
-                        [class.fa-eye-slash]="showConfirmPassword"></i>
-                </span>
-            </div>
-            <p class="field-error" *ngIf="confirmPassword && confirmPasswordError">{{ confirmPasswordError }}</p>
-        </div>
-
-        <button class="btn-submit" [disabled]="!isFormValid" (click)="signUp()">Đăng Ký</button>
-
-        <p class="error-msg" *ngIf="error">{{ error }}</p>
-        <p class="success-msg" *ngIf="success">{{ success }}</p>
-
-        <div class="footer-link">
-            Bạn đã có tài khoản? <a routerLink="/auth/sign-in">Đăng Nhập</a>
-        </div>
-
+    <!-- Full Name -->
+    <div class="form-group">
+      <label>Họ và Tên <span class="required">*</span></label>
+      <div class="input-group">
+        <span class="input-icon"><i class="fa-regular fa-user"></i></span>
+        <input type="text" [(ngModel)]="fullName" placeholder="Nguyễn Văn A" />
+      </div>
     </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label>Email <span class="required">*</span></label>
+      <div class="input-group">
+        <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
+        <input
+          type="email"
+          [(ngModel)]="email"
+          placeholder="example@gmail.com"
+          [class.error-border]="email && emailError"
+        />
+      </div>
+      <p class="field-error" *ngIf="email && emailError">{{ emailError }}</p>
+    </div>
+
+    <!-- Phone -->
+    <div class="form-group">
+      <label>Số Điện Thoại <span class="required">*</span></label>
+      <div class="input-group">
+        <span class="input-icon"><i class="fa-solid fa-phone"></i></span>
+        <input
+          type="tel"
+          [(ngModel)]="phone"
+          placeholder="0901234567"
+          [class.error-border]="phone && phoneError"
+        />
+      </div>
+      <p class="field-error" *ngIf="phone && phoneError">{{ phoneError }}</p>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label>Mật Khẩu <span class="required">*</span></label>
+      <div class="input-group">
+        <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          [(ngModel)]="password"
+          placeholder="*****************"
+          [class.error-border]="password && !isPasswordValid"
+        />
+        <span class="toggle-password" (click)="togglePassword()">
+          <i
+            class="fa-regular"
+            [class.fa-eye]="!showPassword"
+            [class.fa-eye-slash]="showPassword"
+          ></i>
+        </span>
+      </div>
+    </div>
+
+    <!-- Password Requirements -->
+    <div class="password-requirements" *ngIf="password">
+      <p [class.valid]="!passwordErrors.minLength" [class.invalid]="passwordErrors.minLength">
+        <i
+          class="fa-solid"
+          [class.fa-check]="!passwordErrors.minLength"
+          [class.fa-xmark]="passwordErrors.minLength"
+        ></i>
+        Tối thiểu 8 ký tự
+      </p>
+      <p [class.valid]="!passwordErrors.hasUpper" [class.invalid]="passwordErrors.hasUpper">
+        <i
+          class="fa-solid"
+          [class.fa-check]="!passwordErrors.hasUpper"
+          [class.fa-xmark]="passwordErrors.hasUpper"
+        ></i>
+        Có chữ hoa
+      </p>
+      <p [class.valid]="!passwordErrors.hasLower" [class.invalid]="passwordErrors.hasLower">
+        <i
+          class="fa-solid"
+          [class.fa-check]="!passwordErrors.hasLower"
+          [class.fa-xmark]="passwordErrors.hasLower"
+        ></i>
+        Có chữ thường
+      </p>
+      <p [class.valid]="!passwordErrors.hasSpecial" [class.invalid]="passwordErrors.hasSpecial">
+        <i
+          class="fa-solid"
+          [class.fa-check]="!passwordErrors.hasSpecial"
+          [class.fa-xmark]="passwordErrors.hasSpecial"
+        ></i>
+        Kí tự đặc biệt
+      </p>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="form-group">
+      <label>Xác Nhận Mật Khẩu <span class="required">*</span></label>
+      <div class="input-group">
+        <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+        <input
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          [(ngModel)]="confirmPassword"
+          placeholder="*****************"
+          [class.error-border]="confirmPassword && confirmPasswordError"
+        />
+        <span class="toggle-password" (click)="toggleConfirmPassword()">
+          <i
+            class="fa-regular"
+            [class.fa-eye]="!showConfirmPassword"
+            [class.fa-eye-slash]="showConfirmPassword"
+          ></i>
+        </span>
+      </div>
+      @if (confirmPassword && confirmPasswordError) {
+        <p class="field-error">
+          {{ confirmPasswordError }}
+        </p>
+      }
+    </div>
+    @if (error !== '') {
+      <div class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3" role="alert">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <span>{{ error }}</span>
+      </div>
+    }
+    @if (success !== '') {
+      <div class="alert alert-success d-flex align-items-center gap-2 py-2 px-3" role="alert">
+        <i class="bi bi-check-circle-fill"></i>
+        <span>{{ success }}</span>
+      </div>
+    }
+
+    <button class="btn-submit" [disabled]="!isFormValid" (click)="signUp()">Đăng Ký</button>
+    <div class="footer-link">Bạn đã có tài khoản? <a routerLink="/auth/sign-in">Đăng Nhập</a></div>
+  </div>
 </div>

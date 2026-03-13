@@ -75,6 +75,14 @@ export class AuthService {
       }>(`${environment.backend_url}/auth/reset-password/check-otp`, { otpCode })
       .pipe(retry(2), catchError(this.handleError));
   }
+  verifyEmail(otpCode: String): Observable<{ message: string; data: IUser }> {
+    return this.http
+      .post<{
+        message: string;
+        data: IUser;
+      }>(`${environment.backend_url}/auth/verify-email`, { otpCode })
+      .pipe(retry(2), catchError(this.handleError));
+  }
   resetPassword(userId: string, newPassword: string): Observable<{ message: string; data: IUser }> {
     return this.http
       .post<{
@@ -84,6 +92,6 @@ export class AuthService {
       .pipe(retry(2), catchError(this.handleError));
   }
   handleError(err: HttpErrorResponse) {
-    return throwError(() => new Error(err.message));
+    return throwError(() => err);
   }
 }

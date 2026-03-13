@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './sign-up.html',
-  styleUrl: './sign-up.css'
+  styleUrl: './sign-up.css',
 })
 export class SignUp {
   fullName = '';
@@ -23,7 +24,11 @@ export class SignUp {
   error = '';
   success = '';
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -38,7 +43,7 @@ export class SignUp {
       minLength: this.password.length < 8,
       hasUpper: !/[A-Z]/.test(this.password),
       hasLower: !/[a-z]/.test(this.password),
-      hasSpecial: !/[!@#$%^&*(),.?":{}|<>]/.test(this.password)
+      hasSpecial: !/[!@#$%^&*(),.?":{}|<>]/.test(this.password),
     };
   }
 
@@ -69,11 +74,17 @@ export class SignUp {
 
   // Master getter for form validity
   get isFormValid(): boolean {
-    return !!this.fullName &&
-      !!this.email && !this.emailError &&
-      !!this.phone && !this.phoneError &&
-      !!this.password && this.isPasswordValid &&
-      !!this.confirmPassword && !this.confirmPasswordError;
+    return (
+      !!this.fullName &&
+      !!this.email &&
+      !this.emailError &&
+      !!this.phone &&
+      !this.phoneError &&
+      !!this.password &&
+      this.isPasswordValid &&
+      !!this.confirmPassword &&
+      !this.confirmPasswordError
+    );
   }
 
   signUp() {
@@ -86,25 +97,25 @@ export class SignUp {
       return;
     }
 
-    // Mock Success
-    const newUser = {
-      fullName: this.fullName,
-      email: this.email,
-      phone: this.phone,
-      password: this.password, // In real app, never store plain text!
-      role: 'customer',
-      createdAt: new Date()
-    };
-
-    // Simulate saving (optional)
-    // const users = JSON.parse(localStorage.getItem('users') || '[]');
-    // users.push(newUser);
-    // localStorage.setItem('users', JSON.stringify(users));
-
-    this.success = 'Đăng ký thành công! Đang chuyển hướng...';
-
-    setTimeout(() => {
-      this.router.navigate(['/auth/sign-in']);
-    }, 1500);
+    this.authService.register(this.email, this.password, this.fullName, this.phone).subscribe({
+      next: (res) => {
+        if (!res.data) {
+          this.error = 'Thông tin không hợp lệ';
+          this.cdr.detectChanges();
+        }
+        this.success = 'Đăng ký thành công! Đang chuyển hướng...';
+        setTimeout(() => {
+          this.router.navigate(['/auth/verify-email']);
+        }, 500);
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Sai email hoặc mật khẩu';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.cdr.detectChanges();
+      },
+    });
   }
 }

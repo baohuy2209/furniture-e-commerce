@@ -1,110 +1,24 @@
 <div class="auth-container">
   <div class="auth-card">
-    <!-- STEP 1: EMAIL -->
-    <div *ngIf="step === 1">
-      <h2 class="title orange">QUÊN MẬT KHẨU</h2>
-      <p class="subtitle">Nhập email để đặt lại mật khẩu</p>
+    <div>
+      <h2 class="title orange">XÁC THỰC EMAIL</h2>
 
       <div class="form-group">
-        <label>Email Xác Thực</label>
-        <div class="input-group">
-          <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
-          <input type="email" [(ngModel)]="email" placeholder="example@gmail.com" />
-        </div>
-      </div>
-
-      <button class="btn-submit" (click)="sendOtp()">Tiếp Tục</button>
-    </div>
-
-    <!-- STEP 2: NEW PASSWORD -->
-    <div *ngIf="step === 2">
-      <h2 class="title orange">QUÊN MẬT KHẨU</h2>
-
-      <div class="form-group">
-        <label>Mật Khẩu mới</label>
+        <label>Mã OTP</label>
         <div class="input-group">
           <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-          <input
-            [type]="showNewPassword ? 'text' : 'password'"
-            [(ngModel)]="newPassword"
-            placeholder="*****************"
-            [class.error-border]="newPassword && !isPasswordValid"
-          />
-          <span class="toggle-password" (click)="toggleNewPassword()">
-            <i
-              class="fa-regular"
-              [class.fa-eye]="!showNewPassword"
-              [class.fa-eye-slash]="showNewPassword"
-            ></i>
-          </span>
+          <input type="text" [(ngModel)]="otp" placeholder="123456" [class.error-border]="otp" />
         </div>
       </div>
 
-      <div class="password-requirements" *ngIf="newPassword">
-        <p [class.valid]="!passwordErrors.minLength" [class.invalid]="passwordErrors.minLength">
-          <i
-            class="fa-solid"
-            [class.fa-check]="!passwordErrors.minLength"
-            [class.fa-xmark]="passwordErrors.minLength"
-          ></i>
-          Tối thiểu 8 ký tự
-        </p>
-        <p [class.valid]="!passwordErrors.hasUpper" [class.invalid]="passwordErrors.hasUpper">
-          <i
-            class="fa-solid"
-            [class.fa-check]="!passwordErrors.hasUpper"
-            [class.fa-xmark]="passwordErrors.hasUpper"
-          ></i>
-          Có chữ hoa
-        </p>
-        <p [class.valid]="!passwordErrors.hasLower" [class.invalid]="passwordErrors.hasLower">
-          <i
-            class="fa-solid"
-            [class.fa-check]="!passwordErrors.hasLower"
-            [class.fa-xmark]="passwordErrors.hasLower"
-          ></i>
-          Có chữ thường
-        </p>
-        <p [class.valid]="!passwordErrors.hasSpecial" [class.invalid]="passwordErrors.hasSpecial">
-          <i
-            class="fa-solid"
-            [class.fa-check]="!passwordErrors.hasSpecial"
-            [class.fa-xmark]="passwordErrors.hasSpecial"
-          ></i>
-          Kí tự đặc biệt
-        </p>
-      </div>
-
-      <div class="form-group">
-        <label>Xác Nhận Mật Khẩu Mới</label>
-        <div class="input-group">
-          <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-          <input
-            [type]="showConfirmPassword ? 'text' : 'password'"
-            [(ngModel)]="confirmPassword"
-            placeholder="*****************"
-            [class.error-border]="confirmPassword && confirmPasswordError"
-          />
-          <span class="toggle-password" (click)="toggleConfirmPassword()">
-            <i
-              class="fa-regular"
-              [class.fa-eye]="!showConfirmPassword"
-              [class.fa-eye-slash]="showConfirmPassword"
-            ></i>
-          </span>
-        </div>
-        <p class="field-error" *ngIf="confirmPassword && confirmPasswordError">
-          {{ confirmPasswordError }}
-        </p>
-      </div>
-
-      <button class="btn-submit" [disabled]="!isResetFormValid" (click)="resetPassword()">
-        Đổi Mật Khẩu
-      </button>
+      <button class="btn-submit" [disabled]="otp === ''" (click)="checkOtp()">Xác thực</button>
     </div>
-
-    <p class="error-msg" *ngIf="error">{{ error }}</p>
-    <p class="success-msg" *ngIf="success">{{ success }}</p>
+    @if (error !== '') {
+      <p class="error-msg">{{ error }}</p>
+    }
+    @if (success !== '') {
+      <p class="success-msg">{{ success }}</p>
+    }
 
     <div class="back-login">
       <a routerLink="/auth/sign-in">Quay lại đăng nhập</a>
