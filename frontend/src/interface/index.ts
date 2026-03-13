@@ -23,6 +23,30 @@ export interface ILogin {
   roles: string[];
   accessToken: string;
 }
+export interface IProductTag {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+}
+export interface IProductCategory {
+  _id: string;
+  name: string;
+  slug: string;
+  type: 'product_type' | 'room_type';
+}
+export interface IListProducts {
+  _id: string;
+  product_name: string;
+  description: string;
+  discount_percent: number;
+  tags: string;
+  price: number;
+  num_selled: number;
+  rating: number;
+  main_image: string;
+  categories: IProductCategory[];
+}
 export interface Iproduct {
   product_id: string;
   product_name: string;
@@ -66,4 +90,22 @@ export interface Idetail_product {
   product: Iproduct;
   product_variants: Iproduct_variants[];
   list_product_variants_image: Record<string, Iproduct_image[]>;
+}
+
+export interface IListBlog {
+  _id: string;
+  title: string;
+  thumbnail_url: {
+    url: string;
+    alt: string;
+  };
+  description: string;
+  activity: {
+    total_likes: number;
+    total_reads: number;
+    total_comments: number;
+  };
+  categories: string;
+  time_reads: number;
+  publishedAt: Date;
 }

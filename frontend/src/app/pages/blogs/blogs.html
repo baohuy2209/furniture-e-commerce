@@ -81,16 +81,9 @@
   </div>
 </section>
 <div class="row g-4 container mx-auto py-4 mt-4">
-  <div class="col-12 col-sm-6 col-lg-4">
-    <app-blog-card></app-blog-card>
-  </div>
-  <div class="col-12 col-sm-6 col-lg-4">
-    <app-blog-card></app-blog-card>
-  </div>
-  <div class="col-12 col-sm-6 col-lg-4">
-    <app-blog-card></app-blog-card>
-  </div>
-  <div class="col-12 col-sm-6 col-lg-4">
-    <app-blog-card></app-blog-card>
-  </div>
+  @for (blog of listBlogs; track $index) {
+    <div class="col-12 col-sm-6 col-lg-4">
+      <app-blog-card [blogInfo]="blog"></app-blog-card>
+    </div>
+  }
 </div>

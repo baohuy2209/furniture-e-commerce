@@ -37,30 +37,11 @@
   </div>
   <div class="container">
     <div class="row g-4 mt-4 row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 flex flex-wrap">
-      <div class="col">
-        <app-card-product></app-card-product>
-      </div>
-      <div class="col">
-        <app-card-product></app-card-product>
-      </div>
-      <div class="col">
-        <app-card-product></app-card-product>
-      </div>
-      <div class="col">
-        <app-card-product></app-card-product>
-      </div>
-      <div class="col">
-        <app-card-product></app-card-product>
-      </div>
-      <div class="col">
-        <app-card-product></app-card-product>
-      </div>
-      <div class="col">
-        <app-card-product></app-card-product>
-      </div>
-      <div class="col">
-        <app-card-product></app-card-product>
-      </div>
+      @for (product of listBestSellerProducts; track $index) {
+        <div class="col">
+          <app-card-product [productInfo]="product"></app-card-product>
+        </div>
+      }
     </div>
   </div>
 </div>

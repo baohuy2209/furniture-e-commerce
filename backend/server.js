@@ -7,6 +7,7 @@ const { connect } = require("./app/config/db");
 const route = require("./routes/index.route");
 const swaggerUi = require("swagger-ui-express");
 const cookieSession = require("cookie-session");
+const cookieParser = require("cookie-parser");
 const fs = require("fs");
 const cloudinary = require("cloudinary").v2;
 dotenv.config({
@@ -20,6 +21,7 @@ app.use(
   }),
 );
 app.use(morgan("combined"));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(

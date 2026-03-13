@@ -1,12 +1,43 @@
-import { Component } from '@angular/core';
-import { CardProduct } from "../../components/card-product/card-product";
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CardProduct } from '../../components/card-product/card-product';
+import { IListProducts } from '../../../interface';
+import { Product } from '../../services/product';
 
 @Component({
   selector: 'app-products',
   imports: [CardProduct],
   templateUrl: './products.html',
   styleUrl: './products.css',
+  standalone: true,
 })
-export class Products {
-
+export class Products implements OnInit {
+  listProduct: IListProducts[] = [];
+  success: string = '';
+  error: string = '';
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private productService: Product,
+  ) {}
+  ngOnInit(): void {
+    this.productService.getAllProducts().subscribe({
+      next: (res) => {
+        if (!res.data) {
+          this.success = 'Không tìm thấy sản phẩm nào';
+          this.cdr.detectChanges();
+        }
+        this.listProduct = res.data;
+        // console.log(res.data);
+        this.success = res.message;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.cdr.detectChanges();
+      },
+    });
+  }
 }

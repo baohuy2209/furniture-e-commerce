@@ -30,7 +30,13 @@ export class AuthService {
       .post<{
         data: ILogin;
         message: string;
-      }>(`${environment.backend_url}/auth/signin`, { email, password })
+      }>(
+        `${environment.backend_url}/auth/signin`,
+        { email, password },
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(
         retry(2),
         tap((res: { data: ILogin; message: string }) => {
@@ -50,13 +56,25 @@ export class AuthService {
       .post<{
         message: string;
         data: IUser;
-      }>(`${environment.backend_url}/auth/signup`, { email, password, fullname, phone })
+      }>(
+        `${environment.backend_url}/auth/signup`,
+        { email, password, fullname, phone },
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   logout(): Observable<{ message: string }> {
     this.clearState();
     return this.http
-      .post<{ message: string }>(`${environment.backend_url}/auth/logout`, {})
+      .post<{ message: string }>(
+        `${environment.backend_url}/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   forgotPassword(email: string): Observable<{ message: string; data: { email: string } }> {
@@ -64,7 +82,13 @@ export class AuthService {
       .post<{
         message: string;
         data: { email: string };
-      }>(`${environment.backend_url}/auth/forgot-password`, { email })
+      }>(
+        `${environment.backend_url}/auth/forgot-password`,
+        { email },
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   checkOtp(otpCode: string): Observable<{ message: string; data: IUser }> {
@@ -72,7 +96,13 @@ export class AuthService {
       .post<{
         message: string;
         data: IUser;
-      }>(`${environment.backend_url}/auth/reset-password/check-otp`, { otpCode })
+      }>(
+        `${environment.backend_url}/auth/reset-password/check-otp`,
+        { otpCode },
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   verifyEmail(otpCode: String): Observable<{ message: string; data: IUser }> {
@@ -80,7 +110,13 @@ export class AuthService {
       .post<{
         message: string;
         data: IUser;
-      }>(`${environment.backend_url}/auth/verify-email`, { otpCode })
+      }>(
+        `${environment.backend_url}/auth/verify-email`,
+        { otpCode },
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   resetPassword(userId: string, newPassword: string): Observable<{ message: string; data: IUser }> {
@@ -88,7 +124,24 @@ export class AuthService {
       .post<{
         message: string;
         data: IUser;
-      }>(`${environment.backend_url}/auth/reset-password`, { userId, newPassword })
+      }>(
+        `${environment.backend_url}/auth/reset-password`,
+        { userId, newPassword },
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
+  refreshToken(): Observable<{ message: string; data: string }> {
+    return this.http
+      .post<{ message: string; data: string }>(
+        `${environment.backend_url}/auth/refresh-token`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   handleError(err: HttpErrorResponse) {

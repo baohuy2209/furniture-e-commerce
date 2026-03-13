@@ -120,42 +120,62 @@
               </button>
             </div>
           } @else {
-            <div class="dropdown">
-              <a
-                class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
-                href="#"
-                role="button"
-                id="dropdownUser"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <img src="user/image.png" alt="User Avatar" class="user-avatar" />
-                <span>Tánh</span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
-                <li>
-                  <a class="dropdown-item" [routerLink]="['/settings']">
-                    <i class="far fa-file-alt me-2"></i> Tài khoản của bạn</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" [routerLink]="['/settings/my-orders']">
-                    <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng</a
-                  >
-                </li>
-                <li>
-                  <a class="dropdown-item" [routerLink]="['/settings/my-reviews']">
-                    <i class="fas fa-star me-2"></i> Đánh giá của tôi</a
-                  >
-                </li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a class="dropdown-item" (click)="logout()"
-                    ><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a
-                  >
-                </li>
-              </ul>
-            </div>
+            @if (currentUserInfo) {
+              <div class="dropdown">
+                <a
+                  class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
+                  href="#"
+                  role="button"
+                  id="dropdownUser"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <img
+                    [src]="currentUserInfo.avatar ? currentUserInfo.avatar : 'user/image.png'"
+                    alt="User Avatar"
+                    class="user-avatar"
+                  />
+                  <span>{{ userName }}</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
+                  <li>
+                    <a class="dropdown-item" [routerLink]="['/settings']">
+                      <i class="far fa-file-alt me-2"></i> Tài khoản của bạn</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" [routerLink]="['/settings/my-orders']">
+                      <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" [routerLink]="['/settings/my-reviews']">
+                      <i class="fas fa-star me-2"></i> Đánh giá của tôi</a
+                    >
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a class="dropdown-item" (click)="logout()"
+                      ><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            } @else {
+              <div class="dropdown">
+                <a
+                  class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
+                  href="#"
+                  role="button"
+                  id="dropdownUser"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <img src="user/image.png" alt="User Avatar" class="user-avatar" />
+                  <span>Lỗi</span>
+                </a>
+              </div>
+            }
           }
         </div>
       </div>

@@ -148,20 +148,6 @@
   gap: 20px;
 }
 
-.product-card-small {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.product-card-small:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-}
-
 .discount-badge-small {
   position: absolute;
   top: 16px;

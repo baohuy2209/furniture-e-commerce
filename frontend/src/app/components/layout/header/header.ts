@@ -1,9 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../services/auth';
+import { UserService } from '../../../services/user-service';
+import { IUser } from '../../../../interface';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +29,10 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
   cartCount = 0;
   isSearchOpen = false;
   searchQuery = '';
+  userName: string = '';
+  currentUserInfo: IUser | null = null;
+  error = '';
+  success = '';
 
   private authSubscription!: Subscription;
   private cartUpdateListener: any;
@@ -26,6 +40,8 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private userService: UserService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +51,29 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
     window.addEventListener('cartUpdated', this.cartUpdateListener);
 
     this.currentToken = this.authService.getAccessToken();
+    if (this.currentToken) {
+      this.userService.getUserInfo().subscribe({
+        next: (res) => {
+          if (!res.data) {
+            this.error = 'Không tìm thấy thông tin người dùng';
+            this.cdr.detectChanges();
+          }
+          this.currentUserInfo = res.data;
+          let lengthName = this.currentUserInfo.name.split(' ').length;
+          this.userName = this.currentUserInfo.name.split(' ')[lengthName - 1];
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          if (err.status === 404 || err.status === 400 || err.status === 401) {
+            this.error = err.error?.message || 'Không tìm thấy thông tin người dùng ';
+            console.log(this.error);
+          } else {
+            this.error = 'Có lỗi ở phía server';
+          }
+          this.cdr.detectChanges();
+        },
+      });
+    }
   }
 
   ngOnDestroy(): void {

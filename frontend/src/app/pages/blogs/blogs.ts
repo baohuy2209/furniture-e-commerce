@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BlogCard } from "../../components/blog-card/blog-card";
+import { BlogCard } from '../../components/blog-card/blog-card';
+import { BlogService } from '../../services/blog-service';
+import { IListBlog } from '../../../interface';
 interface BlogFilter {
   category: string;
   readTime: string;
@@ -12,10 +14,39 @@ interface BlogFilter {
   imports: [FormsModule, CommonModule, BlogCard],
   templateUrl: './blogs.html',
   styleUrl: './blogs.css',
+  standalone: true,
 })
-export class Blogs {
+export class Blogs implements OnInit {
   @Output() filterChange = new EventEmitter<BlogFilter>();
-
+  listBlogs: IListBlog[] = [];
+  success: string = '';
+  error: string = '';
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private blogService: BlogService,
+  ) {}
+  ngOnInit(): void {
+    this.blogService.getAllBlogs().subscribe({
+      next: (res) => {
+        if (!res.data) {
+          this.success = 'Không tìm thấy bài viết nào';
+          this.cdr.detectChanges();
+        }
+        this.listBlogs = res.data;
+        // console.log(res.data);
+        this.success = res.message;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thây bài viết nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.cdr.detectChanges();
+      },
+    });
+  }
   filter: BlogFilter = {
     category: 'Tất cả',
     readTime: 'Tất cả',

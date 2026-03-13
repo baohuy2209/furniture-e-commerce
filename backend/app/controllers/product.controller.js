@@ -1,58 +1,50 @@
 const Product = require("../models/product.model");
-const ProductTags = require("../models/productTags.model");
 const productService = require("../../services/product.service");
 class ProductController {
   // [GET] /api/products/
   async getAllProduct(req, res) {
     try {
       const products = await Product.find({});
-
-      const listProductInfo = await Promise.all(
-        products.map(async (product) => {
-          const tagPromises = product.tags.map((tagId) =>
-            ProductTags.findById(tagId).then((tag) => {
-              return tag?.name || null;
-            }),
-          );
-
-          const listProductTags = (await Promise.all(tagPromises)).filter(
-            (name) => name !== null,
-          );
-          const mainProductVariant =
-            await productService.getMainProductVariantInfo(product._id);
-          if (!mainProductVariant) {
-            return res.status(500).json({
-              message: `Lỗi server: Không tìm thấy variant mặc định cho sản phẩm ${product.product_name}`,
-              data: null,
-            });
-          }
-          const mainImageDefaultProduct =
-            await productService.getMainImageForDefaultVariant(
-              mainProductVariant._id,
-            );
-          if (!mainImageDefaultProduct) {
-            return res.status(500).json({
-              message: `Lỗi server: Không tìm thấy ảnh mặc định cho variant ${mainProductVariant._id}`,
-              data: null,
-            });
-          }
-          return {
-            _id: product._id,
-            product_name: product.product_name,
-            description: product.description,
-            discount_percent: product.discount_percent,
-            tags: listProductTags,
-            price: mainProductVariant.price,
-            num_selled: mainProductVariant.num_selled,
-            rating: mainProductVariant.rating.average,
-            main_image: mainImageDefaultProduct.url,
-          };
-        }),
-      );
-
+      const { data, message } =
+        await productService.getListProductInfo(products);
+      if (!data) {
+        return res.status(404).json({ data: null, message });
+      }
+      return res.status(200).json({ data, message });
+    } catch (error) {
+      console.error(error);
       return res
-        .status(200)
-        .json({ data: listProductInfo, message: "Lấy dữ liệu thành công" });
+        .status(500)
+        .json({ message: "Lỗi server" + error, data: null });
+    }
+  }
+  // [GET] /api/products/news-product
+  async getNewProduct(req, res) {
+    try {
+      const products = await Product.find({});
+      const { data, message } = await productService.getNewProducts(products);
+      if (!data) {
+        return res.status(404).json({ data: null, message });
+      }
+      return res.status(200).json({ message: "Lấy sản phẩm thành công", data });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Lỗi server" + error, data: null });
+    }
+  }
+  // [GET] /api/products/best-seller-product
+  async getBestSellerProduct(req, res) {
+    try {
+      const products = await Product.find({});
+      const { data, message } =
+        await productService.getListProductInfo(products);
+      if (!data) {
+        return res.status(404).json({ data: null, message });
+      }
+      const bestSellerProducts = productService.getTopSellingProducts(data, 8);
+      return res.status(200).json({ data: bestSellerProducts, message });
     } catch (error) {
       console.error(error);
       return res

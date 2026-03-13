@@ -18,6 +18,7 @@
   border: 1px solid var(--border);
   overflow: hidden;
   width: 100%;
+  max-height: 1000px;
   cursor: pointer;
   transition:
     transform 0.22s ease,
@@ -91,13 +92,17 @@
 }
 
 .bc-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'sans-serif', serif;
   font-size: 1.5rem;
   font-weight: 900;
   line-height: 1.35;
   color: var(--text-dark);
   margin: 0;
   transition: color 0.18s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* số dòng */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .bc-card:hover .bc-title {
@@ -120,6 +125,7 @@
 .bc-meta {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 14px;
   padding-top: 8px;
   border-top: 1px solid var(--border);
@@ -131,6 +137,7 @@
   align-items: center;
   gap: 5px;
   font-size: 0.75rem;
+  font-weight: 700;
   color: var(--text-lt);
 }
 

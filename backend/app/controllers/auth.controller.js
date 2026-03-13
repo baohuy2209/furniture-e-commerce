@@ -51,8 +51,8 @@ exports.signin = async (req, res) => {
     }
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,
+      sameSite: "lax",
       maxAge: 15 * 24 * 60 * 60 * 1000,
     });
     const responseData = {
@@ -73,7 +73,7 @@ exports.signin = async (req, res) => {
 };
 exports.refreshUserToken = async (req, res) => {
   try {
-    const token = req.cookies?.refreshToken;
+    const token = req.cookies.refreshToken;
     if (!token) {
       return res
         .status(401)

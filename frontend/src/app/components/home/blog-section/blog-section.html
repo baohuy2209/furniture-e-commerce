@@ -1,1 +1,21 @@
-<p>blog-section works!</p>
+<section class="blog-section">
+  <div class="container py-5">
+    <div class="position-relative text-center mb-3">
+      <div class="blog-title-block">
+        <p class="blog-label">Cảm hứng &amp; Blogs</p>
+        <h2 class="blog-title">Cảm Hứng <span>Thiết Kế</span></h2>
+        <div class="blog-divider"></div>
+      </div>
+      <a routerLink="/blogs" class="btn-view-all position-absolute end-0 top-50 translate-middle-y"
+        >Xem Tất Cả</a
+      >
+    </div>
+    <div class="row align-items-center g-4">
+      @for (blog of listTrendBlogs; track $index) {
+        <div class="col-12 col-md-4">
+          <app-blog-card [blogInfo]="blog"></app-blog-card>
+        </div>
+      }
+    </div>
+  </div>
+</section>

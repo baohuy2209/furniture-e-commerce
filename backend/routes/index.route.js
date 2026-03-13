@@ -1,4 +1,4 @@
-const authRoute = require("./authentication.routes");
+  const authRoute = require("./authentication.routes");
 const productRoute = require("./product.routes");
 const blogRoute = require("./blog.routes");
 const eventRoute = require("./event.routes");

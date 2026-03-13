@@ -28,12 +28,13 @@ const protectedRoute = (req, res, next) => {
         .status(401)
         .json({ message: "Không tìm thấy access token", data: null });
     }
-    jwt.verify(token, config.secret, (err, decoded) => {
+    jwt.verify(token, process.env.AUTH_SECRET, (err, decoded) => {
       if (err) {
         return res.status(401).json({
           message: "Unauthorized!",
         });
       }
+      console.log(decoded.id);
       req.userId = decoded.id;
       next();
     });

@@ -1,10 +1,11 @@
 const User = require("../models/user.model");
-
+const bcrypt = require("bcryptjs");
 class UserController {
   // [GET] /api/user/
   async getUserInfo(req, res) {
     try {
-      const { id } = req.userId;
+      const id = req.userId;
+      console.log(id);
       const user = await User.findById(id).select("-password_hash");
       if (!user) {
         return res.status(404).json({ message: "Không tìm thấy người dùng" });
@@ -21,10 +22,10 @@ class UserController {
     }
   }
 
-  // [PATCH] /api/user/profile/:id
+  // [PATCH] /api/user/profile
   async updateUserProfile(req, res) {
     try {
-      const userId = req.params.id;
+      const userId = req.userId;
       // Do not allow updating password_hash or roles through this general profile update API
       const { updateData } = req.body;
 
@@ -51,14 +52,13 @@ class UserController {
     }
   }
 
-  // [POST] /api/user/change-password/:id
+  // [POST] /api/user/change-password
   async changePassword(req, res) {
     try {
-      const { id } = req.params;
+      const userId = req.userId;
       const { oldPassword, newPassword } = req.body;
-      const bcrypt = require("bcrypt");
 
-      const user = await User.findById(id).select("+password_hash");
+      const user = await User.findById(userId).select("+password_hash");
       if (!user) {
         return res.status(404).json({ message: "Không tìm thấy người dùng" });
       }
@@ -83,10 +83,10 @@ class UserController {
     }
   }
 
-  // [DELETE] /api/user/:id
+  // [DELETE] /api/user
   async deleteAccount(req, res) {
     try {
-      const { id } = req.params;
+      const id = req.userId;
       const user = await User.findByIdAndDelete(id);
       if (!user) {
         return res.status(404).json({ message: "Không tìm thấy người dùng" });
