@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { IListProducts, Iproduct_variants } from '../../interface';
+import {
+  IListProducts,
+  Iproduct,
+  Iproduct_variants,
+  Iproduct_variants_image,
+} from '../../interface';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Product {
-  private product_variant_link: string = environment.products_url.product_variants;
-  private product_image_link: string = environment.products_url.product_image;
   constructor(private httpClient: HttpClient) {}
   getAllProducts(): Observable<{ message: string; data: IListProducts[] }> {
     return this.httpClient
@@ -38,14 +41,27 @@ export class Product {
       )
       .pipe(retry(2), catchError(this.handleError));
   }
-  getAllProductVariants(): Observable<Iproduct_variants[]> {
+  getProductDetail(id: string): Observable<{
+    message: string;
+    data: {
+      productInfo: Iproduct;
+      defaultProductVariant: Iproduct_variants;
+      listMainImageDefaultProduct: Iproduct_variants_image[];
+    };
+  }> {
     return this.httpClient
-      .get<Iproduct_variants[]>(this.product_variant_link, {
+      .get<{
+        message: string;
+        data: {
+          productInfo: Iproduct;
+          defaultProductVariant: Iproduct_variants;
+          listMainImageDefaultProduct: Iproduct_variants_image[];
+        };
+      }>(`${environment.backend_url}/products/${id}`, {
         withCredentials: true,
       })
       .pipe(retry(2), catchError(this.handleError));
   }
-
   handleError(err: HttpErrorResponse) {
     return throwError(() => new Error(err.message));
   }

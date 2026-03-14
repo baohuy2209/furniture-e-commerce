@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { IListBlog } from '../../interface';
+import { IBlog, IListBlog } from '../../interface';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -24,6 +24,13 @@ export class BlogService {
           withCredentials: true,
         },
       )
+      .pipe(retry(2), catchError(this.handleError));
+  }
+  getDetailBlog(id: string): Observable<{ message: string; data: IBlog }> {
+    return this.httpClient
+      .get<{ message: string; data: IBlog }>(`${environment.backend_url}/blogs/${id}`, {
+        withCredentials: true,
+      })
       .pipe(retry(2), catchError(this.handleError));
   }
   handleError(err: HttpErrorResponse) {

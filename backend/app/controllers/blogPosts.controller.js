@@ -1,6 +1,7 @@
 const BlogPosts = require("../models/blogPosts.model");
 const blogService = require("../../services/blog.service");
 class BlogController {
+  // [GET] /api/blogs
   async getAll(req, res) {
     try {
       const blogs = await BlogPosts.find({});
@@ -18,6 +19,7 @@ class BlogController {
         .json({ message: "Lỗi server " + error, data: null });
     }
   }
+  // [GET] /api/blogs/trending-blogs
   async getTop3ReadingBlogs(req, res) {
     try {
       const blogs = await BlogPosts.find({});
@@ -36,8 +38,25 @@ class BlogController {
         .json({ message: "Lỗi server " + error, data: null });
     }
   }
+  // [GET] /api/blogs/:id
   async getById(req, res) {
-    res.json({ message: `Get blog post with id ${req.params.id}` });
+    try {
+      const blogId = req.params.id;
+      const detailBlog = await BlogPosts.findById(blogId);
+      if (!detailBlog) {
+        return res
+          .status(404)
+          .json({ message: "Không tìm thấy bài viết", data: null });
+      }
+      return res
+        .status(200)
+        .json({ message: "Load dữ liệu thành công", data: detailBlog });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Lỗi server " + error, data: null });
+    }
   }
 }
 module.exports = new BlogController();

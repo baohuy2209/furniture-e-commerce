@@ -284,3 +284,31 @@ export interface IBrand {
   phone: string;
   contact_email: string;
 }
+export interface IBlog {
+  _id: string;
+  title: string;
+  slug: string;
+  thumbnail_url: {
+    url: string;
+    alt: string;
+  };
+  description: string;
+  content: any[];
+  tags: string[];
+  author: string;
+  activity: {
+    total_likes: number;
+    total_comments: number;
+    total_reads: number;
+  };
+  comments: string[];
+  draft: boolean;
+  categories: string;
+  time_reads: number;
+  seo: {
+    metaTitle: string;
+    metaDescription: string;
+    keywords: string;
+  };
+  publishedAt: Date;
+}
