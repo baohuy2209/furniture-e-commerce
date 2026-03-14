@@ -1,0 +1,183 @@
+/* image-gallery.component.css */
+
+/* ════════════════════════════════════════
+   Gallery wrapper
+════════════════════════════════════════ */
+.ig-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* gap giữa các row */
+  background: #e8e6e2; /* màu gap/border giữa ảnh */
+}
+.ig-row {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.ig-row--half .ig-cell {
+  flex: 1 1 50%;
+  aspect-ratio: 4 / 3;
+}
+
+.ig-row--featured .ig-cell--small {
+  flex: 0 0 33.333%;
+  aspect-ratio: 3 / 4;
+}
+
+.ig-row--featured .ig-cell--large {
+  flex: 1 1 0;
+  aspect-ratio: 16 / 10;
+}
+.ig-row--thirds .ig-cell {
+  flex: 1 1 33.333%;
+  aspect-ratio: 4 / 3;
+}
+
+.ig-row--full .ig-cell {
+  flex: 1 1 100%;
+  aspect-ratio: 16 / 7;
+}
+
+.ig-cell {
+  overflow: hidden;
+  background: #f0ede8;
+  position: relative;
+  min-height: 0; /* flex fix */
+}
+
+.ig-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+  transition:
+    transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease;
+}
+
+.ig-img:hover {
+  transform: scale(1.04);
+  opacity: 0.92;
+}
+
+.ig-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+  animation: lb-fade-in 0.22s ease;
+}
+
+@keyframes lb-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ig-lightbox__img {
+  max-width: 92vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  cursor: default;
+  animation: lb-scale-in 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes lb-scale-in {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.ig-lightbox__close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  line-height: 1;
+}
+
+.ig-lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ════════════════════════════════════════
+   Responsive — Tablet (≤ 768px)
+════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .ig-gallery {
+    gap: 3px;
+  }
+
+  .ig-row {
+    gap: 3px;
+  }
+
+  /* featured: stack small on top of large */
+  .ig-row--featured {
+    flex-direction: column;
+  }
+
+  .ig-row--featured .ig-cell--small {
+    flex: none;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+  }
+
+  .ig-row--featured .ig-cell--large {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ════════════════════════════════════════
+   Responsive — Mobile (≤ 480px)
+════════════════════════════════════════ */
+@media (max-width: 480px) {
+  /* thirds → stack thành cột */
+  .ig-row--thirds {
+    flex-direction: column;
+  }
+
+  .ig-row--thirds .ig-cell {
+    flex: none;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+  }
+
+  /* half vẫn giữ 2 cột nhưng taller */
+  .ig-row--half .ig-cell {
+    aspect-ratio: 1 / 1;
+  }
+
+  /* full */
+  .ig-row--full .ig-cell {
+    aspect-ratio: 4 / 3;
+  }
+}

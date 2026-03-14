@@ -1,0 +1,77 @@
+<!-- image-gallery.component.html -->
+<div class="ig-gallery" *ngIf="images.length > 0">
+  <!-- ── Row type A: 2 equal columns ── -->
+  <ng-container *ngFor="let row of layoutRows">
+    <!-- Layout: 2 equal [img, img] -->
+    <div class="ig-row ig-row--half" *ngIf="row.type === 'half'">
+      <div class="ig-cell" *ngFor="let item of row.items">
+        <img
+          [src]="item.src"
+          [alt]="item.alt"
+          class="ig-img"
+          loading="lazy"
+          (click)="openLightbox(item)"
+        />
+      </div>
+    </div>
+
+    <!-- Layout: 1 small left + 1 large right [1/3 | 2/3] -->
+    <div class="ig-row ig-row--featured" *ngIf="row.type === 'featured'">
+      <div class="ig-cell ig-cell--small">
+        <img
+          [src]="row.items[0].src"
+          [alt]="row.items[0].alt"
+          class="ig-img"
+          loading="lazy"
+          (click)="openLightbox(row.items[0])"
+        />
+      </div>
+      <div class="ig-cell ig-cell--large">
+        <img
+          [src]="row.items[1].src"
+          [alt]="row.items[1].alt"
+          class="ig-img"
+          loading="lazy"
+          (click)="openLightbox(row.items[1])"
+        />
+      </div>
+    </div>
+
+    <!-- Layout: 3 equal columns [img, img, img] -->
+    <div class="ig-row ig-row--thirds" *ngIf="row.type === 'thirds'">
+      <div class="ig-cell" *ngFor="let item of row.items">
+        <img
+          [src]="item.src"
+          [alt]="item.alt"
+          class="ig-img"
+          loading="lazy"
+          (click)="openLightbox(item)"
+        />
+      </div>
+    </div>
+
+    <!-- Layout: 1 full width -->
+    <div class="ig-row ig-row--full" *ngIf="row.type === 'full'">
+      <div class="ig-cell">
+        <img
+          [src]="row.items[0].src"
+          [alt]="row.items[0].alt"
+          class="ig-img"
+          loading="lazy"
+          (click)="openLightbox(row.items[0])"
+        />
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<!-- ── Lightbox ── -->
+<div class="ig-lightbox" *ngIf="lightboxItem" (click)="closeLightbox()">
+  <button class="ig-lightbox__close" (click)="closeLightbox()" aria-label="Đóng">✕</button>
+  <img
+    [src]="lightboxItem.src"
+    [alt]="lightboxItem.alt"
+    class="ig-lightbox__img"
+    (click)="$event.stopPropagation()"
+  />
+</div>

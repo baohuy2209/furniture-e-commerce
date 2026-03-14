@@ -1,1 +1,241 @@
-<p>product-details works!</p>
+<section class="product-page">
+  <div class="container-fluid px-0 product-page">
+    <div class="row g-0 product-row">
+      <div class="col-12 col-md-6 col-lg-7">
+        <div class="gallery-col-wrapper">
+          <div class="gallery-col">
+            <div class="gallery-header">
+              <span class="hero-title">HAMILTON</span>
+              <span class="hero-subtitle">Ghế ăn Hamilton</span>
+            </div>
+
+            <div class="gallery-body">
+              <div class="thumbs">
+                @for (img of images; track $index; let i = $index) {
+                  <div class="thumb" [class.active]="i === activeIndex" (click)="setActive(i)">
+                    <img [src]="img.src" [alt]="img.alt" loading="lazy" />
+                  </div>
+                }
+              </div>
+
+              <!-- Main image -->
+              <div class="main-image">
+                <img
+                  class="chair-img"
+                  [src]="images[activeIndex].src"
+                  [alt]="images[activeIndex].alt"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-5 info-col">
+        <div class="info-wrapper">
+          <h1 class="product-title">
+            Ghế ăn Hamilton kết hợp giữa<br />
+            nét cổ điển và hiện đại.
+          </h1>
+
+          <!-- Màu chân -->
+          <div class="option-group">
+            <div class="d-flex gap-4 align-items-center justify-content-start mb-3">
+              <div class="option-title">Màu chân</div>
+              <div class="option-desc">Cấu trúc màu xám tro mờ sơn mài</div>
+            </div>
+
+            <div class="color-row">
+              @for (c of legColors; track $index) {
+                <button
+                  class="color-swatch"
+                  [class.active]="selectedLeg === c.id"
+                  [class.swatch-white]="c.id === 'white'"
+                  [style.background]="c.hex"
+                  [title]="c.label"
+                  (click)="selectLeg(c)"
+                ></button>
+              }
+            </div>
+          </div>
+
+          <!-- Màu ghế -->
+          <div class="option-group">
+            <div class="d-flex gap-4 align-items-center justify-content-start mb-3">
+              <div class="option-title">Màu ghế</div>
+              <div class="option-desc">Ghế {{ selectedChairLabel }}</div>
+            </div>
+
+            <div class="color-row">
+              <button
+                class="color-swatch"
+                *ngFor="let c of chairColors"
+                [class.active]="selectedChair === c.id"
+                [class.swatch-white]="c.id === 'white'"
+                [style.background]="c.hex"
+                [title]="c.label"
+                (click)="selectChair(c)"
+              ></button>
+            </div>
+          </div>
+
+          <!-- Price -->
+          <div class="price-row">
+            <span class="price">12.000.000đ</span>
+            <span class="old-price">15.000.000đ</span>
+          </div>
+
+          <!-- Actions -->
+          <div class="action-row">
+            <button class="cart-btn" title="Thêm vào giỏ" (click)="addToCart()">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 01-8 0" />
+              </svg>
+            </button>
+
+            <div class="qty-box">
+              <button class="qty-btn" (click)="decQty()" [disabled]="qty <= 1">−</button>
+              <span class="qty-val">{{ qty }}</span>
+              <button class="qty-btn" (click)="incQty()">+</button>
+            </div>
+
+            <button class="buy-btn" (click)="buyNow()">Mua Ngay</button>
+          </div>
+
+          <div class="note-block">
+            <p class="shipping">Thời gian giao hàng dự kiến <b>8 đến 10 tuần</b></p>
+            <p class="quality-note">
+              Chất lượng cần thời gian – hầu hết các sản phẩm nội thất của chúng tôi được chế tác tỉ
+              mỉ theo đơn đặt hàng, dành riêng cho bạn.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container mb-4 mt-3">
+    <div class="text-center" style="margin: 40px 0">
+      <h3 class="feature-title">Các ảnh khác của sản phẩm</h3>
+    </div>
+    <app-image-gallery [images]="images"></app-image-gallery>
+  </div>
+  <div class="container my-5 product-tabs">
+    <!-- TAB MENU -->
+    <ul class="nav nav-tabs justify-content-center custom-tabs" id="productTab" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#desc" type="button">
+          Mô Tả
+        </button>
+      </li>
+
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#info" type="button">
+          Thông Tin Sản Phẩm
+        </button>
+      </li>
+
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#review" type="button">
+          Đánh Giá
+        </button>
+      </li>
+    </ul>
+
+    <!-- TAB CONTENT -->
+    <div class="tab-content mt-4">
+      <!-- TAB 1 -->
+      <div class="tab-pane fade show active" id="desc">
+        <div class="table-wrapper">
+          <table class="table product-table">
+            <thead>
+              <tr>
+                <th>Đặc Điểm</th>
+                <th>Mô Tả</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Chân</td>
+                <td>Cấu trúc màu xám tro mờ sơn mài</td>
+              </tr>
+
+              <tr>
+                <td>Ghế</td>
+                <td>Xám</td>
+              </tr>
+
+              <tr>
+                <td>Được thiết kế bởi</td>
+                <td>Morten Georgsen</td>
+              </tr>
+
+              <tr>
+                <td>Bề mặt hoàn thiện</td>
+                <td>Chân - Sơn tĩnh điện</td>
+              </tr>
+
+              <tr>
+                <td>Item number</td>
+                <td>4020075D1940137</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 2 -->
+      <div class="tab-pane fade" id="info">
+        <p class="p-4">
+          Ghế Hamilton mang phong cách thiết kế hiện đại kết hợp cổ điển. Sản phẩm được sản xuất từ
+          vật liệu cao cấp và mang lại sự thoải mái tối đa cho người dùng.
+        </p>
+      </div>
+
+      <!-- TAB 3 -->
+      <div class="tab-pane fade" id="review">
+        <p class="p-4">Chưa có đánh giá cho sản phẩm này.</p>
+      </div>
+    </div>
+  </div>
+  <!-- related-products.component.html -->
+  <section class="related-section">
+    <div class="related-header">
+      <p class="related-eyebrow">CÓ THỂ BẠN QUAN TÂM</p>
+      <h2 class="related-title">Sản Phẩm <span class="title-accent">Liên Quan</span></h2>
+    </div>
+
+    <!-- Scrollable product track -->
+    <div class="product-scroll-wrapper">
+      <div class="product-track">
+        <!-- Lặp card ở đây — *ngFor="let p of products" -->
+        <div class="product-card-slot" *ngFor="let p of products">
+          <!-- Bỏ component card vào đây -->
+          <!-- <app-product-card [product]="p"></app-product-card> -->
+          <ng-container
+            *ngTemplateOutlet="cardPlaceholder; context: { $implicit: p }"
+          ></ng-container>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Placeholder card — xoá khi có component thật -->
+  <ng-template #cardPlaceholder let-p>
+    <div class="placeholder-card">
+      <div class="placeholder-img"></div>
+      <div class="placeholder-body">
+        <div class="placeholder-line w-75"></div>
+        <div class="placeholder-line w-50 mt-1"></div>
+      </div>
+    </div>
+  </ng-template>
+</section>
