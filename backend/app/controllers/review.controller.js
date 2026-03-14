@@ -4,7 +4,8 @@ class ReviewController {
   // [POST] /api/reviews
   async submitReview(req, res) {
     try {
-      const { product_id, user_id, rating, comments, images } = req.body;
+      const user_id = req.userId;
+      const { product_id, rating, comments, images } = req.body;
       const newReview = new Review({
         product_id,
         user_id,
@@ -45,10 +46,10 @@ class ReviewController {
     }
   }
 
-  // [GET] /api/reviews/user/:user_id
+  // [GET] /api/reviews/user
   async getReviewsByUser(req, res) {
     try {
-      const userId = req.params.user_id;
+      const userId = req.userId;
       const reviews = await Review.find({ user_id: userId }).populate(
         "product_id",
       );

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { IListProducts, Iproduct_image, Iproduct_variants } from '../../interface';
+import { IListProducts, Iproduct_variants } from '../../interface';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
@@ -45,13 +45,7 @@ export class Product {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
-  getAllProductImage(): Observable<Iproduct_image[]> {
-    return this.httpClient
-      .get<Iproduct_image[]>(this.product_image_link, {
-        withCredentials: true,
-      })
-      .pipe(retry(2), catchError(this.handleError));
-  }
+
   handleError(err: HttpErrorResponse) {
     return throwError(() => new Error(err.message));
   }

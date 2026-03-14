@@ -12,7 +12,9 @@ class BlogCategoriesController {
       });
     } catch (e) {
       console.error(e);
-      return res.status(500).json({ message: "Lỗi hệ thống " + e, data: null });
+      return res
+        .status(500)
+        .json({ message: "Lỗi hệ thống " + e.message, data: null });
     }
   }
   // [GET] /api/blog-categories/:id

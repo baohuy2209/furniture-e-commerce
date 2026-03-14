@@ -1,9 +1,14 @@
 const express = require("express");
 const reviewController = require("../app/controllers/review.controller");
 const router = express.Router();
+const { authJwt } = require("../middlewares/index");
 
-router.post("/", reviewController.submitReview);
+router.post("/", [authJwt.protectedRoute], reviewController.submitReview);
 router.get("/product/:id", reviewController.getReviewsByProduct);
-router.get("/user/:user_id", reviewController.getReviewsByUser);
+router.get(
+  "/user",
+  [authJwt.protectedRoute],
+  reviewController.getReviewsByUser,
+);
 
 module.exports = router;

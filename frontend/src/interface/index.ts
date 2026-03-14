@@ -247,3 +247,40 @@ export interface IAddress {
   address_detail: string;
   is_default: boolean;
 }
+export interface IBlogAuthor {
+  _id: string;
+  user_id: string;
+  name: string;
+  slug: string;
+  email: string;
+  avatar_url: string;
+  bio: string;
+  social_links: {
+    facebook: string;
+    github: string;
+    twitter: string;
+    linkedin: string;
+    website: string;
+  };
+  role: string;
+  status: string;
+}
+export interface IBlogCategory {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+}
+export interface IBlogTag {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+}
+export interface IBrand {
+  _id: string;
+  name: string;
+  address: string;
+  phone: string;
+  contact_email: string;
+}

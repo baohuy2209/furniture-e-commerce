@@ -59,6 +59,11 @@ class ProductCategoryController {
         productCategoryId,
         req.body,
       );
+      if (!updatedProductCategory) {
+        return res
+          .status(404)
+          .json({ message: "Không tìm thấy loại sản phẩm", data: null });
+      }
       return res.status(200).json({
         message: "Đã cập nhật thành công loại sản phẩm",
         data: updatedProductCategory,
@@ -75,12 +80,10 @@ class ProductCategoryController {
       const productCategoryId = req.params.id;
       const deletedProductCategory =
         await ProductCategory.findByIdAndDelete(productCategoryId);
-      return res
-        .status(200)
-        .json({
-          message: "Xóa dữ liệu thành công",
-          data: deletedProductCategory,
-        });
+      return res.status(200).json({
+        message: "Xóa dữ liệu thành công",
+        data: deletedProductCategory,
+      });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ message: "Lỗi hệ thống" + e, data: null });

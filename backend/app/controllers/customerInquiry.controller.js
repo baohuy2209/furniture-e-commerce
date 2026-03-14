@@ -23,10 +23,10 @@ class CustomerInquiryController {
     }
   }
 
-  // [GET] /api/inquiries/user/:user_id
+  // [GET] /api/inquiries/user
   async getUserTickets(req, res) {
     try {
-      const userId = req.params.user_id;
+      const userId = req.userId;
       const tickets = await CustomerInquiry.find({ user_id: userId });
       return res.status(200).json({
         message: "Lấy danh sách ticket thành công",
