@@ -2,11 +2,11 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CardProduct } from '../../card-product/card-product';
 import { IListProducts } from '../../../../interface';
 import { Product } from '../../../services/product';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-product',
-  imports: [CardProduct, RouterLink],
+  imports: [CardProduct],
   templateUrl: './new-product.html',
   styleUrl: './new-product.css',
   standalone: true,

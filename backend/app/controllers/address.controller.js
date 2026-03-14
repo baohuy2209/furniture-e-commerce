@@ -4,11 +4,13 @@ class AddressController {
   // Lấy danh sách địa chỉ của user
   async getAddresses(req, res) {
     try {
-      const { user_id } = req.params;
-      const addresses = await UserAddress.find({ user_id });
-      return res.status(200).json({ data: addresses });
+      const user_id = req.userId;
+      const addresses = await UserAddress.find({ user: user_id });
+      return res
+        .status(200)
+        .json({ data: addresses, message: "Lấy dữ liệu thành công" });
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return res.status(500).json({ message: error.message, data: null });
     }
   }
 
