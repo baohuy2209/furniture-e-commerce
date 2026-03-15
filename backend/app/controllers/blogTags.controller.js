@@ -56,10 +56,13 @@ class BlogTagsController {
   async updateBlogTags(req, res) {
     try {
       const blogTagId = req.params.id;
-      const updatedBlogTag = await BlogTags.findByIdAndUpdate(
-        blogTagId,
-        req.body,
-      );
+      const { name, description } = req.body;
+      const newSlug = generateSlug(name);
+      const updatedBlogTag = await BlogTags.findByIdAndUpdate(blogTagId, {
+        name,
+        slug: newSlug,
+        description,
+      });
       return res.status(200).json({
         message: "Đã cập nhật thành công loại sản phẩm",
         data: updatedBlogTag,

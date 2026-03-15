@@ -34,7 +34,6 @@ const protectedRoute = (req, res, next) => {
           message: "Unauthorized!",
         });
       }
-      console.log(decoded.id);
       req.userId = decoded.id;
       next();
     });

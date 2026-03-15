@@ -27,9 +27,8 @@ class UserController {
     try {
       const userId = req.userId;
       // Do not allow updating password_hash or roles through this general profile update API
-      const { updateData } = req.body;
-
-      const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
+      console.log(userId);
+      const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
         new: true,
         runValidators: true,
       }).select("-password_hash"); // exclude password_hash from response
