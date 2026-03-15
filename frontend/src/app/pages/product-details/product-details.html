@@ -1,19 +1,33 @@
 <section class="product-page">
+  <div class="container my-2">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/" class="text-decoration-none text-black"
+            ><i class="bi bi-house-door"></i> Trang chủ</a
+          >
+        </li>
+        <li class="breadcrumb-item">
+          <a routerLink="/products" class="text-decoration-none text-black">Sản phẩm</a>
+        </li>
+      </ol>
+    </nav>
+  </div>
   <div class="container-fluid px-0 product-page">
     <div class="row g-0 product-row">
       <div class="col-12 col-md-6 col-lg-7">
         <div class="gallery-col-wrapper">
           <div class="gallery-col">
             <div class="gallery-header">
-              <span class="hero-title">HAMILTON</span>
-              <span class="hero-subtitle">Ghế ăn Hamilton</span>
+              <span class="hero-title">{{ product_details?.productInfo?.brand }}</span>
+              <span class="hero-subtitle">{{ product_details?.productInfo?.product_name }}</span>
             </div>
 
             <div class="gallery-body">
               <div class="thumbs">
-                @for (img of images; track $index; let i = $index) {
+                @for (img of images.slice(0, 6); track $index; let i = $index) {
                   <div class="thumb" [class.active]="i === activeIndex" (click)="setActive(i)">
-                    <img [src]="img.src" [alt]="img.alt" loading="lazy" />
+                    <img [src]="img.url" [alt]="img.position" loading="lazy" />
                   </div>
                 }
               </div>
@@ -22,8 +36,8 @@
               <div class="main-image">
                 <img
                   class="chair-img"
-                  [src]="images[activeIndex].src"
-                  [alt]="images[activeIndex].alt"
+                  [src]="images[activeIndex].url"
+                  [alt]="images[activeIndex].position"
                 />
               </div>
             </div>
@@ -33,56 +47,105 @@
       <div class="col-12 col-md-6 col-lg-5 info-col">
         <div class="info-wrapper">
           <h1 class="product-title">
-            Ghế ăn Hamilton kết hợp giữa<br />
-            nét cổ điển và hiện đại.
+            {{ this.product_details?.productInfo?.description }}
           </h1>
 
-          <!-- Màu chân -->
-          <div class="option-group">
-            <div class="d-flex gap-4 align-items-center justify-content-start mb-3">
-              <div class="option-title">Màu chân</div>
-              <div class="option-desc">Cấu trúc màu xám tro mờ sơn mài</div>
-            </div>
-
-            <div class="color-row">
-              @for (c of legColors; track $index) {
-                <button
-                  class="color-swatch"
-                  [class.active]="selectedLeg === c.id"
-                  [class.swatch-white]="c.id === 'white'"
-                  [style.background]="c.hex"
-                  [title]="c.label"
-                  (click)="selectLeg(c)"
-                ></button>
-              }
-            </div>
-          </div>
-
-          <!-- Màu ghế -->
-          <div class="option-group">
-            <div class="d-flex gap-4 align-items-center justify-content-start mb-3">
-              <div class="option-title">Màu ghế</div>
-              <div class="option-desc">Ghế {{ selectedChairLabel }}</div>
-            </div>
-
-            <div class="color-row">
-              <button
-                class="color-swatch"
-                *ngFor="let c of chairColors"
-                [class.active]="selectedChair === c.id"
-                [class.swatch-white]="c.id === 'white'"
-                [style.background]="c.hex"
-                [title]="c.label"
-                (click)="selectChair(c)"
-              ></button>
-            </div>
-          </div>
+          @if (product_details?.productInfo?.product_component) {
+            @for (item of productVariantComponent | keyvalue; track item.key) {
+              <div class="option-group">
+                <div class="d-flex gap-4 align-items-center justify-content-start mb-3">
+                  <div class="option-title">{{ item.key }}</div>
+                  <div class="option-desc">
+                    {{ item.value[productVariantComponentActive[item.key]] }}
+                  </div>
+                </div>
+                @if (item.key === 'upholstery') {
+                  <div class="us-wrapper">
+                    <div class="dropdown">
+                      <div
+                        class="us-trigger dropdown-toggle"
+                        [class.us-trigger--open]="isOpen"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <div class="us-labels">
+                          <span class="us-title">Upholstery</span>
+                          <span class="us-sub">{{
+                            item.value[productVariantComponentActive[item.key]] ||
+                              'Chọn kiểu vải...'
+                          }}</span>
+                        </div>
+                        <div class="us-right">
+                          @if (item.value.length) {
+                            <span class="us-count">+ {{ item.value.length }}</span>
+                          }
+                        </div>
+                      </div>
+                      <ul class="dropdown-menu" style="width: 100%; border: none !important">
+                        <div class="us-dropdown">
+                          @for (value of item.value; track $index; let i = $index) {
+                            <div
+                              class="us-option dropdown-item"
+                              [class.us-option--selected]="
+                                productVariantComponentActive[item.key] === i
+                              "
+                              (click)="selectUpholsteryAndClose(value)"
+                            >
+                              <div class="us-labels">
+                                <span class="us-title">Upholstery</span>
+                                <span class="us-sub">{{ value }}</span>
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                  <span class="us-sub"
+                    >Bạn có thể tham khảo các chất liệu vải:
+                    <a routerLink="/upholstery">Upholstery</a></span
+                  >
+                } @else {
+                  <div class="color-row">
+                    @for (value of item.value; track $index; let i = $index) {
+                      <button
+                        class="btn-swatch"
+                        [class.active]="productVariantComponentActive[item.key] === i"
+                        [title]="value"
+                        (click)="selectComponentVariantValue(item.key, i)"
+                      >
+                        {{ value }}
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          }
 
           <!-- Price -->
-          <div class="price-row">
-            <span class="price">12.000.000đ</span>
-            <span class="old-price">15.000.000đ</span>
-          </div>
+          @if (product_details?.productInfo?.discount_percent) {
+            <div class="price-row">
+              <span class="price">
+                {{
+                  countPricePercent(
+                    current_product_variant?.price!,
+                    product_details?.productInfo?.discount_percent!
+                  )
+                }}
+              </span>
+              <span class="old-price">
+                {{ countFormatPrice(current_product_variant?.price!) }}
+              </span>
+            </div>
+          } @else {
+            <div class="price-row">
+              <span class="price">
+                {{ countFormatPrice(current_product_variant?.price!) }}
+              </span>
+            </div>
+          }
 
           <!-- Actions -->
           <div class="action-row">
@@ -111,7 +174,9 @@
           </div>
 
           <div class="note-block">
-            <p class="shipping">Thời gian giao hàng dự kiến <b>8 đến 10 tuần</b></p>
+            <p class="shipping">
+              Thời gian giao hàng dự kiến: <b>{{ current_product_variant?.expected_delivery }}</b>
+            </p>
             <p class="quality-note">
               Chất lượng cần thời gian – hầu hết các sản phẩm nội thất của chúng tôi được chế tác tỉ
               mỉ theo đơn đặt hàng, dành riêng cho bạn.
@@ -125,7 +190,7 @@
     <div class="text-center" style="margin: 40px 0">
       <h3 class="feature-title">Các ảnh khác của sản phẩm</h3>
     </div>
-    <app-image-gallery [images]="images"></app-image-gallery>
+    <app-image-gallery [images]="product_details?.productInfo?.image_url!"></app-image-gallery>
   </div>
   <div class="container my-5 product-tabs">
     <!-- TAB MENU -->
@@ -138,7 +203,7 @@
 
       <li class="nav-item">
         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#info" type="button">
-          Thông Tin Sản Phẩm
+          Thông số sản phẩm
         </button>
       </li>
 
@@ -153,6 +218,52 @@
     <div class="tab-content mt-4">
       <!-- TAB 1 -->
       <div class="tab-pane fade show active" id="desc">
+        <div class="pd-panel container">
+          <!-- Header -->
+          <h2 class="pd-title">Mô tả sản phẩm</h2>
+          <p class="px-3 fs-5">
+            {{ product_details?.productInfo?.description }}
+          </p>
+          <!-- Basic Info -->
+          <div class="pd-section">
+            <div class="pd-field">
+              <span class="pd-label">Thiết kế bởi</span>
+              <span class="pd-value">{{ current_product_variant?.designed_by }}</span>
+            </div>
+            <div class="pd-field">
+              <span class="pd-label">Sku</span>
+              <span class="pd-value">{{ current_product_variant?.sku }}</span>
+            </div>
+            <div class="pd-field">
+              <span class="pd-label">Có lắp ráp hay không?</span>
+              <span class="pd-value">{{
+                product_details?.productInfo?.is_assembly ? 'Có' : 'Không'
+              }}</span>
+            </div>
+            <div class="pd-field">
+              <span class="pd-label">Thời hạn bảo hành</span>
+              <span class="pd-value">{{ product_details?.productInfo?.warranty }} tháng</span>
+            </div>
+          </div>
+
+          <div class="pd-divider"></div>
+          <div class="pd-section">
+            <div class="pd-field">
+              <span class="pd-label">Những chức năng quan trọng</span>
+              @if (product_details?.productInfo?.important_functions?.length! > 0) {
+                <ul>
+                  @for (item of product_details?.productInfo?.important_functions; track $index) {
+                    <li class="pd-value">{{ item }}</li>
+                  }
+                </ul>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2 -->
+      <div class="tab-pane fade" id="info">
         <div class="table-wrapper">
           <table class="table product-table">
             <thead>
@@ -163,46 +274,26 @@
             </thead>
 
             <tbody>
-              <tr>
-                <td>Chân</td>
-                <td>Cấu trúc màu xám tro mờ sơn mài</td>
-              </tr>
-
-              <tr>
-                <td>Ghế</td>
-                <td>Xám</td>
-              </tr>
-
-              <tr>
-                <td>Được thiết kế bởi</td>
-                <td>Morten Georgsen</td>
-              </tr>
-
-              <tr>
-                <td>Bề mặt hoàn thiện</td>
-                <td>Chân - Sơn tĩnh điện</td>
-              </tr>
-
-              <tr>
-                <td>Item number</td>
-                <td>4020075D1940137</td>
-              </tr>
+              @if (current_product_variant?.measurement) {
+                @for (item of current_product_variant?.measurement | keyvalue; track item.key) {
+                  <tr>
+                    <td>{{ item.key }}</td>
+                    @if (getType(item.value) === 'number') {
+                      <td>{{ item.value }} cm</td>
+                    } @else {
+                      <td>{{ item.value }}</td>
+                    }
+                  </tr>
+                }
+              }
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- TAB 2 -->
-      <div class="tab-pane fade" id="info">
-        <p class="p-4">
-          Ghế Hamilton mang phong cách thiết kế hiện đại kết hợp cổ điển. Sản phẩm được sản xuất từ
-          vật liệu cao cấp và mang lại sự thoải mái tối đa cho người dùng.
-        </p>
-      </div>
-
       <!-- TAB 3 -->
       <div class="tab-pane fade" id="review">
-        <p class="p-4">Chưa có đánh giá cho sản phẩm này.</p>
+        <app-product-reviews></app-product-reviews>
       </div>
     </div>
   </div>
@@ -216,26 +307,16 @@
     <!-- Scrollable product track -->
     <div class="product-scroll-wrapper">
       <div class="product-track">
-        <!-- Lặp card ở đây — *ngFor="let p of products" -->
-        <div class="product-card-slot" *ngFor="let p of products">
-          <!-- Bỏ component card vào đây -->
-          <!-- <app-product-card [product]="p"></app-product-card> -->
-          <ng-container
-            *ngTemplateOutlet="cardPlaceholder; context: { $implicit: p }"
-          ></ng-container>
-        </div>
+        @if (relatedProducts.length > 0) {
+          @for (product of relatedProducts; track $index) {
+            <div class="product-card-slot">
+              <app-card-product [productInfo]="product"></app-card-product>
+            </div>
+          }
+        } @else {
+          <p class="text-center">Không có sản phẩm liên quan</p>
+        }
       </div>
     </div>
   </section>
-
-  <!-- Placeholder card — xoá khi có component thật -->
-  <ng-template #cardPlaceholder let-p>
-    <div class="placeholder-card">
-      <div class="placeholder-img"></div>
-      <div class="placeholder-body">
-        <div class="placeholder-line w-75"></div>
-        <div class="placeholder-line w-50 mt-1"></div>
-      </div>
-    </div>
-  </ng-template>
 </section>

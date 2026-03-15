@@ -1,26 +1,20 @@
-<div class="container sidebar">
-  <div class="sidebar-logo">
-    <div class="d-flex align-items-center flex-column gap-5">
-      <div class="logo-icon">
-        <a href="/">
-          <img src="logo.png" alt="Homebase" />
-        </a>
-      </div>
-      <div class="d-flex flex-column align-items-center justify-content-center gap-2">
-        <img src="user/image.png" alt="Bao Huy" class="user-img" />
-        <h4 class="user-name">Nguyễn Bảo Huy</h4>
-      </div>
+<div class="card sidebar-card">
+  @if (showUserInfo) {
+    <div class="card-body text-center user-mini-profile">
+      <img src="{{ user.avatar }}" alt="User Avatar" class="profile-avatar-sm mb-2" />
+      <h6 class="mb-0">{{ user.firstName + ' ' + user.lastName }}</h6>
     </div>
-  </div>
+  }
 
-  <div class="sidebar-menu">
-    @for (item of list_menu; track $index) {
-      <button class="menu-item" [class]="getCurrentUrl() == changeHref(item.href) ? 'active' : ''">
-        <div class="menu-icon">
-          <i class="{{ item.iconClass }}"></i>
-        </div>
-        <a class="text-decoration-none" href="{{ item.href }}">{{ item.name }}</a>
-      </button>
+  <div class="list-group list-group-flush">
+    @for (item of listMenu; track item.id) {
+      <a
+        [routerLink]="item.href"
+        routerLinkActive="active"
+        class="list-group-item list-group-item-action"
+      >
+        <i class="{{ item.iconClass }} me-2"></i> {{ item.name }}
+      </a>
     }
   </div>
 </div>

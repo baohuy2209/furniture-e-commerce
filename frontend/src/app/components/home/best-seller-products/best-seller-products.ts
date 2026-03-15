@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CardProduct } from '../../card-product/card-product';
 import { IListProducts } from '../../../../interface';
 import { Product } from '../../../services/product';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-best-seller-products',
@@ -17,6 +18,7 @@ export class BestSellerProducts implements OnInit {
   constructor(
     private cdr: ChangeDetectorRef,
     private productService: Product,
+    private router: Router,
   ) {}
   ngOnInit(): void {
     this.productService.getBestSellerProduct().subscribe({
@@ -39,5 +41,8 @@ export class BestSellerProducts implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+  onClick(): void {
+    this.router.navigate(['/products']);
   }
 }

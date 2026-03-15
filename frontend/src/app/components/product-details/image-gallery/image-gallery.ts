@@ -9,7 +9,7 @@ type RowType = 'half' | 'featured' | 'thirds' | 'full';
 
 interface GalleryRow {
   type: RowType;
-  items: GalleryImage[];
+  items: string[];
 }
 
 /**
@@ -36,10 +36,10 @@ const PATTERN: Array<{ type: RowType; count: number }> = [
 })
 export class ImageGallery {
   /** Truyền mảng ảnh vào từ component cha */
-  @Input() images: GalleryImage[] = [];
+  @Input() images: string[] = [];
 
   layoutRows: GalleryRow[] = [];
-  lightboxItem: GalleryImage | null = null;
+  lightboxItem: string | null = null;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['images']) {
@@ -74,7 +74,7 @@ export class ImageGallery {
     }
   }
 
-  openLightbox(item: GalleryImage): void {
+  openLightbox(item: string): void {
     this.lightboxItem = item;
     document.body.style.overflow = 'hidden';
   }

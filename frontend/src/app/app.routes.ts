@@ -44,6 +44,10 @@ export const routes: Routes = [
         path: 'events',
         loadComponent: () => import('./pages/events/events').then((m) => m.Events),
       },
+      {
+        path: 'upholstery',
+        loadComponent: () => import('./pages/upholstery/upholstery').then((m) => m.Upholstery),
+      },
     ],
   },
   {

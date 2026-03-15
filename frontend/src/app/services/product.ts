@@ -62,6 +62,19 @@ export class Product {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
+  getRelatedProduct(
+    listlistProductCategoryIds: string[],
+  ): Observable<{ message: string; data: IListProducts[] }> {
+    return this.httpClient
+      .post<{ message: string; data: IListProducts[] }>(
+        `${environment.backend_url}/products/related-product`,
+        {
+          listlistProductCategoryIds,
+        },
+        { withCredentials: true },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
   handleError(err: HttpErrorResponse) {
     return throwError(() => new Error(err.message));
   }

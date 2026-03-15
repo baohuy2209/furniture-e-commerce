@@ -1,0 +1,134 @@
+<!-- upholstery-list.component.html -->
+
+<div class="ul-page">
+  <!-- Page header -->
+  <div class="ul-header">
+    <h1 class="ul-title">Chất liệu vải</h1>
+    <p class="ul-subtitle">
+      Chúng tôi cung cấp hơn 120 loại chất liệu vải cao cấp để bạn lựa chọn.<br />
+      Khám phá từng loại vải để tìm ra sự lựa chọn hoàn hảo cho không gian của bạn.
+    </p>
+
+    <!-- Filter pills -->
+    <div class="ul-filters">
+      <button
+        *ngFor="let f of filterOptions"
+        class="ul-filter-btn"
+        [class.ul-filter-btn--active]="activeFilter === f.value"
+        (click)="setFilter(f.value)"
+      >
+        {{ f.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Main layout: grid + side panel -->
+  <div class="ul-body" [class.ul-body--panel-open]="!!selectedFabric">
+    <!-- Grid -->
+    <div class="ul-grid">
+      <div
+        *ngFor="let fabric of filteredFabrics"
+        class="ul-card"
+        [class.ul-card--active]="selectedFabric?.id === fabric.id"
+        (click)="openPanel(fabric)"
+      >
+        <div class="ul-card-img-wrap">
+          <img [src]="fabric.image" [alt]="fabric.name" class="ul-card-img" loading="lazy" />
+          <span class="ul-card-tag">{{ fabric.type }}</span>
+          <div class="ul-card-overlay">
+            <span class="ul-card-overlay-text">Xem chi tiết</span>
+          </div>
+        </div>
+        <div class="ul-card-body">
+          <div class="ul-card-info">
+            <span class="ul-card-name">{{ fabric.name }}</span>
+            <button
+              class="ul-card-detail-btn"
+              (click)="openPanel(fabric); $event.stopPropagation()"
+            >
+              Xem chi tiết
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path
+                  d="M2 5h6M5 2l3 3-3 3"
+                  stroke="currentColor"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <label class="ul-card-checkbox" (click)="$event.stopPropagation()">
+            <input type="checkbox" [(ngModel)]="fabric.selected" />
+            <span class="ul-checkbox-box"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Detail Panel -->
+    <div class="ul-panel" [class.ul-panel--open]="!!selectedFabric">
+      <ng-container *ngIf="selectedFabric">
+        <button class="ul-panel-close" (click)="closePanel()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path
+              d="M1 1L13 13M13 1L1 13"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+
+        <!-- Hero image -->
+        <div class="ul-panel-hero">
+          <img [src]="selectedFabric.image" [alt]="selectedFabric.name" />
+        </div>
+
+        <!-- Content -->
+        <div class="ul-panel-content">
+          <span class="ul-panel-tag">{{ selectedFabric.type }}</span>
+          <h2 class="ul-panel-title">{{ selectedFabric.familyName || selectedFabric.name }}</h2>
+          <p class="ul-panel-desc">{{ selectedFabric.description }}</p>
+
+          <!-- Facts -->
+          <div class="ul-panel-section">
+            <h3 class="ul-panel-section-title">Thông số kỹ thuật</h3>
+            <div class="ul-panel-facts">
+              <div *ngFor="let fact of selectedFabric.facts" class="ul-panel-fact-row">
+                <span class="ul-panel-fact-label">{{ fact.label }}</span>
+                <span class="ul-panel-fact-value">{{ fact.value }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Characteristics -->
+          <div class="ul-panel-section" *ngIf="selectedFabric.characteristics">
+            <h3 class="ul-panel-section-title">Đặc điểm vải</h3>
+            <p class="ul-panel-body-text">{{ selectedFabric.characteristics }}</p>
+          </div>
+
+          <!-- Maintenance -->
+          <div class="ul-panel-section" *ngIf="selectedFabric.maintenance">
+            <h3 class="ul-panel-section-title">Bảo quản</h3>
+            <p class="ul-panel-body-text">{{ selectedFabric.maintenance }}</p>
+          </div>
+
+          <!-- Color variants -->
+          <div class="ul-panel-section" *ngIf="selectedFabric.colorVariants?.length">
+            <h3 class="ul-panel-section-title">Màu sắc có sẵn</h3>
+            <div class="ul-panel-colors">
+              <div
+                *ngFor="let c of selectedFabric.colorVariants"
+                class="ul-color-swatch"
+                [style.background]="c.hex"
+                [title]="c.name"
+                [class.ul-color-swatch--active]="c.name === selectedFabric.name"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

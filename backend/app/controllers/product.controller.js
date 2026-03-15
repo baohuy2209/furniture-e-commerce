@@ -77,7 +77,24 @@ class ProductController {
     }
   }
   // [POST] /api/products
-  //
+  // [POST] /api/products/related-product
+  async getRelatedProduct(req, res) {
+    try {
+      const { listProductCategoryIds } = req.body;
+      const relatedProducts = await Product.find({
+        categories: { $in: listProductCategoryIds },
+      });
+      const listRelatedProducts =
+        await productService.getListProductInfo(relatedProducts);
+      return res.status(200).json({
+        message: `Lấy thành công các dữ liệu liên quan`,
+        data: listRelatedProducts,
+      });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({ message: "Lỗi server" + e, data: null });
+    }
+  }
 }
 
 module.exports = new ProductController();
