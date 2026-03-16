@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 /** ===== Types (scope đúng FDD khách hàng) ===== */
 type USER_STATUS = 'active' | 'locked';
@@ -152,7 +153,7 @@ type DetailVM = {
 @Component({
   selector: 'app-management-customers',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConfirmModal],
   templateUrl: './management-customers.html',
   styleUrls: ['./management-customers.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -181,6 +182,11 @@ export class ManagementCustomers {
 
   /** ===== detail tab local ===== */
   private readonly detailTab$ = new BehaviorSubject<DETAIL_TAB>('overview');
+
+  /** ===== cancel order modal ===== */
+  isCancelModalOpen = false;
+  cancelOrderId: string | null = null;
+  cancelOrderNumber = '';
 
   /** ===== route state ===== */
   readonly routeState$ = this.route.queryParamMap.pipe(
@@ -498,6 +504,31 @@ export class ManagementCustomers {
       it.user_id === user_id ? { ...it, status: nextStatus, updated_at: nowIso() } : it,
     );
     this.users$.next(next);
+  }
+
+  /** ===== Cancel Order ===== */
+  initCancelOrder(order_id: string, order_number: string) {
+    this.cancelOrderId = order_id;
+    this.cancelOrderNumber = order_number;
+    this.isCancelModalOpen = true;
+  }
+
+  confirmCancelOrder() {
+    if (!this.cancelOrderId) return;
+    
+    const orders = this.orders$.value;
+    const next = orders.map(o => 
+      o.order_id === this.cancelOrderId ? { ...o, status: 'cancelled' as ORDER_STATUS } : o
+    );
+    
+    this.orders$.next(next);
+    this.closeCancelModal();
+  }
+
+  closeCancelModal() {
+    this.isCancelModalOpen = false;
+    this.cancelOrderId = null;
+    this.cancelOrderNumber = '';
   }
 
   /** ===== Export CSV ===== */

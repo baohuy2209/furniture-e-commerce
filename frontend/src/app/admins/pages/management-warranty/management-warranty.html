@@ -3,10 +3,8 @@
   <div class="hb-page-header">
     <div class="hb-header-left">
       <div class="hb-title" routerLink="/admin/management-warranty" style="cursor: pointer;">BẢO HÀNH / ĐỔI TRẢ</div>
-      <div class="hb-sub" *ngIf="mode !== 'list' && detail">
-        Mã yêu cầu: <b>#{{ detail.id }}</b> <span class="mx-2">/</span> Đơn hàng: <b>#{{ detail.orderId }}</b>
-      </div>
     </div>
+
 
     <!-- LIST ACTIONS -->
     <div class="hb-header-actions" *ngIf="mode === 'list'">
@@ -149,25 +147,25 @@
               *ngFor="let r of vm.rows"
               (click)="openDetail(r.id)"
             >
-              <div class="hb-td hb-td-center text-muted fw-bold">
+              <div class="hb-td hb-td-center text-muted">
                 {{ r.stt }}
               </div>
 
               <div class="hb-td hb-td-center">
-                <span class="fw-bold text-primary">{{ r.id }}</span>
+                <span class="text-primary">{{ r.id }}</span>
               </div>
 
               <div class="hb-td">
-                <div class="fw-bold">{{ r.customerName }}</div>
+                <div class="">{{ r.customerName }}</div>
               </div>
 
-              <div class="hb-td hb-td-center text-muted fw-semibold">
+              <div class="hb-td hb-td-center text-muted">
                 {{ r.customerPhone }}
               </div>
 
               <div class="hb-td">
                 <div class="min-w-0">
-                  <div class="hb-name fw-bold hb-text-truncate">{{ r.productName }}</div>
+                  <div class="hb-name hb-text-truncate">{{ r.productName }}</div>
                   <div class="hb-subline hb-text-truncate">Đơn: #{{ r.orderId }} · {{ r.variantLabel }}</div>
                 </div>
               </div>
@@ -182,7 +180,7 @@
                 <span class="hb-pill" [ngClass]="statusBadgeClass(r.status)">{{ r.statusLabel }}</span>
               </div>
 
-              <div class="hb-td hb-td-center text-muted fw-bold">
+              <div class="hb-td hb-td-center text-muted">
                 {{ r.expectedDoneAt | date: 'dd/MM/yyyy' }}
               </div>
 
@@ -203,7 +201,7 @@
               </div>
             </div>
 
-            <div class="p-5 text-center text-muted fw-semibold" *ngIf="vm.rows.length === 0">
+            <div class="p-5 text-center text-muted" *ngIf="vm.rows.length === 0">
               Không có yêu cầu nào phù hợp.
             </div>
           </div>
@@ -271,7 +269,7 @@
                 <div class="tl-dot"></div>
                 <div class="tl-body">
                   <div class="d-flex align-items-center justify-content-between gap-2">
-                    <div class="fw-bold text-primary">{{ t.title }}</div>
+                    <div class="text-primary">{{ t.title }}</div>
                     <div class="text-muted small">{{ t.at | date: 'dd/MM/yyyy HH:mm' }}</div>
                   </div>
                   <div class="text-muted small mt-1" *ngIf="t.note">{{ t.note }}</div>
@@ -343,33 +341,33 @@
             <div class="hb-section-title">Cập nhật nội dung xử lý</div>
             <div class="row g-3">
               <div class="col-md-6">
-                <label class="form-label fw-bold">Trạng thái hiện tại</label>
+                <label class="form-label">Trạng thái hiện tại</label>
                 <select class="form-select" [(ngModel)]="f.status" (ngModelChange)="markDirty()">
                   <option *ngFor="let s of statusOptions" [ngValue]="s.value">{{ s.label }}</option>
                 </select>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Nhân viên phụ trách</label>
+                <label class="form-label">Nhân viên phụ trách</label>
                 <input class="form-control" [(ngModel)]="f.assignee" (ngModelChange)="markDirty()" placeholder="Tên nhân viên..." />
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Nhà cung cấp xử lý</label>
+                <label class="form-label">Nhà cung cấp xử lý</label>
                 <input class="form-control" [(ngModel)]="f.supplier" (ngModelChange)="markDirty()" placeholder="NCC A, NCC B..." />
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Ngày hẹn hoàn tất (SLA)</label>
+                <label class="form-label">Ngày hẹn hoàn tất (SLA)</label>
                 <input class="form-control" type="date" [(ngModel)]="f.expectedDoneDate" (ngModelChange)="markDirty()" />
               </div>
               <div class="col-12">
-                <label class="form-label fw-bold">Ghi chú nội bộ / Kết luận</label>
+                <label class="form-label">Ghi chú nội bộ / Kết luận</label>
                 <textarea class="form-control" rows="5" [(ngModel)]="f.internalNote" (ngModelChange)="markDirty()" placeholder="Mô tả chi tiết quá trình kiểm tra và xử lý..."></textarea>
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Chi phí ước tính (VNĐ)</label>
+                <label class="form-label">Chi phí ước tính (VNĐ)</label>
                 <input class="form-control" type="number" [(ngModel)]="f.estimatedCost" (ngModelChange)="markDirty()" />
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Kênh phản hồi khách</label>
+                <label class="form-label">Kênh phản hồi khách</label>
                 <select class="form-select" [(ngModel)]="f.customerOutcome" (ngModelChange)="markDirty()">
                   <option value="">-- Chọn kênh --</option>
                   <option value="call">Điện thoại trực tiếp</option>

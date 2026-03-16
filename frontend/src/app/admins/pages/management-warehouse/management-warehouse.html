@@ -193,23 +193,23 @@
               (click)="openDetail(r.stock_item_id)"
               title="Xem chi tiết"
             >
-              <div class="hb-td hb-td-center text-muted fw-bold">
+              <div class="hb-td hb-td-center text-muted">
                 {{ r.stt }}
               </div>
 
               <div class="hb-td hb-td-center">
-                <span class="hb-text-truncate fw-bold text-primary" style="font-size: 13px;">{{ r.sku || '—' }}</span>
+                <span class="hb-text-truncate text-primary" style="font-size: 13px;">{{ r.sku || '—' }}</span>
               </div>
 
               <div class="hb-td">
                 <div class="min-w-0">
-                  <div class="hb-name hb-text-truncate fw-bold">{{ r.product_variant_id }}</div>
+                  <div class="hb-name hb-text-truncate">{{ r.product_variant_id }}</div>
                   <div class="hb-subline hb-text-truncate">ID: {{ r.product_id }}</div>
                 </div>
               </div>
 
               <div class="hb-td">
-                <span class="hb-text-truncate fw-semibold text-muted">{{ r.warehouse_name }}</span>
+                <span class="hb-text-truncate text-muted">{{ r.warehouse_name }}</span>
               </div>
 
               <div class="hb-td hb-td-center">
@@ -217,10 +217,10 @@
               </div>
 
               <div class="hb-td hb-td-center">
-                <span class="fw-bold">{{ r.qtyText }}</span>
+                <span class="">{{ r.qtyText }}</span>
               </div>
 
-              <div class="hb-td hb-td-center text-muted fw-semibold">
+              <div class="hb-td hb-td-center text-muted">
                 {{ r.updatedAtText }}
               </div>
 
@@ -290,7 +290,7 @@
             </div>
 
             <div class="card hb-card hb-card-pad">
-              <div class="hb-section-title fw-bold" style="font-size: 18px">Thông tin tồn kho</div>
+              <div class="hb-section-title">Thông tin tồn kho</div>
               <div class="hb-divider"></div>
 
               <div class="row g-3">
@@ -328,7 +328,7 @@
 
               <div class="hb-divider"></div>
 
-              <div class="hb-section-title fw-bold" style="font-size: 16px">Lịch sử biến động gần đây</div>
+              <div class="hb-section-title">Lịch sử biến động gần đây</div>
               <div class="hb-sub text-muted mb-3">Bản ghi 10 giao dịch nhập/xuất/điều chỉnh chót.</div>
 
               <div class="hb-mini-table" *ngIf="d.recentMovements.length > 0; else noMv">
@@ -342,7 +342,7 @@
                 <div class="hb-mini-row" *ngFor="let m of d.recentMovements">
                   <div class="text-muted small">{{ m.createdAtText }}</div>
                   <div>
-                    <div class="fw-semibold">{{ m.reference_type }}</div>
+                    <div class="">{{ m.reference_type }}</div>
                     <div class="text-muted small">{{ m.reference_id || '—' }}</div>
                   </div>
                   <div>
@@ -363,7 +363,7 @@
           <!-- Side Area Actions -->
           <div class="col-12 col-xl-4">
             <div class="card hb-card hb-card-pad">
-              <div class="hb-section-title fw-bold" style="font-size: 18px">Thao tác</div>
+              <div class="hb-section-title">Thao tác</div>
               <div class="hb-divider"></div>
               
               <div class="d-grid gap-2">
@@ -387,14 +387,14 @@
           <div class="row g-3">
             <div class="col-12 col-xl-8">
               <div class="card hb-card hb-card-pad">
-                <div class="hb-section-title fw-bold" style="font-size: 18px">Thực hiện điều chuyển kho</div>
+                <div class="hb-section-title">Thực hiện điều chuyển kho</div>
                 <div class="text-muted small mb-3">Ghi nhận biến động tồn kho cho SKU: <b>{{ d.variant?.sku }}</b></div>
                 <div class="hb-divider"></div>
 
                 <div class="row g-4">
                   <!-- Movement Type Selection -->
                   <div class="col-12">
-                    <label class="form-label fw-bold small text-muted">CHỌN NGHIỆP VỤ *</label>
+                    <label class="form-label small text-muted">CHỌN NGHIỆP VỤ *</label>
                     <div class="d-flex gap-2">
                        <button type="button" class="btn flex-fill py-3" 
                                [class]="em.adjustType === 'IN' ? 'btn-hb-success' : 'btn-hb-outline'"
@@ -412,7 +412,7 @@
                   </div>
 
                   <div class="col-md-6">
-                    <label class="form-label fw-bold small text-muted">SỐ LƯỢNG BIẾN ĐỘNG</label>
+                    <label class="form-label small text-muted">SỐ LƯỢNG BIẾN ĐỘNG</label>
                     <div class="input-group">
                       <span class="input-group-text px-3" [ngClass]="{
                         'bg-success text-white border-success': em.adjustType === 'IN',
@@ -420,12 +420,12 @@
                       }">
                         {{ em.adjustType === 'IN' ? '+' : '+/-' }}
                       </span>
-                      <input class="form-control form-control-lg fw-bold" type="number" [(ngModel)]="em.qtyAbs" placeholder="Số lượng..." />
+                      <input class="form-control form-control-lg" type="number" [(ngModel)]="em.qtyAbs" placeholder="Số lượng..." />
                     </div>
                   </div>
 
                   <div class="col-md-6">
-                    <label class="form-label fw-bold small text-muted">LÝ DO CHI TIẾT *</label>
+                    <label class="form-label small text-muted">LÝ DO CHI TIẾT *</label>
                     <input class="form-control form-control-lg" 
                            [class.is-invalid]="!em.reason || !em.reason.trim()"
                            [(ngModel)]="em.reason" 

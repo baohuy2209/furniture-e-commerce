@@ -9,7 +9,7 @@ import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 // Domain model (future MongoDB-friendly)
 // =====================
 
-type VoucherStatus = 'active' | 'paused' | 'expired' | 'deleted';
+type VoucherStatus = 'active' | 'paused' | 'expired' | 'pending';
 type VoucherType = 'percent' | 'fixed' | 'freeship';
 
 /**
@@ -29,12 +29,14 @@ interface Voucher {
   min_order_value: number;
   usage_limit: number;
   used_count: number;
-  start_date: string; // yyyy-mm-dd
-  end_date: string; // yyyy-mm-dd
+  start_date: string; // yyyy-mm-ddThh:mm
+  end_date: string; // yyyy-mm-ddThh:mm
   status: VoucherStatus;
   created_at: string; // yyyy-mm-dd
   description?: string;
   revenue_generated?: number;
+  appliedTo?: 'all' | 'specific';
+  applied_products?: string[];
 }
 
 type VoucherRowVM = Voucher & {
@@ -47,6 +49,7 @@ type VoucherRowVM = Voucher & {
   stt: number;
   startDateText: string;
   endDateText: string;
+  appliedToText: string;
 };
 
 type PageMode = 'list' | 'detail' | 'edit';
@@ -66,7 +69,7 @@ type UIState = {
 // =====================
 
 type VoucherUpdate = Partial<
-  Pick<Voucher, 'value' | 'min_order_value' | 'usage_limit' | 'end_date' | 'status'>
+  Pick<Voucher, 'value' | 'min_order_value' | 'usage_limit' | 'start_date' | 'end_date' | 'status' | 'appliedTo' | 'applied_products'>
 >;
 
 interface VoucherRepository {
@@ -88,12 +91,14 @@ class InMemoryVoucherRepository implements VoucherRepository {
       min_order_value: 500000,
       usage_limit: 100,
       used_count: 45,
-      start_date: '2025-04-20',
-      end_date: '2025-05-03',
+      start_date: '2025-04-20T00:00',
+      end_date: '2025-05-03T23:59',
       status: 'active',
       created_at: '2025-01-01',
       description: 'Chương trình tri ân khách hàng dịp lễ lớn, áp dụng cho tất cả các đơn hàng mua sản phẩm nội thất.',
       revenue_generated: 154000000,
+      appliedTo: 'all',
+      applied_products: [],
     },
     {
       voucher_id: 'V002',
@@ -104,12 +109,14 @@ class InMemoryVoucherRepository implements VoucherRepository {
       min_order_value: 250000,
       usage_limit: 200,
       used_count: 150,
-      start_date: '2025-01-01',
-      end_date: '2026-01-01',
+      start_date: '2025-01-01T00:00',
+      end_date: '2026-01-01T23:59',
       status: 'active',
       created_at: '2025-01-02',
       description: 'Mã giảm giá dành riêng cho các khách hàng lần đầu mua sắm tại nền tảng HomeBase.',
       revenue_generated: 45000000,
+      appliedTo: 'all',
+      applied_products: [],
     },
     {
       voucher_id: 'V003',
@@ -120,12 +127,14 @@ class InMemoryVoucherRepository implements VoucherRepository {
       min_order_value: 0,
       usage_limit: 10,
       used_count: 1,
-      start_date: '2025-01-01',
-      end_date: '2026-01-01',
-      status: 'deleted',
+      start_date: '2025-01-01T08:00',
+      end_date: '2026-01-01T23:59',
+      status: 'active', // Changed from deleted
       created_at: '2025-01-03',
       description: 'Mã nội bộ không công khai, dành cho nhân viên công ty.',
       revenue_generated: 2000000,
+      appliedTo: 'specific',
+      applied_products: ['SOFA-001', 'TABLE-002'],
     },
   ]);
 
@@ -172,7 +181,10 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     value: number;
     min_order_value: number;
     usage_limit: number;
+    start_date: string;
     end_date: string;
+    appliedTo: 'all' | 'specific';
+    applied_products_text: string;
   } | null = null;
   saveModalOpen = false;
 
@@ -183,7 +195,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
   deleteModalMessage = '';
 
   // ====== TODAY ISO for min date + expiration compare ======
-  todayISO = this.toISODate(new Date());
+  todayISO = this.toISODateTime(new Date());
 
   // ====== REPO ======
   private readonly repo: VoucherRepository = new InMemoryVoucherRepository();
@@ -243,15 +255,17 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       let activeCount = 0;
       let pausedCount = 0;
       let expiredCount = 0;
+      let pendingCount = 0;
 
       data.forEach(v => {
         const s = this.computeStatus(v);
         if (s === 'active') activeCount++;
         else if (s === 'paused') pausedCount++;
         else if (s === 'expired') expiredCount++;
+        else if (s === 'pending') pendingCount++;
       });
 
-      const summary = { activeCount, pausedCount, expiredCount };
+      const summary = { activeCount, pausedCount, expiredCount, pendingCount };
 
       // search
       const keyword = st.q.trim().toLowerCase();
@@ -412,7 +426,10 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       value: this.detail.value,
       min_order_value: this.detail.min_order_value,
       usage_limit: this.detail.usage_limit,
+      start_date: this.detail.start_date,
       end_date: this.detail.end_date,
+      appliedTo: this.detail.appliedTo || 'all',
+      applied_products_text: (this.detail.applied_products || []).join(', '),
     };
   }
 
@@ -424,9 +441,8 @@ export class ManagementVoucher implements OnInit, OnDestroy {
   saveEdit() {
     if (!this.detail || !this.editModel) return;
 
-    // validate end_date >= today
-    if (this.editModel.end_date < this.todayISO) {
-      alert('Ngày hết hạn phải lớn hơn hoặc bằng hôm nay.');
+    if (this.editModel.end_date < this.editModel.start_date) {
+      alert('Ngày hết hạn phải lớn hơn hoặc bằng ngày bắt đầu.');
       return;
     }
 
@@ -445,7 +461,12 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       value: Number(this.editModel.value) || 0,
       min_order_value: Number(this.editModel.min_order_value) || 0,
       usage_limit: Number(this.editModel.usage_limit) || 0,
+      start_date: this.editModel.start_date,
       end_date: this.editModel.end_date,
+      appliedTo: this.editModel.appliedTo,
+      applied_products: this.editModel.applied_products_text 
+        ? this.editModel.applied_products_text.split(',').map(s => s.trim()).filter(Boolean)
+        : [],
     });
 
     // refresh detail
@@ -463,7 +484,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     if (!v) return;
 
     const computed = this.computeStatus(v);
-    if (computed === 'expired' || computed === 'deleted') return;
+    if (computed === 'expired' || computed === 'pending') return;
 
     const next: VoucherStatus = v.status === 'paused' ? 'active' : 'paused';
     this.repo.update(id, { status: next });
@@ -516,8 +537,8 @@ export class ManagementVoucher implements OnInit, OnDestroy {
         return 'Tạm dừng';
       case 'expired':
         return 'Hết hạn';
-      case 'deleted':
-        return 'Đã ẩn';
+      case 'pending':
+        return 'Chưa publish';
       default:
         return s;
     }
@@ -531,8 +552,8 @@ export class ManagementVoucher implements OnInit, OnDestroy {
         return 'hb-st-paused';
       case 'expired':
         return 'hb-st-expired';
-      case 'deleted':
-        return 'hb-st-deleted';
+      case 'pending':
+        return 'hb-st-pending';
       default:
         return '';
     }
@@ -540,10 +561,13 @@ export class ManagementVoucher implements OnInit, OnDestroy {
 
   // ====== HELPERS ======
   private computeStatus(v: Voucher): VoucherStatus {
-    if (v.status === 'deleted') return 'deleted';
+    const now = this.toISODateTime(new Date());
+    
+    // Check if hasn't started yet
+    if (v.start_date && v.start_date > now) return 'pending';
 
-    // Since dates are yyyy-mm-dd, string compare works.
-    if (v.end_date && v.end_date < this.todayISO) return 'expired';
+    // String compare works for yyyy-MM-ddTHH:mm format
+    if (v.end_date && v.end_date < now) return 'expired';
 
     return v.status;
   }
@@ -562,6 +586,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       v.type === 'percent' ? 'Giảm %' : v.type === 'fixed' ? 'Giảm tiền' : 'Free ship';
 
     const revenueText = (v.revenue_generated || 0).toLocaleString('vi-VN') + 'đ';
+    const appliedToText = v.appliedTo === 'specific' ? `Sản phẩm chỉ định (${(v.applied_products || []).length})` : 'Tất cả sản phẩm';
 
     return {
       ...v,
@@ -572,23 +597,37 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       remaining: Math.max(0, v.usage_limit - v.used_count),
       typeLabel,
       stt,
-      startDateText: this.fmtISODate(v.start_date),
-      endDateText: this.fmtISODate(v.end_date),
+      startDateText: this.fmtISODateNoTime(v.start_date),
+      endDateText: this.fmtISODateNoTime(v.end_date),
+      appliedToText,
     };
   }
 
-  private fmtISODate(iso: string): string {
+  fmtISODate(iso: string): string {
     if (!iso) return '—';
-    // iso is yyyy-mm-dd
-    const parts = iso.split('-');
-    if (parts.length !== 3) return iso;
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    // iso is yyyy-mm-ddThh:mm
+    const [datePart, timePart] = iso.split('T');
+    if (!datePart) return iso;
+    const dateParts = datePart.split('-');
+    if (dateParts.length !== 3) return iso;
+    return `${timePart || '00:00'} - ${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
   }
 
-  private toISODate(d: Date): string {
+  fmtISODateNoTime(iso: string): string {
+    if (!iso) return '—';
+    const [datePart] = iso.split('T');
+    if (!datePart) return iso;
+    const dateParts = datePart.split('-');
+    if (dateParts.length !== 3) return iso;
+    return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+  }
+
+  private toISODateTime(d: Date): string {
     const yyyy = d.getFullYear();
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mins = String(d.getMinutes()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}T${hh}:${mins}`;
   }
 }

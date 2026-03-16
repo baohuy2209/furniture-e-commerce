@@ -1,26 +1,35 @@
 :host {
   --hb-primary: #3d529d;
   --hb-accent: #ff911f;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
 .hb-wrap {
   width: 100%;
 }
 
-.hb-titlebar {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  position: sticky;
-  top: 0;
-  background: #f6f8fb;
-  z-index: 50;
-  padding: 10px 0;
+.hb-title {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  color: var(--hb-primary);
+  text-transform: uppercase;
 }
 
-.hb-title {
-  font-weight: 700;
+.hb-th, table thead th {
+  font-size: 13px;
+  font-weight: 800;
   color: var(--hb-primary);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+table tbody td {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--hb-text);
+  vertical-align: middle;
 }
 
 .hb-card {

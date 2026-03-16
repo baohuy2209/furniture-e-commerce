@@ -42,9 +42,17 @@
         </div>
 
         <div class="hb-summary-card">
+          <div class="hb-sc-icon" style="color: #64748b; background: #f1f5f9;"><i class="bi bi-clock-history"></i></div>
+          <div>
+            <div class="hb-sc-label">Chưa publish</div>
+            <div class="hb-sc-value">{{ vm.summary.pendingCount }}</div>
+          </div>
+        </div>
+
+        <div class="hb-summary-card">
           <div class="hb-sc-icon warn"><i class="bi bi-pause-circle-fill"></i></div>
           <div>
-            <div class="hb-sc-label">Tạm dừng / Chờ</div>
+            <div class="hb-sc-label">Tạm dừng</div>
             <div class="hb-sc-value">{{ vm.summary.pausedCount }}</div>
           </div>
         </div>
@@ -75,9 +83,9 @@
           >
             <option value="">Tất cả trạng thái</option>
             <option value="active">Hoạt động</option>
+            <option value="pending">Chưa publish</option>
             <option value="paused">Tạm dừng</option>
             <option value="expired">Hết hạn</option>
-            <option value="deleted">Đã ẩn (Deleted)</option>
           </select>
 
           <select class="form-select" [(ngModel)]="f_type" (ngModelChange)="onChangeType($event)">
@@ -161,20 +169,19 @@
               *ngFor="let v of vm.rows"
               (click)="openDetail(v.voucher_id)"
               [class.is-active]="v.voucher_id === selectedId"
-              [class.is-deleted]="v.computed_status === 'deleted'"
               title="Xem chi tiết"
             >
-              <div class="hb-td hb-td-stt fw-bold text-center">{{ v.stt }}</div>
+              <div class="hb-td hb-td-stt text-center">{{ v.stt }}</div>
 
               <div class="hb-td">
                 <div class="hb-text-truncate">
-                  <div class="fw-bold">{{ v.code }}</div>
+                  <div class="">{{ v.code }}</div>
                   <div class="text-muted small">ID: {{ v.voucher_id }}</div>
                 </div>
               </div>
 
               <div class="hb-td">
-                <span class="hb-text-truncate fw-semibold" title="{{ v.voucher_name }}">{{ v.voucher_name }}</span>
+                <span class="hb-text-truncate" title="{{ v.voucher_name }}">{{ v.voucher_name }}</span>
               </div>
 
               <div class="hb-td hb-td-center">
@@ -185,13 +192,13 @@
                 <span class="hb-badge hb-badge-accent">{{ v.valueText }}</span>
               </div>
 
-              <div class="hb-td hb-td-center text-muted fw-semibold">
+              <div class="hb-td hb-td-center text-muted">
                 {{ v.endDateText }}
               </div>
 
               <div class="hb-td hb-td-center">
                 <div class="text-center">
-                  <div class="fw-bold">{{ v.used_count }}/{{ v.usage_limit }}</div>
+                  <div class="">{{ v.used_count }}/{{ v.usage_limit }}</div>
                   <div class="text-muted small">Còn {{ v.remaining }}</div>
                 </div>
               </div>
@@ -218,7 +225,7 @@
                   class="hb-icon-btn danger"
                   type="button"
                   (click)="stopEvent($event); hardDelete(v.voucher_id)"
-                  title="Xóa vĩnh viễn"
+                  title="Xóa voucher"
                 >
                   <i class="bi bi-trash3"></i>
                 </button>
@@ -273,7 +280,7 @@
             </div>
 
             <div class="card hb-card hb-card-pad">
-              <div class="hb-section-title fw-bold" style="font-size: 18px">Thông tin chi tiết voucher</div>
+              <div class="hb-section-title">Thông tin chi tiết voucher</div>
               <div class="hb-divider"></div>
 
               <div class="row g-3">
@@ -298,7 +305,7 @@
                 <div class="col-md-6">
                   <div class="hb-kv text-accent">
                     <div class="k">Giá trị</div>
-                    <div class="v fw-bold fs-5">{{ d.valueText }}</div>
+                    <div class="v">{{ d.valueText }}</div>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -309,14 +316,14 @@
                 </div>
                 <div class="col-md-6">
                   <div class="hb-kv">
-                    <div class="k">Ngày bắt đầu</div>
-                    <div class="v">{{ d.startDateText }}</div>
+                    <div class="k">Thời gian bắt đầu</div>
+                    <div class="v">{{ fmtISODate(d.start_date) }}</div>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="hb-kv">
-                    <div class="k">Ngày hết hạn</div>
-                    <div class="v">{{ d.endDateText }}</div>
+                    <div class="k">Thời gian kết thúc</div>
+                    <div class="v">{{ fmtISODate(d.end_date) }}</div>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -329,6 +336,12 @@
                   <div class="hb-kv">
                     <div class="k">Đã sử dụng</div>
                     <div class="v">{{ d.used_count }} đơn hàng</div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="hb-kv">
+                    <div class="k">Sản phẩm áp dụng</div>
+                    <div class="v">{{ d.appliedToText }}</div>
                   </div>
                 </div>
               </div>
@@ -346,7 +359,7 @@
           <div class="col-12 col-xl-4">
             <!-- Action Card -->
             <div class="card hb-card hb-card-pad mb-3">
-              <div class="hb-section-title fw-bold" style="font-size: 18px">Thao tác</div>
+              <div class="hb-section-title">Thao tác</div>
               <div class="hb-divider"></div>
               
               <div class="d-grid gap-2">
@@ -357,7 +370,7 @@
                 <button
                   class="btn btn-hb-outline"
                   type="button"
-                  [disabled]="d.computed_status === 'expired' || d.computed_status === 'deleted'"
+                  [disabled]="d.computed_status === 'expired' || d.computed_status === 'pending'"
                   (click)="toggleActivePaused(d.voucher_id)"
                 >
                   <i class="bi" [ngClass]="d.status === 'paused' ? 'bi-play-fill' : 'bi-pause-fill'"></i>
@@ -371,7 +384,7 @@
                   type="button"
                   (click)="hardDelete(d.voucher_id)"
                 >
-                  <i class="bi bi-trash3 me-1"></i> Xóa vĩnh viễn
+                  <i class="bi bi-trash3 me-1"></i> Xóa voucher
                 </button>
               </div>
             </div>
@@ -383,16 +396,16 @@
                   
                   <div class="d-flex flex-column gap-4">
                     <div class="item-stat p-3 rounded" style="background: rgba(255,145,31,0.06); border: 1px dashed var(--hb-accent);">
-                      <div class="text-accent small fw-bold text-uppercase mb-1">Doanh thu mang lại</div>
+                      <div class="text-accent small mb-1">Doanh thu mang lại</div>
                       <div class="d-flex align-items-center gap-2">
-                        <span class="fs-2 fw-black text-accent">{{ d.revenueText || '0đ' }}</span>
+                        <span class="fs-2 text-accent">{{ d.revenueText || '0đ' }}</span>
                       </div>
                     </div>
 
                     <div>
-                      <div class="text-muted small fw-bold mb-1">TỶ LỆ SỬ DỤNG</div>
+                      <div class="text-muted small mb-1">TỶ LỆ SỬ DỤNG</div>
                       <div class="d-flex align-items-center gap-2">
-                        <span class="fs-3 fw-bold">{{ ((d.used_count / d.usage_limit) * 100) | number:'1.0-0' }}%</span>
+                        <span class="fs-3">{{ ((d.used_count / d.usage_limit) * 100) | number:'1.0-0' }}%</span>
                         <span class="text-muted small">({{ d.used_count }}/{{ d.usage_limit }})</span>
                       </div>
                       <div class="progress mt-2" style="height: 6px;">
@@ -406,7 +419,7 @@
                        <span class="badge" [ngClass]="statusBadgeClass(d.computed_status)">
                           {{ statusLabel(d.computed_status) }}
                        </span>
-                       <span class="small text-muted">Hết hạn: <b>{{ d.endDateText }}</b></span>
+                       <span class="small text-muted">Bắt đầu: <b>{{ fmtISODate(d.start_date) }}</b> <br> Hết hạn: <b>{{ fmtISODate(d.end_date) }}</b></span>
                     </div>
                   </div>
                </div>
@@ -424,37 +437,80 @@
             <!-- Main Content (Left) -->
             <div class="col-12 col-xl-8">
               <div class="card hb-card hb-card-pad">
-                <div class="hb-section-title fw-bold" style="font-size: 18px">Hiệu chỉnh Voucher</div>
+                <div class="hb-section-title">Hiệu chỉnh Voucher</div>
                 <div class="text-muted small mb-3">Cập nhật thông tin/điều kiện cho mã khuyến mãi: <b>{{ d.code }}</b></div>
                 
                 <div class="hb-divider"></div>
 
-                <div class="row g-3">
+                <div class="row g-4">
+                  <!-- Value -->
                   <div class="col-md-6">
-                    <label class="form-label fw-bold small text-muted">GIÁ TRỊ ƯU ĐÃI</label>
-                    <input class="form-control form-control-lg" type="number" [(ngModel)]="em.value" />
+                    <label class="form-label small text-muted">GIÁ TRỊ ƯU ĐÃI *</label>
+                    <div class="input-group">
+                      <span class="input-group-text px-3 bg-light fw-bold text-primary">{{ d.type === 'percent' ? '%' : 'VNĐ' }}</span>
+                      <input class="form-control form-control-lg" type="number" [(ngModel)]="em.value" />
+                    </div>
                     <div class="hb-help small text-muted mt-1">* Loại hình: {{ d.typeLabel }}</div>
                   </div>
 
+                  <!-- Min Order -->
                   <div class="col-md-6">
-                    <label class="form-label fw-bold small text-muted">GIÁ TRỊ ĐƠN TỐI THIỂU (VNĐ)</label>
-                    <input class="form-control form-control-lg" type="number" [(ngModel)]="em.min_order_value" />
+                    <label class="form-label small text-muted">GIÁ TRỊ ĐƠN TỐI THIỂU *</label>
+                    <div class="input-group">
+                      <span class="input-group-text px-3 bg-light fw-bold text-primary">VNĐ</span>
+                      <input class="form-control form-control-lg" type="number" [(ngModel)]="em.min_order_value" />
+                    </div>
                   </div>
 
+                  <!-- Usage Limit -->
                   <div class="col-md-6">
-                    <label class="form-label fw-bold small text-muted">HẠN MỨC (USAGE LIMIT)</label>
-                    <input class="form-control form-control-lg" type="number" [(ngModel)]="em.usage_limit" />
+                    <label class="form-label small text-muted">HẠN MỨC (USAGE LIMIT) *</label>
+                    <div class="input-group">
+                      <span class="input-group-text px-3 bg-light fw-bold"><i class="bi bi-people"></i></span>
+                      <input class="form-control form-control-lg" type="number" [(ngModel)]="em.usage_limit" />
+                    </div>
                     <div class="hb-help small text-muted mt-1">* Đã dùng: {{ d.used_count }} lần</div>
                   </div>
 
+                  <!-- Start Date -->
                   <div class="col-md-6">
-                    <label class="form-label fw-bold small text-muted">NGÀY HẾT HẠN</label>
-                    <input
-                      class="form-control form-control-lg"
-                      type="date"
-                      [(ngModel)]="em.end_date"
-                      [min]="todayISO"
-                    />
+                    <label class="form-label small text-muted">THỜI GIAN BẮT ĐẦU *</label>
+                    <div class="input-group">
+                      <span class="input-group-text px-3 bg-light fw-bold"><i class="bi bi-calendar-check"></i></span>
+                      <input class="form-control form-control-lg" type="datetime-local" [(ngModel)]="em.start_date" />
+                    </div>
+                  </div>
+
+                  <!-- End Date -->
+                  <div class="col-md-6">
+                    <label class="form-label small text-muted">THỜI GIAN HẾT HẠN *</label>
+                    <div class="input-group">
+                      <span class="input-group-text px-3 bg-light fw-bold"><i class="bi bi-calendar-event"></i></span>
+                      <input class="form-control form-control-lg" type="datetime-local" [(ngModel)]="em.end_date" />
+                    </div>
+                  </div>
+
+                  <!-- Applied Products -->
+                  <div class="col-12">
+                    <label class="form-label small text-muted">SẢN PHẨM ÁP DỤNG KHUYẾN MÃI *</label>
+                    <div class="d-flex gap-2 mb-3">
+                       <button type="button" class="btn flex-fill py-3" 
+                               [class]="em.appliedTo === 'all' ? 'btn-hb' : 'btn-hb-outline'"
+                               (click)="em.appliedTo = 'all'">
+                         <i class="bi bi-globe me-2 fs-5"></i>
+                         <span>TẤT CẢ SẢN PHẨM</span>
+                       </button>
+                       <button type="button" class="btn flex-fill py-3" 
+                               [class]="em.appliedTo === 'specific' ? 'btn-hb-accent' : 'btn-hb-outline'"
+                               (click)="em.appliedTo = 'specific'">
+                         <i class="bi bi-box-seam me-2 fs-5"></i>
+                         <span>SẢN PHẨM CHỈ ĐỊNH</span>
+                       </button>
+                    </div>
+                    <div *ngIf="em.appliedTo === 'specific'">
+                      <textarea class="form-control form-control-lg" rows="2" [(ngModel)]="em.applied_products_text" placeholder="Nhập mã SKU/Variant phân cách bởi dấu phẩy..."></textarea>
+                      <div class="hb-help small text-muted mt-1">Ví dụ: SOFA-001, TABLE-002</div>
+                    </div>
                   </div>
                 </div>
 
@@ -484,13 +540,18 @@
 
                   <div class="d-flex flex-column gap-3">
                     <div>
-                      <div class="text-muted small fw-bold mb-1">TỶ LỆ SỬ DỤNG (HIỆN TẠI)</div>
+                      <div class="text-muted small fw-bold mb-1">GIỚI HẠN SỬ DỤNG (HIỆN TẠI)</div>
                       <div class="d-flex align-items-center gap-2">
-                        <span class="fs-3 fw-bold">{{ ((d.used_count / d.usage_limit) * 100) | number:'1.0-0' }}%</span>
-                        <span class="text-muted small">({{ d.used_count }}/{{ d.usage_limit }})</span>
+                        <span class="fs-3 fw-bold">{{ d.usage_limit }}</span>
+                        <span class="text-muted small">lượt</span>
                       </div>
-                      <div class="progress mt-2" style="height: 6px;">
-                        <div class="progress-bar bg-accent" role="progressbar" [style.width]="((d.used_count / d.usage_limit) * 100) + '%'"></div>
+                    </div>
+
+                    <div class="p-3 rounded" style="background: rgba(255,145,31,0.06); border: 1px dashed var(--hb-accent);">
+                      <div class="text-accent small fw-bold">DỰ KIẾN SAU THAY ĐỔI</div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="fs-2 fw-bold text-accent">{{ em.usage_limit || 0 }}</span>
+                        <span class="text-accent small fw-bold">lượt</span>
                       </div>
                     </div>
                   </div>
@@ -503,6 +564,14 @@
                        <span class="small text-muted">Hết hạn: <b>{{ d.endDateText }}</b></span>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <!-- Rule helper box -->
+              <div class="mt-3 p-3 rounded bg-white shadow-sm" style="border: 1px solid var(--hb-border);">
+                <div class="small fw-bold mb-2 text-primary"><i class="bi bi-info-circle me-1"></i> Quy định hệ thống:</div>
+                <div class="small text-muted" style="line-height: 1.6;">
+                  Voucher sẽ tự động cập nhật số lượng giới hạn mới và áp dụng cho các sản phẩm được chỉ định. Đảm bảo bạn đã kiểm tra kỹ lưỡng danh sách sản phẩm áp dụng và giới hạn.
                 </div>
               </div>
             </div>
@@ -529,7 +598,7 @@
     [title]="deleteModalTitle"
     [message]="deleteModalMessage"
     [type]="'danger'"
-    confirmLabel="Xóa vĩnh viễn"
+    confirmLabel="Xóa"
     (confirm)="onConfirmDelete()"
     (cancel)="onCancelDelete()">
   </hb-confirm-modal>

@@ -257,7 +257,7 @@
                     <img [src]="r.imageCover" alt="cover" />
                   </div>
                   <div class="hb-name-block min-w-0">
-                    <div class="fw-bold hb-name hb-text-truncate">{{ r.name }}</div>
+                    <div class="hb-name hb-text-truncate">{{ r.name }}</div>
                     <div class="text-muted" style="font-size: 10px;">ID: {{ r.id }}</div>
                   </div>
                 </div>
@@ -610,7 +610,7 @@
           <ng-container *ngFor="let c of d.comments">
             <div class="hb-comment" [class.is-hidden]="c.hidden">
               <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <div class="fw-semibold">{{ c.userName }}</div>
+                <div class="">{{ c.userName }}</div>
                 <div class="text-muted small">
                   ★ {{ c.rating }}/5 • {{ c.createdAt | date: 'dd/MM/yyyy HH:mm' }}
                 </div>

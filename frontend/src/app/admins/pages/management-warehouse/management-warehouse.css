@@ -11,15 +11,10 @@
 }
 
 :host {
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    Arial,
-    sans-serif;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   --hb-radius-lg: 20px;
+  display: block;
+  height: 100%;
 }
 
 .fw-black { font-weight: 900 !important; }
@@ -63,8 +58,10 @@
 .hb-page-body {
   flex: 1 1 auto;
   min-height: 0;
+  overflow: auto;
   display: flex;
   flex-direction: column;
+  padding-top: 14px;
 }
 
 /* ===== TYPO ===== */
@@ -74,11 +71,13 @@
   line-height: 1;
   letter-spacing: 0.5px;
   color: var(--hb-primary);
+  text-transform: uppercase;
 }
 
 .hb-sub {
   margin-top: 6px;
   font-size: 13px;
+  font-weight: 500;
   color: var(--hb-muted);
 }
 
@@ -260,15 +259,15 @@
 .hb-sc-label {
   font-size: 13px;
   font-weight: 800;
-  color: rgba(0, 0, 0, 0.55);
+  color: var(--hb-muted);
   margin-bottom: 2px;
   text-transform: uppercase;
 }
 
 .hb-sc-value {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 900;
-  color: rgba(0, 0, 0, 0.78);
+  color: var(--hb-text);
 }
 
 /* ===== FILTERBAR ===== */
@@ -340,15 +339,18 @@
 }
 
 .hb-th {
-  padding: 12px; /* Pad inside cell instead */
+  padding: 12px;
   cursor: pointer;
   user-select: none;
-  color: rgba(0, 0, 0, 0.72);
+  color: var(--hb-primary);
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 13px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -387,6 +389,8 @@
   padding: 12px;
   min-width: 0;
   color: var(--hb-text);
+  font-size: 14px;
+  font-weight: 500;
   height: 100%;
   display: flex;
   align-items: center;
@@ -402,7 +406,8 @@
 }
 
 .hb-name {
-  font-weight: 900;
+  font-weight: 600;
+  color: var(--hb-text);
 }
 
 .hb-subline {
@@ -568,15 +573,18 @@
 }
 
 .hb-kv .k {
-  font-size: 12px;
-  font-weight: 900;
-  color: rgba(0, 0, 0, 0.52);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--hb-muted);
   margin-bottom: 2px;
 }
 
 .hb-kv .v {
-  font-weight: 900;
-  color: rgba(0, 0, 0, 0.78);
+  font-weight: 500;
+  color: var(--hb-text);
+  font-size: 14px;
 }
 
 .hb-mini-table {
@@ -609,6 +617,20 @@
   text-align: center;
   color: rgba(0, 0, 0, 0.55);
   font-weight: 800;
+}
+
+/* ===== SECTION TITLE ===== */
+.hb-section-title {
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--hb-text);
+  margin-bottom: 16px;
+}
+
+.hb-h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--hb-text);
 }
 
 /* ===== RESPONSIVE ===== */

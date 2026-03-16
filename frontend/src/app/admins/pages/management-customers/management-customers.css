@@ -13,6 +13,8 @@
 :host {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   display: block;
+  height: 100%;
+  overflow: hidden;
 }
 
 /* ===== PAGE SHELL ===== */
@@ -52,8 +54,10 @@
 .hb-page-body {
   flex: 1 1 auto;
   min-height: 0;
+  overflow: auto;
   display: flex;
   flex-direction: column;
+  padding-top: 14px;
 }
 
 /* ===== TYPO ===== */
@@ -63,29 +67,38 @@
   line-height: 1;
   letter-spacing: 0.5px;
   color: var(--hb-primary);
+  text-transform: uppercase;
 }
 
 .hb-h1 {
-  font-size: 26px;
-  font-weight: 900;
-  color: var(--hb-primary);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--hb-text);
 }
 
 .hb-h2 {
   font-size: 18px;
   font-weight: 900;
-  color: rgba(0, 0, 0, 0.78);
+  color: var(--hb-text);
 }
 
 .hb-sub {
   margin-top: 6px;
   font-size: 13px;
+  font-weight: 500;
   color: var(--hb-muted);
 }
 
 .hb-name {
-  font-weight: 600; /* Standardized to semibold */
-  color: rgba(0, 0, 0, 0.78);
+  font-weight: 600;
+  color: var(--hb-text);
+}
+
+.hb-section-title {
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--hb-text);
+  margin-bottom: 16px;
 }
 
 .hb-text-truncate {
@@ -204,15 +217,15 @@
 .hb-sc-label {
   font-size: 13px;
   font-weight: 800;
-  color: rgba(0, 0, 0, 0.55);
+  color: var(--hb-muted);
   margin-bottom: 2px;
   text-transform: uppercase;
 }
 
 .hb-sc-value {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 900;
-  color: rgba(0, 0, 0, 0.78);
+  color: var(--hb-text);
 }
 
 /* ===== FILTERBAR ===== */
@@ -317,6 +330,8 @@
   display: flex;
   align-items: center;
   color: var(--hb-text);
+  font-size: 14px;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -331,7 +346,7 @@
 .hb-td-num {
   justify-content: flex-end;
   text-align: right;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--hb-primary);
 }
 
@@ -463,12 +478,7 @@
 }
 
 /* ===== DETAIL SHELL ===== */
-.hb-detail-grid {
-  display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 16px;
-  align-items: start;
-}
+/* hb-detail-grid removed in favor of Bootstrap grid */
 
 .hb-profile-top {
   display: flex;
@@ -480,9 +490,9 @@
 }
 
 .hb-profile-name {
-  font-weight: 900;
-  font-size: 22px;
-  color: var(--hb-primary);
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--hb-text);
 }
 
 .hb-profile-stats {
@@ -503,7 +513,7 @@
 .hb-stat-num {
   font-weight: 900;
   color: var(--hb-primary);
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .hb-stat-label {
@@ -526,13 +536,14 @@
 .hb-k {
   font-size: 11px;
   color: var(--hb-muted);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-bottom: 2px;
 }
 
 .hb-v {
-  font-weight: 800;
+  font-weight: 500;
   color: var(--hb-text);
   font-size: 14px;
 }
@@ -565,6 +576,7 @@
   color: var(--hb-accent);
   background: rgba(255, 145, 31, 0.12);
   border-bottom: 2px solid var(--hb-accent);
+  font-weight: 900;
 }
 
 .hb-panels {
@@ -596,7 +608,7 @@
 
 .hb-subtitle {
   font-weight: 900;
-  font-size: 16px;
+  font-size: 18px;
   margin-bottom: 12px;
   color: var(--hb-text);
 }
@@ -632,8 +644,6 @@
   font-weight: 700;
 }
 
-@media (max-width: 992px) {
-  .hb-detail-grid {
-    grid-template-columns: 1fr;
-  }
-}
+
+/* Media queries (if any) */
+

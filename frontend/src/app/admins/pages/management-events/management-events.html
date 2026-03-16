@@ -3,10 +3,8 @@
   <div class="hb-page-header">
     <div class="hb-header-left">
       <div class="hb-title" routerLink="/admin/management-events" style="cursor: pointer;">QUẢN LÝ SỰ KIỆN</div>
-      <div class="hb-sub text-muted" *ngIf="mode !== 'list' && detail">
-        {{ detail.event_name }} <span class="mx-2">/</span> ID: <b>#{{ detail.event_id }}</b>
-      </div>
     </div>
+
 
     <!-- LIST ACTIONS -->
     <div class="hb-header-actions" *ngIf="mode === 'list'">
@@ -162,22 +160,22 @@
               *ngFor="let r of vm.rows"
               (click)="openDetail(r.event_id)"
             >
-              <div class="hb-td hb-td-center text-muted fw-bold">
+              <div class="hb-td hb-td-center text-muted">
                 {{ r.stt }}
               </div>
 
               <div class="hb-td hb-td-center">
-                <span class="fw-bold text-primary">{{ r.event_code }}</span>
+                <span class="text-primary">{{ r.event_code }}</span>
               </div>
 
               <div class="hb-td">
                 <div class="min-w-0">
-                  <div class="hb-name fw-bold hb-text-truncate">{{ r.event_name }}</div>
+                  <div class="hb-name hb-text-truncate">{{ r.event_name }}</div>
                   <div class="hb-subline hb-text-truncate">{{ r.locationText }}</div>
                 </div>
               </div>
 
-              <div class="hb-td hb-td-center text-muted fw-semibold">
+              <div class="hb-td hb-td-center text-muted">
                 {{ r.startText }}
               </div>
 
@@ -186,7 +184,7 @@
               </div>
 
               <div class="hb-td hb-td-center">
-                <span class="fw-bold">{{ r.capacityText }}</span>
+                <span class="">{{ r.capacityText }}</span>
               </div>
 
               <div class="hb-td hb-td-center">
@@ -210,7 +208,7 @@
               </div>
             </div>
 
-            <div class="p-5 text-center text-muted fw-semibold" *ngIf="vm.rows.length === 0">
+            <div class="p-5 text-center text-muted" *ngIf="vm.rows.length === 0">
               Không có sự kiện nào phù hợp.
             </div>
           </div>
@@ -262,9 +260,9 @@
             <div class="hb-timeline">
               <div class="hb-tl-item" *ngFor="let it of d.schedule">
                 <div class="hb-tl-dot"></div>
-                <div class="hb-tl-time fw-bold text-primary">{{ fmtTimeRange(it) }}</div>
+                <div class="hb-tl-time text-primary">{{ fmtTimeRange(it) }}</div>
                 <div class="hb-tl-content">
-                  <div class="fw-bold">{{ it.title }}</div>
+                  <div class="">{{ it.title }}</div>
                   <div class="text-muted small mt-1">{{ it.description }}</div>
                 </div>
               </div>
@@ -317,17 +315,17 @@
           <div class="card hb-card hb-card-pad">
             <div class="hb-section-title">Nội dung sự kiện</div>
             <div class="mb-3">
-              <label class="form-label fw-bold">Tên sự kiện *</label>
+              <label class="form-label">Tên sự kiện *</label>
               <input class="form-control form-control-lg" [(ngModel)]="em.event_name" placeholder="Ví dụ: Interior Expo 2025" />
             </div>
 
             <div class="row g-3">
               <div class="col-md-6">
-                <label class="form-label fw-bold">Mã định danh</label>
+                <label class="form-label">Mã định danh</label>
                 <input class="form-control" [(ngModel)]="em.event_code" />
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Trạng thái</label>
+                <label class="form-label">Trạng thái</label>
                 <select class="form-select" [(ngModel)]="em.status">
                   <option value="draft">Bản nháp (Draft)</option>
                   <option value="published">Xuất bản (Published)</option>
@@ -340,17 +338,17 @@
 
             <div class="row g-3 mt-1">
               <div class="col-md-6">
-                <label class="form-label fw-bold">Ngày bắt đầu</label>
+                <label class="form-label">Ngày bắt đầu</label>
                 <input class="form-control" type="date" [(ngModel)]="em.start_at" />
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Ngày kết thúc</label>
+                <label class="form-label">Ngày kết thúc</label>
                 <input class="form-control" type="date" [(ngModel)]="em.end_at" />
               </div>
             </div>
 
             <div class="mt-4">
-              <label class="form-label fw-bold">Mô tả sự kiện</label>
+              <label class="form-label">Mô tả sự kiện</label>
               <textarea class="form-control" rows="4" [(ngModel)]="em.description" placeholder="Mô tả tóm tắt sự kiện..."></textarea>
             </div>
 
@@ -384,28 +382,28 @@
             <div class="hb-section-title">Địa điểm & Quy mô</div>
             <div class="row g-3">
               <div class="col-12">
-                <label class="form-label fw-bold">Tên địa điểm</label>
+                <label class="form-label">Tên địa điểm</label>
                 <input class="form-control" [(ngModel)]="em.location_name" placeholder="Ví dụ: SECC" />
               </div>
               <div class="col-12">
-                <label class="form-label fw-bold">Địa chỉ chi tiết</label>
+                <label class="form-label">Địa chỉ chi tiết</label>
                 <input class="form-control" [(ngModel)]="em.address" />
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Thành phố</label>
+                <label class="form-label">Thành phố</label>
                 <input class="form-control" [(ngModel)]="em.city" />
               </div>
               <div class="col-md-6">
-                <label class="form-label fw-bold">Tổng slots</label>
+                <label class="form-label">Tổng slots</label>
                 <input class="form-control" type="number" [(ngModel)]="em.capacity" />
               </div>
               <hr class="hb-hr" />
               <div class="col-12">
-                <label class="form-label fw-bold">Email liên hệ</label>
+                <label class="form-label">Email liên hệ</label>
                 <input class="form-control" [(ngModel)]="em.contact_email" />
               </div>
               <div class="col-12">
-                <label class="form-label fw-bold">Phone liên hệ</label>
+                <label class="form-label">Phone liên hệ</label>
                 <input class="form-control" [(ngModel)]="em.contact_phone" />
               </div>
             </div>

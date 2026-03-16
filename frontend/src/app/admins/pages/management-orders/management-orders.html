@@ -2,11 +2,8 @@
   <!-- PAGE HEADER (sticky) -->
   <div class="hb-page-header">
     <div class="hb-header-left">
-      <div class="hb-title" routerLink="/admin/management-orders" style="cursor: pointer;">QUẢN LÝ ĐƠN HÀNG</div>
-      <div class="hb-sub text-muted" *ngIf="vm.mode !== 'list' && vm.detail">
-        Order: <b>{{ vm.detail.order.order_number }}</b>
-        <span class="hb-dot">•</span>
-        ID: <b>{{ vm.detail.order.order_id }}</b>
+      <div class="hb-title" routerLink="/admin/management-orders" style="cursor: pointer">
+        QUẢN LÝ ĐƠN HÀNG
       </div>
     </div>
 
@@ -87,7 +84,11 @@
             <option value="returned">Đã trả hàng</option>
           </select>
 
-          <select class="form-select" [ngModel]="f_payment" (ngModelChange)="onChangePayment($event)">
+          <select
+            class="form-select"
+            [ngModel]="f_payment"
+            (ngModelChange)="onChangePayment($event)"
+          >
             <option value="">Thanh toán</option>
             <option value="unpaid">Chưa thanh toán</option>
             <option value="paid">Đã thanh toán</option>
@@ -99,7 +100,11 @@
             <option *ngFor="let r of vm.regions" [value]="r">{{ r }}</option>
           </select>
 
-          <select class="form-select" [ngModel]="pageSize" (ngModelChange)="onChangePageSize($event)">
+          <select
+            class="form-select"
+            [ngModel]="pageSize"
+            (ngModelChange)="onChangePageSize($event)"
+          >
             <option [ngValue]="10">10 / trang</option>
             <option [ngValue]="20">20 / trang</option>
           </select>
@@ -153,13 +158,13 @@
               <div class="hb-td hb-td-center text-muted fw-bold">{{ r.stt }}</div>
               <div class="hb-td">
                 <div class="hb-text-truncate">
-                  <div class="fw-semibold text-primary">{{ r.order_number }}</div>
-                  <div class="text-muted" style="font-size: 10px;">ID: {{ r.order_id }}</div>
+                  <div class="text-primary">{{ r.order_number }}</div>
+                  <div class="text-muted" style="font-size: 10px">ID: {{ r.order_id }}</div>
                 </div>
               </div>
               <div class="hb-td">
                 <div class="hb-text-truncate">
-                  <div class="fw-semibold">{{ r.customer }}</div>
+                  <div class="">{{ r.customer }}</div>
                   <div class="text-muted small">{{ r.phone }}</div>
                 </div>
               </div>
@@ -173,7 +178,10 @@
               <div class="hb-td hb-td-center text-muted fw-normal">{{ r.createdAtText }}</div>
               <div class="hb-td hb-td-num">{{ r.totalText }}</div>
               <div class="hb-td hb-td-center">
-                <button class="hb-icon-btn" (click)="stopEvent($event); openDetail(r.order_id); enterEdit()">
+                <button
+                  class="hb-icon-btn"
+                  (click)="stopEvent($event); openDetail(r.order_id); enterEdit()"
+                >
                   <i class="bi bi-pencil-square"></i>
                 </button>
               </div>
@@ -182,101 +190,117 @@
         </div>
 
         <div class="hb-pagination">
-          <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">‹</button>
-          <div class="hb-page-info">Trang <b>{{ vm.page }}</b> / <b>{{ vm.totalPages }}</b></div>
-          <button class="hb-page-btn" [disabled]="vm.page >= vm.totalPages" (click)="setPage(vm.page + 1)">›</button>
+          <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">
+            ‹
+          </button>
+          <div class="hb-page-info">
+            Trang <b>{{ vm.page }}</b> / <b>{{ vm.totalPages }}</b>
+          </div>
+          <button
+            class="hb-page-btn"
+            [disabled]="vm.page >= vm.totalPages"
+            (click)="setPage(vm.page + 1)"
+          >
+            ›
+          </button>
         </div>
       </div>
     </ng-container>
 
     <!-- ===== DETAIL VIEW ===== -->
     <ng-container *ngIf="vm.mode === 'detail' && vm.detail as d">
-      <div class="hb-detail-shell">
-        <div class="card hb-card hb-detail-main-card">
-          <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-            <h1 class="hb-h1 mb-0">{{ d.order.order_number }}</h1>
-            <div class="d-flex gap-2">
-              <span class="hb-pill" [ngClass]="d.statusPillClass">{{ d.statusLabel }}</span>
-              <span class="hb-pill" [ngClass]="d.payPillClass">{{ d.paymentLabel }}</span>
+      <div class="row g-4 pt-1">
+        <div class="col-12 col-xl-8">
+          <div class="card hb-card hb-card-pad mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+              <h1 class="hb-h1 mb-0">{{ d.order.order_number }}</h1>
+              <div class="d-flex gap-2">
+                <span class="hb-pill" [ngClass]="d.statusPillClass">{{ d.statusLabel }}</span>
+                <span class="hb-pill" [ngClass]="d.payPillClass">{{ d.paymentLabel }}</span>
+              </div>
             </div>
-          </div>
 
-          <div class="hb-divider"></div>
+            <div class="hb-divider"></div>
 
-          <!-- Items Table -->
-          <div class="hb-h2 mb-2">Danh sách sản phẩm</div>
-          <div class="table-responsive">
-            <table class="table align-middle">
-              <thead>
-                <tr class="small text-muted text-uppercase fw-bold">
-                  <th>Sản phẩm</th>
-                  <th class="text-center">Đơn giá</th>
-                  <th class="text-center">Số lượng</th>
-                  <th class="text-end">Thành tiền</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let it of d.items">
-                  <td>
-                    <div class="d-flex align-items-center gap-2">
-                      <img [src]="it.product_image_url" class="rounded" style="width: 44px; height: 44px; object-fit: cover;">
-                      <div>
-                        <div class="fw-bold">{{ it.product_name }}</div>
-                        <div class="text-muted small">Variant: {{ it.product_variant_id }}</div>
+            <!-- Items Table -->
+            <div class="hb-h2 mb-2">Danh sách sản phẩm</div>
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead>
+                  <tr class="small text-muted text-uppercase fw-bold">
+                    <th>Sản phẩm</th>
+                    <th class="text-center">Đơn giá</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-end">Thành tiền</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let it of d.items">
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <img
+                          [src]="it.product_image_url"
+                          class="rounded"
+                          style="width: 44px; height: 44px; object-fit: cover"
+                        />
+                        <div>
+                          <div class="">{{ it.product_name }}</div>
+                          <div class="text-muted small">Variant: {{ it.product_variant_id }}</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td class="text-center">{{ it.unitPriceText }}</td>
-                  <td class="text-center">{{ it.quantity }}</td>
-                  <td class="text-end fw-bold">{{ it.subtotalText }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                    </td>
+                    <td class="text-center">{{ it.unitPriceText }}</td>
+                    <td class="text-center">{{ it.quantity }}</td>
+                    <td class="text-end">{{ it.subtotalText }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-          <div class="hb-divider"></div>
+            <div class="hb-divider"></div>
 
-          <!-- Totals -->
-          <div class="row justify-content-end">
-            <div class="col-md-5">
-              <div class="hb-kv d-flex justify-content-between">
-                <span class="k">Tạm tính:</span>
-                <span class="v">{{ d.beforeTotalText }}</span>
-              </div>
-              <div class="hb-kv d-flex justify-content-between">
-                <span class="k">Giảm giá:</span>
-                <span class="v text-danger">- {{ d.discountTotalText }}</span>
-              </div>
-              <div class="hb-kv d-flex justify-content-between">
-                <span class="k">Phí vận chuyển:</span>
-                <span class="v">{{ d.shippingFeeText }}</span>
-              </div>
-              <div class="hb-divider"></div>
-              <div class="hb-kv d-flex justify-content-between">
-                <span class="k hb-total fw-bold">TỔNG CỘNG:</span>
-                <span class="v hb-total fw-bold">{{ d.totalText }}</span>
+            <!-- Totals -->
+            <div class="row justify-content-end">
+              <div class="col-md-5">
+                <div class="hb-kv d-flex justify-content-between">
+                  <span class="k">Tạm tính:</span>
+                  <span class="v">{{ d.beforeTotalText }}</span>
+                </div>
+                <div class="hb-kv d-flex justify-content-between">
+                  <span class="k">Giảm giá:</span>
+                  <span class="v text-danger">- {{ d.discountTotalText }}</span>
+                </div>
+                <div class="hb-kv d-flex justify-content-between">
+                  <span class="k">Phí vận chuyển:</span>
+                  <span class="v">{{ d.shippingFeeText }}</span>
+                </div>
+                <div class="hb-divider"></div>
+                <div class="hb-kv d-flex justify-content-between">
+                  <span class="k hb-total fw-bold">TỔNG CỘNG:</span>
+                  <span class="v hb-total fw-bold text-primary">{{ d.totalText }}</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="hb-divider"></div>
+            <div class="hb-divider"></div>
 
-          <!-- Timeline -->
-          <div class="hb-h2 mb-3">Lịch sử xử lý đơn hàng</div>
-          <div class="hb-timeline">
-            <div class="hb-tl-item" *ngFor="let t of d.timeline">
-              <div class="hb-tl-dot" [class.is-done]="t.done"></div>
-              <div>
-                <div class="hb-tl-title">{{ t.title }}</div>
-                <div class="text-muted small">{{ t.desc }}</div>
+            <!-- Timeline -->
+            <div class="hb-h2 mb-3">Lịch sử xử lý đơn hàng</div>
+            <div class="hb-timeline">
+              <div class="hb-tl-item" *ngFor="let t of d.timeline">
+                <div class="hb-tl-dot" [class.is-done]="t.done"></div>
+                <div>
+                  <div class="hb-tl-title">{{ t.title }}</div>
+                  <div class="text-muted small">{{ t.desc }}</div>
+                </div>
+                <div class="text-muted small">{{ t.atText }}</div>
               </div>
-              <div class="text-muted small">{{ t.atText }}</div>
             </div>
           </div>
         </div>
 
         <!-- Right Side: Logistics & Customer -->
-        <div class="hb-side-card">
+        <div class="col-12 col-xl-4">
           <div class="card hb-card hb-card-pad mb-3">
             <div class="hb-h2 mb-3">Thông tin khách hàng</div>
             <div class="hb-kv">
@@ -289,7 +313,7 @@
             </div>
             <div class="hb-kv">
               <div class="k">Địa chỉ nhận hàng:</div>
-              <div class="v small" style="white-space: pre-line;">{{ d.addressText }}</div>
+              <div class="v small" style="white-space: pre-line">{{ d.addressText }}</div>
             </div>
           </div>
 
@@ -301,14 +325,24 @@
             </div>
             <div class="hb-kv mt-2">
               <div class="k">Ghi chú nội bộ:</div>
-              <div class="v small text-muted italic">{{ d.order.admin_note || 'Chưa có ghi chú' }}</div>
+              <div class="v small text-muted italic">
+                {{ d.order.admin_note || 'Chưa có ghi chú' }}
+              </div>
             </div>
             <div class="hb-divider"></div>
             <div class="d-grid gap-2">
-              <button class="btn btn-hb-outline w-100" *ngIf="d.canCancel" (click)="confirmCancel(d.order.order_id)">
+              <button
+                class="btn btn-hb-outline w-100"
+                *ngIf="d.canCancel"
+                (click)="confirmCancel(d.order.order_id)"
+              >
                 Huỷ đơn hàng
               </button>
-              <button class="btn btn-hb-accent w-100" *ngIf="d.canApproveRequest" (click)="approveRequest(d.order.order_id)">
+              <button
+                class="btn btn-hb-accent w-100"
+                *ngIf="d.canApproveRequest"
+                (click)="approveRequest(d.order.order_id)"
+              >
                 Duyệt đổi trả
               </button>
             </div>
@@ -319,20 +353,31 @@
 
     <!-- ===== EDIT VIEW ===== -->
     <ng-container *ngIf="vm.mode === 'edit' && vm.editModel as em">
-      <div class="hb-detail-shell">
-        <div class="card hb-card hb-card-pad">
-          <h2 class="hb-h1 mb-4">Cập nhật đơn hàng</h2>
-          <div class="mb-3">
-            <label class="form-label fw-bold">Ghi chú nội bộ</label>
-            <textarea class="form-control" rows="8" [(ngModel)]="$any(em).admin_note" placeholder="Nhập ghi chú cho nhân viên..."></textarea>
-            <div class="form-text mt-1 italic opacity-75">Thông tin này không hiển thị với khách hàng.</div>
+      <div class="row g-4 pt-1">
+        <div class="col-12 col-xl-8">
+          <div class="card hb-card hb-card-pad">
+            <h2 class="hb-h1 mb-4">Cập nhật đơn hàng</h2>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Ghi chú nội bộ</label>
+              <textarea
+                class="form-control"
+                rows="8"
+                [(ngModel)]="$any(em).admin_note"
+                placeholder="Nhập ghi chú cho nhân viên..."
+              ></textarea>
+              <div class="form-text mt-1 italic opacity-75">
+                Thông tin này không hiển thị với khách hàng.
+              </div>
+            </div>
           </div>
         </div>
-        <div class="hb-side-card">
-          <div class="card hb-card hb-card-pad bg-light">
-            <div class="hb-h2 mb-2">Thao tác</div>
-            <button class="btn btn-hb w-100 mb-2" (click)="saveEdit()">Lưu ghi chú</button>
-            <button class="btn btn-hb-outline w-100" (click)="cancelEdit()">Hủy bỏ</button>
+        <div class="col-12 col-xl-4">
+          <div class="hb-side-card">
+            <div class="card hb-card hb-card-pad bg-light">
+              <div class="hb-h2 mb-2">Thao tác</div>
+              <button class="btn btn-hb w-100 mb-2" (click)="saveEdit()">Lưu ghi chú</button>
+              <button class="btn btn-hb-outline w-100" (click)="cancelEdit()">Hủy bỏ</button>
+            </div>
           </div>
         </div>
       </div>
