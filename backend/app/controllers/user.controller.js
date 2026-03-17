@@ -5,7 +5,6 @@ class UserController {
   async getUserInfo(req, res) {
     try {
       const id = req.userId;
-      console.log(id);
       const user = await User.findById(id).select("-password_hash");
       if (!user) {
         return res.status(404).json({ message: "Không tìm thấy người dùng" });
