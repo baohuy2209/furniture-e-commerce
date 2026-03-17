@@ -69,7 +69,17 @@ type UIState = {
 // =====================
 
 type VoucherUpdate = Partial<
-  Pick<Voucher, 'value' | 'min_order_value' | 'usage_limit' | 'start_date' | 'end_date' | 'status' | 'appliedTo' | 'applied_products'>
+  Pick<
+    Voucher,
+    | 'value'
+    | 'min_order_value'
+    | 'usage_limit'
+    | 'start_date'
+    | 'end_date'
+    | 'status'
+    | 'appliedTo'
+    | 'applied_products'
+  >
 >;
 
 interface VoucherRepository {
@@ -95,7 +105,8 @@ class InMemoryVoucherRepository implements VoucherRepository {
       end_date: '2025-05-03T23:59',
       status: 'active',
       created_at: '2025-01-01',
-      description: 'Chương trình tri ân khách hàng dịp lễ lớn, áp dụng cho tất cả các đơn hàng mua sản phẩm nội thất.',
+      description:
+        'Chương trình tri ân khách hàng dịp lễ lớn, áp dụng cho tất cả các đơn hàng mua sản phẩm nội thất.',
       revenue_generated: 154000000,
       appliedTo: 'all',
       applied_products: [],
@@ -113,7 +124,8 @@ class InMemoryVoucherRepository implements VoucherRepository {
       end_date: '2026-01-01T23:59',
       status: 'active',
       created_at: '2025-01-02',
-      description: 'Mã giảm giá dành riêng cho các khách hàng lần đầu mua sắm tại nền tảng HomeBase.',
+      description:
+        'Mã giảm giá dành riêng cho các khách hàng lần đầu mua sắm tại nền tảng HomeBase.',
       revenue_generated: 45000000,
       appliedTo: 'all',
       applied_products: [],
@@ -257,7 +269,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       let expiredCount = 0;
       let pendingCount = 0;
 
-      data.forEach(v => {
+      data.forEach((v) => {
         const s = this.computeStatus(v);
         if (s === 'active') activeCount++;
         else if (s === 'paused') pausedCount++;
@@ -309,7 +321,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
         totalPages,
         summary,
         startIndex: startIndex + 1,
-        endIndex: startIndex + pageRows.length
+        endIndex: startIndex + pageRows.length,
       };
     }),
   );
@@ -464,8 +476,11 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       start_date: this.editModel.start_date,
       end_date: this.editModel.end_date,
       appliedTo: this.editModel.appliedTo,
-      applied_products: this.editModel.applied_products_text 
-        ? this.editModel.applied_products_text.split(',').map(s => s.trim()).filter(Boolean)
+      applied_products: this.editModel.applied_products_text
+        ? this.editModel.applied_products_text
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
         : [],
     });
 
@@ -506,7 +521,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     if (this.selectedId === this.deleteVoucherId) {
       this.backToList();
     }
-    
+
     this.deleteModalOpen = false;
     this.deleteVoucherId = null;
   }
@@ -562,7 +577,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
   // ====== HELPERS ======
   private computeStatus(v: Voucher): VoucherStatus {
     const now = this.toISODateTime(new Date());
-    
+
     // Check if hasn't started yet
     if (v.start_date && v.start_date > now) return 'pending';
 
@@ -586,7 +601,10 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       v.type === 'percent' ? 'Giảm %' : v.type === 'fixed' ? 'Giảm tiền' : 'Free ship';
 
     const revenueText = (v.revenue_generated || 0).toLocaleString('vi-VN') + 'đ';
-    const appliedToText = v.appliedTo === 'specific' ? `Sản phẩm chỉ định (${(v.applied_products || []).length})` : 'Tất cả sản phẩm';
+    const appliedToText =
+      v.appliedTo === 'specific'
+        ? `Sản phẩm chỉ định (${(v.applied_products || []).length})`
+        : 'Tất cả sản phẩm';
 
     return {
       ...v,

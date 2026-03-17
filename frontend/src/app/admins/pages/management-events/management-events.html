@@ -2,9 +2,10 @@
   <!-- PAGE HEADER (sticky) -->
   <div class="hb-page-header">
     <div class="hb-header-left">
-      <div class="hb-title" routerLink="/admin/management-events" style="cursor: pointer;">QUẢN LÝ SỰ KIỆN</div>
+      <div class="hb-title" routerLink="/admin/management-events" style="cursor: pointer">
+        QUẢN LÝ SỰ KIỆN
+      </div>
     </div>
-
 
     <!-- LIST ACTIONS -->
     <div class="hb-header-actions" *ngIf="mode === 'list'">
@@ -37,11 +38,11 @@
   </div>
 
   <!-- PAGE BODY -->
-  <div class="hb-page-body mt-3">
+  <div class="hb-page-body">
     <!-- LIST MODE -->
     <ng-container *ngIf="mode === 'list'">
       <!-- SUMMARY BOARD -->
-      <div class="hb-summary-row mb-3">
+      <div class="hb-summary-row">
         <div class="hb-summary-card">
           <div class="hb-sc-icon"><i class="bi bi-calendar-event"></i></div>
           <div>
@@ -91,16 +92,32 @@
             <option value="cancelled">Đã hủy (Cancelled)</option>
           </select>
 
-          <input class="form-control" type="date" [ngModel]="f_from" (ngModelChange)="onChangeFrom($event)" />
-          <input class="form-control" type="date" [ngModel]="f_to" (ngModelChange)="onChangeTo($event)" />
+          <input
+            class="form-control"
+            type="date"
+            [ngModel]="f_from"
+            (ngModelChange)="onChangeFrom($event)"
+          />
+          <input
+            class="form-control"
+            type="date"
+            [ngModel]="f_to"
+            (ngModelChange)="onChangeTo($event)"
+          />
 
-          <select class="form-select" [ngModel]="pageSize" (ngModelChange)="onChangePageSize($event)">
+          <select
+            class="form-select"
+            [ngModel]="pageSize"
+            (ngModelChange)="onChangePageSize($event)"
+          >
             <option [ngValue]="10">10</option>
             <option [ngValue]="20">20</option>
             <option [ngValue]="50">50</option>
           </select>
 
-          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">Reset</button>
+          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
+            Reset
+          </button>
         </div>
       </div>
 
@@ -120,7 +137,11 @@
                   <i class="fas" [ngClass]="sortIcon('event_code')"></i>
                 </div>
               </div>
-              <div class="hb-th" (click)="toggleSort('event_name')" style="justify-content: flex-start; text-align: left;">
+              <div
+                class="hb-th"
+                (click)="toggleSort('event_name')"
+                style="justify-content: flex-start; text-align: left"
+              >
                 <div class="th-content">
                   <span>SỰ KIỆN & ĐỊA ĐIỂM</span>
                   <i class="fas" [ngClass]="sortIcon('event_name')"></i>
@@ -188,11 +209,15 @@
               </div>
 
               <div class="hb-td hb-td-center">
-                <span class="hb-pill" [ngClass]="phaseBadgeClass(r.phase)">{{ phaseLabel(r.phase) }}</span>
+                <span class="hb-pill" [ngClass]="phaseBadgeClass(r.phase)">{{
+                  phaseLabel(r.phase)
+                }}</span>
               </div>
 
               <div class="hb-td hb-td-center">
-                <span class="hb-pill" [ngClass]="statusBadgeClass(r.status)">{{ statusLabel(r.status) }}</span>
+                <span class="hb-pill" [ngClass]="statusBadgeClass(r.status)">{{
+                  statusLabel(r.status)
+                }}</span>
               </div>
 
               <div class="hb-td hb-td-center" (click)="stopEvent($event)">
@@ -216,14 +241,22 @@
 
         <!-- Pagination -->
         <div class="hb-pagination">
-          <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">‹</button>
+          <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">
+            ‹
+          </button>
           <div class="hb-page-info">
             <span>Trang</span>
             <b>{{ vm.page }}</b>
             <span>/</span>
             <span>{{ vm.totalPages }}</span>
           </div>
-          <button class="hb-page-btn" [disabled]="vm.page >= vm.totalPages" (click)="setPage(vm.page + 1)">›</button>
+          <button
+            class="hb-page-btn"
+            [disabled]="vm.page >= vm.totalPages"
+            (click)="setPage(vm.page + 1)"
+          >
+            ›
+          </button>
         </div>
       </div>
     </ng-container>
@@ -234,8 +267,14 @@
         <div class="hb-event-hero-cover" [style.backgroundImage]="'url(' + d.banner_url + ')'">
           <div class="hb-event-hero-overlay">
             <div class="d-flex gap-2">
-              <span class="hb-pill" [ngClass]="phaseBadgeClass(computePhase(d.start_at, d.end_at))">{{ phaseLabel(computePhase(d.start_at, d.end_at)) }}</span>
-              <span class="hb-pill" [ngClass]="statusBadgeClass(d.status)">{{ statusLabel(d.status) }}</span>
+              <span
+                class="hb-pill"
+                [ngClass]="phaseBadgeClass(computePhase(d.start_at, d.end_at))"
+                >{{ phaseLabel(computePhase(d.start_at, d.end_at)) }}</span
+              >
+              <span class="hb-pill" [ngClass]="statusBadgeClass(d.status)">{{
+                statusLabel(d.status)
+              }}</span>
             </div>
             <div class="hb-event-title">{{ d.event_name }}</div>
             <div class="hb-event-sub">{{ d.description }}</div>
@@ -256,7 +295,9 @@
 
             <hr class="hb-hr" />
 
-            <div class="hb-section-title"><i class="bi bi-clock-history me-2"></i>Chương trình sự kiện</div>
+            <div class="hb-section-title">
+              <i class="bi bi-clock-history me-2"></i>Chương trình sự kiện
+            </div>
             <div class="hb-timeline">
               <div class="hb-tl-item" *ngFor="let it of d.schedule">
                 <div class="hb-tl-dot"></div>
@@ -271,8 +312,10 @@
         </div>
 
         <div class="col-lg-4">
-          <div class="card hb-card hb-card-pad sticky-top" style="top: 80px;">
-            <div class="hb-section-title"><i class="bi bi-info-circle me-2"></i>Thông tin chi tiết</div>
+          <div class="card hb-card hb-card-pad sticky-top" style="top: 80px">
+            <div class="hb-section-title">
+              <i class="bi bi-info-circle me-2"></i>Thông tin chi tiết
+            </div>
             <div class="hb-info-kv">
               <div class="kv-item">
                 <div class="kv-label">Mã sự kiện</div>
@@ -316,7 +359,11 @@
             <div class="hb-section-title">Nội dung sự kiện</div>
             <div class="mb-3">
               <label class="form-label">Tên sự kiện *</label>
-              <input class="form-control form-control-lg" [(ngModel)]="em.event_name" placeholder="Ví dụ: Interior Expo 2025" />
+              <input
+                class="form-control form-control-lg"
+                [(ngModel)]="em.event_name"
+                placeholder="Ví dụ: Interior Expo 2025"
+              />
             </div>
 
             <div class="row g-3">
@@ -349,28 +396,54 @@
 
             <div class="mt-4">
               <label class="form-label">Mô tả sự kiện</label>
-              <textarea class="form-control" rows="4" [(ngModel)]="em.description" placeholder="Mô tả tóm tắt sự kiện..."></textarea>
+              <textarea
+                class="form-control"
+                rows="4"
+                [(ngModel)]="em.description"
+                placeholder="Mô tả tóm tắt sự kiện..."
+              ></textarea>
             </div>
 
             <hr class="hb-hr" />
 
             <div class="d-flex align-items-center justify-content-between mb-3">
               <div class="hb-section-title mb-0">Chương trình (Timeline)</div>
-              <button class="btn btn-hb-outline btn-sm" (click)="addScheduleItem()">+ Thêm mục</button>
+              <button class="btn btn-hb-outline btn-sm" (click)="addScheduleItem()">
+                + Thêm mục
+              </button>
             </div>
 
             <div class="hb-schedule-editor">
               <div class="hb-schedule-row" *ngFor="let it of em.schedule; let i = index">
                 <div class="hb-schedule-time">
-                  <input class="form-control form-control-sm mb-1" [(ngModel)]="it.start_time" placeholder="09:00" />
-                  <input class="form-control form-control-sm" [(ngModel)]="it.end_time" placeholder="10:00" />
+                  <input
+                    class="form-control form-control-sm mb-1"
+                    [(ngModel)]="it.start_time"
+                    placeholder="09:00"
+                  />
+                  <input
+                    class="form-control form-control-sm"
+                    [(ngModel)]="it.end_time"
+                    placeholder="10:00"
+                  />
                 </div>
                 <div class="min-w-0">
-                  <input class="form-control form-control-sm fw-bold mb-1" [(ngModel)]="it.title" placeholder="Tiêu đề mục..." />
-                  <textarea class="form-control form-control-sm" rows="2" [(ngModel)]="it.description" placeholder="Mô tả ngắn..."></textarea>
+                  <input
+                    class="form-control form-control-sm fw-bold mb-1"
+                    [(ngModel)]="it.title"
+                    placeholder="Tiêu đề mục..."
+                  />
+                  <textarea
+                    class="form-control form-control-sm"
+                    rows="2"
+                    [(ngModel)]="it.description"
+                    placeholder="Mô tả ngắn..."
+                  ></textarea>
                 </div>
                 <div class="d-flex align-items-center">
-                  <button class="hb-icon-btn danger" (click)="removeScheduleItem(i)"><i class="bi bi-trash3"></i></button>
+                  <button class="hb-icon-btn danger" (click)="removeScheduleItem(i)">
+                    <i class="bi bi-trash3"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -378,12 +451,16 @@
         </div>
 
         <div class="col-lg-4">
-          <div class="card hb-card hb-card-pad sticky-top" style="top: 80px;">
+          <div class="card hb-card hb-card-pad sticky-top" style="top: 80px">
             <div class="hb-section-title">Địa điểm & Quy mô</div>
             <div class="row g-3">
               <div class="col-12">
                 <label class="form-label">Tên địa điểm</label>
-                <input class="form-control" [(ngModel)]="em.location_name" placeholder="Ví dụ: SECC" />
+                <input
+                  class="form-control"
+                  [(ngModel)]="em.location_name"
+                  placeholder="Ví dụ: SECC"
+                />
               </div>
               <div class="col-12">
                 <label class="form-label">Địa chỉ chi tiết</label>

@@ -9,9 +9,15 @@
   --hb-radius-lg: 20px;
 }
 
-.fw-black { font-weight: 900 !important; }
-.fs-2 { font-size: 2rem !important; }
-.fs-3 { font-size: 1.5rem !important; }
+.fw-black {
+  font-weight: 900 !important;
+}
+.fs-2 {
+  font-size: 2rem !important;
+}
+.fs-3 {
+  font-size: 1.5rem !important;
+}
 
 /* Utility for sidebar stats */
 .item-stat {
@@ -21,9 +27,15 @@
   transform: scale(1.02);
 }
 
-
 :host {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
   display: block;
   height: 100%;
 }
@@ -274,15 +286,15 @@
 /* Header | Code | Name | Type | Value | Expiry | Used | Status | Edit | Delete */
 .hb-grid-vouchers {
   display: grid;
-  grid-template-columns: 
-    55px 
-    175px 
-    minmax(180px, 1.6fr) 
-    100px 
-    115px 
-    115px 
-    100px 
-    125px 
+  grid-template-columns:
+    55px
+    175px
+    minmax(180px, 1.6fr)
+    100px
+    115px
+    115px
+    100px
+    125px
     65px
     65px;
   align-items: center;
@@ -361,7 +373,8 @@
 }
 
 /* Centering Utilities */
-.hb-td-center, .hb-td-stt {
+.hb-td-center,
+.hb-td-stt {
   justify-content: center;
   text-align: center;
 }

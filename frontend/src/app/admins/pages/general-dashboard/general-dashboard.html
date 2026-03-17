@@ -18,8 +18,8 @@
 
   <div class="hb-page-body">
     <!-- QUICK DATE & GLOBAL FILTERS -->
-    <div class="card hb-card hb-card-pad mt-3 mb-3">
-      <div class="hb-filterbar d-flex align-items-center gap-3">
+    <div class="card hb-card hb-card-pad mb-3">
+      <div class="hb-filterbar">
         <div class="btn-group">
           <button class="btn btn-sm btn-hb-outline" [class.active]="isGlobalPresetActive(7)" (click)="applyGlobalPreset(7)">7 ngày</button>
           <button class="btn btn-sm btn-hb-outline" [class.active]="isGlobalPresetActive(30)" (click)="applyGlobalPreset(30)">30 ngày</button>
@@ -41,7 +41,7 @@
     </div>
 
     <!-- SUMMARY KPI ROW -->
-    <section class="hb-summary-row">
+    <section class="hb-summary-row mt-3">
       <div class="hb-summary-card">
         <div class="hb-sc-icon revenue"><i class="bi bi-currency-dollar"></i></div>
         <div>
