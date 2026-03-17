@@ -1,9 +1,22 @@
+const eventService = require("../../services/event.service");
 const RegisterEvent = require("../models/registerEvent.model");
 class RegisterEventController {
   // [POST] /api/register-events
   async registerEvents(req, res) {
     try {
-      const newRegisterEvent = await RegisterEvent.create(req.body);
+      const { event_id, fullname, email, phone, note } = req.body;
+      const newRegisterEvent = await RegisterEvent.create({
+        event_id,
+        fullname,
+        email,
+        phone,
+        note,
+      });
+      const { data, message } =
+        await eventService.increaseRegisterEvent(event_id);
+      if (!data) {
+        return res.status(403).json({ message, data: null });
+      }
       return res.status(200).json({
         message: "Đăng kí sự kiện thành công",
         data: newRegisterEvent,

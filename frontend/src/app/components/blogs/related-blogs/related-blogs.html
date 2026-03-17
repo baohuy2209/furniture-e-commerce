@@ -1,0 +1,21 @@
+@if (posts.length > 0) {
+  <section class="related-posts">
+    <!-- Header -->
+    <div class="related-posts__header">
+      <h2 class="related-posts__title">Bài Viết <span class="title-highlight">Liên Quan</span></h2>
+      <p class="related-posts__subtitle">{{ subtitle }}</p>
+    </div>
+
+    <!-- Scrollable track -->
+    <div class="related-posts__scroll-wrapper container" appDragScroll>
+      <div class="related-posts__track">
+        @for (post of posts; track $index) {
+          <div class="related-posts__item">
+            <!-- Dùng blog-card của bạn ở đây -->
+            <app-blog-card [blogInfo]="post"></app-blog-card>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+}

@@ -1,0 +1,30 @@
+<div class="content-renderer">
+  @for (block of sortedBlocks; track $index) {
+    @switch (block.type) {
+      @case ('paragraph') {
+        <app-paragraph-block
+          [data]="asString(block.data)"
+          [order]="block.order"
+        ></app-paragraph-block>
+      }
+      @case ('heading') {
+        <app-heading-block [data]="asString(block.data)" [order]="block.order"></app-heading-block>
+      }
+      @case ('quote') {
+        <app-quote-block [data]="asString(block.data)" [order]="block.order"></app-quote-block>
+      }
+      @case ('list') {
+        <app-list-block [data]="asStringArray(block.data)" [order]="block.order"></app-list-block>
+      }
+      @case ('image') {
+        <app-image-block [data]="asImageData(block.data)" [order]="block.order"></app-image-block>
+      }
+      @case ('embed') {
+        <app-embed-block [data]="asEmbedData(block.data)" [order]="block.order"></app-embed-block>
+      }
+      @case ('code') {
+        <app-code-block [data]="asCodeData(block.data)" [order]="block.order"></app-code-block>
+      }
+    }
+  }
+</div>

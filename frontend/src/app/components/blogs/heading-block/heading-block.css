@@ -1,0 +1,50 @@
+.heading-block {
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+.heading-text {
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 0.6rem 0;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.heading-divider {
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-accent));
+  border-radius: 99px;
+  transition: width var(--transition-base);
+}
+
+.heading-block:hover .heading-divider {
+  width: 80px;
+}
+
+/* Sub-heading style for numbered headings */
+.heading-block.numbered .heading-text {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+.heading-block.numbered .heading-divider {
+  width: 32px;
+  height: 2px;
+  background: var(--color-accent);
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .heading-text {
+    font-size: 1.4rem;
+  }
+
+  .heading-block.numbered .heading-text {
+    font-size: 1.15rem;
+  }
+}

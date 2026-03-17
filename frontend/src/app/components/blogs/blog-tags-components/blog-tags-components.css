@@ -1,0 +1,61 @@
+.post-tags {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg) var(--spacing-lg);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Label "Tags" */
+.tags-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Tag list container */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* Individual tag pill */
+.tag-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  background: #fdf0e0;
+  color: var(--color-secondary);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(139, 115, 85, 0.4);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.tag-item:hover {
+  background: #f5e3c8;
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+  text-decoration-color: var(--color-secondary);
+  transform: translateY(-1px);
+}
+
+.tag-item:active {
+  transform: translateY(0);
+}

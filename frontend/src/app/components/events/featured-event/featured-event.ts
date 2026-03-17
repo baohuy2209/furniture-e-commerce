@@ -1,18 +1,19 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { EventRegistrationModal } from '../event-registration-modal/event-registration-modal';
 import { IEvent } from '../../../../interface';
 import { EventService } from '../../../services/event-service';
 @Component({
   selector: 'app-featured-event',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, EventRegistrationModal],
   templateUrl: './featured-event.html',
   styleUrl: './featured-event.css',
 })
 export class FeaturedEvent implements OnInit {
   isModalOpen = false;
   listCurrentEvents: IEvent[] = [];
+  numBrands: number = 0;
   success: string = '';
   error: string = '';
   constructor(
@@ -20,6 +21,7 @@ export class FeaturedEvent implements OnInit {
     private cdr: ChangeDetectorRef,
   ) {}
   ngOnInit(): void {
+    this.numBrands = this.getRandomNumber();
     this.eventService.getAllCurrentEvents().subscribe({
       next: (res) => {
         this.listCurrentEvents = res.data;
@@ -43,25 +45,7 @@ export class FeaturedEvent implements OnInit {
   closeRegisterModal() {
     this.isModalOpen = false;
   }
-
-  event = {
-    event_id: 1,
-    event_name: 'Interior Harmony Expo 2025',
-    description:
-      'Triển lãm nội thất nghệ thuật – Cân bằng lý trí & cảm xúc. Khám phá cách phối cảnh, ánh sáng, màu sắc và vật liệu tạo không gian sống mang dấu ấn cá nhân.',
-    date: { day: 15, month: 1, year: 2025 },
-    time: '08:00 - 17:00',
-    location: 'HomeBase Quận 2, TP.HCM',
-    thumbnail_image: '/images/event/event_images1.jpg',
-    event_status: 'ONGOING',
-    event_type: 'EXHIBITION',
-    price: 0,
-    max_participants: 500,
-    stats: {
-      attendees: 500,
-      brands: 15,
-      workshops: 6,
-    },
-    is_featured: true,
-  };
+  getRandomNumber() {
+    return Math.floor(Math.random() * 10) + 1;
+  }
 }

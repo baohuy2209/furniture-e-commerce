@@ -1,0 +1,83 @@
+.list-block {
+  margin: var(--spacing-md) 0;
+}
+
+.list-content {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: 0.75rem var(--spacing-sm);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  animation: fadeInLeft 0.4s ease both;
+}
+
+.list-item:hover {
+  border-color: var(--color-secondary);
+  background: #fdf8f0;
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.list-bullet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.bullet-inner {
+  width: 6px;
+  height: 6px;
+  background: var(--color-white);
+  border-radius: 50%;
+}
+
+.list-text {
+  font-family: var(--font-body);
+  font-size: 0.97rem;
+  line-height: 1.65;
+  color: var(--color-text);
+}
+
+/* Highlight colon-separated label (e.g. "Tên: mô tả") */
+.list-text::first-line {
+  font-weight: 500;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .list-item {
+    padding: 0.65rem var(--spacing-xs);
+  }
+
+  .list-text {
+    font-size: 0.92rem;
+  }
+}

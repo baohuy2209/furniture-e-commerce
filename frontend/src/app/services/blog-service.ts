@@ -17,6 +17,17 @@ export class BlogService {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
+  getAllRelatedBlogs(categoryId: string): Observable<{ message: string; data: IListBlog[] }> {
+    console.log(categoryId);
+    return this.httpClient
+      .get<{ message: string; data: IListBlog[] }>(
+        `${environment.backend_url}/blogs/related-blog/${categoryId}`,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
   getTrendingBlogs(): Observable<{ message: string; data: IListBlog[] }> {
     return this.httpClient
       .get<{ message: string; data: IListBlog[] }>(

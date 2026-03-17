@@ -1,0 +1,8 @@
+<div class="post-tags">
+  <span class="tags-label">Tags</span>
+  <div class="tags-list">
+    @for (tag of tags; track $index) {
+      <a class="tag-item" [routerLink]="'/blogs/tag/' + tag.slug"> #{{ tag.name }} </a>
+    }
+  </div>
+</div>

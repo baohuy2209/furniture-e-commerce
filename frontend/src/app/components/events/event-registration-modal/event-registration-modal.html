@@ -18,62 +18,36 @@
         </div>
 
         <form (ngSubmit)="submitForm()" class="reg-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label><i class="bi bi-person"></i> HỌ VÀ TÊN</label>
-              <input
-                type="text"
-                [(ngModel)]="formData.fullname"
-                name="fullname"
-                placeholder="Nguyễn Văn A"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label><i class="bi bi-envelope"></i> EMAIL</label>
-              <input
-                type="email"
-                [(ngModel)]="formData.email"
-                name="email"
-                placeholder="email@example.com"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label><i class="bi bi-telephone"></i> SỐ ĐIỆN THOẠI</label>
-              <input
-                type="tel"
-                [(ngModel)]="formData.phone"
-                name="phone"
-                placeholder="0901234567"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label><i class="bi bi-geo-alt"></i> ĐỊA CHỈ</label>
-              <input
-                type="text"
-                [(ngModel)]="formData.address"
-                name="address"
-                placeholder="Phường ABC, TP.HCM"
-              />
-            </div>
+          <div class="form-group">
+            <label><i class="bi bi-person"></i> HỌ VÀ TÊN</label>
+            <input
+              type="text"
+              [(ngModel)]="formData.fullname"
+              name="fullname"
+              placeholder="Nguyễn Văn A"
+              required
+            />
           </div>
 
           <div class="form-group">
-            <label><i class="bi bi-people"></i> SỐ NGƯỜI THAM DỰ</label>
-            <select [(ngModel)]="formData.quantity" name="quantity">
-              <option [value]="1">1 người</option>
-              <option [value]="2">2 người</option>
-              <option [value]="3">3 người</option>
-              <option [value]="4">4 người</option>
-              <option [value]="5">5 - 10 người</option>
-            </select>
+            <label><i class="bi bi-envelope"></i> EMAIL</label>
+            <input
+              type="email"
+              [(ngModel)]="formData.email"
+              name="email"
+              placeholder="email@example.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label><i class="bi bi-telephone"></i> SỐ ĐIỆN THOẠI</label>
+            <input
+              type="tel"
+              [(ngModel)]="formData.phone"
+              name="phone"
+              placeholder="0901234567"
+              required
+            />
           </div>
 
           <div class="form-group">
@@ -92,7 +66,9 @@
               >Tôi đồng ý với <a href="#">điều khoản và điều kiện</a> của HomeBase Events</label
             >
           </div>
-
+          @if (error) {
+            <p class="text-danger">{{ error }}</p>
+          }
           <button type="submit" class="btn-submit">ĐĂNG KÝ NGAY</button>
         </form>
       </div>

@@ -1,8 +1,15 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { BlogService } from '../../services/blog-service';
+import { IBlog, IBlogTag, IListBlog } from '../../../interface';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ContentRender } from '../../components/blogs/content-render/content-render';
+import { BlogTagsService } from '../../services/blog-tags-service';
+import { BlogTagsComponents } from '../../components/blogs/blog-tags-components/blog-tags-components';
+import { RelatedBlogs } from '../../components/blogs/related-blogs/related-blogs';
 
 @Component({
   selector: 'app-blogs-details',
-  imports: [],
+  imports: [ContentRender, BlogTagsComponents, RelatedBlogs],
   templateUrl: './blogs-details.html',
   styleUrl: './blogs-details.css',
 })
@@ -10,6 +17,18 @@ export class BlogsDetails {
   // Article URL for sharing
   articleUrl: string = '';
   articleTitle: string = '';
+  blog_detail: IBlog | null = null;
+  blog_id: string | null = null;
+  listBlogTags: IBlogTag[] = [];
+  listRelatedBlogs: IListBlog[] = [];
+  error: string = '';
+  constructor(
+    private blogService: BlogService,
+    private blogTagsService: BlogTagsService,
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
   onStartClick(): void {
     // Add your navigation logic here
     console.log('Bắt đầu button clicked');
@@ -19,11 +38,58 @@ export class BlogsDetails {
     // Add your navigation logic here
     console.log('Tìm hiểu button clicked');
   }
+  onBackClick(): void {
+    this.router.navigate(['/blogs']);
+  }
 
   ngOnInit(): void {
     // Get current page URL and title
+    this.blog_id = this.route.snapshot.paramMap.get('id');
     this.articleUrl = window.location.href;
     this.articleTitle = document.title || 'Bài viết về thiết kế nội thất';
+    this.blogService.getDetailBlog(this.blog_id!).subscribe({
+      next: (res) => {
+        this.blog_detail = res.data;
+        res.data.tags.forEach((tagId: string) => {
+          this.blogTagsService.getDetailBlogTags(tagId).subscribe({
+            next: (res) => {
+              this.listBlogTags.push(res.data);
+            },
+            error: (err) => {
+              if (err.status === 404 || err.status === 400 || err.status === 401) {
+                this.error = err.error?.message || 'Không tìm thây thông tin sự kiện nào';
+              } else {
+                this.error = 'Có lỗi ở phía server';
+              }
+              this.cdr.detectChanges();
+            },
+          });
+        });
+        this.blogService.getAllRelatedBlogs(res.data.categories).subscribe({
+          next: (res) => {
+            this.listRelatedBlogs = res.data;
+            console.log(this.listRelatedBlogs);
+          },
+          error: (err) => {
+            if (err.status === 404 || err.status === 400 || err.status === 401) {
+              this.error = err.error?.message || 'Không tìm thây thông tin sự kiện nào';
+            } else {
+              this.error = 'Có lỗi ở phía server';
+            }
+            this.cdr.detectChanges();
+          },
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thây thông tin sự kiện nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   /**
@@ -93,5 +159,19 @@ export class BlogsDetails {
     console.log('Register button clicked');
     // Example: this.router.navigate(['/register']);
     // Or open a modal: this.modalService.open(RegistrationModalComponent);
+  }
+  formatDateTime(dateStr: string | Date) {
+    const date = new Date(dateStr);
+
+    return date.toLocaleString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+  formatNumber(num: number): string {
+    return new Intl.NumberFormat('vi-VN').format(num);
   }
 }

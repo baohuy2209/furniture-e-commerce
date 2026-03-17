@@ -11,7 +11,29 @@
   >
     <div class="overlay"></div>
     <div class="hero-content container">
-      <span class="status-badge">⏳ SẮP DIỄN RA</span>
+      @switch (event?.status) {
+        @case ('ENDED') {
+          <span
+            class="status-badge"
+            style="color: #ff5a5a; background-color: #ffb2b2; border-color: #e36a6a"
+            >Đã kết thúc</span
+          >
+        }
+        @case ('ONGOING') {
+          <span class="status-badge">Đang diễn ra</span>
+        }
+        @case ('UPCOMING') {
+          <span
+            class="status-badge"
+            style="
+              background: linear-gradient(90deg, #ffd54f, #ffb300);
+              color: #4e342e;
+              border: none;
+            "
+            >Sắp diễn ra</span
+          >
+        }
+      }
       <h1>{{ event?.title }}</h1>
       <p class="subtitle">{{ event?.description }}</p>
     </div>
@@ -112,7 +134,12 @@
             </div>
           </div>
 
-          <button class="btn-event-primary w-100 mt-3" (click)="openRegisterModal()">
+          <button
+            class="btn-event-primary w-100 mt-3"
+            (click)="openRegisterModal()"
+            [disabled]="event?.status == 'ENDED' || event?.status == 'ONGOING'"
+            [class.opacity-80]="event?.status == 'ENDED' || event?.status == 'ONGOING'"
+          >
             ĐĂNG KÝ NGAY
           </button>
         </div>

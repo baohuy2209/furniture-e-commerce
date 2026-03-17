@@ -62,5 +62,25 @@ class BlogController {
         .json({ message: "Lỗi server " + error, data: null });
     }
   }
+  // [GET] /api/blogs/related-blog/:id
+  async getRelatedBlogs(req, res) {
+    try {
+      const categoryId = req.params.id;
+      const blogs = await BlogPosts.find({ categories: categoryId });
+      console.log(blogs, categoryId);
+      const { data, message } = await blogService.getListBlogInfo(blogs);
+      if (!data) {
+        return res
+          .status(404)
+          .json({ data: null, message: "Không tìm thấy dữ liệu" });
+      }
+      return res.status(200).json({ message, data });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Lỗi server " + error, data: null });
+    }
+  }
 }
 module.exports = new BlogController();

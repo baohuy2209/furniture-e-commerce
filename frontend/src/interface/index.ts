@@ -1,3 +1,5 @@
+import { ContentBlock } from './contentTypeBlock';
+
 export interface IHeroItem {
   image: string;
 }
@@ -182,6 +184,7 @@ export interface IEvent {
     maxSlot: number;
     registeredCount: number;
   };
+  status: string;
 }
 export interface IRegisterEvent {
   _id: string;
@@ -299,7 +302,7 @@ export interface IBlog {
     alt: string;
   };
   description: string;
-  content: any[];
+  content: ContentBlock[];
   tags: string[];
   author: string;
   activity: {

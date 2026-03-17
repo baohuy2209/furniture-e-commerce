@@ -1,0 +1,45 @@
+<div class="code-block">
+  <div class="code-header">
+    <div class="code-dots">
+      <span class="dot dot-red"></span>
+      <span class="dot dot-yellow"></span>
+      <span class="dot dot-green"></span>
+    </div>
+    <span class="code-lang">{{ language }}</span>
+    <button class="copy-btn" (click)="copyCode()" [class.copied]="copied" type="button">
+      <!-- Copy icon -->
+      <svg
+        *ngIf="!copied"
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+        />
+      </svg>
+      <!-- Check icon -->
+      <svg
+        *ngIf="copied"
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      {{ copied ? 'Đã sao chép!' : 'Sao chép' }}
+    </button>
+  </div>
+  <div class="code-body">
+    <pre class="code-pre"><code class="code-content">{{ codeString }}</code></pre>
+  </div>
+</div>

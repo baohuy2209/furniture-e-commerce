@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IEvent } from '../../../../interface';
@@ -15,18 +15,20 @@ export class EventRegistrationModal {
   @Output() close = new EventEmitter<void>();
 
   step: 'form' | 'success' = 'form';
-
+  fullname: string = '';
+  error: string = '';
   // Form Data
   formData = {
     fullname: '',
     email: '',
     phone: '',
-    address: '',
-    quantity: 1,
     note: '',
     agreed: false,
   };
-  constructor(private registerEventsService: RegisterEventService) {}
+  constructor(
+    private registerEventsService: RegisterEventService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   closeModal() {
     this.close.emit();
@@ -37,7 +39,29 @@ export class EventRegistrationModal {
       alert('Vui lòng đồng ý với điều khoản tham dự.');
       return;
     }
-    this.step = 'success';
+    this.registerEventsService
+      .registerEvents(
+        this.event._id,
+        this.formData.fullname,
+        this.formData.email,
+        this.formData.phone,
+        this.formData.note,
+      )
+      .subscribe({
+        next: (res) => {
+          this.fullname = res.data.fullname;
+          this.step = 'success';
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          if (err.status === 404 || err.status === 400 || err.status === 401) {
+            this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
+          } else {
+            this.error = 'Có lỗi ở phía server';
+          }
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   finish() {
@@ -48,8 +72,6 @@ export class EventRegistrationModal {
       fullname: '',
       email: '',
       phone: '',
-      address: '',
-      quantity: 1,
       note: '',
       agreed: false,
     };

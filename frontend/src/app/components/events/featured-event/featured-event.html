@@ -1,66 +1,62 @@
-<section class="featured" id="featured-event">
-  <p class="section-label">◆ SỰ KIỆN NỔI BẬT</p>
+@if (listCurrentEvents.length > 0) {
+  <section class="featured" id="featured-event">
+    <p class="section-label">◆ SỰ KIỆN NỔI BẬT</p>
 
-  <h2 class="section-title">Dang <span>Diễn Ra</span></h2>
+    <h2 class="section-title">Dang <span>Diễn Ra</span></h2>
 
-  <div class="featured-card">
-    <!-- IMAGE -->
-    <div class="featured-image">
-      <span class="badge-live">● ĐANG DIỄN RA</span>
-      <img [src]="event.thumbnail_image" [alt]="event.event_name" />
-    </div>
+    <div class="featured-card">
+      <!-- IMAGE -->
+      <div class="featured-image">
+        <span class="badge-live">● ĐANG DIỄN RA</span>
+        <img [src]="listCurrentEvents[0].images[0].url_image" [alt]="listCurrentEvents[0].title" />
+      </div>
 
-    <!-- CONTENT -->
-    <div class="featured-info">
-      <p class="location">
-        <i class="bi bi-geo-alt-fill"></i>
-        {{ event.location }}
-      </p>
+      <!-- CONTENT -->
+      <div class="featured-info">
+        <p class="location">
+          <i class="bi bi-geo-alt-fill"></i>
+          {{ listCurrentEvents[0].location.name }}, {{ listCurrentEvents[0].location.address }},
+          {{ listCurrentEvents[0].location.city }}
+        </p>
 
-      <h3>{{ event.event_name }}</h3>
+        <h3>{{ listCurrentEvents[0].title }}</h3>
 
-      <p class="desc">
-        {{ event.description }}
-      </p>
-      @if (event.stats) {
+        <p class="desc">
+          {{ listCurrentEvents[0].description }}
+        </p>
+
         <div class="meta">
           <div class="meta-item">
             <i class="bi bi-people-fill"></i>
-            <b>{{ event.stats.attendees }}+</b>
+            <b>{{ listCurrentEvents[0].registration.maxSlot }}+</b>
             <span>Khách tham dự</span>
           </div>
 
           <div class="meta-item">
             <i class="bi bi-buildings"></i>
-            <b>{{ event.stats.brands }}+</b>
+            <b>{{ numBrands }}+</b>
             <span>Thương hiệu</span>
           </div>
 
           <div class="meta-item">
             <i class="bi bi-mic-fill"></i>
-            <b>{{ event.stats.workshops }}</b>
-            <span>Workshop</span>
+            <b>{{ listCurrentEvents[0].timeline_event.length - 1 }}+</b>
+            <span>Hoạt động</span>
           </div>
         </div>
-      }
 
-      <div class="actions">
-        <button class="btn-primary" [routerLink]="['/events', event.event_id]">
-          Xem chi tiết →
-        </button>
-        <button
-          class="btn-outline"
-          [disabled]="event.event_status === 'PAST'"
-          (click)="openRegisterModal()"
-        >
-          Đăng ký tham dự
-        </button>
+        <div class="actions">
+          <button class="btn-primary" [routerLink]="['/events', listCurrentEvents[0]._id]">
+            Xem chi tiết →
+          </button>
+          <button class="btn-outline" (click)="openRegisterModal()">Đăng ký tham dự</button>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+}
 
-  <!-- @if (isModalOpen) {
-    <app-event-registration-modal [event]="event" (close)="closeRegisterModal()">
-    </app-event-registration-modal>
-  } -->
-</section>
+@if (isModalOpen) {
+  <app-event-registration-modal [event]="listCurrentEvents[0]" (close)="closeRegisterModal()">
+  </app-event-registration-modal>
+}

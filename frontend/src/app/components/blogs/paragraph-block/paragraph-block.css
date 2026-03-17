@@ -1,0 +1,21 @@
+.paragraph-block {
+  margin-bottom: var(--spacing-md);
+}
+
+.paragraph-text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--color-text);
+  margin: 0;
+  letter-spacing: 0.01em;
+  text-align: justify;
+  hyphens: auto;
+}
+
+@media (max-width: 768px) {
+  .paragraph-text {
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+}

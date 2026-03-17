@@ -1,0 +1,12 @@
+<div class="list-block">
+  <ul class="list-content">
+    @for (item of data; track $index; let i = $index) {
+      <li class="list-item" [style.animation-delay]="i * 0.05 + 's'">
+        <span class="list-bullet">
+          <span class="bullet-inner"></span>
+        </span>
+        <span class="list-text">{{ item }}</span>
+      </li>
+    }
+  </ul>
+</div>

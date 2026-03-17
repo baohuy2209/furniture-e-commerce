@@ -43,5 +43,25 @@ class EventService {
       return { message: "Có lỗi phía server " + e.message, data: null };
     }
   }
+  async increaseRegisterEvent(eventId) {
+    try {
+      const currentEvent = await Event.findById(eventId);
+      if (
+        currentEvent.registration.registeredCount + 1 >
+        currentEvent.registration.maxSlot
+      ) {
+        return { message: "Sự kiện đã đủ số lượng người đăng kí", data: null };
+      }
+      currentEvent.registration.registeredCount += 1;
+      await currentEvent.save();
+      return {
+        message: "Đã đăng kí tham gia sự kiện thành công",
+        data: currentEvent,
+      };
+    } catch (e) {
+      console.log(e);
+      return { message: "Có lỗi phía server " + e.message, data: null };
+    }
+  }
 }
 module.exports = new EventService();

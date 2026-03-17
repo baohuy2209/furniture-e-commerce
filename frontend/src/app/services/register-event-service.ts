@@ -9,11 +9,23 @@ import { environment } from '../../environments/environment.development';
 })
 export class RegisterEventService {
   constructor(private http: HttpClient) {}
-  registerEvents(data: IRegisterEvent): Observable<{ message: string; data: IRegisterEvent }> {
+  registerEvents(
+    event_id: string,
+    fullname: string,
+    email: string,
+    phone: string,
+    note: string,
+  ): Observable<{ message: string; data: IRegisterEvent }> {
     return this.http
       .post<{ message: string; data: IRegisterEvent }>(
         `${environment.backend_url}/register-events`,
-        data,
+        {
+          event_id,
+          fullname,
+          email,
+          phone,
+          note,
+        },
         {
           withCredentials: true,
         },
