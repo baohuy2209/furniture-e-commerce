@@ -3,7 +3,7 @@
   <!-- ── Hero ── -->
   <div class="bh-hero position-relative overflow-hidden">
     <img
-      src="images/blog/blog_images1.jpg"
+      src="images/blog/bo-tri-phong-khach/thumbnail.jpg"
       alt="Blog hero"
       class="bh-hero-img w-100 h-100 object-fit-cover"
     />
@@ -81,9 +81,27 @@
   </div>
 </section>
 <div class="row g-4 container mx-auto py-4 mt-4">
-  @for (blog of listBlogs; track $index) {
-    <div class="col-12 col-sm-6 col-lg-4">
-      <app-blog-card [blogInfo]="blog"></app-blog-card>
+  @if (listBlogs.length > 0) {
+    @for (
+      blog of listBlogs
+        | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: count };
+      track $index
+    ) {
+      <div class="col-12 col-sm-6 col-lg-4">
+        <app-blog-card [blogInfo]="blog"></app-blog-card>
+      </div>
+    }
+  } @else {
+    <div class="col-12 text-center">Không có bài viết nào</div>
+  }
+  @if (listBlogs.length > 12) {
+    <div class="col-12 d-flex justify-content-center align-items-center">
+      <pagination-controls
+        previousLabel="Trang trước"
+        nextLabel="Trang sau"
+        [responsive]="true"
+        (pageChange)="handlePageChange($event)"
+      ></pagination-controls>
     </div>
   }
 </div>

@@ -5,12 +5,15 @@
   </div>
 
   <!-- HERO SECTION -->
-  <section class="details-hero" [style.backgroundImage]="'url(' + event.thumbnail_image + ')'">
+  <section
+    class="details-hero"
+    [style.backgroundImage]="'url(' + event?.images?.[0]?.url_image + ')'"
+  >
     <div class="overlay"></div>
     <div class="hero-content container">
       <span class="status-badge">⏳ SẮP DIỄN RA</span>
-      <h1>{{ event.event_name }}</h1>
-      <p class="subtitle">{{ event.description }}</p>
+      <h1>{{ event?.title }}</h1>
+      <p class="subtitle">{{ event?.description }}</p>
     </div>
   </section>
 
@@ -33,26 +36,28 @@
         </section>
 
         <!-- HIGHLIGHTS -->
-        <section class="section-block">
-          <h3><i class="bi bi-check-square text-gold"></i> Điểm Nổi Bật</h3>
-          <div class="highlights-list">
-            @for (item of event.highlights; track item) {
-              <div class="highlight-item">
-                <i class="bi bi-check-circle-fill"></i>
-                <span>{{ item }}</span>
-              </div>
-            }
-          </div>
-        </section>
+        @if (event?.hightlight_des) {
+          <section class="section-block">
+            <h3><i class="bi bi-check-square text-gold"></i> Điểm Nổi Bật</h3>
+            <div class="highlights-list">
+              @for (item of event?.hightlight_des; track item) {
+                <div class="highlight-item">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span>{{ item }}</span>
+                </div>
+              }
+            </div>
+          </section>
+        }
 
         <!-- TIMELINE -->
         <section class="section-block">
           <h3><i class="bi bi-calendar-event text-gold"></i> Chương Trình</h3>
           <div class="timeline">
-            @for (item of event.timeline; track item) {
+            @for (item of event?.timeline_event; track item) {
               <div class="timeline-item">
                 <div class="dot"></div>
-                <div class="time-badge">{{ item.time }}</div>
+                <div class="time-badge">{{ item.start_time }} - {{ item.end_time }}</div>
                 <h4>{{ item.title }}</h4>
                 <p>{{ item.description }}</p>
               </div>
@@ -67,18 +72,13 @@
           <h4>Thông Tin Sự Kiện</h4>
 
           <div class="info-row">
-            <i class="bi bi-calendar3"></i>
-            <div>
-              <label>NGÀY TỔ CHỨC</label>
-              <span>15-17 Tháng 3, 2025</span>
-            </div>
-          </div>
-
-          <div class="info-row">
             <i class="bi bi-clock"></i>
             <div>
               <label>THỜI GIAN</label>
-              <span>{{ event.time }}</span>
+              <span
+                >{{ formatDateTime(event?.date_range?.startDate!) }} -
+                {{ formatDateTime(event?.date_range?.endDate!) }}</span
+              >
             </div>
           </div>
 
@@ -86,23 +86,29 @@
             <i class="bi bi-geo-alt"></i>
             <div>
               <label>ĐỊA ĐIỂM</label>
-              <span>{{ event.location }}</span>
+              <span
+                >{{ event?.location?.name }}, {{ event?.location?.address }},
+                {{ event?.location?.city }}</span
+              >
             </div>
           </div>
-
-          <div class="info-row">
-            <i class="bi bi-ticket-perforated"></i>
-            <div>
-              <label>GIÁ VÉ</label>
-              <span>Miễn phí (Đăng ký trước)</span>
+          @if (event?.registration?.isFree) {
+            <div class="info-row">
+              <i class="bi bi-ticket-perforated"></i>
+              <div>
+                <label>GIÁ VÉ</label>
+                <span>Miễn phí (Đăng ký trước)</span>
+              </div>
             </div>
-          </div>
+          }
 
           <div class="info-row">
             <i class="bi bi-people"></i>
             <div>
               <label>SỐ CHỖ CÒN LẠI</label>
-              <span>{{ event.stats?.attendees || 0 }}/200</span>
+              <span
+                >{{ event?.registration?.registeredCount }}/{{ event?.registration?.maxSlot }}</span
+              >
             </div>
           </div>
 
@@ -112,10 +118,10 @@
         </div>
         <!-- MODAL (Moved to top) -->
         <!-- MODAL (Moved to top) -->
-        <!-- @if (isModalOpen) {
-          <app-event-registration-modal [event]="event" (close)="closeRegisterModal()">
+        @if (isModalOpen) {
+          <app-event-registration-modal [event]="event!" (close)="closeRegisterModal()">
           </app-event-registration-modal>
-        } -->
+        }
 
         <div class="sidebar-card contact-card">
           <h4>Liên Hệ</h4>

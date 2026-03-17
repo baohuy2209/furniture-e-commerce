@@ -20,7 +20,7 @@ h2 {
 }
 
 h2 span {
-  color: var(--color-accent-gold);
+  color: var(--color-accent);
 }
 
 .past-grid {
@@ -97,8 +97,8 @@ h2 span {
 
 .recap-thumb:hover .play-btn {
   transform: translate(-50%, -50%) scale(1.1);
-  background: var(--color-accent-gold);
-  border-color: var(--color-accent-gold);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .recap-content {
@@ -123,7 +123,7 @@ h2 span {
 }
 
 .btn {
-  color: var(--color-accent-gold);
+  color: var(--color-accent);
   text-decoration: none;
   font-weight: 600;
   display: flex;

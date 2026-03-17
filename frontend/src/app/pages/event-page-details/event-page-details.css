@@ -264,7 +264,22 @@
 .mt-3 {
   margin-top: 1rem;
 }
+.btn-event-primary {
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 999px; /* bo tròn pill */
 
+  background: linear-gradient(90deg, #d4ae37 0%, #ff911f 100%);
+
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
 @media (max-width: 992px) {
   .details-hero {
     height: 300px;

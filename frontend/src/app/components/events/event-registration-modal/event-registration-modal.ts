@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { IEvent } from '../../../../interface';
+import { RegisterEventService } from '../../../services/register-event-service';
 @Component({
   selector: 'app-event-registration-modal',
   imports: [CommonModule, FormsModule],
@@ -9,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './event-registration-modal.css',
 })
 export class EventRegistrationModal {
-  @Input() event!: Event;
+  @Input() event!: IEvent;
   @Output() close = new EventEmitter<void>();
 
   step: 'form' | 'success' = 'form';
@@ -24,6 +26,7 @@ export class EventRegistrationModal {
     note: '',
     agreed: false,
   };
+  constructor(private registerEventsService: RegisterEventService) {}
 
   closeModal() {
     this.close.emit();

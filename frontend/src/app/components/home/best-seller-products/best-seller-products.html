@@ -14,35 +14,77 @@
     <div class="container">
       <nav class="nav-container">
         <div class="nav-item">
-          <a href="#" class="nav-link active"><span>Tất cả</span></a>
+          <button class="nav-link" [class.active]="room_type == ''" (click)="switchTabs('')">
+            <span>Tất cả</span>
+          </button>
         </div>
         <div class="nav-item">
-          <a href="#" class="nav-link">Phòng khách</a>
+          <button
+            class="nav-link"
+            [class.active]="room_type == 'living-room'"
+            (click)="switchTabs('living-room')"
+          >
+            Phòng khách
+          </button>
         </div>
         <div class="nav-item">
-          <a href="#" class="nav-link">Phòng ngủ</a>
+          <button
+            class="nav-link"
+            [class.active]="room_type == 'bedroom'"
+            (click)="switchTabs('bedroom')"
+          >
+            Phòng ngủ
+          </button>
         </div>
         <div class="nav-item">
-          <a href="#" class="nav-link">Phòng ăn</a>
+          <button
+            class="nav-link"
+            [class.active]="room_type == 'dining-room'"
+            (click)="switchTabs('dining-room')"
+          >
+            Phòng ăn
+          </button>
         </div>
         <div class="nav-item">
-          <a href="#" class="nav-link">Ngoài trời</a>
+          <button
+            class="nav-link"
+            [class.active]="room_type == 'outdoor'"
+            (click)="switchTabs('outdoor')"
+          >
+            Ngoài trời
+          </button>
         </div>
         <div class="nav-item">
-          <a href="#" class="nav-link">Đồ trang trí</a>
+          <button
+            class="nav-link"
+            [class.active]="room_type == 'bathroom'"
+            (click)="switchTabs('bathroom')"
+          >
+            Phòng tắm
+          </button>
         </div>
         <div class="nav-item">
-          <a href="#" class="nav-link">Phụ kiện</a>
+          <button
+            class="nav-link"
+            [class.active]="room_type == 'accessories'"
+            (click)="switchTabs('accessories')"
+          >
+            Phụ kiện
+          </button>
         </div>
       </nav>
     </div>
   </div>
   <div class="container">
     <div class="row g-4 mt-4 row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 flex flex-wrap">
-      @for (product of listBestSellerProducts; track $index) {
-        <div class="col">
-          <app-card-product [productInfo]="product"></app-card-product>
-        </div>
+      @if (listBestSellerProducts.length > 0) {
+        @for (product of listBestSellerProducts; track $index) {
+          <div class="col">
+            <app-card-product [productInfo]="product"></app-card-product>
+          </div>
+        }
+      } @else {
+        <div class="col text-center">Không có sản phẩm nào</div>
       }
     </div>
   </div>

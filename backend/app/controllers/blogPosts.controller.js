@@ -1,11 +1,15 @@
 const BlogPosts = require("../models/blogPosts.model");
 const blogService = require("../../services/blog.service");
+const { getPagination } = require("../../utils/utils");
+
 class BlogController {
   // [GET] /api/blogs
   async getAll(req, res) {
     try {
-      const blogs = await BlogPosts.find({});
-      const { data, message } = await blogService.getListBlogInfo(blogs);
+      const { page, size } = req.query;
+      const { limit, offset } = getPagination(page, size);
+      const blogs = await BlogPosts.paginate({}, { offset, limit });
+      const { data, message } = await blogService.getListBlogInfo(blogs.docs);
       if (!data) {
         return res
           .status(404)

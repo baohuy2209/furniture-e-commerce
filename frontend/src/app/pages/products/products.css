@@ -36,7 +36,7 @@
 .nav-link.active {
   color: var(--color-primary);
   font-weight: 600;
-  border-bottom-color: #2d5f3f;
+  border-bottom-color: var(--color-primary);
 }
 .nav-link.active span {
   padding: 6px 16px;

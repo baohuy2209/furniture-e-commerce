@@ -1,4 +1,5 @@
 const Event = require("../models/event.model");
+const eventService = require("../../services/event.service");
 class EventController {
   // [GET] /api/events/
   async getAllEvents(req, res) {
@@ -13,6 +14,58 @@ class EventController {
       return res
         .status(500)
         .json({ message: "Lỗi server", error: error.message });
+    }
+  }
+  // [GET] /api/events/past-event
+  async getPastEvents(req, res) {
+    try {
+      const { data, message } = await eventService.getPastEvents();
+      if (!data) {
+        return res.status(404).json({ message, data });
+      }
+      return res.status(200).json({
+        data,
+        message: "Lấy dữ liệu các sự kiện thành công",
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Lỗi server " + error.message, data: null });
+    }
+  }
+  // [GET] /api/events/upcoming-event
+  async getUpcommingEvent(req, res) {
+    try {
+      const { data, message } = await eventService.getUpcommingEvents();
+      if (!data) {
+        return res.status(404).json({ message, data });
+      }
+      return res.status(200).json({
+        data,
+        message: "Lấy dữ liệu các sự kiện sắp diễn ra thành công",
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Lỗi server " + error.message, data: null });
+    }
+  }
+  // [GET] /api/events/current-event
+  async getCurrentEvent(req, res) {
+    try {
+      const { data, message } = await eventService.getCurrentEvents();
+      if (!data) {
+        return res.status(404).json({ message, data: null });
+      }
+      return res.status(200).json({
+        data,
+        message: "Lấy dữ liệu các sự kiện đang diễn ra thành công",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Lỗi server", data: null });
     }
   }
   // [GET] /api/events/:id
@@ -48,7 +101,9 @@ class EventController {
   async updateEvent(req, res) {
     try {
       const eventId = req.params.id;
-      const updatedEvent = await Event.findByIdAndUpdate(eventId, req.body);
+      const updatedEvent = await Event.findByIdAndUpdate(eventId, {
+        ...req.body,
+      });
       if (!updatedEvent) {
         return res
           .status(404)

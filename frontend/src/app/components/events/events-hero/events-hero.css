@@ -2,7 +2,7 @@
   position: relative;
   height: 80vh; /* Set height based on design */
   width: 100%;
-  background-image: url('/images/event/background_image.jpg'); /* Need to ensure this mage exists or use a placeholder */
+  background-image: url('../../../../assets/events/background_image.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -51,7 +51,7 @@ h1 {
 }
 
 h1 span {
-  color: var(--color-accent-gold); /* Or orange from design */
+  color: var(--color-accent); /* Or orange from design */
   display: block;
   font-size: 6rem;
 }

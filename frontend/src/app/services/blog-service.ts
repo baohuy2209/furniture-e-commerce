@@ -9,10 +9,11 @@ import { environment } from '../../environments/environment.development';
 })
 export class BlogService {
   constructor(private httpClient: HttpClient) {}
-  getAllBlogs(): Observable<{ message: string; data: IListBlog[] }> {
+  getAllBlogs(params: any): Observable<{ message: string; data: IListBlog[] }> {
     return this.httpClient
       .get<{ message: string; data: IListBlog[] }>(`${environment.backend_url}/blogs`, {
         withCredentials: true,
+        params,
       })
       .pipe(retry(2), catchError(this.handleError));
   }

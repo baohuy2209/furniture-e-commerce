@@ -12,13 +12,16 @@ class ProductService {
           }),
         );
         const categoriesPromises = product.categories.map((categoryId) =>
-          ProductCategory.findById(categoryId).then((category) => {
-            return category;
+          ProductCategory.findById({ _id: categoryId }).then((category) => {
+            return category?.name || null;
           }),
         );
         const listProductTags = (await Promise.all(tagPromises)).filter(
           (name) => name !== null,
         );
+        const listProductCategories = (
+          await Promise.all(categoriesPromises)
+        ).filter((name) => name !== null);
         const mainProductVariant = await this.getMainProductVariantInfo(
           product._id,
         );
@@ -46,7 +49,7 @@ class ProductService {
           num_selled: mainProductVariant.num_selled,
           rating: mainProductVariant.rating.average,
           main_image: mainImageDefaultProduct.url,
-          categories: categoriesPromises,
+          categories: listProductCategories,
         };
       }),
     );
@@ -85,6 +88,10 @@ class ProductService {
       product_variant: product_variant_id,
     });
     return listDefaultProductVariantImage;
+  }
+  async getProductCategoriesIdBySlug(slug) {
+    const productCategory = await ProductCategory.findOne({ slug: slug });
+    return productCategory._id;
   }
 }
 

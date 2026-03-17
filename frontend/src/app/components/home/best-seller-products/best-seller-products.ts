@@ -15,6 +15,7 @@ export class BestSellerProducts implements OnInit {
   listBestSellerProducts: IListProducts[] = [];
   success: string = '';
   error: string = '';
+  room_type: string = '';
   constructor(
     private cdr: ChangeDetectorRef,
     private productService: Product,
@@ -28,6 +29,25 @@ export class BestSellerProducts implements OnInit {
           this.cdr.detectChanges();
         }
         this.listBestSellerProducts = res.data;
+        // console.log(res.data);
+        this.success = res.message;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.cdr.detectChanges();
+      },
+    });
+  }
+  switchTabs(room_type: string) {
+    this.productService.getBestSellerProductByRoomType(room_type).subscribe({
+      next: (res) => {
+        this.listBestSellerProducts = res.data;
+        this.room_type = room_type;
         // console.log(res.data);
         this.success = res.message;
         this.cdr.detectChanges();

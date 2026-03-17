@@ -1,13 +1,13 @@
 <section class="hero-banner">
   <!-- Background Image -->
   <div class="hero-bg">
-    <img src="images/hero-section/P1.png" alt="Phòng Khách" />
+    <img src="{{ currentImageHero }}" alt="{{ room_type }}" />
     <div class="hero-overlay"></div>
   </div>
 
   <!-- Content -->
   <div class="hero-content">
-    <h1 class="hero-title">PHÒNG KHÁCH</h1>
+    <h1 class="hero-title">{{ currentRoom | uppercase }}</h1>
     <a href="/" class="hero-btn">Trang chủ / Sản phẩm</a>
   </div>
 </section>
@@ -15,25 +15,63 @@
   <div class="container">
     <nav class="nav-container">
       <div class="nav-item">
-        <a href="#" class="nav-link active"><span>Tất cả</span></a>
+        <button class="nav-link" [class.active]="room_type == ''" (click)="switchTabs('')">
+          <span>Tất cả</span>
+        </button>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link">Phòng khách</a>
+        <button
+          class="nav-link"
+          [class.active]="room_type == 'living-room'"
+          (click)="switchTabs('living-room')"
+        >
+          Phòng khách
+        </button>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link">Phòng ngủ</a>
+        <button
+          class="nav-link"
+          [class.active]="room_type == 'bedroom'"
+          (click)="switchTabs('bedroom')"
+        >
+          Phòng ngủ
+        </button>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link">Phòng ăn</a>
+        <button
+          class="nav-link"
+          [class.active]="room_type == 'dining-room'"
+          (click)="switchTabs('dining-room')"
+        >
+          Phòng ăn
+        </button>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link">Ngoài trời</a>
+        <button
+          class="nav-link"
+          [class.active]="room_type == 'outdoor'"
+          (click)="switchTabs('outdoor')"
+        >
+          Ngoài trời
+        </button>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link">Đồ trang trí</a>
+        <button
+          class="nav-link"
+          [class.active]="room_type == 'bathroom'"
+          (click)="switchTabs('bathroom')"
+        >
+          Phòng tắm
+        </button>
       </div>
       <div class="nav-item">
-        <a href="#" class="nav-link">Phụ kiện</a>
+        <button
+          class="nav-link"
+          [class.active]="room_type == 'accessories'"
+          (click)="switchTabs('accessories')"
+        >
+          Phụ kiện
+        </button>
       </div>
     </nav>
   </div>
@@ -212,9 +250,27 @@
     </div>
     <div class="col-lg-10 col-md-8 p-2">
       <div class="row g-4">
-        @for (product of listProduct; track $index) {
-          <div class="col-12 col-sm-6 col-lg-3">
-            <app-card-product [productInfo]="product"></app-card-product>
+        @if (listProduct.length > 0) {
+          @for (
+            product of listProduct
+              | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: count };
+            track $index
+          ) {
+            <div class="col-12 col-sm-6 col-lg-3">
+              <app-card-product [productInfo]="product"></app-card-product>
+            </div>
+          }
+        } @else {
+          <div class="col-12 text-center">Không có sản phẩm nào</div>
+        }
+        @if (listProduct.length > 16) {
+          <div class="col-12 d-flex justify-content-center align-items-center">
+            <pagination-controls
+              previousLabel="Trang trước"
+              nextLabel="Trang sau"
+              [responsive]="true"
+              (pageChange)="handlePageChange($event)"
+            ></pagination-controls>
           </div>
         }
       </div>

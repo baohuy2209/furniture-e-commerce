@@ -45,7 +45,7 @@ export interface IListProducts {
   num_selled: number;
   rating: number;
   main_image: string;
-  categories: IProductCategory[];
+  categories: string[];
 }
 export interface IListEvent {}
 export interface Iproduct {
@@ -155,12 +155,12 @@ export interface IEvent {
   title: string;
   slug: string;
   description: string;
-  image: {
+  images: {
     url_image: string;
     is_main: string;
   }[];
   category: string;
-  highlight_des: string[];
+  hightlight_des: string[];
   date_range: {
     startDate: Date;
     endDate: Date;
@@ -170,6 +170,12 @@ export interface IEvent {
     address: string;
     city: string;
   };
+  timeline_event: {
+    start_time: string;
+    end_time: string;
+    title: string;
+    description: string;
+  }[];
   registration: {
     requireRegister: boolean;
     isFree: boolean;

@@ -4,25 +4,29 @@
   <h2>Sự kiện <span>Sắp Tổ Chức</span></h2>
 
   <div class="grid">
-    @for (event of events; track event.event_id) {
+    @for (event of upCommingEvents; track $index) {
       <div class="event-card">
         <div class="thumb">
-          <img [src]="event.thumbnail_image" [alt]="event.event_name" />
+          <img [src]="event.images[0].url_image" [alt]="event.title" />
           <div class="date-badge">
-            <b>{{ event.date.day }}</b>
-            <span>THÁNG {{ event.date.month }}</span>
+            <b>{{ convertDate(event.date_range.startDate).getDate() }}</b>
+            <span>THÁNG {{ convertDate(event.date_range.startDate).getMonth() + 1 }}</span>
           </div>
         </div>
         <div class="content">
-          <span class="tag">{{ event.event_type }}</span>
-          <h4>{{ event.event_name }}</h4>
+          <span class="tag">{{ event.category }}</span>
+          <h4>{{ event.title }}</h4>
           <p>{{ event.description }}</p>
           <div class="meta">
-            <span><i class="bi bi-clock"></i> {{ event.time }}</span>
-            <span *ngIf="event.price === 0">Miễn phí</span>
-            <span *ngIf="event.price > 0">{{ event.price | number }}đ</span>
+            <span
+              ><i class="bi bi-clock"></i> {{ formatDateTime(event.date_range.startDate) }} -
+              {{ formatDateTime(event.date_range.endDate) }}</span
+            >
+            @if (event.registration.isFree) {
+              <span>Miễn phí</span>
+            }
           </div>
-          <a class="more" [routerLink]="['/events', event.event_id]">Tìm hiểu thêm →</a>
+          <a class="more" [routerLink]="['/events', event._id]">Tìm hiểu thêm →</a>
         </div>
       </div>
     }

@@ -4,6 +4,7 @@ import { AuthLayout } from './components/layout/auth-layout/auth-layout';
 import { SettingLayout } from './components/layout/setting-layout/setting-layout';
 import { AdminLayout } from './components/layout/admin-layout/admin-layout';
 import { SignIn } from './pages/sign-in/sign-in';
+import { EventsLayout } from './components/layout/events-layout/events-layout';
 export const routes: Routes = [
   {
     path: '',
@@ -41,12 +42,23 @@ export const routes: Routes = [
           import('./pages/blogs-details/blogs-details').then((m) => m.BlogsDetails),
       },
       {
-        path: 'events',
+        path: 'upholstery',
+        loadComponent: () => import('./pages/upholstery/upholstery').then((m) => m.Upholstery),
+      },
+    ],
+  },
+  {
+    path: 'events',
+    component: EventsLayout,
+    children: [
+      {
+        path: '',
         loadComponent: () => import('./pages/events/events').then((m) => m.Events),
       },
       {
-        path: 'upholstery',
-        loadComponent: () => import('./pages/upholstery/upholstery').then((m) => m.Upholstery),
+        path: ':id',
+        loadComponent: () =>
+          import('./pages/event-page-details/event-page-details').then((m) => m.EventPageDetails),
       },
     ],
   },

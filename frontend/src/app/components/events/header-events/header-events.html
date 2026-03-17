@@ -1,0 +1,196 @@
+<header class="homebase-header">
+  <div class="top-bar">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="contact-info d-flex gap-4">
+            <a href="tel:+84901234567" class="contact-link">
+              <i class="fas fa-phone-alt me-2"></i>+84 901 234 567
+            </a>
+            <a href="mailto:info@homebase.vn" class="contact-link">
+              <i class="fas fa-envelope me-2"></i>info@homebase.vn
+            </a>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex justify-content-end align-items-center gap-3 header-social">
+            <span class="social-label">Theo dõi chúng tôi:</span>
+            <div class="social-links d-flex gap-2">
+              <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="main-nav navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="logo_white.png" alt="HomeBase Logo" class="logo-img me-2" />
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item">
+            <a class="nav-link" [class]="getCurrentUrl() == 'home' ? 'active' : ''" routerLink="/"
+              >Trang Chủ</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [class]="getCurrentUrl() == 'products' ? 'active' : ''"
+              routerLink="/products"
+              >Sản Phẩm</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [class]="getCurrentUrl() == 'events' ? 'active' : ''"
+              routerLink="/events"
+              >Sự Kiện</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [class]="getCurrentUrl() == 'blogs' ? 'active' : ''"
+              routerLink="/blogs"
+              >Blogs</a
+            >
+          </li>
+        </ul>
+
+        <div class="nav-icons d-flex align-items-center gap-3">
+          <div class="search-wrapper" [class.active]="isSearchOpen">
+            <div class="search-box">
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Tìm kiếm sản phẩm..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="onSearch()"
+                #searchInput
+              />
+              <button class="search-submit-btn" (click)="onSearch()" aria-label="Submit Search">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+            <button class="icon-btn search-toggle" (click)="toggleSearch()" aria-label="Search">
+              <i class="fas" [class]="isSearchOpen ? 'fa-times' : 'fa-search'"></i>
+            </button>
+          </div>
+          <button class="icon-btn" aria-label="Wishlist">
+            <i class="far fa-heart"></i>
+          </button>
+          <button class="icon-btn position-relative" aria-label="Cart" routerLink="/cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge">{{ cartCount }}</span>
+          </button>
+          <!-- KHỐI NÀY LÀ DROPDOWN KHI CHƯA ĐĂNG NHẬP-->
+          @if (!currentToken) {
+            <div class="auth-buttons">
+              <button
+                class="btn btn-login text-nowrap text-center"
+                aria-label="User Account"
+                (click)="goSignIn()"
+              >
+                ĐĂNG NHẬP
+              </button>
+              <button
+                class="btn btn-signup text-center"
+                aria-label="User Account"
+                (click)="goSignUp()"
+              >
+                ĐĂNG KÝ
+              </button>
+            </div>
+          } @else {
+            @if (currentUserInfo) {
+              <div class="dropdown">
+                <a
+                  class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
+                  href="#"
+                  role="button"
+                  id="dropdownUser"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <img
+                    [src]="currentUserInfo.avatar ? currentUserInfo.avatar : 'user/image.png'"
+                    alt="User Avatar"
+                    class="user-avatar"
+                  />
+                  <span style="color: white">{{ userName }}</span>
+                </a>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  style="color: white; background-color: black"
+                  aria-labelledby="dropdownUser"
+                >
+                  <li>
+                    <a class="dropdown-item" style="color: white" [routerLink]="['/settings']">
+                      <i class="far fa-file-alt me-2"></i> Tài khoản của bạn</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      style="color: white"
+                      [routerLink]="['/settings/my-orders']"
+                    >
+                      <i class="fas fa-list-alt me-2"></i> Quản lý đơn hàng</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      style="color: white"
+                      [routerLink]="['/settings/my-reviews']"
+                    >
+                      <i class="fas fa-star me-2"></i> Đánh giá của tôi</a
+                    >
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a class="dropdown-item" style="color: white" (click)="logout()"
+                      ><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            } @else {
+              <div class="dropdown">
+                <a
+                  class="nav-link dropdown-toggle user-profile d-flex align-items-center gap-2"
+                  href="#"
+                  role="button"
+                  id="dropdownUser"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <img src="user/image.png" alt="User Avatar" class="user-avatar" />
+                  <span>Lỗi</span>
+                </a>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -184,7 +184,7 @@
 }
 
 .floating-tag i {
-  color: #d4a574;
+  color: var(--color-accent);
   font-size: 1.2rem;
 }
 

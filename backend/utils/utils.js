@@ -63,4 +63,9 @@ async function uploadImage(file, folder = "furniture-e-commer") {
     });
   }
 }
-module.exports = { normalize, generateSlug, uploadImage };
+const getPagination = (page, size) => {
+  const limit = size ? +size : 20;
+  const offset = page ? page * limit : 0;
+  return { limit, offset };
+};
+module.exports = { normalize, generateSlug, uploadImage, getPagination };

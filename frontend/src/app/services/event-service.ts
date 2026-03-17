@@ -16,6 +16,30 @@ export class EventService {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
+  getAllPastEvents(): Observable<{ message: string; data: IEvent[] }> {
+    return this.http
+      .get<{ message: string; data: IEvent[] }>(`${environment.backend_url}/events/past-event`, {
+        withCredentials: true,
+      })
+      .pipe(retry(2), catchError(this.handleError));
+  }
+  getAllUpcommingEvents(): Observable<{ message: string; data: IEvent[] }> {
+    return this.http
+      .get<{ message: string; data: IEvent[] }>(
+        `${environment.backend_url}/events/upcoming-event`,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
+  getAllCurrentEvents(): Observable<{ message: string; data: IEvent[] }> {
+    return this.http
+      .get<{ message: string; data: IEvent[] }>(`${environment.backend_url}/events/current-event`, {
+        withCredentials: true,
+      })
+      .pipe(retry(2), catchError(this.handleError));
+  }
   getDetailEvent(id: string): Observable<{ message: string; data: IEvent }> {
     return this.http
       .get<{ message: string; data: IEvent }>(`${environment.backend_url}/events/${id}`, {

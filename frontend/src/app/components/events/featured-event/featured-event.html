@@ -22,26 +22,27 @@
       <p class="desc">
         {{ event.description }}
       </p>
+      @if (event.stats) {
+        <div class="meta">
+          <div class="meta-item">
+            <i class="bi bi-people-fill"></i>
+            <b>{{ event.stats.attendees }}+</b>
+            <span>Khách tham dự</span>
+          </div>
 
-      <div class="meta" *ngIf="event.stats">
-        <div class="meta-item">
-          <i class="bi bi-people-fill"></i>
-          <b>{{ event.stats.attendees }}+</b>
-          <span>Khách tham dự</span>
-        </div>
+          <div class="meta-item">
+            <i class="bi bi-buildings"></i>
+            <b>{{ event.stats.brands }}+</b>
+            <span>Thương hiệu</span>
+          </div>
 
-        <div class="meta-item">
-          <i class="bi bi-buildings"></i>
-          <b>{{ event.stats.brands }}+</b>
-          <span>Thương hiệu</span>
+          <div class="meta-item">
+            <i class="bi bi-mic-fill"></i>
+            <b>{{ event.stats.workshops }}</b>
+            <span>Workshop</span>
+          </div>
         </div>
-
-        <div class="meta-item">
-          <i class="bi bi-mic-fill"></i>
-          <b>{{ event.stats.workshops }}</b>
-          <span>Workshop</span>
-        </div>
-      </div>
+      }
 
       <div class="actions">
         <button class="btn-primary" [routerLink]="['/events', event.event_id]">

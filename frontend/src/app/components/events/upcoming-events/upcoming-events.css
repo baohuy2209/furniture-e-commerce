@@ -20,7 +20,7 @@ h2 {
 }
 
 h2 span {
-  color: var(--color-accent-gold);
+  color: var(--color-accent);
 }
 
 .grid {
@@ -70,11 +70,11 @@ h2 span {
   top: 10px;
   right: 10px;
   background: rgba(0, 0, 0, 0.8);
-  color: var(--color-accent-gold);
+  color: var(--color-accent);
   padding: 5px 10px;
   border-radius: 4px;
   text-align: center;
-  border: 1px solid var(--color-accent-gold);
+  border: 1px solid var(--color-accent);
 }
 
 .date-badge b {
@@ -96,7 +96,7 @@ h2 span {
 .tag {
   display: inline-block;
   background: #333;
-  color: var(--color-accent-gold);
+  color: var(--color-accent);
   font-size: 0.7rem;
   padding: 3px 8px;
   border-radius: 4px;
@@ -141,7 +141,7 @@ p {
 }
 
 .more {
-  color: var(--color-accent-gold);
+  color: var(--color-accent);
   font-weight: 600;
   text-decoration: none;
   font-size: 0.9rem;
