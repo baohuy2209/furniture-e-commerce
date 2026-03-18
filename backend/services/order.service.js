@@ -10,7 +10,7 @@ class OrderService {
     const {
       address_id,
       shipping_method,
-      shipping_fee = 0,
+      shipping_fee,
       payment_method,
       note,
     } = checkoutData;
