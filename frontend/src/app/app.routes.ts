@@ -91,11 +91,6 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'mock-google-login',
-    loadComponent: () =>
-      import('./pages/mock-google-login/mock-google-login').then((m) => m.MockGoogleLogin),
-  },
-  {
     path: 'settings',
     component: SettingLayout,
     children: [

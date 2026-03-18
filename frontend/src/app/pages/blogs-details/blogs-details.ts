@@ -1,15 +1,17 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { BlogService } from '../../services/blog-service';
-import { IBlog, IBlogTag, IListBlog } from '../../../interface';
+import { IBlog, IBlogCategory, IBlogTag, IListBlog } from '../../../interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentRender } from '../../components/blogs/content-render/content-render';
 import { BlogTagsService } from '../../services/blog-tags-service';
 import { BlogTagsComponents } from '../../components/blogs/blog-tags-components/blog-tags-components';
 import { RelatedBlogs } from '../../components/blogs/related-blogs/related-blogs';
+import { BlogCategoryService } from '../../services/blog-category-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-blogs-details',
-  imports: [ContentRender, BlogTagsComponents, RelatedBlogs],
+  imports: [ContentRender, BlogTagsComponents, RelatedBlogs, CommonModule],
   templateUrl: './blogs-details.html',
   styleUrl: './blogs-details.css',
 })
@@ -21,10 +23,12 @@ export class BlogsDetails {
   blog_id: string | null = null;
   listBlogTags: IBlogTag[] = [];
   listRelatedBlogs: IListBlog[] = [];
+  blogCategory: IBlogCategory | null = null;
   error: string = '';
   constructor(
     private blogService: BlogService,
     private blogTagsService: BlogTagsService,
+    private blogCategoryService: BlogCategoryService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
@@ -69,6 +73,20 @@ export class BlogsDetails {
           next: (res) => {
             this.listRelatedBlogs = res.data;
             console.log(this.listRelatedBlogs);
+          },
+          error: (err) => {
+            if (err.status === 404 || err.status === 400 || err.status === 401) {
+              this.error = err.error?.message || 'Không tìm thây thông tin sự kiện nào';
+            } else {
+              this.error = 'Có lỗi ở phía server';
+            }
+            this.cdr.detectChanges();
+          },
+        });
+        this.blogCategoryService.getDetailBlogCategory(res.data.categories).subscribe({
+          next: (res) => {
+            this.blogCategory = res.data;
+            this.cdr.detectChanges();
           },
           error: (err) => {
             if (err.status === 404 || err.status === 400 || err.status === 401) {

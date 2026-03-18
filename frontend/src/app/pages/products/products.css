@@ -433,7 +433,7 @@
 .fs-price-badge {
   display: inline-block;
   background: var(--accent-lt);
-  color: var(--accent);
+  color: var(--color-accent);
   font-size: 0.82rem;
   font-weight: 500;
   padding: 4px 14px;
@@ -451,9 +451,9 @@
   cursor: pointer;
   background: linear-gradient(
     to right,
-    var(--accent) 0%,
-    var(--accent) 70%,
-    var(--border) 70%,
+    var(--color-accent) 0%,
+    var(--color-accent) var(--percent),
+    var(--border) var(--percent),
     var(--border) 100%
   );
 }
@@ -464,7 +464,7 @@
   height: 20px;
   border-radius: 50%;
   background: #fff;
-  border: 2.5px solid var(--accent);
+  border: 2.5px solid var(--color-accent);
   box-shadow: 0 2px 8px rgba(200, 85, 61, 0.3);
   cursor: pointer;
   transition:
@@ -482,7 +482,7 @@
   height: 20px;
   border-radius: 50%;
   background: #fff;
-  border: 2.5px solid var(--accent);
+  border: 2.5px solid var(--color-accent);
   cursor: pointer;
 }
 

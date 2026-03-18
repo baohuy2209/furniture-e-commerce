@@ -102,31 +102,18 @@
             <h3 class="fs-card-title">Loại sản phẩm</h3>
           </div>
           <div class="fs-options">
-            <label class="fs-radio">
-              <input type="radio" name="category" value="sofa" checked />
-              <span class="fs-radio-ring"></span>
-              <span class="fs-radio-label">Sofa</span>
-            </label>
-            <label class="fs-radio">
-              <input type="radio" name="category" value="ban-tra" />
-              <span class="fs-radio-ring"></span>
-              <span class="fs-radio-label">Bàn trà</span>
-            </label>
-            <label class="fs-radio">
-              <input type="radio" name="category" value="ke-tv" />
-              <span class="fs-radio-ring"></span>
-              <span class="fs-radio-label">Kệ TV</span>
-            </label>
-            <label class="fs-radio">
-              <input type="radio" name="category" value="ghe-thu-gian" />
-              <span class="fs-radio-ring"></span>
-              <span class="fs-radio-label">Ghế thư giãn</span>
-            </label>
-            <label class="fs-radio">
-              <input type="radio" name="category" value="tham" />
-              <span class="fs-radio-ring"></span>
-              <span class="fs-radio-label">Thảm</span>
-            </label>
+            @for (productType of listProductType; track $index) {
+              <label class="fs-radio">
+                <input
+                  type="radio"
+                  name="category"
+                  value="{{ productType.name }}"
+                  [(ngModel)]="selectCategory"
+                />
+                <span class="fs-radio-ring"></span>
+                <span class="fs-radio-label">{{ productType.name }}</span>
+              </label>
+            }
           </div>
         </div>
 
@@ -137,31 +124,13 @@
             <h3 class="fs-card-title">Màu sắc</h3>
           </div>
           <div class="fs-colors">
-            <label class="fs-color" title="Xám">
-              <input type="radio" name="color" value="xam" checked />
-              <span class="fs-swatch" style="--c: #9e9e9e"></span>
-              <span class="fs-color-name">Xám</span>
-            </label>
-            <label class="fs-color" title="Nâu">
-              <input type="radio" name="color" value="nau" />
-              <span class="fs-swatch" style="--c: #795548"></span>
-              <span class="fs-color-name">Nâu</span>
-            </label>
-            <label class="fs-color" title="Be">
-              <input type="radio" name="color" value="be" />
-              <span class="fs-swatch" style="--c: #d7c4a3"></span>
-              <span class="fs-color-name">Be</span>
-            </label>
-            <label class="fs-color" title="Trắng">
-              <input type="radio" name="color" value="trang" />
-              <span class="fs-swatch fs-swatch--outlined" style="--c: #f5f5f0"></span>
-              <span class="fs-color-name">Trắng</span>
-            </label>
-            <label class="fs-color" title="Đen">
-              <input type="radio" name="color" value="den" />
-              <span class="fs-swatch" style="--c: #212121"></span>
-              <span class="fs-color-name">Đen</span>
-            </label>
+            @for (color of listProductColor; track $index) {
+              <label class="fs-color" title="{{ color.name }}">
+                <input type="radio" name="color" value="{{ color.name }}" />
+                <span class="fs-swatch" style="--c: {{ color.hex }}"></span>
+                <span class="fs-color-name">{{ color.name }}</span>
+              </label>
+            }
           </div>
         </div>
 
@@ -173,7 +142,9 @@
           </div>
           <div class="fs-price-body">
             <div class="fs-price-display">
-              <span class="fs-price-badge" id="priceValue">100.000.000đ</span>
+              <span class="fs-price-badge" id="priceValue"
+                >0đ - {{ formatPriceProduct(filterPrice) }}</span
+              >
             </div>
             <input
               type="range"
@@ -182,7 +153,9 @@
               min="0"
               max="400000000"
               step="500000"
-              value="100000000"
+              [(ngModel)]="filterPrice"
+              (ngModelChange)="onInput($event)"
+              [style.--percent]="percent + '%'"
             />
             <div class="fs-price-limits">
               <span>0đ</span>
@@ -205,7 +178,7 @@
                 <i class="s f">★</i><i class="s f">★</i><i class="s f">★</i><i class="s f">★</i
                 ><i class="s f">★</i>
               </span>
-              <span class="fs-count">(128)</span>
+              <span class="fs-count">({{ countProductByRating(5) }})</span>
             </label>
             <label class="fs-radio fs-star-row">
               <input type="radio" name="rating" value="4" />
@@ -214,7 +187,7 @@
                 <i class="s f">★</i><i class="s f">★</i><i class="s f">★</i><i class="s f">★</i
                 ><i class="s e">★</i>
               </span>
-              <span class="fs-count">(94)</span>
+              <span class="fs-count">({{ countProductByRating(4) }})</span>
             </label>
             <label class="fs-radio fs-star-row">
               <input type="radio" name="rating" value="3" />
@@ -223,7 +196,7 @@
                 <i class="s f">★</i><i class="s f">★</i><i class="s f">★</i><i class="s e">★</i
                 ><i class="s e">★</i>
               </span>
-              <span class="fs-count">(47)</span>
+              <span class="fs-count">({{ countProductByRating(3) }}))</span>
             </label>
             <label class="fs-radio fs-star-row">
               <input type="radio" name="rating" value="2" />
@@ -232,33 +205,42 @@
                 <i class="s f">★</i><i class="s f">★</i><i class="s e">★</i><i class="s e">★</i
                 ><i class="s e">★</i>
               </span>
-              <span class="fs-count">(12)</span>
+              <span class="fs-count">({{ countProductByRating(2) }})</span>
             </label>
           </div>
         </div>
 
         <!-- ── Actions ── -->
-        <button class="fs-btn-apply">
+        <button class="fs-btn-apply" (click)="filterProduct()">
           Áp dụng bộ lọc
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </button>
 
-        <button class="fs-btn-reset">Xóa tất cả bộ lọc</button>
+        <button class="fs-btn-reset" (click)="resetProduct()">Xóa tất cả bộ lọc</button>
       </aside>
     </div>
     <div class="col-lg-10 col-md-8 p-2">
       <div class="row g-4">
         @if (listProduct.length > 0) {
-          @for (
-            product of listProduct
-              | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: count };
-            track $index
-          ) {
-            <div class="col-12 col-sm-6 col-lg-3">
-              <app-card-product [productInfo]="product"></app-card-product>
-            </div>
+          @if (isFilter) {
+            @for (
+              product of listProduct
+                | paginate: { itemsPerPage: pageSize, currentPage: page, totalItems: count };
+              track $index
+            ) {
+              <div class="col-12 col-sm-6 col-lg-3">
+                <app-card-product [productInfo]="product"></app-card-product>
+              </div>
+            }
+          }
+          @if (!isFilter) {
+            @for (product of filterProduct(); track $index) {
+              <div class="col-12 col-sm-6 col-lg-3">
+                <app-card-product [productInfo]="product"></app-card-product>
+              </div>
+            }
           }
         } @else {
           <div class="col-12 text-center">Không có sản phẩm nào</div>

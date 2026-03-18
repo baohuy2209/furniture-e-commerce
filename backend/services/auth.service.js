@@ -236,5 +236,42 @@ class AuthService {
       return { message: "Có lỗi phía server: " + e.message, data: null };
     }
   }
+  async oauth2Google(payload) {
+    try {
+      let user = await User.findOne({ google_id: payload.sub });
+      if (!user) {
+        const newUsername = generateUsernameFromEmail(payload.email);
+        const userRole = await Role.findOne({ name: "user" });
+        user = await User.create({
+          google_id: payload.sub,
+          email: payload.email,
+          name: payload.name,
+          avatar: payload.picture,
+          authProvider: "google",
+          last_login: new Date(),
+          username: newUsername,
+          is_verified: true,
+          roles: [userRole._id],
+        });
+      }
+      const token = jwt.sign({ id: user._id }, process.env.AUTH_SECRET, {
+        algorithm: "HS256",
+        allowInsecureKeySizes: true,
+        expiresIn: 86400,
+      });
+      var authorities = [];
+      const listRoles = await this.getUserRolesById(user.roles);
+      for (let i = 0; i < user.roles.length; i++) {
+        authorities.push("ROLE_" + listRoles[i].toUpperCase());
+      }
+      return {
+        data: { user, token, authorities },
+        message: "Người dùng đăng nhập thành công",
+      };
+    } catch (e) {
+      console.log(e);
+      return { message: "Có lỗi phía server: " + e.message, data: null };
+    }
+  }
 }
 module.exports = new AuthService();

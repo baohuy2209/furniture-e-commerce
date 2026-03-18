@@ -4,8 +4,7 @@ class ProductCategoryController {
   // [GET] /api/product-categories
   async getAllProductCategories(req, res) {
     try {
-      const listProductCategories =
-        await ProductCategory.find().select("name slug type");
+      const listProductCategories = await ProductCategory.find();
       return res.status(200).json({
         message: "Load dữ liệu các loại sản phẩm thành công",
         data: listProductCategories,
@@ -15,7 +14,21 @@ class ProductCategoryController {
       return res.status(500).json({ message: "Lỗi hệ thống " + e, data: null });
     }
   }
-
+  // [GET] /api/product-categories/product_type
+  async getAllProductTypeCategories(req, res) {
+    try {
+      const listProductCategories = await ProductCategory.find({
+        type: "product_type",
+      });
+      return res.status(200).json({
+        message: "Load dữ liệu các loại sản phẩm thành công",
+        data: listProductCategories,
+      });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({ message: "Lỗi hệ thống " + e, data: null });
+    }
+  }
   // [GET] /api/product-categories/:id
   async getProductCategoryDetail(req, res) {
     try {

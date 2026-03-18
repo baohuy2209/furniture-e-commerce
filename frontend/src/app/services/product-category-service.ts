@@ -20,6 +20,16 @@ export class ProductCategoryService {
       )
       .pipe(retry(2), catchError(this.handleError));
   }
+  getAllProductTypeCategories(): Observable<{ message: string; data: IProductCategory[] }> {
+    return this.http
+      .get<{ message: string; data: IProductCategory[] }>(
+        `${environment.backend_url}/product-categories/product_type`,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
   getDetailProductCategories(id: string): Observable<{ message: string; data: IProductCategory }> {
     return this.http
       .get<{ message: string; data: IProductCategory }>(

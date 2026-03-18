@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const productCategoryController = require("../app/controllers/productCategory.controller");
 router.get("/", productCategoryController.getAllProductCategories);
+router.get(
+  "/product_type",
+  productCategoryController.getAllProductTypeCategories,
+);
 router.get("/:id", productCategoryController.getProductCategoryDetail);
 router.post("/", productCategoryController.createNewProductCategory);
 router.patch("/:id", productCategoryController.updateProductCategory);

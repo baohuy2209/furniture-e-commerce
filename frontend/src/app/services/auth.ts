@@ -77,6 +77,21 @@ export class AuthService {
       )
       .pipe(retry(2), catchError(this.handleError));
   }
+  googleAuthentication(token: string): Observable<{ data: ILogin; message: string }> {
+    return this.http
+      .post<{
+        data: ILogin;
+        message: string;
+      }>(`${environment.backend_url}/auth/google`, { token }, { withCredentials: true })
+      .pipe(
+        retry(2),
+        tap((res: { data: ILogin; message: string }) => {
+          this.setAccessToken(res.data.accessToken);
+          localStorage.setItem('roles', JSON.stringify(res.data.roles));
+        }),
+        catchError(this.handleError),
+      );
+  }
   forgotPassword(email: string): Observable<{ message: string; data: { email: string } }> {
     return this.http
       .post<{

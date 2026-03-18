@@ -14,6 +14,7 @@ router.post(
 );
 router.post("/signin", authController.signin);
 router.post("/logout", authController.logout);
+router.post("/google", authController.googleAuthentication);
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/reset-password/check-otp", authController.checkOtpResetPassword);
 router.post("/reset-password", authController.resetPassword);

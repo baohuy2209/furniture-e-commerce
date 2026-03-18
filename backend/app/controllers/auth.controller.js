@@ -2,6 +2,8 @@ const authService = require("../../services/auth.service");
 const crypto = require("crypto");
 const Session = require("../models/session.model");
 const jwt = require("jsonwebtoken");
+const { verify } = require("../../utils/utils");
+const User = require("../models/user.model");
 
 exports.signup = async (req, res) => {
   try {
@@ -190,6 +192,55 @@ exports.resetPassword = async (req, res) => {
       return res.status(404).json({ message, data });
     }
     return res.status(200).json({ message, data });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });
+  }
+};
+exports.googleAuthentication = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const payload = await verify(token);
+    const checkExistEmail = await User.findOne({ email: payload.email });
+    if (checkExistEmail) {
+      return res
+        .status(400)
+        .json({
+          message: "Email đã được sử dụng cho tài khoản khác",
+          data: null,
+        });
+    }
+    const { data, message } = await authService.oauth2Google(payload);
+    if (!data) {
+      return res.status(404).json({ message: message, data: null });
+    }
+    const refreshToken = crypto.randomBytes(64).toString("hex");
+    const { session } = await authService.createSession(
+      refreshToken,
+      data.userLogin._id,
+    );
+    if (!session) {
+      return res
+        .status(403)
+        .json({ message: "Không tạo được phiên đăng nhập", data: null });
+    }
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 15 * 24 * 60 * 60 * 1000,
+    });
+    const responseData = {
+      id: data.user._id,
+      username: data.user.username,
+      email: data.user.email,
+      roles: data.authorities,
+      accessToken: data.token,
+    };
+    return res.status(200).json({
+      data: responseData,
+      message: message,
+    });
   } catch (e) {
     console.log(e);
     return res.status(500).json({ message: "Lỗi hệ thống: " + e, data: null });

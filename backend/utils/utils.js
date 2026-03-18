@@ -1,4 +1,5 @@
 const { cloudinary } = require("../server");
+const { OAuth2Client } = require("google-auth-library");
 // Chuẩn hóa tên
 function normalize(str = "") {
   return str
@@ -68,4 +69,19 @@ const getPagination = (page, size) => {
   const offset = page ? page * limit : 0;
   return { limit, offset };
 };
-module.exports = { normalize, generateSlug, uploadImage, getPagination };
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+async function verify(token) {
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+  const payload = ticket.getPayload();
+  return payload;
+}
+module.exports = {
+  normalize,
+  generateSlug,
+  uploadImage,
+  getPagination,
+  verify,
+};

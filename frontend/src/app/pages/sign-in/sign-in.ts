@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { GoolgeSignIn } from '../goolge-sign-in/goolge-sign-in';
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule, GoolgeSignIn],
   templateUrl: './sign-in.html',
   styleUrl: './sign-in.css',
 })

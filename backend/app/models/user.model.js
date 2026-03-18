@@ -53,6 +53,14 @@ const User = mongoose.model(
       type: Number,
       default: 0,
     },
+    google_id: {
+      type: String,
+    },
+    authProvider: {
+      type: String,
+      enums: ["google" | "local"],
+      default: "local",
+    },
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
