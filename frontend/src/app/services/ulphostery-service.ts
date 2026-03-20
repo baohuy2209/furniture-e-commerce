@@ -9,9 +9,9 @@ import { environment } from '../../environments/environment.development';
 })
 export class UlphosteryService {
   constructor(private http: HttpClient) {}
-  getAllUpholstery(): Observable<{ message: string; data: IUpholstery }> {
+  getAllUpholstery(): Observable<{ message: string; data: IUpholstery[] }> {
     return this.http
-      .get<{ message: string; data: IUpholstery }>(`${environment.backend_url}/upholstery`, {
+      .get<{ message: string; data: IUpholstery[] }>(`${environment.backend_url}/upholstery`, {
         withCredentials: true,
       })
       .pipe(retry(2), catchError(this.handleError));

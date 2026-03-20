@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { UlphosteryService } from '../../services/ulphostery-service';
+import { IUpholstery } from '../../../interface';
 export interface ColorVariant {
   name: string;
   hex: string;
@@ -32,8 +34,9 @@ export interface Fabric {
 })
 export class Upholstery implements OnInit {
   activeFilter: string = 'all';
-  selectedFabric: Fabric | null = null;
-
+  selectedUpholstery: Fabric | null = null;
+  listUpholstery: IUpholstery[] = [];
+  error: string = '';
   filterOptions = [
     { label: 'Tất cả', value: 'all' },
     { label: 'Vải', value: 'fabric' },
@@ -160,13 +163,31 @@ export class Upholstery implements OnInit {
       maintenance: 'Lau nhẹ với khăn khô. Không sử dụng chất tẩy có clo.',
     },
   ];
-
+  constructor(
+    private upholsteryService: UlphosteryService,
+    private cdr: ChangeDetectorRef,
+  ) {}
   get filteredFabrics(): Fabric[] {
     if (this.activeFilter === 'all') return this.fabrics;
     return this.fabrics.filter((f) => f.type === this.activeFilter);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.upholsteryService.getAllUpholstery().subscribe({
+      next: (res) => {
+        this.listUpholstery = res.data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.cdr.detectChanges();
+      },
+    });
+  }
 
   setFilter(value: string): void {
     this.activeFilter = value;

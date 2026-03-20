@@ -321,3 +321,9 @@ export interface IBlog {
   };
   publishedAt: Date;
 }
+export interface IWarehouse {
+  _id?: string;
+  name?: string;
+  warehouse_area?: string;
+  warehouse_status?: string;
+}

@@ -4,7 +4,6 @@
 
 :host {
   display: block;
-  font-family: 'Jost', 'Helvetica Neue', Helvetica, sans-serif;
   --c-bg: #f5f3ef;
   --c-text: #1a1814;
   --c-muted: #7a7570;
@@ -34,7 +33,6 @@
 }
 
 .ul-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(36px, 5vw, 56px);
   font-weight: 300;
   color: var(--c-text);
