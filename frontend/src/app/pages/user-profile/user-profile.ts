@@ -231,6 +231,7 @@ export class UserProfile implements OnInit {
         } else {
           this.error = 'Có lỗi ở phía server';
         }
+        this.toastService.error(`${this.error}`);
         this.cdr.detectChanges();
       },
     });

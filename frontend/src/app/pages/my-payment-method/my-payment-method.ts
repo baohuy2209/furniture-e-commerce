@@ -1,17 +1,9 @@
-import { Component, signal, computed } from '@angular/core';
+import { MyPaymentService } from '../../services/my-payment-service';
+import { Component, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-interface PaymentMethodItem {
-  id: string;
-  type: string;
-  bankName: string;
-  name: string;
-  isDefault: boolean;
-  description: string;
-  icon: string;
-  cardNumber?: string; // Dấu ? nghĩa là có cũng được, không có cũng không sao
-  owner?: string; // Dấu ? để tránh lỗi với kiểu 'cash'
-}
+import { ToastService } from '../../services/toast-service';
+import { IPaymentMethod } from '../../../interface';
 
 @Component({
   selector: 'app-my-payment-method',
@@ -20,11 +12,13 @@ interface PaymentMethodItem {
   templateUrl: './my-payment-method.html',
   styleUrl: './my-payment-method.css',
 })
-export class MyPaymentMethod {
+export class MyPaymentMethod implements OnInit {
   searchQuery = signal('');
   isAddingNew = signal(false);
   showConfirmDelete = signal(false);
+  isLoading = signal(false);
   notification = signal<{ msg: string; type: 'success' | 'error' } | null>(null);
+
   banks = [
     'ABBANK',
     'ACB',
@@ -90,6 +84,31 @@ export class MyPaymentMethod {
     'VNPT Pay',
   ].sort();
 
+  constructor(
+    private myPaymentService: MyPaymentService,
+    private toastService: ToastService,
+  ) {}
+
+  ngOnInit(): void {
+    this.loadPaymentMethods();
+  }
+
+  // ===== LOAD DATA =====
+  loadPaymentMethods() {
+    this.isLoading.set(true);
+    this.myPaymentService.getUserPayment().subscribe({
+      next: (res) => {
+        this.paymentMethods.set(res.data);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.showToast('Không thể tải danh sách phương thức thanh toán!', 'error');
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  // ===== DROPDOWN =====
   isDropdownOpen = signal(false);
 
   filteredSubNames = computed(() => {
@@ -99,67 +118,38 @@ export class MyPaymentMethod {
   });
 
   selectSubName(name: string) {
-    this.newMethodSubName.set(name); // Dùng .set cho Signal
+    this.newMethodSubName.set(name);
     this.isDropdownOpen.set(false);
   }
 
-  // Khai báo lại dưới dạng Signal
+  // ===== FORM SIGNALS =====
   newMethodType = signal('bank');
   newMethodSubName = signal('');
   newMethodCardNumber = signal('');
   newMethodOwner = signal('NGUYEN BAO HUY');
 
-  // Hàm Reset Form
   resetForm() {
     this.newMethodSubName.set('');
     this.newMethodCardNumber.set('');
   }
 
-  // Hàm mở Popup (Đảm bảo popup luôn trống khi mở mới)
   openAddPopup() {
     this.newMethodType.set('bank');
     this.resetForm();
     this.isAddingNew.set(true);
   }
 
-  // Thêm <PaymentMethodItem[]> vào sau signal
-  paymentMethods = signal<PaymentMethodItem[]>([
-    {
-      id: 'pm-1',
-      type: 'cash',
-      bankName: 'Tiền mặt',
-      name: 'Thanh toán tiền mặt',
-      isDefault: true,
-      description: 'Đang sử dụng đối với: Thông tin đặt hàng của Nguyễn Bảo Huy',
-      icon: 'bi bi-cash-stack',
-      // Không có cardNumber và owner ở đây là hợp lệ nhờ dấu ? trong interface
-    },
-    {
-      id: 'pm-2',
-      type: 'bank',
-      bankName: 'Vietcombank',
-      name: 'Ngân hàng', // THÊM DÒNG NÀY VÀO LÀ HẾT ĐỎ NGAY
-      cardNumber: '1029 327 289',
-      owner: 'NGUYEN BAO HUY',
-      isDefault: false,
-      description: 'Đang sử dụng đối với: Thông tin đặt hàng của Nguyễn Bảo Huy',
-      icon: 'bi bi-credit-card-2-front',
-    },
-  ]);
+  // ===== PAYMENT METHODS STATE =====
+  paymentMethods = signal<IPaymentMethod[]>([]);
 
-  // Tìm và thay thế đoạn sortedMethods bằng đoạn này
   sortedMethods = computed(() => {
     const q = this.searchQuery().toLowerCase();
-
-    // 1. Lọc theo tên ngân hàng hoặc tên chủ sở hữu khi Huy gõ vào ô search
     const filtered = this.paymentMethods().filter(
       (m) =>
         m.bankName.toLowerCase().includes(q) ||
         m.owner?.toLowerCase().includes(q) ||
         m.name.toLowerCase().includes(q),
     );
-
-    // 2. Sau đó mới sắp xếp đưa thằng mặc định lên đầu
     return filtered.sort((a, b) => {
       if (a.isDefault) return -1;
       if (b.isDefault) return 1;
@@ -169,47 +159,73 @@ export class MyPaymentMethod {
 
   selectedIds = signal<string[]>([]);
 
-  // ĐẶT MẶC ĐỊNH
+  // ===== ĐẶT MẶC ĐỊNH =====
   setDefault(id: string) {
-    this.paymentMethods.update((methods) => methods.map((m) => ({ ...m, isDefault: m.id === id })));
-    this.showToast('Đã thay đổi phương thức mặc định thành công!', 'success');
+    this.myPaymentService.setDefaultPaymentMethod(id).subscribe({
+      next: (res) => {
+        // Cập nhật local state theo response từ server
+        this.paymentMethods.update((methods) =>
+          methods.map((m) => ({ ...m, isDefault: m._id === id ? res.data.isDefault : 'false' })),
+        );
+        this.showToast('Đã thay đổi phương thức mặc định thành công!', 'success');
+      },
+      error: () => {
+        this.showToast('Không thể đặt mặc định, vui lòng thử lại!', 'error');
+      },
+    });
   }
 
-  // LƯU THÊM MỚI
+  // ===== THÊM MỚI =====
   saveNewMethod() {
-    // SỬA DÒNG NÀY:
     if (!this.newMethodSubName() || !this.newMethodCardNumber()) {
       this.showToast('Vui lòng nhập đầy đủ thông tin!', 'error');
       return;
     }
 
-    // SỬA CÁC DÒNG TRONG newItem:
-    const newItem: PaymentMethodItem = {
-      id: 'pm-' + Date.now(),
+    const newItem: Omit<IPaymentMethod, '_id'> = {
+      user_id: '', // server sẽ tự gán từ token
       type: this.newMethodType(),
       bankName: this.newMethodSubName(),
       name: this.newMethodType() === 'bank' ? 'Ngân hàng' : 'Ví điện tử',
       cardNumber: this.newMethodCardNumber(),
       owner: this.newMethodOwner(),
-      isDefault: false,
-      description: 'Đang sử dụng đối với: Thông tin đặt hàng của Nguyễn Bảo Huy',
-      icon: this.newMethodType() === 'bank' ? 'bi bi-credit-card-2-front' : 'bi bi-wallet2',
+      isDefault: 'false',
     };
 
-    this.paymentMethods.update((m) => [...m, newItem]);
-    this.isAddingNew.set(false);
-    this.showToast('Thêm phương thức thanh toán thành công!', 'success');
+    this.myPaymentService.createNewPaymentMethod(newItem as IPaymentMethod).subscribe({
+      next: (res) => {
+        this.paymentMethods.update((m) => [...m, res.data]);
+        this.isAddingNew.set(false);
+        this.resetForm();
+        this.showToast('Thêm phương thức thanh toán thành công!', 'success');
+      },
+      error: () => {
+        this.showToast('Không thể thêm phương thức thanh toán, vui lòng thử lại!', 'error');
+      },
+    });
   }
 
-  // XÓA THỰC TẾ
+  // ===== XÓA =====
   confirmDelete() {
     const selected = this.selectedIds();
-    this.paymentMethods.update((methods) => methods.filter((m) => !selected.includes(m.id)));
+
+    // Gọi API xóa song song tất cả id được chọn
+    const deleteRequests = selected.map((id) =>
+      this.myPaymentService.deletePaymentMethod(id).subscribe({
+        error: () => this.showToast(`Không thể xóa phương thức ${id}!`, 'error'),
+      }),
+    );
+
+    // Cập nhật local state sau khi gọi API
+    this.paymentMethods.update(
+      (methods) => methods.filter((m) => !selected.includes(m._id)), // dùng _id thay vì id
+    );
     this.selectedIds.set([]);
     this.showConfirmDelete.set(false);
     this.showToast('Đã xóa các phương thức thanh toán được chọn!', 'success');
   }
 
+  // ===== UTILITIES =====
   showToast(msg: string, type: 'success' | 'error') {
     this.notification.set({ msg, type });
     setTimeout(() => this.notification.set(null), 3000);
@@ -221,7 +237,9 @@ export class MyPaymentMethod {
   }
 
   toggleSelectAll(event: any) {
-    this.selectedIds.set(event.target.checked ? this.paymentMethods().map((p) => p.id) : []);
+    this.selectedIds.set(
+      event.target.checked ? this.paymentMethods().map((p) => p._id) : [], // dùng _id
+    );
   }
 
   openDeleteModal() {
@@ -230,6 +248,6 @@ export class MyPaymentMethod {
   }
 
   get methodsToDelete() {
-    return this.paymentMethods().filter((m) => this.selectedIds().includes(m.id));
+    return this.paymentMethods().filter((m) => this.selectedIds().includes(m._id)); // dùng _id
   }
 }

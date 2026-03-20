@@ -4,9 +4,10 @@ class CustomerInquiryController {
   // [POST] /api/inquiries
   async createTicket(req, res) {
     try {
-      const { user_id, subject, message } = req.body;
+      const userId = req.userId;
+      const { subject, message } = req.body;
       const newTicket = new CustomerInquiry({
-        user_id,
+        user_id: userId,
         subject,
         message,
       });

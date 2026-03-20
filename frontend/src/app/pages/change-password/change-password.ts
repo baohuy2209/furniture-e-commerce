@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; // Dùng Reactive Forms
 import { CommonModule } from '@angular/common'; // Cần cho *ngIf, *ngFor nếu dùng (nhưng @if/@for thì không)
 import { Router } from '@angular/router'; // Để điều hướng sau khi đổi mật khẩu
 import { UserService } from '../../services/user-service';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
   selector: 'app-change-password',
@@ -25,11 +26,12 @@ export class ChangePassword {
     special: false,
   };
   showRequirements: boolean = false;
-
+  toastService = inject(ToastService);
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private userService: UserService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -137,5 +139,27 @@ export class ChangePassword {
   get confirmNewPassword() {
     return this.changePasswordForm.get('confirmNewPassword');
   }
-  changePassword(){}
+  changePassword() {
+    const oldPasswordValue = this.oldPassword?.value;
+    const newPasswordValue = this.newPassword?.value;
+
+    this.userService.changePassword(oldPasswordValue, newPasswordValue).subscribe({
+      next: (res) => {
+        this.successMessage = res.message;
+        this.toastService.success(`${this.successMessage}`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.errorMessage = err.error?.message || 'Không tìm thấy địa chỉ người dùng nào';
+        } else {
+          this.errorMessage = 'Có lỗi ở phía server';
+        }
+        this.toastService.error(`${this.errorMessage}`);
+        this.cdr.detectChanges();
+      },
+    });
+  }
 }

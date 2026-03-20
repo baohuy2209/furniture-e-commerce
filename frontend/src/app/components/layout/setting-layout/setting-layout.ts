@@ -97,6 +97,7 @@ export class SettingLayout {
         // 1. Kiểm tra để ẩn/hiện Header lớn
         const shouldHideLarge = hideLargeHeaderOn.some((path) => currentUrl.includes(path));
         this.showHeaderProfile.set(!shouldHideLarge);
+        console.log(this.showHeaderProfile());
 
         // 2. LUÔN HIỂN THỊ AVATAR NHỎ TRONG SIDEBAR
         // Dù ở bất kỳ trang nào, ta cũng ép nó về true

@@ -16,44 +16,15 @@
   <div class="support-form-card shadow-sm mx-auto">
     <form (ngSubmit)="onSubmit()" #f="ngForm">
       <div class="row g-4">
-        <!-- Họ và tên -->
-        <div class="col-md-12">
-          <label class="form-label-luxury">Họ và tên *</label>
-          <input
-            type="text"
-            class="form-input-luxury"
-            [(ngModel)]="supportForm().fullName"
-            name="fullName"
-            required
-          />
-        </div>
-
-        <!-- Email & Số điện thoại -->
-        <div class="col-md-6">
-          <label class="form-label-luxury">Email *</label>
-          <input
-            type="email"
-            class="form-input-luxury"
-            [(ngModel)]="supportForm().email"
-            name="email"
-            required
-          />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label-luxury">Số điện thoại *</label>
-          <input
-            type="tel"
-            class="form-input-luxury"
-            [(ngModel)]="supportForm().phone"
-            name="phone"
-            required
-          />
-        </div>
-
         <!-- Loại yêu cầu -->
         <div class="col-md-12">
-          <label class="form-label-luxury">Bạn cần hỗ trợ về mục nào?</label>
-          <select class="form-select-luxury" [(ngModel)]="supportForm().category" name="category">
+          <label class="form-label-luxury">Bạn cần hỗ trợ về mục nào? *</label>
+          <select
+            class="form-select-luxury"
+            [(ngModel)]="supportForm().category"
+            name="category"
+            required
+          >
             <option value="">Chọn danh mục</option>
             <option value="order">Vấn đề đơn hàng</option>
             <option value="product">Tư vấn sản phẩm</option>
@@ -81,12 +52,21 @@
           <textarea
             class="form-input-luxury"
             rows="5"
-            placeholder="Huy có thể mô tả rõ hơn vấn đề đang gặp phải không?"
+            placeholder="Bạn có thể mô tả rõ hơn vấn đề đang gặp phải không?"
             [(ngModel)]="supportForm().message"
             name="message"
             required
           ></textarea>
         </div>
+
+        <!-- Error Message -->
+        @if (errorMessage()) {
+          <div class="col-md-12">
+            <div class="alert alert-danger rounded-3 py-2 px-3 mb-0">
+              <i class="bi bi-exclamation-circle-fill me-2"></i>{{ errorMessage() }}
+            </div>
+          </div>
+        }
 
         <!-- Nút gửi -->
         <div class="col-md-12 text-center mt-5">
@@ -117,7 +97,7 @@
 
       <h2 class="fw-800 mb-3 text-dark">Gửi yêu cầu thành công!</h2>
       <p class="text-muted mb-4">
-        Cảm ơn Huy, chúng tôi đã nhận được tin nhắn của bạn. <br />
+        Cảm ơn bạn, chúng tôi đã nhận được tin nhắn. <br />
         Vui lòng chờ phản hồi sớm nhất từ đội ngũ hỗ trợ.
       </p>
 

@@ -6,7 +6,7 @@ const paymentMethodSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    type: { type: String, enum: ["bank", "wallet", "cash"], required: true },
+    type: { type: String, enum: ["bank", "wallet"], required: true },
     bankName: { type: String, required: true },
     name: { type: String, required: true }, // e.g., "Ngân hàng", "Ví điện tử"
     cardNumber: { type: String },

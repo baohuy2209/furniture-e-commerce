@@ -4,7 +4,7 @@ class PaymentMethodController {
   // Lấy danh sách phương thức thanh toán của user
   async getPaymentMethods(req, res) {
     try {
-      const { user_id } = req.params;
+      const user_id = req.userId;
       const methods = await PaymentMethod.find({ user_id });
       return res.status(200).json({
         message: "Lấy danh sách phương thức thanh toán thành công",
@@ -21,16 +21,19 @@ class PaymentMethodController {
   // Thêm mới phương thức thanh toán
   async addPaymentMethod(req, res) {
     try {
-      const { user_id, type, bankName, name, cardNumber, owner, isDefault } =
-        req.body;
+      const { type, bankName, name, cardNumber, owner, isDefault } = req.body;
 
       // Nếu đặt làm mặc định thì bỏ mặc định của các cái cũ
+      const userId = req.userId;
       if (isDefault) {
-        await PaymentMethod.updateMany({ user_id }, { isDefault: false });
+        await PaymentMethod.updateMany(
+          { user_id: userId },
+          { isDefault: false },
+        );
       }
 
       const newMethod = await PaymentMethod.create({
-        user_id,
+        user_id: userId,
         type,
         bankName,
         name,
@@ -55,7 +58,15 @@ class PaymentMethodController {
   async deletePaymentMethod(req, res) {
     try {
       const { id } = req.params;
-      await PaymentMethod.findByIdAndDelete(id);
+      const method = await PaymentMethod.findOneAndDelete({
+        _id: id,
+        user_id: req.userId,
+      });
+      if (!method) {
+        return res
+          .status(404)
+          .json({ message: "Không tìm thấy hoặc không có quyền xóa" });
+      }
       return res.status(200).json({
         message: "Xóa phương thức thanh toán thành công",
       });
@@ -71,15 +82,13 @@ class PaymentMethodController {
   async setDefault(req, res) {
     try {
       const { id } = req.params;
-      const method = await PaymentMethod.findById(id);
+      const userId = req.userId;
+      const method = await PaymentMethod.findOne({ _id: id, user_id: userId });
       if (!method) {
         return res.status(404).json({ message: "Không tìm thấy phương thức" });
       }
 
-      await PaymentMethod.updateMany(
-        { user_id: method.user_id },
-        { isDefault: false },
-      );
+      await PaymentMethod.updateMany({ user_id: userId }, { isDefault: false });
       method.isDefault = true;
       await method.save();
 

@@ -53,14 +53,30 @@
   <div class="payment-card-main shadow-sm mb-5">
     <div class="card-header-dark">Các phương thức thanh toán hiện tại</div>
     <div class="card-body p-0">
-      @for (method of sortedMethods(); track method.id; let last = $last) {
+      <div class="payment-item p-4 d-flex align-items-center">
+        <div class="method-icon-container me-4">
+          <i class="bi bi-cash-stack payment-display-icon"></i>
+        </div>
+
+        <div class="flex-grow-1">
+          <div class="d-flex justify-content-between">
+            <!-- Hiển thị tiêu đề linh hoạt: Ngân hàng - ... hoặc Ví điện tử - ... -->
+            <h5 class="fw-bold mb-1">Tiền mặt</h5>
+            <span class="badge-default-active"><i class="bi bi-check2-circle"></i> Mặc định</span>
+          </div>
+          <div class="text-muted smaller-text">
+            'Đang sử dụng đối với: Thông tin đặt hàng của Nguyễn Bảo Huy
+          </div>
+        </div>
+      </div>
+      @for (method of sortedMethods(); track method._id; let last = $last) {
         <div
           class="payment-item p-4 d-flex align-items-center"
           [class.border-bottom]="!last"
           [class.is-default-row]="method.isDefault"
         >
           <div class="method-icon-container me-4">
-            <i [class]="method.icon + ' payment-display-icon'"></i>
+            <i class="bi bi-credit-card-2-front payment-display-icon"></i>
           </div>
 
           <div class="flex-grow-1">
@@ -79,7 +95,7 @@
                   ><i class="bi bi-check2-circle"></i> Mặc định</span
                 >
               } @else {
-                <span class="btn-set-default" (click)="setDefault(method.id)"
+                <span class="btn-set-default" (click)="setDefault(method._id)"
                   >Đặt làm mặc định</span
                 >
               }
@@ -89,15 +105,14 @@
               <div class="small text-dark mb-1"><b>Số thẻ/ID:</b> {{ method.cardNumber }}</div>
               <div class="small text-dark mb-2"><b>Chủ tài khoản:</b> {{ method.owner }}</div>
             }
-            <div class="text-muted smaller-text">{{ method.description }}</div>
           </div>
 
           <div class="ms-4">
             <input
               type="checkbox"
               class="red-dot-checkbox"
-              (change)="toggleSelect(method.id)"
-              [checked]="selectedIds().includes(method.id)"
+              (change)="toggleSelect(method._id)"
+              [checked]="selectedIds().includes(method._id)"
             />
           </div>
         </div>
@@ -236,9 +251,9 @@
         <div class="p-4">
           <h2 class="text-danger fw-800 mb-4 ps-3">Các phương thức thực bị xóa</h2>
           <div class="deleted-list-container mb-4">
-            @for (m of methodsToDelete; track m.id) {
+            @for (m of methodsToDelete; track m._id) {
               <div class="deleted-item p-3 d-flex align-items-center">
-                <i [class]="m.icon + ' fs-2 me-3 text-dark'"></i>
+                <i class="bi bi-credit-card-2-front + fs-2 me-3 text-dark"></i>
                 <div>
                   <h6 class="fw-bold mb-0 text-dark">
                     {{

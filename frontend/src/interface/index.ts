@@ -329,3 +329,13 @@ export interface IWarehouse {
   warehouse_area?: string;
   warehouse_status?: string;
 }
+export interface IPaymentMethod {
+  _id: string;
+  user_id: string;
+  type: string;
+  bankName: string;
+  name: string;
+  cardNumber: string;
+  owner: string;
+  isDefault: string;
+}

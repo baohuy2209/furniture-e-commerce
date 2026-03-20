@@ -1,15 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { CustomerInquiryService } from './../../services/customer-inquiry-service';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ICustomerInquiry } from '../../../interface';
 
-interface SupportRequest {
-  fullName: string;
-  email: string;
-  phone: string;
-  category: string;
-  subject: string;
-  message: string;
-}
 @Component({
   selector: 'app-support',
   imports: [CommonModule, FormsModule],
@@ -18,32 +12,55 @@ interface SupportRequest {
   styleUrl: './support.css',
 })
 export class Support {
-  supportForm = signal<SupportRequest>({
-    fullName: 'Nguyễn Bảo Huy',
-    email: 'huynguyen002311@gmail.com',
-    phone: '0375686583',
-    category: '',
+  supportForm = signal<
+    Omit<
+      ICustomerInquiry,
+      '_id' | 'user_id' | 'status' | 'resolving_staff_id' | 'staff_response'
+    > & { category: string }
+  >({
     subject: '',
     message: '',
+    category: '',
   });
 
   isSubmitting = signal(false);
-  showSuccess = signal(false);
   showSuccessModal = signal(false);
+  errorMessage = signal<string | null>(null);
+
+  constructor(private customerInquiryService: CustomerInquiryService) {}
 
   onSubmit() {
+    // Validate
+    const form = this.supportForm();
+    if (!form.subject || !form.message || !form.category) {
+      this.errorMessage.set('Vui lòng điền đầy đủ thông tin!');
+      return;
+    }
+
     this.isSubmitting.set(true);
-    setTimeout(() => {
-      this.isSubmitting.set(false);
-      // Bật Pop-up lên (Thay vì showSuccess đơn thuần)
-      this.showSuccessModal.set(true);
-    }, 1500);
+    this.errorMessage.set(null);
+
+    const payload = {
+      subject: form.subject,
+      message: form.message,
+      category: form.category,
+    } as unknown as ICustomerInquiry;
+
+    this.customerInquiryService.createInquiry(payload).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.showSuccessModal.set(true);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.errorMessage.set(err?.error?.message || 'Gửi yêu cầu thất bại, vui lòng thử lại!');
+      },
+    });
   }
 
   closeAndReset() {
     this.showSuccessModal.set(false);
-    // Reset các trường nhập liệu, giữ lại thông tin cá nhân của Huy
-    this.supportForm.update((f: SupportRequest) => ({
+    this.supportForm.update((f) => ({
       ...f,
       category: '',
       subject: '',
