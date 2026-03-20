@@ -23,13 +23,25 @@ export class AddressService {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
-  deleteNewAddress(id: string): Observable<String> {
+  setDefaultAddress(id: string): Observable<{ message: string; data: IAddress }> {
     return this.http
-      .delete<String>(`${environment.backend_url}/addresses/${id}`, {
+      .patch<{ message: string; data: IAddress }>(
+        `${environment.backend_url}/addresses/default_address/${id}`,
+        {},
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
+  deleteAddress(id: string): Observable<{ message: string }> {
+    return this.http
+      .delete<{ message: string }>(`${environment.backend_url}/addresses/${id}`, {
         withCredentials: true,
       })
       .pipe(retry(2), catchError(this.handleError));
   }
+
   handleError(err: HttpErrorResponse) {
     return throwError(() => err);
   }

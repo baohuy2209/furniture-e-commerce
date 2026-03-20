@@ -18,13 +18,9 @@ export class UserService {
   }
   updateUserProfile(data: IUser): Observable<{ message: string; data: IUser }> {
     return this.http
-      .patch<{ message: string; data: IUser }>(
-        `${environment.backend_url}/user/profile`,
-        { data },
-        {
-          withCredentials: true,
-        },
-      )
+      .patch<{ message: string; data: IUser }>(`${environment.backend_url}/user/profile`, data, {
+        withCredentials: true,
+      })
       .pipe(retry(2), catchError(this.handleError));
   }
   changePassword(oldPassword: string, newPassword: string): Observable<{ message: string }> {

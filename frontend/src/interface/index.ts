@@ -17,6 +17,8 @@ export interface IUser {
   is_verified?: boolean;
   points: number;
   roles: string[];
+  dob: string;
+  createdAt: Date;
 }
 export interface ILogin {
   id: string;

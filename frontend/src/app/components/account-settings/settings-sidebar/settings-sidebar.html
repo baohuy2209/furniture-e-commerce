@@ -1,8 +1,12 @@
 <div class="card sidebar-card">
   @if (showUserInfo) {
     <div class="card-body text-center user-mini-profile">
-      <img src="{{ user.avatar }}" alt="User Avatar" class="profile-avatar-sm mb-2" />
-      <h6 class="mb-0">{{ user.firstName + ' ' + user.lastName }}</h6>
+      <img
+        src="{{ user?.avatar ? user?.avatar : 'user/image.png' }}"
+        alt="User Avatar"
+        class="profile-avatar-sm mb-2"
+      />
+      <h6 class="mb-0">{{ user?.name }}</h6>
     </div>
   }
 

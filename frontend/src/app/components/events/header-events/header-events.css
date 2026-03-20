@@ -125,7 +125,7 @@
 }
 .btn-login,
 .btn-signup {
-  background: #3d529d;
+  background: var(--color-accent);
   color: white;
   font-size: 1rem;
   cursor: pointer;

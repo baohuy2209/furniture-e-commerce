@@ -1,72 +1,77 @@
 const mongoose = require("mongoose");
 const User = mongoose.model(
   "User",
-  new mongoose.Schema({
-    username: { type: String, required: true, trim: true },
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password_hash: { type: String },
-    phone: { type: String, required: true },
-    dob: { type: Date },
-    gender: {
-      type: String,
-      enum: ["male", "female", "other"],
-    },
-    avatar: {
-      type: String,
-    },
-    status: {
-      type: String,
-      enum: ["locked", "unlocked"],
-      default: "unlocked",
-    },
-
-    last_login: {
-      type: Date,
-    },
-
-    is_verified: {
-      type: Boolean,
-      default: false,
-    },
-
-    reset_password_token: {
-      type: String,
-      select: false,
-    },
-
-    reset_password_token_expire_at: {
-      type: Date,
-      select: false,
-    },
-
-    verification_token: {
-      type: String,
-      select: false,
-    },
-
-    verification_token_expire_at: {
-      type: Date,
-      select: false,
-    },
-    points: {
-      type: Number,
-      default: 0,
-    },
-    google_id: {
-      type: String,
-    },
-    authProvider: {
-      type: String,
-      enums: ["google" | "local"],
-      default: "local",
-    },
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Role",
+  new mongoose.Schema(
+    {
+      username: { type: String, required: true, trim: true },
+      name: { type: String, required: true },
+      email: { type: String, required: true, unique: true },
+      password_hash: { type: String },
+      phone: { type: String, required: true },
+      dob: { type: Date },
+      gender: {
+        type: String,
+        enum: ["male", "female", "other"],
       },
-    ],
-  }),
+      avatar: {
+        type: String,
+      },
+      status: {
+        type: String,
+        enum: ["locked", "unlocked"],
+        default: "unlocked",
+      },
+
+      last_login: {
+        type: Date,
+      },
+
+      is_verified: {
+        type: Boolean,
+        default: false,
+      },
+
+      reset_password_token: {
+        type: String,
+        select: false,
+      },
+
+      reset_password_token_expire_at: {
+        type: Date,
+        select: false,
+      },
+
+      verification_token: {
+        type: String,
+        select: false,
+      },
+
+      verification_token_expire_at: {
+        type: Date,
+        select: false,
+      },
+      points: {
+        type: Number,
+        default: 0,
+      },
+      google_id: {
+        type: String,
+      },
+      authProvider: {
+        type: String,
+        enums: ["google" | "local"],
+        default: "local",
+      },
+      roles: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Role",
+        },
+      ],
+    },
+    {
+      timestamps: true,
+    },
+  ),
 );
 module.exports = User;

@@ -39,9 +39,10 @@ export class SignIn {
         }
         this.success = res.message;
         f.reset();
-        if (res.data.roles.includes('ROLE_ADMIN')) {
-          this.router.navigate(['/admin']);
-        }
+        // if (res.data.roles.includes('ROLE_ADMIN')) {
+        //   this.router.navigate(['/admin']);
+        //   return;
+        // }
         this.router.navigate(['/']);
       },
       error: (err) => {
@@ -56,41 +57,6 @@ export class SignIn {
   }
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
-  }
-
-  loginWithGoogle() {
-    const width = 500;
-    const height = 600;
-    const left = (window.screen.width - width) / 2;
-    const top = (window.screen.height - height) / 2;
-
-    const popup = window.open(
-      '/mock-google-login',
-      'GoogleSignIn',
-      `width=${width},height=${height},top=${top},left=${left}`,
-    );
-
-    const messageHandler = (event: MessageEvent) => {
-      if (event.data.type === 'GOOGLE_LOGIN_SUCCESS') {
-        const googleUser = event.data.user;
-
-        // Save to local storage
-        const user = {
-          ...googleUser,
-          role: 'customer',
-          loginAt: new Date(),
-        };
-        localStorage.setItem('userLogin', JSON.stringify(user));
-
-        // Cleanup
-        window.removeEventListener('message', messageHandler);
-
-        alert(`Đăng nhập Google thành công! create chào ${user.fullName} 🎉`);
-        this.router.navigate(['/']); // Redirect to home
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
   }
 
   forgotPassword() {

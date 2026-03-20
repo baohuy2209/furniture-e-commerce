@@ -1,14 +1,17 @@
 <div class="card user-header-banner-card mb-4">
-  <!-- Thêm class 'card' và custom class -->
   <div class="card-body">
-    <div class="d-flex align-items-center user-info-header">
-      <img src="{{ user.avatar }}" alt="User Avatar" class="profile-avatar-lg me-3" />
+    <div class="d-flex user-info-header">
+      <img
+        [src]="user?.avatar ? user?.avatar : 'user/image.png'"
+        alt="User Avatar"
+        class="profile-avatar-lg me-4"
+      />
       <div>
-        <h2 class="mb-1">{{ user.firstName + ' ' + user.lastName }}</h2>
-        <p class="text-muted mb-0">{{ user.email }}</p>
-        <p class="text-muted small">{{ user.phone }}</p>
-        @if (user.isVerified) {
-          <span class="badge badge-verified">Đã xác thực</span>
+        <h2>{{ user?.name }}</h2>
+        <p>{{ user?.email }}</p>
+        <p>{{ user?.phone }}</p>
+        @if (user?.is_verified) {
+          <span class="badge-verified">✓ Đã xác thực</span>
         }
       </div>
     </div>

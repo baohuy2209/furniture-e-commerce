@@ -20,28 +20,15 @@
                 />
               </div>
             </div>
-
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Họ <span class="text-danger">*</span></label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="firstname"
-                  [(ngModel)]="user.firstName"
-                  required
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Tên <span class="text-danger">*</span></label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="lastname"
-                  [(ngModel)]="user.lastName"
-                  required
-                />
-              </div>
+            <div class="mb-3">
+              <label class="form-label">Họ và tên<span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                name="name"
+                [(ngModel)]="user.name"
+                required
+              />
             </div>
 
             <div class="mb-3">
@@ -69,11 +56,17 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label">Ngày sinh</label>
-                <input type="date" class="form-control" name="dob" [(ngModel)]="user.dob" />
+                <input
+                  type="date"
+                  class="form-control"
+                  name="dob"
+                  [(ngModel)]="user.dob"
+                  [value]="user.dob | date: 'yyyy-MM-dd'"
+                />
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label">Giới tính</label>
-                <select class="form-select">
+                <select class="form-select" [(ngModel)]="user.gender" name="gender">
                   <option value="male">Nam</option>
                   <option value="female">Nữ</option>
                   <option value="other">Khác</option>
@@ -82,7 +75,7 @@
             </div>
 
             <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-primary" (click)="updateUserInfo()">
                 <i class="bi bi-check-circle me-2"></i>Cập Nhật Thông Tin
               </button>
             </div>
@@ -101,20 +94,23 @@
             <input
               type="text"
               class="form-control readonly-field"
-              value="15/11/2025 14:30"
+              value="{{ formatDateTime(user.last_login!) }}"
               readonly
             />
           </div>
-          <div class="mb-3">
-            <label class="form-label">Tài khoản được tạo</label>
-            <input
-              type="text"
-              class="form-control readonly-field"
-              value="15/11/2025 14:30"
-              readonly
-            />
-          </div>
-          <a href="/change-password" type="button" class="btn btn-outline-primary w-100">
+          @if (user.createdAt) {
+            <div class="mb-3">
+              <label class="form-label">Tài khoản được tạo</label>
+              <input
+                type="text"
+                class="form-control readonly-field"
+                value="{{ formatDateTime(user.createdAt!) }}"
+                readonly
+              />
+            </div>
+          }
+
+          <a routerLink="/settings/change-password" class="btn btn-outline-primary w-100">
             <i class="bi bi-key me-2"></i>Đổi Mật Khẩu
           </a>
           <button
@@ -142,33 +138,30 @@
           </button>
         </div>
         <div class="card-body">
-          @for (item of user.address; track $index) {
+          @for (item of listUserAddress; track $index) {
             <div class="address-card mb-3" [class]="item.is_default ? 'default' : ''">
               @if (item.is_default) {
                 <span class="badge bg-primary default-badge">Mặc định</span>
               }
-              <h6 class="mb-2">{{ user.firstName + ' ' + user.lastName }}</h6>
+              <h6 class="mb-2">{{ user.name }}</h6>
               <p class="mb-1"><i class="bi bi-telephone me-2"></i>{{ user.phone }}</p>
               <p class="mb-2">
                 <i class="bi bi-house-door me-2"></i>
-                {{ item.specific_address }}
-              </p>
-              <p class="mb-3 text-muted small">
-                <i class="bi bi-mailbox me-2"></i>Mã bưu điện:
-                {{ item.postal_code }}
+                {{ item.ward }}, {{ item.province }}
               </p>
               <div class="btn-group w-100" role="group">
-                <button type="button" class="btn btn-outline-primary btn-sm">
-                  <i class="bi bi-pencil"></i> Sửa
-                </button>
-                <button type="button" class="btn btn-outline-danger btn-sm">
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="deleteAddress(item._id)"
+                >
                   <i class="bi bi-trash"></i> Xóa
                 </button>
                 @if (!item.is_default) {
                   <button
                     type="button"
                     class="btn btn-outline-secondary btn-sm"
-                    (click)="setDefaultAddress($index)"
+                    (click)="setDefaultAddress(item._id)"
                   >
                     <i class="bi bi-bookmark"></i> Đặt làm mặc định
                   </button>
@@ -196,11 +189,10 @@
           Hành động này không thể hoàn tác. Mọi lịch sử đơn hàng và thông tin cá nhân của bạn sẽ bị
           xóa khỏi hệ thống.
         </p>
-        <input type="password" class="form-control mt-3" placeholder="Nhập mật khẩu để xác nhận" />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
-        <button type="button" class="btn btn-danger">Xác nhận xóa</button>
+        <button type="button" class="btn btn-danger" (click)="deleteAccount()">Xác nhận xóa</button>
       </div>
     </div>
   </div>
@@ -215,44 +207,72 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <form>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Họ <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" required />
-            </div>
-            <div class="col-md-6 mb-3">
-              <label class="form-label">Tên <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" required />
-            </div>
+        <form #f="ngForm" (ngSubmit)="createNewAddress(f)">
+          <div class="mb-3">
+            <label class="form-label">Họ và tên<span class="text-danger">*</span></label>
+            <input
+              #name="ngModel"
+              type="text"
+              class="form-control"
+              name="name"
+              [(ngModel)]="newAddress.name"
+              placeholder="Nguyen Van A"
+              [class.is-invalid]="name.invalid && name.touched"
+              [class.error-border]="name.invalid && name.touched"
+              required
+            />
           </div>
 
           <div class="mb-3">
             <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-            <input type="tel" class="form-control" required />
+            <input
+              #phone="ngModel"
+              name="phone"
+              [(ngModel)]="newAddress.phone"
+              placeholder="0375686583"
+              [class.is-invalid]="phone.invalid && phone.touched"
+              [class.error-border]="phone.invalid && phone.touched"
+              type="tel"
+              class="form-control"
+              required
+            />
           </div>
 
           <div class="mb-3">
             <label class="form-label">Tỉnh/Thành phố <span class="text-danger">*</span></label>
-            <select class="form-select" required>
+            <select
+              class="form-select"
+              #province="ngModel"
+              name="province"
+              [(ngModel)]="newAddress.province"
+              [class.is-invalid]="province.invalid && province.touched"
+              [class.error-border]="province.invalid && province.touched"
+              (ngModelChange)="onProvinceChange($event)"
+              required
+            >
               <option value="">Chọn tỉnh/thành phố</option>
-              <option value="hcm">TP. Hồ Chí Minh</option>
-              <option value="hn">Hà Nội</option>
-              <option value="dn">Đà Nẵng</option>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Quận/Huyện <span class="text-danger">*</span></label>
-            <select class="form-select" required>
-              <option value="">Chọn quận/huyện</option>
+              @for (p of provinces(); track p.code) {
+                <option [value]="p.code">{{ p.name }}</option>
+              }
             </select>
           </div>
 
           <div class="mb-3">
             <label class="form-label">Phường/Xã <span class="text-danger">*</span></label>
-            <select class="form-select" required>
+            <select
+              class="form-select"
+              #ward="ngModel"
+              name="ward"
+              [(ngModel)]="newAddress.ward"
+              [disabled]="!newAddress.province"
+              [class.is-invalid]="ward.invalid && ward.touched"
+              [class.error-border]="ward.invalid && ward.touched"
+              required
+            >
               <option value="">Chọn phường/xã</option>
+              @for (w of wards(); track w.code) {
+                <option [value]="w.name">{{ w.name }}</option>
+              }
             </select>
           </div>
           <div class="mb-3">
@@ -260,15 +280,20 @@
             <textarea
               class="form-control"
               rows="3"
+              #addressDetail="ngModel"
+              name="addressDetail"
+              [(ngModel)]="newAddress.address_detail"
+              [class.is-invalid]="addressDetail.invalid && addressDetail.touched"
+              [class.error-border]="addressDetail.invalid && addressDetail.touched"
               placeholder="Số nhà, tên đường..."
               required
             ></textarea>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary">Thêm Địa Chỉ</button>
+          </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-        <button type="button" class="btn btn-primary">Thêm Địa Chỉ</button>
       </div>
     </div>
   </div>

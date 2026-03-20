@@ -5,6 +5,7 @@ import { SettingLayout } from './components/layout/setting-layout/setting-layout
 import { AdminLayout } from './components/layout/admin-layout/admin-layout';
 import { SignIn } from './pages/sign-in/sign-in';
 import { EventsLayout } from './components/layout/events-layout/events-layout';
+import { authGuard } from './guards/auth-guard';
 export const routes: Routes = [
   {
     path: '',
@@ -31,6 +32,7 @@ export const routes: Routes = [
       {
         path: 'cart',
         loadComponent: () => import('./pages/cart/cart').then((m) => m.Cart),
+        canActivate: [authGuard],
       },
       {
         path: 'blogs',
@@ -103,7 +105,7 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/my-orders/my-orders').then((m) => m.MyOrders), // <== CẦN TẠO COMPONENT NÀY
       },
       {
-        path: 'wishlist',
+        path: 'my-reviews',
         loadComponent: () => import('./pages/my-reviews/my-reviews').then((m) => m.MyReviews), // <== CẦN TẠO COMPONENT NÀY
       },
       {
@@ -115,6 +117,20 @@ export const routes: Routes = [
         path: 'user-setting',
         loadComponent: () =>
           import('./pages/user-settings/user-settings').then((m) => m.UserSettings),
+      },
+      {
+        path: 'my-promotions',
+        loadComponent: () =>
+          import('./pages/my-promotions/my-promotions').then((m) => m.MyPromotions),
+      },
+      {
+        path: 'my-payment-method',
+        loadComponent: () =>
+          import('./pages/my-payment-method/my-payment-method').then((m) => m.MyPaymentMethod),
+      },
+      {
+        path: 'policy',
+        loadComponent: () => import('./pages/policy/policy').then((m) => m.Policy),
       },
       {
         path: 'requests-warranty',

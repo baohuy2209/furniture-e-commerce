@@ -1,10 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
 import { filter, Subscription } from 'rxjs';
 import { SettingsSidebar } from '../../account-settings/settings-sidebar/settings-sidebar';
 import { HeaderProfile } from '../../account-settings/header-profile/header-profile';
+import { UserService } from '../../../services/user-service';
+import { IUser } from '../../../../interface';
 
 @Component({
   selector: 'app-setting-layout',
@@ -16,11 +18,11 @@ import { HeaderProfile } from '../../account-settings/header-profile/header-prof
 export class SettingLayout {
   showHeaderProfile = signal(true);
   showUserInSidebar = signal(true);
-
+  user = signal<IUser | null>(null);
   private routerSubscription!: Subscription;
 
   list_menu = [
-    { id: 1, name: 'Thông tin cá nhân', href: '/settings/profile', iconClass: 'fa-solid fa-user' },
+    { id: 1, name: 'Thông tin cá nhân', href: '/settings', iconClass: 'fa-solid fa-user' },
     {
       id: 2,
       name: 'Đổi mật khẩu',
@@ -67,30 +69,12 @@ export class SettingLayout {
     },
   ];
 
-  user = {
-    username: 'baohuy2209',
-    firstName: 'Nguyễn Bảo',
-    lastName: 'Huy',
-    email: 'huynguyen002311@gmail.com',
-    phone: '0375686583',
-    avatar: 'assets/images/user-profile-avatar.png',
-    dob: '2005-09-22',
-    isVerified: true,
-    address: [
-      {
-        specific_address: 'Phường 26, quận Bình Thạnh, Tp. Hồ Chí Minh',
-        postal_code: 55000,
-        is_default: true,
-      },
-      {
-        specific_address: 'hẻm 300, đường Nguyễn Tri Phương, Bình Dương',
-        postal_code: 55000,
-        is_default: false,
-      },
-    ],
-  };
-
-  constructor(private router: Router) {}
+  error: string = '';
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.routerSubscription = this.router.events
@@ -121,6 +105,19 @@ export class SettingLayout {
         console.log('DEBUG: Large Header hidden:', shouldHideLarge);
         console.log('DEBUG: Sidebar Avatar always visible: true');
       });
+    this.userService.getUserInfo().subscribe({
+      next: (res) => {
+        this.user.set(res.data);
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   ngOnDestroy(): void {

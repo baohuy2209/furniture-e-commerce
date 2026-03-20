@@ -59,7 +59,6 @@ export class Products implements OnInit {
     this.productService.getAllProducts(this.getRequestParams).subscribe({
       next: (res) => {
         this.listProduct = res.data;
-        console.log(this.listProduct);
         this.success = res.message;
         this.cdr.detectChanges();
       },

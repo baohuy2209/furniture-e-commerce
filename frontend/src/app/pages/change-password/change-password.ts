@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; // Dùng Reactive Forms
 import { CommonModule } from '@angular/common'; // Cần cho *ngIf, *ngFor nếu dùng (nhưng @if/@for thì không)
 import { Router } from '@angular/router'; // Để điều hướng sau khi đổi mật khẩu
+import { UserService } from '../../services/user-service';
 
 @Component({
   selector: 'app-change-password',
@@ -28,6 +29,7 @@ export class ChangePassword {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -135,4 +137,5 @@ export class ChangePassword {
   get confirmNewPassword() {
     return this.changePasswordForm.get('confirmNewPassword');
   }
+  changePassword(){}
 }

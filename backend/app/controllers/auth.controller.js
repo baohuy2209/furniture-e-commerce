@@ -203,12 +203,10 @@ exports.googleAuthentication = async (req, res) => {
     const payload = await verify(token);
     const checkExistEmail = await User.findOne({ email: payload.email });
     if (checkExistEmail) {
-      return res
-        .status(400)
-        .json({
-          message: "Email đã được sử dụng cho tài khoản khác",
-          data: null,
-        });
+      return res.status(400).json({
+        message: "Email đã được sử dụng cho tài khoản khác",
+        data: null,
+      });
     }
     const { data, message } = await authService.oauth2Google(payload);
     if (!data) {

@@ -44,6 +44,19 @@ app.get("/", (req, res) => {
 });
 const swaggerDocument = JSON.parse(fs.readFileSync("./swagger.json", "utf8"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get("/provinces", async (req, res) => {
+  const data = await fetch("https://provinces.open-api.vn/api/v2/p/");
+  const json = await data.json();
+  res.json(json);
+});
+app.get("/provinces/:id", async (req, res) => {
+  const id = req.params.id;
+  const data = await fetch(
+    `https://provinces.open-api.vn/api/v2/p/${id}?depth=2`,
+  );
+  const json = await data.json();
+  res.json(json);
+});
 connect();
 route(app);
 app.listen(PORT, () => {

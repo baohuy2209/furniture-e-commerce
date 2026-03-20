@@ -2,7 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../app/services/auth';
-
+let isRefreshing = false;
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
@@ -35,7 +35,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       // token hết hạn
-      if (error.status === 401 || error.status === 403) {
+      if (error.status === 401 && !isRefreshing) {
+        isRefreshing = true;
         return authService.refreshToken().pipe(
           switchMap((res: any) => {
             console.log(res.data);

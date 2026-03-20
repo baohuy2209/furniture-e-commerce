@@ -130,8 +130,19 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']);
-    window.location.reload();
+    this.authService.logout().subscribe({
+      next: (res) => {
+        this.success = res.message;
+        window.location.href = '/';
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.cdr.detectChanges();
+      },
+    });
   }
 }
