@@ -1,3 +1,4 @@
+const userService = require("../../services/user.service");
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 class UserController {
@@ -89,6 +90,26 @@ class UserController {
         return res.status(404).json({ message: "Không tìm thấy người dùng" });
       }
       return res.status(200).json({ message: "Xóa tài khoản thành công" });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Lỗi Server",
+        error: error.message,
+      });
+    }
+  }
+  // [POST] /api/user/create-user
+  async createUserGuest(req, res) {
+    try {
+      const { name, email, phone } = req.body;
+      const { data, message } = await userService.createUser(
+        email,
+        name,
+        phone,
+      );
+      if (!data) {
+        return res.status(401).json({ message, data: null });
+      }
+      return res.status(200).json({ message, data });
     } catch (error) {
       return res.status(500).json({
         message: "Lỗi Server",

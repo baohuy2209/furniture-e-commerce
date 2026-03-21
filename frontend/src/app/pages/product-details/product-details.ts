@@ -1,7 +1,7 @@
 import { CartStateService } from './../../services/cart-state-service';
 import { ProductVariantService } from './../../services/product-variant-service';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { ImageGallery } from '../../components/product-details/image-gallery/image-gallery';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductVariantImageService } from '../../services/product-variant-image-service';
@@ -10,6 +10,7 @@ import {
   Iproduct,
   Iproduct_variants,
   Iproduct_variants_image,
+  IUser,
 } from '../../../interface';
 import { Product } from '../../services/product';
 import { formatPrice } from '../../utils/utils';
@@ -17,10 +18,23 @@ import { CardProduct } from '../../components/card-product/card-product';
 import { ProductReviews } from '../../components/product-details/product-reviews/product-reviews';
 import { ToastService } from '../../services/toast-service';
 import { AuthService } from '../../services/auth';
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { AddressService } from '../../services/address-service';
+import { UserService } from '../../services/user-service';
 
+interface Province {
+  code: number;
+  name: string;
+}
+
+interface Ward {
+  code: number;
+  name: string;
+}
 @Component({
   selector: 'app-product-details',
-  imports: [CommonModule, ImageGallery, RouterLink, CardProduct, ProductReviews],
+  imports: [CommonModule, ImageGallery, RouterLink, CardProduct, ProductReviews, FormsModule],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css',
 })
@@ -42,7 +56,26 @@ export class ProductDetails implements OnInit {
   productVariantComponent: Record<string, string[]> = {};
   productVariantComponentActive: Record<string, number> = {};
   qty = 1;
-
+  newAddress = {
+    _id: '',
+    user: '',
+    name: '',
+    phone: '',
+    province: '',
+    ward: '',
+    address_detail: '',
+    is_default: true,
+  };
+  guestUser = {
+    name: '',
+    phone: '',
+    email: '',
+  };
+  newGuestUser: IUser | null = null;
+  provinces = signal<Province[]>([]);
+  wards = signal<Ward[]>([]);
+  isShowAddressModel: boolean = false;
+  isShowUserInfoModal: boolean = false;
   selectedLeg = 'beige';
   constructor(
     private router: Router,
@@ -54,6 +87,9 @@ export class ProductDetails implements OnInit {
     private toastService: ToastService,
     private authService: AuthService,
     private cartState: CartStateService,
+    private http: HttpClient,
+    private userAddressService: AddressService,
+    private userService: UserService,
   ) {}
   setActive(index: number): void {
     this.activeIndex = index;
@@ -104,6 +140,9 @@ export class ProductDetails implements OnInit {
         this.cdr.detectChanges();
       },
     });
+    this.http
+      .get<Province[]>('http://localhost:3000/provinces')
+      .subscribe((data) => this.provinces.set(data));
   }
   incQty(): void {
     this.qty++;
@@ -113,6 +152,16 @@ export class ProductDetails implements OnInit {
   }
   countFormatPrice(price: number) {
     return formatPrice(price);
+  }
+  onProvinceChange(code: string) {
+    if (!code) {
+      this.wards.set([]);
+      this.newAddress.ward = '';
+      return;
+    }
+    this.http
+      .get<any>(`http://localhost:3000/provinces/${code}`)
+      .subscribe((data) => this.wards.set(data.wards ?? []));
   }
   countPricePercent(price: number, discount_percent: number) {
     const discount_price = Math.floor(price * (1 - discount_percent / 100));
@@ -173,11 +222,67 @@ export class ProductDetails implements OnInit {
         });
       this.router.navigate(['/checkout']);
     } else {
+      this.isShowUserInfoModal = true;
     }
   }
   getType(value: any): string {
     return typeof value;
   }
+  createAddressForGuest(f: any) {
+    if (f.invalid) {
+      this.error = 'Vui lòng kiểm tra lại thông tin địa chỉ';
+      return;
+    }
+    if (!this.newGuestUser) {
+      this.toastService.error('Bạn chưa nhập thông tin người dùng');
+      return;
+    }
+    const selectedProvince = this.provinces().find(
+      (p) => String(p.code) === this.newAddress.province,
+    );
+    this.newAddress.user = this.newGuestUser?._id!;
+    this.newAddress.province = selectedProvince?.name!;
+    this.userAddressService.createNewAddress(this.newAddress).subscribe({
+      next: (res) => {
+        this.success = `Đã tạo địa chỉ mới thành công cho người dùng ${res.data.name}`;
+        this.toastService.success(`${this.success}`);
+        f.reset();
+        window.location.reload();
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thấy địa chỉ người dùng nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.toastService.error(`${this.error}`);
+        this.cdr.detectChanges();
+      },
+    });
+  }
+  createUserGuest(f: any) {
+    if (f.invalid) {
+      this.error = 'Vui lòng kiểm tra lại thông tin địa chỉ';
+      return;
+    }
+    this.userService.createUser(this.guestUSer).subscribe({
+      next: (res) => {
+        this.newGuestUser = res.data;
+        this.isShowUserInfoModal = false;
+        this.isShowAddressModel = true;
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thấy địa chỉ người dùng nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.toastService.error(`${this.error}`);
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
   selectComponentVariantValue(key: string, index: number) {
     this.productVariantComponentActive[key] = index;
     console.log(this.productVariantComponentActive);

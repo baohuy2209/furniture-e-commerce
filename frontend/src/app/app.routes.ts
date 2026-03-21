@@ -150,6 +150,7 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/support/support').then((m) => m.Support),
       },
     ],
+    canActivate: [authGuard],
   },
   {
     path: 'admin',

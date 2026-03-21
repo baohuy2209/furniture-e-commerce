@@ -44,6 +44,17 @@ export class UserService {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
+  createUser(data: {
+    name: string;
+    phone: string;
+    email: string;
+  }): Observable<{ message: string; data: IUser }> {
+    return this.http
+      .post<{ message: string; data: IUser }>(`${environment.backend_url}/user/create-user`, data, {
+        withCredentials: true,
+      })
+      .pipe(retry(2), catchError(this.handleError));
+  }
   handleError(err: HttpErrorResponse) {
     return throwError(() => err);
   }

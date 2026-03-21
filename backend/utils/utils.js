@@ -70,6 +70,13 @@ const getPagination = (page, size) => {
   return { limit, offset };
 };
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const formatVND = (amount) => {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(amount);
+  // → 59.224.000 ₫
+};
 async function verify(token) {
   const ticket = await client.verifyIdToken({
     idToken: token,
@@ -78,10 +85,12 @@ async function verify(token) {
   const payload = ticket.getPayload();
   return payload;
 }
+
 module.exports = {
   normalize,
   generateSlug,
   uploadImage,
   getPagination,
+  formatVND,
   verify,
 };

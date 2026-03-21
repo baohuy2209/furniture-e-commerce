@@ -12,7 +12,7 @@ class OrderController {
         .json({ message: "Lỗi server: " + error.message, data: null });
     }
   }
-  // [POST] /api/orders/checkout
+  // [POST] /api/orders/checkout-without-login
   async checkoutWithoutLogin(req, res) {
     try {
       const {
@@ -25,6 +25,35 @@ class OrderController {
         shipping_fee,
         note,
       } = req.body;
+      const { data, message } = await userService.createUser(
+        email,
+        name,
+        phone,
+      );
+      if (!data) {
+        console.error(message);
+        return res
+          .status(401)
+          .json({ message: "Lỗi không tạo được user", data: null });
+      }
+      const { dataOrder, errorMessage } =
+        await orderService.checkoutWithoutLogin(
+          data._id,
+          email,
+          name,
+          product_variant_id,
+          quantity,
+          address_id,
+          shipping_fee,
+          note,
+        );
+      if (!dataOrder) {
+        return res.status(401).json({ message: errorMessage, data: null });
+      }
+      return res.status(200).json({
+        message: errorMessage,
+        data: dataOrder,
+      });
     } catch (error) {
       return res
         .status(500)
