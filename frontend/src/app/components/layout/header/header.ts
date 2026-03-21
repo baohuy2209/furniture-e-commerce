@@ -1,3 +1,4 @@
+import { CartStateService } from './../../../services/cart-state-service';
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
@@ -14,7 +15,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../../services/auth';
 import { UserService } from '../../../services/user-service';
 import { IUser } from '../../../../interface';
-
+import { afterNextRender } from '@angular/core';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -26,7 +27,6 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   currentToken: string | null = null;
-  cartCount = 0;
   isSearchOpen = false;
   searchQuery = '';
   userName: string = '';
@@ -42,14 +42,14 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
     private authService: AuthService,
     private userService: UserService,
     private cdr: ChangeDetectorRef,
-  ) {}
+    public cartState: CartStateService,
+  ) {
+    afterNextRender(() => {
+      this.cartState.syncCart().subscribe();
+    });
+  }
 
   ngOnInit(): void {
-    // Cart
-    this.updateCartCount();
-    this.cartUpdateListener = () => this.updateCartCount();
-    window.addEventListener('cartUpdated', this.cartUpdateListener);
-
     this.currentToken = this.authService.getAccessToken();
     if (this.currentToken) {
       this.userService.getUserInfo().subscribe({
@@ -86,16 +86,6 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {}
-
-  updateCartCount(): void {
-    const savedCart = localStorage.getItem('homebase_cart');
-    if (savedCart) {
-      const items = JSON.parse(savedCart);
-      this.cartCount = items.reduce((total: number, item: any) => total + item.quantity, 0);
-    } else {
-      this.cartCount = 0;
-    }
-  }
 
   getCurrentUrl(): string {
     const segments = this.router.url.split('/');
@@ -137,7 +127,7 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
       },
       error: (err) => {
         if (err.status === 404 || err.status === 400 || err.status === 401) {
-          this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
+          this.error = err.error?.message || 'Không tìm thấy thông tin người dùng nào';
         } else {
           this.error = 'Có lỗi ở phía server';
         }

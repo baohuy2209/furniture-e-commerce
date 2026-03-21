@@ -62,6 +62,7 @@ const orderItemShippingSchema = new mongoose.Schema(
          */
         "INSTALLATION_ONLY",
       ],
+      default: "STANDARD_DELIVERY",
       required: true,
     },
     shipping_fee: { type: Number, required: true, default: 0 },
@@ -96,6 +97,7 @@ const ShippingProvider = [
    */
     shipping_provider: {
       type: String,
+      default: "J&T",
     },
   },
   {

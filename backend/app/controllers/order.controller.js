@@ -1,5 +1,5 @@
 const orderService = require("../../services/order.service");
-
+const userService = require("../../services/user.service");
 class OrderController {
   // [POST] /api/orders/checkout
   async checkout(req, res) {
@@ -12,7 +12,25 @@ class OrderController {
         .json({ message: "Lỗi server: " + error.message, data: null });
     }
   }
-
+  // [POST] /api/orders/checkout
+  async checkoutWithoutLogin(req, res) {
+    try {
+      const {
+        product_variant_id,
+        quantity,
+        email,
+        phone,
+        name,
+        address_id,
+        shipping_fee,
+        note,
+      } = req.body;
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Lỗi server: " + error.message, data: null });
+    }
+  }
   // [GET] /api/orders
   async getUserOrders(req, res) {
     try {
@@ -99,12 +117,10 @@ class OrderController {
         req.params.orderItemId,
         status,
       );
-      return res
-        .status(200)
-        .json({
-          message: "Cập nhật trạng thái sản phẩm trong đơn thành công",
-          data,
-        });
+      return res.status(200).json({
+        message: "Cập nhật trạng thái sản phẩm trong đơn thành công",
+        data,
+      });
     } catch (error) {
       return res
         .status(500)

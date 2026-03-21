@@ -51,7 +51,7 @@ class CartService {
 
     const price = variant.price || 0;
     const discount_percent = variant.product?.discount_percent || 0;
-    const discounted_price = price * (1 - discount_percent / 100);
+    const discounted_price = Math.round(price * (1 - discount_percent / 100));
 
     let cartItem = await CartItem.findOne({
       cart_id: cart._id,

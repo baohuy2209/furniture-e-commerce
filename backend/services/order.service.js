@@ -90,7 +90,7 @@ class OrderService {
 
     return order;
   }
-
+  async checkoutWithoutLogin(){}
   async getUserOrders(userId) {
     return await Order.find({ user_id: userId }).sort({ createdAt: -1 });
   }

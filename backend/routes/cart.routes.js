@@ -9,7 +9,7 @@ router.post(
   protectedRoute,
   cartController.addToCart.bind(cartController),
 );
-router.put(
+router.patch(
   "/update",
   protectedRoute,
   cartController.updateQuantity.bind(cartController),

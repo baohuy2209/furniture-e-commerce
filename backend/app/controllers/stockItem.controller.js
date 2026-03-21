@@ -18,6 +18,32 @@ class StockItemController {
         .json({ message: "Lỗi server", error: error.message });
     }
   }
+  // [GET] /api/stock-items/product-variant-id/:id
+  async getStockItemByProductVariant(req, res) {
+    try {
+      const productVariantId = req.params.id;
+      const stockItems = await StockItem.findOne({
+        product_variant_id: productVariantId,
+      });
+      if (!stockItems) {
+        return res
+          .status(404)
+          .json({
+            message: "Không tìm thấy item lưu kho nào của biến thể sản phẩm",
+            data: null,
+          });
+      }
+      return res.status(200).json({
+        message: "Lấy dữ liệu tồn kho thành công",
+        data: stockItems,
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ message: "Lỗi server", error: error.message });
+    }
+  }
 
   // [GET] /api/stock-items/:id
   async getStockItemById(req, res) {

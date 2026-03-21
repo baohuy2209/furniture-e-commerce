@@ -33,6 +33,7 @@ const orderItemSchema = new mongoose.Schema(
         "cancelled",
         "returned",
       ],
+      default: "pending",
     },
     reviewed: {
       type: Boolean,

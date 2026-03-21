@@ -8,6 +8,7 @@ const paymentSchema = new mongoose.Schema(
     payment_method: {
       type: String,
       enum: ["cod", "momo", "bank_transfer"],
+      defeault: "cod",
     },
     status: {
       type: String,

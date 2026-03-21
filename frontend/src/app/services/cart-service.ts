@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { ICart, ICartItem } from '../../interface';
+import { ICart, ICartItem, ICartItemDetail } from '../../interface';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -9,11 +9,14 @@ import { environment } from '../../environments/environment.development';
 })
 export class CartService {
   constructor(private http: HttpClient) {}
-  getCart(): Observable<{ message: string; data: ICart }> {
+  getCart(): Observable<{ message: string; data: { cart: ICart; cartItems: ICartItemDetail[] } }> {
     return this.http
-      .get<{ message: string; data: ICart }>(`${environment.backend_url}/cart`, {
-        withCredentials: true,
-      })
+      .get<{ message: string; data: { cart: ICart; cartItems: ICartItemDetail[] } }>(
+        `${environment.backend_url}/cart`,
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   addToCart(
@@ -22,7 +25,7 @@ export class CartService {
   ): Observable<{ message: string; data: ICartItem }> {
     return this.http
       .post<{ message: string; data: ICartItem }>(
-        `${environment.backend_url}/add`,
+        `${environment.backend_url}/cart/add`,
         {
           product_variant_id,
           quantity,

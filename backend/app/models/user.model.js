@@ -59,7 +59,7 @@ const User = mongoose.model(
       },
       authProvider: {
         type: String,
-        enums: ["google" | "local"],
+        enums: ["google" | "local" | "guest"],
         default: "local",
       },
       roles: [

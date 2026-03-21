@@ -99,7 +99,7 @@
           </button>
           <button class="icon-btn position-relative" aria-label="Cart" routerLink="/cart">
             <i class="fas fa-shopping-cart"></i>
-            <span class="cart-badge">{{ cartCount }}</span>
+            <span class="cart-badge">{{ cartState.totalItems() }}</span>
           </button>
           <!-- KHỐI NÀY LÀ DROPDOWN KHI CHƯA ĐĂNG NHẬP-->
           @if (!currentToken) {

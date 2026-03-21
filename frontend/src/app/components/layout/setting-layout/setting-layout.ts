@@ -77,34 +77,12 @@ export class SettingLayout {
   ) {}
 
   ngOnInit(): void {
+    this.checkRoute(this.router.url);
+
     this.routerSubscription = this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        const currentUrl = event.urlAfterRedirects;
-
-        // DANH SÁCH CÁC TRANG MUỐN ẨN HEADER LỚN
-        const hideLargeHeaderOn = [
-          'my-orders',
-          'my-reviews',
-          'my-payment-method',
-          'my-promotions',
-          'user-setting',
-          'policy',
-          'requests-warranty',
-          'support',
-        ];
-
-        // 1. Kiểm tra để ẩn/hiện Header lớn
-        const shouldHideLarge = hideLargeHeaderOn.some((path) => currentUrl.includes(path));
-        this.showHeaderProfile.set(!shouldHideLarge);
-        console.log(this.showHeaderProfile());
-
-        // 2. LUÔN HIỂN THỊ AVATAR NHỎ TRONG SIDEBAR
-        // Dù ở bất kỳ trang nào, ta cũng ép nó về true
-        this.showUserInSidebar.set(true);
-
-        console.log('DEBUG: Large Header hidden:', shouldHideLarge);
-        console.log('DEBUG: Sidebar Avatar always visible: true');
+        this.checkRoute(event.urlAfterRedirects);
       });
     this.userService.getUserInfo().subscribe({
       next: (res) => {
@@ -119,6 +97,22 @@ export class SettingLayout {
         this.cdr.detectChanges();
       },
     });
+  }
+  private checkRoute(currentUrl: string): void {
+    const hideLargeHeaderOn = [
+      'my-orders',
+      'my-reviews',
+      'my-payment-method',
+      'my-promotions',
+      'user-setting',
+      'policy',
+      'requests-warranty',
+      'support',
+    ];
+
+    const shouldHideLarge = hideLargeHeaderOn.some((path) => currentUrl.includes(path));
+    this.showHeaderProfile.set(!shouldHideLarge);
+    this.showUserInSidebar.set(true);
   }
 
   ngOnDestroy(): void {

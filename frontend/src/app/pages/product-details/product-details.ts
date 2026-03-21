@@ -1,3 +1,4 @@
+import { CartStateService } from './../../services/cart-state-service';
 import { ProductVariantService } from './../../services/product-variant-service';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
@@ -12,8 +13,10 @@ import {
 } from '../../../interface';
 import { Product } from '../../services/product';
 import { formatPrice } from '../../utils/utils';
-import { CardProduct } from "../../components/card-product/card-product";
-import { ProductReviews } from "../../components/product-details/product-reviews/product-reviews";
+import { CardProduct } from '../../components/card-product/card-product';
+import { ProductReviews } from '../../components/product-details/product-reviews/product-reviews';
+import { ToastService } from '../../services/toast-service';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-product-details',
@@ -48,6 +51,9 @@ export class ProductDetails implements OnInit {
     private productVariantService: ProductVariantService,
     private productVariantImageSerivce: ProductVariantImageService,
     private cdr: ChangeDetectorRef,
+    private toastService: ToastService,
+    private authService: AuthService,
+    private cartState: CartStateService,
   ) {}
   setActive(index: number): void {
     this.activeIndex = index;
@@ -71,10 +77,12 @@ export class ProductDetails implements OnInit {
           }
         }
         this.success = res.message;
+        this.toastService.success(`${this.success}`);
         this.productService.getRelatedProduct(res.data.productInfo.categories).subscribe({
           next: (res) => {
             this.relatedProducts = res.data;
             this.success = res.message;
+            this.toastService.success(`${this.success}`);
           },
           error: (err) => {
             if (err.status === 404 || err.status === 400 || err.status === 401) {
@@ -112,10 +120,60 @@ export class ProductDetails implements OnInit {
   }
   addToCart(): void {
     // console.log('Add to cart', { qty: this.qty, leg: this.selectedLeg, chair: this.selectedChair });
+    const token = this.authService.getAccessToken();
+    if (token) {
+      this.cartState
+        .addItem(
+          this.current_product_variant?._id ?? this.product_details?.defaultProductVariant._id!,
+          this.qty,
+        )
+        .subscribe({
+          next: (res) => {
+            this.toastService.success(
+              `Đã thêm sản phẩm ${this.product_details?.productInfo.product_name} vào giỏ hàng`,
+            );
+          },
+          error: (err) => {
+            if (err.status === 404 || err.status === 400 || err.status === 401) {
+              this.error = err.error?.message || 'Không tìm thây giỏ hàng nào';
+            } else {
+              this.error = 'Có lỗi ở phía server';
+            }
+            this.toastService.error(`${this.error}`);
+          },
+        });
+    } else {
+      this.toastService.error(`Bạn chưa đăng nhập để sử dụng giỏ hàng`);
+    }
   }
 
   buyNow(): void {
     // console.log('Buy now', { qty: this.qty, leg: this.selectedLeg, chair: this.selectedChair });
+    const token = this.authService.getAccessToken();
+    if (token) {
+      this.cartState
+        .addItem(
+          this.current_product_variant?._id ?? this.product_details?.defaultProductVariant._id!,
+          this.qty,
+        )
+        .subscribe({
+          next: (res) => {
+            this.toastService.success(
+              `Đã thêm sản phẩm ${this.product_details?.productInfo.product_name} vào giỏ hàng`,
+            );
+          },
+          error: (err) => {
+            if (err.status === 404 || err.status === 400 || err.status === 401) {
+              this.error = err.error?.message || 'Không tìm thây giỏ hàng nào';
+            } else {
+              this.error = 'Có lỗi ở phía server';
+            }
+            this.toastService.error(`${this.error}`);
+          },
+        });
+      this.router.navigate(['/checkout']);
+    } else {
+    }
   }
   getType(value: any): string {
     return typeof value;
