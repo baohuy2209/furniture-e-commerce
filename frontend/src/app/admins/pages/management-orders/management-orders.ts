@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, combineLatest, map, takeUntil } from 'rxjs';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 /** ===================== TYPES ===================== */
 type Mode = 'list' | 'detail' | 'edit';
@@ -34,24 +35,17 @@ type SortKey =
 interface OrderEntity {
   order_id: string;
   order_number: string;
-
   user_id: string | null;
-
   status: OrderStatus;
   payment_status: PaymentStatus;
-
   region: string;
   shipping_fee: number;
-
   subtotal_amount: number;
   discount_amount: number;
   total_amount: number;
-
   note: string;
   admin_note: string;
-
   cancel_reason: string;
-
   created_at: string;
   delivered_at: string | null;
   updated_at: string;
@@ -76,15 +70,12 @@ interface AddressEntity {
 interface OrderItemEntity {
   order_item_id: string;
   order_id: string;
-
   product_id: string;
   product_name: string;
   product_image_url: string;
   product_variant_id: string;
-
   unit_price: number;
   quantity: number;
-
   created_at: string;
   updated_at: string;
 }
@@ -95,11 +86,9 @@ type RequestStatus = 'requested' | 'approved' | 'rejected' | 'completed';
 interface ReturnExchangeRequestEntity {
   request_id: string;
   order_id: string;
-
   type: RequestType;
   reason: string;
   note: string;
-
   status: RequestStatus;
   created_at: string;
   updated_at: string;
@@ -124,10 +113,8 @@ interface OrderListRow extends Pick<
 interface VMListRow extends OrderListRow {
   createdAtText: string;
   totalText: string;
-
   statusLabel: string;
   statusPillClass: string;
-
   paymentLabel: string;
   payPillClass: string;
   stt: number;
@@ -182,26 +169,19 @@ interface OrderDetailVM {
 
 interface VM {
   mode: Mode;
-
   rows: VMListRow[];
   exportRows: VMListRow[];
   total: number;
-
   page: number;
   pageSize: number;
   totalPages: number;
-
   sortKey: SortKey;
   sortDir: SortDir;
-
   regions: string[];
-
   showingFrom: number;
   showingTo: number;
-
   selectedId: string | null;
   detail: OrderDetailVM | null;
-
   editModel: Partial<OrderEntity> | null;
   summary?: {
     totalRevenue: string;
@@ -226,7 +206,7 @@ const MOCK_DETAIL: Record<string, OrderDetailRaw> = MOCK.MOCK_DETAIL;
 @Component({
   selector: 'app-management-orders',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, ConfirmModal],
   templateUrl: './management-orders.html',
   styleUrls: ['./management-orders.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -243,7 +223,15 @@ export class ManagementOrders implements OnInit, OnDestroy {
   private detail$ = new BehaviorSubject<OrderDetailVM | null>(null);
   private editModel$ = new BehaviorSubject<Partial<OrderEntity> | null>(null);
 
-  // Filters (bind in template)
+  private originalEditSnapshot: string | null = null;
+  private pendingDiscardAction: (() => void) | null = null;
+
+  saveModalOpen = false;
+  discardModalOpen = false;
+  cancelModalOpen = false;
+  cancelTargetOrderId: string | null = null;
+
+  // Filters
   q = '';
   f_status: '' | OrderStatus = '';
   f_payment: '' | PaymentStatus = '';
@@ -295,9 +283,9 @@ export class ManagementOrders implements OnInit, OnDestroy {
       ]) => {
         const regions = this.buildRegions(rows);
 
-        const computedRows: VMListRow[] = rows.map((r, i) => ({
+        const computedRows: VMListRow[] = rows.map((r) => ({
           ...r,
-          stt: (page - 1) * pageSize + (i + 1),
+          stt: 0,
           createdAtText: this.fmtDate(r.created_at),
           totalText: money(r.total_amount),
           statusLabel: this.statusLabel(r.status),
@@ -306,14 +294,14 @@ export class ManagementOrders implements OnInit, OnDestroy {
           payPillClass: this.paymentPillClass(r.payment_status),
         }));
 
-        const key = q.trim().toLowerCase();
+        const keyword = q.trim().toLowerCase();
         let filtered = computedRows.filter((r) => {
-          if (key.length >= 3) {
+          if (keyword.length >= 3) {
             const hit =
-              r.order_number.toLowerCase().includes(key) ||
-              r.customer.toLowerCase().includes(key) ||
-              r.phone.toLowerCase().includes(key) ||
-              r.region.toLowerCase().includes(key);
+              r.order_number.toLowerCase().includes(keyword) ||
+              r.customer.toLowerCase().includes(keyword) ||
+              r.phone.toLowerCase().includes(keyword) ||
+              r.region.toLowerCase().includes(keyword);
             if (!hit) return false;
           }
           if (status && r.status !== status) return false;
@@ -323,21 +311,25 @@ export class ManagementOrders implements OnInit, OnDestroy {
         });
 
         filtered = filtered.sort((a, b) => compareByKey(a, b, sortKey, sortDir));
-        const exportRows = filtered.slice();
 
+        const exportRows = filtered.slice();
         const total = filtered.length;
         const totalPages = Math.max(1, Math.ceil(total / pageSize));
         const safePage = clamp(page, 1, totalPages);
         const start = (safePage - 1) * pageSize;
-        const paged = filtered.slice(start, start + pageSize);
+
+        const paged = filtered.slice(start, start + pageSize).map((r, i) => ({
+          ...r,
+          stt: start + i + 1,
+        }));
 
         const showingFrom = total === 0 ? 0 : start + 1;
         const showingTo = total === 0 ? 0 : Math.min(total, start + paged.length);
 
         const summary = {
           totalRevenue: money(rows.reduce((s, r) => s + r.total_amount, 0)),
-          pendingCount: rows.filter(r => r.status === 'pending' || r.status === 'packed').length,
-          shippingCount: rows.filter(r => r.status === 'shipping').length
+          pendingCount: rows.filter((r) => r.status === 'pending' || r.status === 'packed').length,
+          shippingCount: rows.filter((r) => r.status === 'shipping').length,
         };
 
         const vm: VM = {
@@ -372,70 +364,71 @@ export class ManagementOrders implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ================== ROUTE SYNC (giống Products: dùng query params) ==================
   private bindRouteState(): void {
     this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((qp) => {
       const id = qp.get('id');
-      const modeRaw = qp.get('mode');
+      const isEdit = qp.get('edit') === 'true';
 
-      const incomingId = id ? String(id) : null;
-      const incomingMode: Mode = incomingId ? (modeRaw === 'edit' ? 'edit' : 'detail') : 'list';
-
-      if (!incomingId) {
+      if (!id) {
         this.selectedId$.next(null);
         this.detail$.next(null);
         this.editModel$.next(null);
+        this.originalEditSnapshot = null;
         this.mode$.next('list');
         return;
       }
 
-      const d = this.buildDetail(incomingId);
+      const d = this.buildDetail(id);
       if (!d) {
-        // id không tồn tại -> clear query
         this.syncRoute(null, 'list', false);
         return;
       }
 
-      this.selectedId$.next(incomingId);
+      this.selectedId$.next(id);
       this.detail$.next(d);
 
-      if (incomingMode === 'edit') {
-        const cloned: Partial<OrderEntity> = {
-          order_id: d.order.order_id,
-          admin_note: d.order.admin_note ?? '',
-          note: d.order.note ?? '',
-          updated_at: d.order.updated_at,
-        };
-        this.editModel$.next(cloned);
+      if (isEdit) {
+        const current = this.editModel$.value;
+        const sameOrder = current?.order_id === d.order.order_id;
+
+        if (!sameOrder) {
+          const cloned: Partial<OrderEntity> = {
+            order_id: d.order.order_id,
+            admin_note: d.order.admin_note ?? '',
+            updated_at: d.order.updated_at,
+          };
+          this.editModel$.next(cloned);
+          this.originalEditSnapshot = JSON.stringify({
+            admin_note: cloned.admin_note ?? '',
+          });
+        }
+
         this.mode$.next('edit');
       } else {
         this.editModel$.next(null);
+        this.originalEditSnapshot = null;
         this.mode$.next('detail');
       }
     });
   }
 
   private syncRoute(id: string | null, mode: Mode, push: boolean): void {
-    const queryParams: Record<string, string | null> = {
-      id: id ? id : null,
-      mode: id ? (mode === 'edit' ? 'edit' : 'detail') : null,
-    };
-
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams,
+      queryParams: {
+        id: id ?? null,
+        edit: id && mode === 'edit' ? 'true' : null,
+      },
       queryParamsHandling: 'merge',
       replaceUrl: !push,
     });
   }
 
-  /** ===================== TEMPLATE HELPERS ===================== */
   stopEvent(ev: MouseEvent) {
     ev.stopPropagation();
     ev.preventDefault();
   }
 
-  /** ===================== FILTERS / SORT / PAGING ===================== */
   onChangeQ(v: string) {
     this.q = v;
     this.q$.next(v);
@@ -461,8 +454,8 @@ export class ManagementOrders implements OnInit, OnDestroy {
   }
 
   onChangePageSize(v: number) {
-    this.pageSize = v;
-    this.pageSize$.next(v);
+    this.pageSize = Number(v) || 10;
+    this.pageSize$.next(this.pageSize);
     this.page$.next(1);
   }
 
@@ -482,6 +475,7 @@ export class ManagementOrders implements OnInit, OnDestroy {
   }
 
   setPage(p: number) {
+    this.page = p;
     this.page$.next(p);
   }
 
@@ -493,17 +487,26 @@ export class ManagementOrders implements OnInit, OnDestroy {
       this.sortDir$.next(curDir === 'asc' ? 'desc' : 'asc');
       return;
     }
+
     this.sortKey$.next(key);
     this.sortDir$.next('asc');
   }
 
-  /** ===================== ROUTER NAV ACTIONS ===================== */
+  sortIcon(key: SortKey): string {
+    const st = this.sortKey$.value;
+    const dir = this.sortDir$.value;
+    if (st !== key) return 'fa-sort';
+    return dir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+  }
+
   openDetail(orderId: string) {
     this.syncRoute(orderId, 'detail', true);
   }
 
   goList() {
-    this.syncRoute(null, 'list', true);
+    this.attemptLeave(() => {
+      this.syncRoute(null, 'list', true);
+    });
   }
 
   enterEdit() {
@@ -512,29 +515,93 @@ export class ManagementOrders implements OnInit, OnDestroy {
     this.syncRoute(d.order.order_id, 'edit', true);
   }
 
-  cancelEdit() {
+  backToDetail() {
     const id = this.selectedId$.value;
-    if (!id) return;
-    this.syncRoute(id, 'detail', true);
+    if (!id) {
+      this.goList();
+      return;
+    }
+
+    this.attemptLeave(() => {
+      this.syncRoute(id, 'detail', true);
+    });
+  }
+
+  onHeaderBack() {
+    if (this.mode$.value === 'edit') {
+      this.backToDetail();
+      return;
+    }
+    this.goList();
+  }
+
+  cancelEdit() {
+    this.backToDetail();
+  }
+
+  get isDirty(): boolean {
+    const em = this.editModel$.value;
+    if (!em || !this.originalEditSnapshot) return false;
+
+    const current = JSON.stringify({
+      admin_note: em.admin_note ?? '',
+    });
+    return current !== this.originalEditSnapshot;
+  }
+
+  private attemptLeave(action: () => void) {
+    if (!this.isDirty) {
+      action();
+      return;
+    }
+    this.pendingDiscardAction = action;
+    this.discardModalOpen = true;
+  }
+
+  onConfirmDiscard() {
+    this.discardModalOpen = false;
+    const action = this.pendingDiscardAction;
+    this.pendingDiscardAction = null;
+    this.editModel$.next(null);
+    this.originalEditSnapshot = null;
+    action?.();
+  }
+
+  onCancelDiscard() {
+    this.discardModalOpen = false;
+    this.pendingDiscardAction = null;
   }
 
   saveEdit() {
     const em = this.editModel$.value;
-    const d = this.detail$.value;
-    if (!em || !d) return;
+    if (!em) return;
 
-    const note = (em.admin_note ?? '').trim();
-    if (note.length > 500) {
-      alert('Ghi chú nội bộ tối đa 500 ký tự.');
+    const note = String(em.admin_note ?? '').trim();
+    if (note.length > 500) return;
+
+    this.saveModalOpen = true;
+  }
+
+  onCancelSave() {
+    this.saveModalOpen = false;
+  }
+
+  executeSave() {
+    const em = this.editModel$.value;
+    const d = this.detail$.value;
+    if (!em || !d) {
+      this.saveModalOpen = false;
       return;
     }
+
+    const note = String(em.admin_note ?? '').trim();
 
     updateMockOrder(d.order.order_id, {
       admin_note: note,
       updated_at: new Date().toISOString(),
     });
 
-    // quay về detail theo URL
+    this.saveModalOpen = false;
     this.syncRoute(d.order.order_id, 'detail', true);
   }
 
@@ -581,48 +648,40 @@ export class ManagementOrders implements OnInit, OnDestroy {
     URL.revokeObjectURL(url);
   }
 
-  /** ===================== BUSINESS ACTIONS ===================== */
   confirmCancel(orderId: string) {
     const d = this.detail$.value;
     if (!d || d.order.order_id !== orderId) return;
+    if (!d.canCancel) return;
 
-    const canCancel = d.order.status === 'pending' || d.order.status === 'packed';
-    if (!canCancel) {
-      alert('Chỉ huỷ được khi đơn ở trạng thái: Chờ xác nhận / Đã xác nhận.');
-      return;
-    }
+    this.cancelTargetOrderId = orderId;
+    this.cancelModalOpen = true;
+  }
 
-    const ok = window.confirm(`Xác nhận HUỶ đơn ${d.order.order_number}?`);
-    if (!ok) return;
+  onCancelOrderDismiss() {
+    this.cancelModalOpen = false;
+    this.cancelTargetOrderId = null;
+  }
 
-    const reason = (window.prompt('Nhập lý do huỷ (bắt buộc):') ?? '').trim();
-    if (!reason) {
-      alert('Cần nhập lý do huỷ.');
-      return;
-    }
+  onConfirmCancelOrder() {
+    const orderId = this.cancelTargetOrderId;
+    if (!orderId) return;
 
     updateMockOrder(orderId, {
       status: 'cancelled',
-      cancel_reason: reason,
+      cancel_reason: 'Huỷ bởi quản trị viên',
       updated_at: new Date().toISOString(),
     });
 
-    // rebuild detail
+    this.cancelModalOpen = false;
+    this.cancelTargetOrderId = null;
     this.detail$.next(this.buildDetail(orderId));
   }
 
   approveRequest(orderId: string) {
     const d = this.detail$.value;
     if (!d || d.order.order_id !== orderId || !d.request) return;
-
-    if (!d.request.isWithin7Days) {
-      alert('Yêu cầu đã quá 7 ngày. Không thể duyệt theo rule mặc định.');
-      return;
-    }
+    if (!d.request.isWithin7Days) return;
     if (d.request.status !== 'requested') return;
-
-    const ok = window.confirm('Duyệt yêu cầu này?');
-    if (!ok) return;
 
     updateMockRequest(orderId, { status: 'approved', updated_at: new Date().toISOString() });
 
@@ -638,14 +697,8 @@ export class ManagementOrders implements OnInit, OnDestroy {
     if (!d || d.order.order_id !== orderId || !d.request) return;
     if (d.request.status !== 'requested') return;
 
-    const ok = window.confirm('Từ chối yêu cầu này?');
-    if (!ok) return;
-
-    const note = (window.prompt('Nhập lý do từ chối (tuỳ chọn):') ?? '').trim();
-
     updateMockRequest(orderId, {
       status: 'rejected',
-      note: note || d.request.note,
       updated_at: new Date().toISOString(),
     });
 
@@ -655,13 +708,7 @@ export class ManagementOrders implements OnInit, OnDestroy {
   markRequestCompleted(orderId: string) {
     const d = this.detail$.value;
     if (!d || d.order.order_id !== orderId || !d.request) return;
-    if (d.request.status !== 'approved') {
-      alert('Chỉ hoàn tất khi yêu cầu đã được duyệt.');
-      return;
-    }
-
-    const ok = window.confirm('Xác nhận đã xử lý xong đổi/trả?');
-    if (!ok) return;
+    if (d.request.status !== 'approved') return;
 
     updateMockRequest(orderId, { status: 'completed', updated_at: new Date().toISOString() });
 
@@ -671,7 +718,6 @@ export class ManagementOrders implements OnInit, OnDestroy {
     this.detail$.next(this.buildDetail(orderId));
   }
 
-  /** ===================== VIEWMODEL BUILDER ===================== */
   private buildDetail(orderId: string): OrderDetailVM | null {
     const raw: OrderDetailRaw | undefined = MOCK_DETAIL[orderId];
     if (!raw) return null;
@@ -771,13 +817,6 @@ export class ManagementOrders implements OnInit, OnDestroy {
     }
   }
 
-  sortIcon(key: SortKey): string {
-    const st = this.sortKey$.value;
-    const dir = this.sortDir$.value;
-    if (st !== key) return 'fa-sort';
-    return dir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
-  }
-
   private isWithin7Days(deliveredAt: string | null, requestAt?: string) {
     if (!deliveredAt || !requestAt) return true;
     const a = new Date(deliveredAt).getTime();
@@ -860,7 +899,6 @@ export class ManagementOrders implements OnInit, OnDestroy {
     }));
   }
 
-  /** ===================== LABELS / CLASSES ===================== */
   statusLabel(s: OrderStatus) {
     switch (s) {
       case 'pending':
@@ -981,7 +1019,7 @@ function updateMockRequest(orderId: string, patch: Partial<ReturnExchangeRequest
   store.request = { ...store.request, ...patch };
 }
 
-/** ===================== MOCK GENERATOR (STRICT TYPED) ===================== */
+/** ===================== MOCK GENERATOR ===================== */
 function buildOrdersMock(count: number): {
   MOCK_ROWS: OrderListRow[];
   MOCK_DETAIL: Record<string, OrderDetailRaw>;
@@ -1031,7 +1069,7 @@ function buildOrdersMock(count: number): {
     const customer = customers[(i - 1) % customers.length];
     const region = regions[(i - 1) % regions.length];
 
-    const createdAt = new Date(Date.now() - i * 36 * 60 * 60 * 1000); // -36h each
+    const createdAt = new Date(Date.now() - i * 36 * 60 * 60 * 1000);
     const created_at = createdAt.toISOString();
 
     const status = statuses[i % statuses.length];

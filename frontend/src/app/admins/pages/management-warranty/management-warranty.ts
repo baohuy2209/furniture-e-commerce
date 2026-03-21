@@ -1,8 +1,9 @@
 import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { BehaviorSubject, Subject, combineLatest, map } from 'rxjs';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { BehaviorSubject, Subject, combineLatest, map, takeUntil } from 'rxjs';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 type SortDir = 'asc' | 'desc';
 type PageMode = 'list' | 'detail' | 'edit';
@@ -18,13 +19,13 @@ type RequestStatus =
   | 'COMPLETED';
 
 interface TimelineItem {
-  at: string; // ISO
+  at: string;
   title: string;
   note?: string;
 }
 
 interface WarrantyRequest {
-  id: string; // phase sau -> Mongo ObjectId string
+  id: string;
   type: RequestType;
   status: RequestStatus;
 
@@ -36,27 +37,25 @@ interface WarrantyRequest {
   productName: string;
   variantLabel: string;
 
-  supplier?: string; // NCC
-  assignee?: string; // admin/staff phụ trách
+  supplier?: string;
+  assignee?: string;
 
   reason: string;
   internalNote?: string;
 
-  createdAt: string; // ISO
-  updatedAt: string; // ISO
-  expectedDoneAt: string; // ISO (SLA target)
-  completedAt?: string; // ISO
+  createdAt: string;
+  updatedAt: string;
+  expectedDoneAt: string;
+  completedAt?: string;
 
   estimatedCost: number;
   attachments: string[];
-
   timeline: TimelineItem[];
 }
 
 type WarrantyRequestDetailVM = Omit<WarrantyRequest, 'createdAt' | 'expectedDoneAt'> & {
   createdAt: Date;
   expectedDoneAt: Date;
-
   typeLabel: string;
   statusLabel: string;
   slaLabel: string;
@@ -66,12 +65,10 @@ type WarrantyRequestDetailVM = Omit<WarrantyRequest, 'createdAt' | 'expectedDone
 interface ListRowVM {
   id: string;
   type: RequestType;
-
   status: RequestStatus;
   statusLabel: string;
 
   orderId: string;
-
   productName: string;
   variantLabel: string;
 
@@ -91,13 +88,10 @@ interface ListQuery {
   type: 'all' | RequestType;
   status: 'all' | RequestStatus;
   supplier: string;
-
-  dateFrom: string; // yyyy-MM-dd
-  dateTo: string; // yyyy-MM-dd
-
+  dateFrom: string;
+  dateTo: string;
   sortKey: keyof ListRowVM;
   sortDir: SortDir;
-
   page: number;
   pageSize: number;
 }
@@ -111,13 +105,12 @@ interface EditForm {
   status: RequestStatus;
   assignee: string;
   supplier: string;
-  expectedDoneDate: string; // yyyy-MM-dd
+  expectedDoneDate: string;
   internalNote: string;
   estimatedCost: number;
   customerOutcome: '' | 'call' | 'email' | 'chat';
 }
 
-/** Repository mock (phase sau thay bằng HttpClient gọi API MongoDB) */
 class WarrantyRequestRepository {
   private seed: WarrantyRequest[] = buildSeed();
 
@@ -157,7 +150,7 @@ class WarrantyRequestRepository {
 @Component({
   selector: 'app-management-warranty-returns',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, NgIf, NgFor, DatePipe],
+  imports: [CommonModule, FormsModule, RouterModule, NgIf, NgFor, DatePipe, ConfirmModal],
   templateUrl: './management-warranty.html',
   styleUrls: ['./management-warranty.css'],
 })
@@ -169,20 +162,33 @@ export class ManagementWarranty implements OnInit, OnDestroy {
   selectedId: string | null = null;
 
   private requests$ = new BehaviorSubject<WarrantyRequest[]>([]);
+  private routeState$ = new BehaviorSubject<{ id: string | null; edit: boolean }>({
+    id: null,
+    edit: false,
+  });
 
   detail: WarrantyRequestDetailVM | null = null;
   editForm: EditForm | null = null;
-  private originalSnapshot: WarrantyRequest | null = null;
+  private originalSnapshot: EditForm | null = null;
 
   isDirty = false;
   saving = false;
 
   exportRows: ListRowVM[] = [];
+  private pendingDiscardAction: (() => void) | null = null;
+
+  saveModalOpen = false;
+  discardModalOpen = false;
+  deleteModalOpen = false;
+  advanceModalOpen = false;
+
+  deleteTargetId: string | null = null;
+  advanceTargetId: string | null = null;
 
   statusOptions: StatusOption[] = [
     { value: 'NEW', label: 'Mới tạo' },
     { value: 'RECEIVED', label: 'Đã tiếp nhận' },
-    { value: 'CHECKING', label: 'Đang kiểm tra điều kiện' },
+    { value: 'CHECKING', label: 'Đang kiểm tra' },
     { value: 'APPROVED', label: 'Đã duyệt' },
     { value: 'REJECTED', label: 'Từ chối' },
     { value: 'PROCESSING', label: 'Đang xử lý' },
@@ -209,43 +215,46 @@ export class ManagementWarranty implements OnInit, OnDestroy {
       let filtered = rowsAll.slice();
       const q = (query.q || '').trim().toLowerCase();
 
-      if (q.length >= 3) {
+      if (q.length >= 1) {
         filtered = filtered.filter((r) => {
           const hay =
-            `${r.id} ${r.orderId} ${r.productName} ${r.variantLabel} ${r.assignee ?? ''} ${r.supplier ?? ''}`.toLowerCase();
+            `${r.id} ${r.orderId} ${r.customerName} ${r.customerPhone} ${r.productName} ${r.variantLabel} ${r.assignee ?? ''} ${r.supplier ?? ''}`.toLowerCase();
           return hay.includes(q);
         });
       }
 
       if (query.type !== 'all') {
-        // list row vm không giữ type -> filter theo source (phase sau backend filter)
-        // tạm thời bỏ qua type filter trong list row. (vẫn giữ select để đồng bộ UI)
+        filtered = filtered.filter((r) => r.type === query.type);
       }
 
-      if (query.status !== 'all') filtered = filtered.filter((r) => r.status === query.status);
-      if (query.supplier) filtered = filtered.filter((r) => (r.supplier ?? '') === query.supplier);
+      if (query.status !== 'all') {
+        filtered = filtered.filter((r) => r.status === query.status);
+      }
+
+      if (query.supplier) {
+        filtered = filtered.filter((r) => (r.supplier ?? '') === query.supplier);
+      }
 
       if (query.dateFrom) {
         const from = new Date(query.dateFrom + 'T00:00:00');
         filtered = filtered.filter((r) => r.expectedDoneAt >= from);
       }
+
       if (query.dateTo) {
         const to = new Date(query.dateTo + 'T23:59:59');
         filtered = filtered.filter((r) => r.expectedDoneAt <= to);
       }
 
-      // SORT
       filtered.sort((a, b) => compareRowVM(a, b, query.sortKey, query.sortDir));
 
-      // export cache
-      this.exportRows = filtered;
+      this.exportRows = filtered.slice();
 
       const total = filtered.length;
       const totalPages = Math.max(1, Math.ceil(total / query.pageSize));
       const page = clamp(query.page, 1, totalPages);
-
       const start = (page - 1) * query.pageSize;
       const end = start + query.pageSize;
+
       const rows = filtered.slice(start, end).map((r, i) => ({
         ...r,
         stt: start + i + 1,
@@ -255,9 +264,7 @@ export class ManagementWarranty implements OnInit, OnDestroy {
         new Set(rowsAll.map((x) => x.supplier).filter(Boolean) as string[]),
       ).sort((a, b) => a.localeCompare(b));
 
-      const rangeLabel = total === 0 ? '0-0' : `${start + 1}-${Math.min(end, total)}`;
-
-      const processingCount = filtered.filter((r) =>
+      const processingCount = this.requests$.value.filter((r) =>
         ['RECEIVED', 'CHECKING', 'APPROVED', 'PROCESSING'].includes(r.status),
       ).length;
 
@@ -269,7 +276,6 @@ export class ManagementWarranty implements OnInit, OnDestroy {
         totalCount: rowsAll.length,
         total,
         totalPages,
-        rangeLabel,
         supplierOptions,
         statusOptions: this.statusOptions,
         processingCount,
@@ -278,8 +284,14 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     }),
   );
 
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
+
   ngOnInit(): void {
     this.requests$.next(this.repo.list());
+    this.bindRouteState();
   }
 
   ngOnDestroy(): void {
@@ -287,13 +299,87 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ===== List interactions =====
+  private bindRouteState(): void {
+    this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((qp) => {
+      const id = qp.get('id');
+      const edit = qp.get('edit') === 'true';
+
+      this.routeState$.next({ id, edit });
+
+      if (!id) {
+        this.selectedId = null;
+        this.mode = 'list';
+        this.detail = null;
+        this.editForm = null;
+        this.originalSnapshot = null;
+        this.isDirty = false;
+        return;
+      }
+
+      const item = this.repo.getById(id);
+      if (!item) {
+        this.syncRoute(null, 'list', false);
+        return;
+      }
+
+      this.selectedId = id;
+      this.detail = enrichDetail(item);
+
+      if (edit) {
+        this.mode = 'edit';
+        this.initEditForm(item);
+      } else {
+        this.mode = 'detail';
+        this.editForm = null;
+        this.originalSnapshot = null;
+        this.isDirty = false;
+      }
+    });
+  }
+
+  private syncRoute(id: string | null, mode: PageMode, push: boolean): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        id: id ?? null,
+        edit: id && mode === 'edit' ? 'true' : null,
+      },
+      queryParamsHandling: 'merge',
+      replaceUrl: !push,
+    });
+  }
+
+  private initEditForm(src: WarrantyRequest): void {
+    this.editForm = {
+      status: src.status,
+      assignee: src.assignee ?? '',
+      supplier: src.supplier ?? '',
+      expectedDoneDate: toDateInput(src.expectedDoneAt),
+      internalNote: src.internalNote ?? '',
+      estimatedCost: src.estimatedCost ?? 0,
+      customerOutcome: '',
+    };
+
+    this.originalSnapshot = {
+      ...this.editForm,
+    };
+    this.isDirty = false;
+  }
+
+  private recalcDirty(): void {
+    if (!this.editForm || !this.originalSnapshot) {
+      this.isDirty = false;
+      return;
+    }
+    this.isDirty = JSON.stringify(this.editForm) !== JSON.stringify(this.originalSnapshot);
+  }
+
   patchQuery(patch: Partial<ListQuery>): void {
     const prev = this.query$.value;
     const next: ListQuery = {
       ...prev,
       ...patch,
-      page: patch.page ? patch.page : 1,
+      page: patch.page !== undefined ? patch.page : 1,
     };
     this.query$.next(next);
   }
@@ -327,90 +413,96 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     return this.query$.value.sortDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
-  isSortKey(key: keyof ListRowVM): boolean {
-    return this.query$.value.sortKey === key;
-  }
-
-  isSortDir(dir: SortDir): boolean {
-    return this.query$.value.sortDir === dir;
-  }
-
   goPage(page: number): void {
     const q = this.query$.value;
     this.query$.next({ ...q, page });
   }
 
   openDetail(id: string): void {
-    const item = this.repo.getById(id);
-    if (!item) return;
+    this.syncRoute(id, 'detail', true);
+  }
 
-    this.selectedId = id;
-    this.mode = 'detail';
-    this.detail = enrichDetail(item);
-    this.editForm = null;
-    this.originalSnapshot = null;
-    this.isDirty = false;
+  openEditFromList(ev: MouseEvent, id: string): void {
+    ev.stopPropagation();
+    this.syncRoute(id, 'edit', true);
   }
 
   backToList(): void {
-    this.mode = 'list';
-    this.detail = null;
-    this.editForm = null;
-    this.originalSnapshot = null;
-    this.isDirty = false;
+    this.attemptLeave(() => {
+      this.syncRoute(null, 'list', true);
+    });
   }
 
-  // ===== Icon actions in list =====
-  openEditFromList(ev: MouseEvent, id: string): void {
-    ev.stopPropagation();
-    this.openDetail(id);
-    this.goEdit();
+  onHeaderBack(): void {
+    if (this.mode === 'edit') {
+      this.backToDetail();
+      return;
+    }
+    this.backToList();
   }
 
-  deleteFromList(ev: MouseEvent, id: string): void {
-    ev.stopPropagation();
-    this.deleteRequest(id);
-  }
-
-  // ===== Detail/Edit =====
   goEdit(): void {
-    if (!this.detail) return;
-    const src = this.repo.getById(this.detail.id);
-    if (!src) return;
-
-    this.mode = 'edit';
-    this.originalSnapshot = structuredClone(src);
-
-    this.editForm = {
-      status: src.status,
-      assignee: src.assignee ?? '',
-      supplier: src.supplier ?? '',
-      expectedDoneDate: toDateInput(src.expectedDoneAt),
-      internalNote: src.internalNote ?? '',
-      estimatedCost: src.estimatedCost ?? 0,
-      customerOutcome: '',
-    };
-
-    this.isDirty = false;
+    if (!this.selectedId) return;
+    this.syncRoute(this.selectedId, 'edit', true);
   }
 
-  cancelEdit(): void {
-    if (!this.originalSnapshot) {
+  backToDetail(): void {
+    if (!this.selectedId) {
       this.backToList();
       return;
     }
-    this.detail = enrichDetail(this.originalSnapshot);
-    this.mode = 'detail';
+
+    this.attemptLeave(() => {
+      this.syncRoute(this.selectedId, 'detail', true);
+    });
+  }
+
+  cancelEdit(): void {
+    this.backToDetail();
+  }
+
+  private attemptLeave(action: () => void): void {
+    if (!this.isDirty) {
+      action();
+      return;
+    }
+    this.pendingDiscardAction = action;
+    this.discardModalOpen = true;
+  }
+
+  onConfirmDiscard(): void {
+    this.discardModalOpen = false;
+    const action = this.pendingDiscardAction;
+    this.pendingDiscardAction = null;
     this.editForm = null;
+    this.originalSnapshot = null;
     this.isDirty = false;
+    action?.();
+  }
+
+  onCancelDiscard(): void {
+    this.discardModalOpen = false;
+    this.pendingDiscardAction = null;
   }
 
   markDirty(): void {
-    this.isDirty = true;
+    this.recalcDirty();
   }
 
   saveEdit(): void {
     if (!this.detail || !this.editForm) return;
+    this.saveModalOpen = true;
+  }
+
+  onCancelSave(): void {
+    this.saveModalOpen = false;
+  }
+
+  executeSave(): void {
+    if (!this.detail || !this.editForm) {
+      this.saveModalOpen = false;
+      return;
+    }
 
     this.saving = true;
 
@@ -439,22 +531,17 @@ export class ManagementWarranty implements OnInit, OnDestroy {
       }
 
       this.requests$.next(this.repo.list());
-
-      const fresh = this.repo.getById(updated.id)!;
-      this.detail = enrichDetail(fresh);
-
-      this.mode = 'detail';
-      this.editForm = null;
-      this.originalSnapshot = null;
-      this.isDirty = false;
+      this.saveModalOpen = false;
+      this.saving = false;
+      this.syncRoute(updated.id, 'detail', true);
+      return;
     }
 
     this.saving = false;
+    this.saveModalOpen = false;
   }
 
-  // ===== BPMN step/advance =====
   stepInfo(status: RequestStatus): { current: string; next: string | null } {
-    // BPMN: Tiếp nhận -> Kiểm tra điều kiện -> Theo dõi & cập nhật -> Hoàn tất & phản hồi
     switch (status) {
       case 'NEW':
         return { current: 'Tiếp nhận yêu cầu', next: 'Kiểm tra điều kiện' };
@@ -469,7 +556,7 @@ export class ManagementWarranty implements OnInit, OnDestroy {
       case 'COMPLETED':
         return { current: 'Đã hoàn tất', next: null };
       default:
-        return { current: 'Tiếp nhận yêu cầu', next: 'Kiểm tra điều kiện' };
+        return { current: 'Tiếp nhận yêu cầu', next: null };
     }
   }
 
@@ -479,19 +566,20 @@ export class ManagementWarranty implements OnInit, OnDestroy {
   }
 
   advanceWithConfirm(id: string): void {
-    const item = this.repo.getById(id);
-    if (!item) return;
+    this.advanceTargetId = id;
+    this.advanceModalOpen = true;
+  }
 
-    const info = this.stepInfo(item.status);
-    const nextSt = nextStatus(item.status);
+  onCancelAdvance(): void {
+    this.advanceModalOpen = false;
+    this.advanceTargetId = null;
+  }
 
-    if (!nextSt || !info.next) return;
-
-    const ok = window.confirm(
-      `Đang ở: ${info.current}\nTiếp theo: ${info.next}\n\nXác nhận chuyển bước?`,
-    );
-    if (!ok) return;
-
+  onConfirmAdvance(): void {
+    const id = this.advanceTargetId;
+    this.advanceModalOpen = false;
+    this.advanceTargetId = null;
+    if (!id) return;
     this.quickNextStatus(id);
   }
 
@@ -516,18 +604,33 @@ export class ManagementWarranty implements OnInit, OnDestroy {
 
       this.requests$.next(this.repo.list());
 
-      if (this.mode !== 'list') {
+      if (this.selectedId === id) {
         this.detail = enrichDetail(this.repo.getById(id)!);
       }
     }
   }
 
-  deleteRequest(id: string): void {
-    const item = this.repo.getById(id);
-    if (!item) return;
+  deleteFromList(ev: MouseEvent, id: string): void {
+    ev.stopPropagation();
+    this.deleteTargetId = id;
+    this.deleteModalOpen = true;
+  }
 
-    const ok = window.confirm(`Xóa yêu cầu ${id}? Thao tác này không thể hoàn tác.`);
-    if (!ok) return;
+  deleteRequest(id: string): void {
+    this.deleteTargetId = id;
+    this.deleteModalOpen = true;
+  }
+
+  onCancelDelete(): void {
+    this.deleteModalOpen = false;
+    this.deleteTargetId = null;
+  }
+
+  onConfirmDelete(): void {
+    const id = this.deleteTargetId;
+    this.deleteModalOpen = false;
+    this.deleteTargetId = null;
+    if (!id) return;
 
     const done = this.repo.delete(id);
     if (!done) return;
@@ -535,12 +638,10 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     this.requests$.next(this.repo.list());
 
     if (this.selectedId === id) {
-      this.backToList();
-      this.selectedId = null;
+      this.syncRoute(null, 'list', true);
     }
   }
 
-  // ===== UI helpers =====
   statusBadgeClass(status: RequestStatus): string {
     switch (status) {
       case 'NEW':
@@ -561,20 +662,6 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     }
   }
 
-  fmtDate(iso: string | undefined): string {
-    if (!iso) return '—';
-    try {
-      const d = new Date(iso);
-      if (Number.isNaN(d.getTime())) return iso;
-      const dd = String(d.getDate()).padStart(2, '0');
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const yyyy = d.getFullYear();
-      return `${dd}/${mm}/${yyyy}`;
-    } catch {
-      return iso;
-    }
-  }
-
   formatNumber(n: number | undefined): string {
     if (n === undefined || n === null) return '0';
     return n.toLocaleString('vi-VN');
@@ -584,8 +671,11 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     const header = [
       'id',
       'orderId',
+      'customerName',
+      'customerPhone',
       'productName',
       'variantLabel',
+      'type',
       'status',
       'expectedDoneAt',
       'assignee',
@@ -595,8 +685,11 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     const lines = rows.map((r) => [
       r.id,
       r.orderId,
+      r.customerName,
+      r.customerPhone,
       r.productName,
       r.variantLabel,
+      r.type,
       r.status,
       r.expectedDoneAt.toISOString(),
       r.assignee ?? '',
@@ -623,29 +716,25 @@ export class ManagementWarranty implements OnInit, OnDestroy {
 
 function toRowVM(x: WarrantyRequest): ListRowVM {
   const expectedDoneAt = new Date(x.expectedDoneAt);
-  const diffH = Math.max(0, Math.round((expectedDoneAt.getTime() - Date.now()) / 36e5));
-  const slaLabel = diffH === 0 ? 'Quá hạn/đến hạn' : `Còn ~${diffH}h`;
+  const diffMs = expectedDoneAt.getTime() - Date.now();
+  const diffH = Math.round(diffMs / 36e5);
+  const slaLabel = diffH <= 0 ? 'Quá hạn/đến hạn' : `Còn ~${diffH}h`;
 
   return {
     id: x.id,
     type: x.type,
     status: x.status,
     statusLabel: statusLabel(x.status),
-
     orderId: x.orderId,
-
     productName: x.productName,
     variantLabel: x.variantLabel,
-
     customerName: x.customerName,
     customerPhone: x.customerPhone,
-
     supplier: x.supplier,
     assignee: x.assignee,
-
     expectedDoneAt,
     slaLabel,
-    stt: 0, // Injected later
+    stt: 0,
   };
 }
 
@@ -657,8 +746,9 @@ function enrichDetail(x: WarrantyRequest): WarrantyRequestDetailVM {
     ? Math.round((new Date(x.completedAt).getTime() - createdAt.getTime()) / 36e5)
     : null;
 
-  const diffH = Math.max(0, Math.round((expectedDoneAt.getTime() - Date.now()) / 36e5));
-  const slaLabel = diffH === 0 ? 'Quá hạn/đến hạn' : `Còn ~${diffH}h`;
+  const diffMs = expectedDoneAt.getTime() - Date.now();
+  const diffH = Math.round(diffMs / 36e5);
+  const slaLabel = diffH <= 0 ? 'Quá hạn/đến hạn' : `Còn ~${diffH}h`;
 
   return {
     ...x,
@@ -692,12 +782,6 @@ function statusLabel(s: RequestStatus): string {
   }
 }
 
-/**
- * Quy tắc chuyển bước nhanh (bấm "Chuyển bước")
- * - NEW -> RECEIVED -> CHECKING -> PROCESSING -> COMPLETED
- * - APPROVED -> PROCESSING (nếu có dùng approve)
- * - REJECTED/COMPLETED: không chuyển
- */
 function nextStatus(s: RequestStatus): RequestStatus | null {
   switch (s) {
     case 'NEW':
@@ -726,7 +810,7 @@ function compareRowVM(a: ListRowVM, b: ListRowVM, key: keyof ListRowVM, dir: Sor
 
   if (isDate(av) && isDate(bv)) cmp = av.getTime() - bv.getTime();
   else if (typeof av === 'number' && typeof bv === 'number') cmp = av - bv;
-  else cmp = String(av ?? '').localeCompare(String(bv ?? ''), 'vi');
+  else cmp = String(av ?? '').localeCompare(String(bv ?? ''), 'vi', { numeric: true });
 
   return dir === 'asc' ? cmp : -cmp;
 }
@@ -766,7 +850,6 @@ function calcAvgResolutionHours(items: WarrantyRequest[]): number {
   return Math.round((sum / done.length) * 10) / 10;
 }
 
-/* ===== seed ===== */
 function buildSeed(): WarrantyRequest[] {
   const now = Date.now();
   const iso = (ms: number) => new Date(ms).toISOString();

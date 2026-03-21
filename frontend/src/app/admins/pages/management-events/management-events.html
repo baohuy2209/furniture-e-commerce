@@ -1,5 +1,4 @@
 <div class="hb-page-shell" *ngIf="vm$ | async as vm">
-  <!-- PAGE HEADER (sticky) -->
   <div class="hb-page-header">
     <div class="hb-header-left">
       <div class="hb-title" routerLink="/admin/management-events" style="cursor: pointer">
@@ -7,7 +6,6 @@
       </div>
     </div>
 
-    <!-- LIST ACTIONS -->
     <div class="hb-header-actions" *ngIf="mode === 'list'">
       <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
       <button class="btn btn-hb" type="button" (click)="exportCsvSnapshot()">
@@ -18,30 +16,28 @@
       </button>
     </div>
 
-    <!-- DETAIL ACTIONS -->
     <div class="hb-header-actions" *ngIf="mode === 'detail'">
-      <button class="btn btn-hb-outline" type="button" (click)="backToList()">
-        <i class="bi bi-arrow-left me-1"></i> Quay lại
+      <button class="btn btn-hb-outline" type="button" (click)="onHeaderBack()">
+        <i class="bi bi-arrow-left me-1"></i> Quay lại Danh sách
       </button>
       <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
         <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
       </button>
     </div>
 
-    <!-- EDIT ACTIONS -->
     <div class="hb-header-actions" *ngIf="mode === 'edit'">
-      <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Hủy</button>
-      <button class="btn btn-hb" type="button" (click)="saveEdit()">
+      <button class="btn btn-hb-outline" type="button" (click)="onHeaderBack()">
+        <i class="bi bi-arrow-left me-1"></i> Quay lại Chi tiết
+      </button>
+      <button class="btn btn-hb" type="button" (click)="saveEdit()" [disabled]="!isDirty">
         <i class="bi bi-save2 me-1"></i> Lưu sự kiện
       </button>
     </div>
   </div>
 
-  <!-- PAGE BODY -->
   <div class="hb-page-body">
-    <!-- LIST MODE -->
+    <!-- LIST -->
     <ng-container *ngIf="mode === 'list'">
-      <!-- SUMMARY BOARD -->
       <div class="hb-summary-row">
         <div class="hb-summary-card">
           <div class="hb-sc-icon"><i class="bi bi-calendar-event"></i></div>
@@ -50,6 +46,7 @@
             <div class="hb-sc-value">{{ vm.summary.totalCount }}</div>
           </div>
         </div>
+
         <div class="hb-summary-card">
           <div class="hb-sc-icon ok"><i class="bi bi-activity"></i></div>
           <div>
@@ -57,6 +54,7 @@
             <div class="hb-sc-value">{{ vm.summary.ongoingCount }}</div>
           </div>
         </div>
+
         <div class="hb-summary-card">
           <div class="hb-sc-icon warn"><i class="bi bi-clock-history"></i></div>
           <div>
@@ -66,7 +64,6 @@
         </div>
       </div>
 
-      <!-- FILTER BAR -->
       <div class="card hb-card hb-card-pad mb-3">
         <div class="hb-filterbar">
           <input
@@ -85,11 +82,11 @@
 
           <select class="form-select" [ngModel]="f_status" (ngModelChange)="onChangeStatus($event)">
             <option value="">-- Trạng thái --</option>
-            <option value="published">Đang mở (Published)</option>
-            <option value="draft">Bản nháp (Draft)</option>
-            <option value="paused">Tạm dừng (Paused)</option>
-            <option value="ended">Đã kết thúc (Ended)</option>
-            <option value="cancelled">Đã hủy (Cancelled)</option>
+            <option value="published">Đang mở</option>
+            <option value="draft">Bản nháp</option>
+            <option value="paused">Tạm dừng</option>
+            <option value="ended">Đã kết thúc</option>
+            <option value="cancelled">Đã hủy</option>
           </select>
 
           <input
@@ -121,11 +118,9 @@
         </div>
       </div>
 
-      <!-- TABLE CARD -->
       <div class="card hb-card hb-table-card">
         <div class="hb-table-wrap">
           <div class="hb-table">
-            <!-- HEAD -->
             <div class="hb-table-head hb-grid-events">
               <div class="hb-th">
                 <div class="th-content"><span>STT</span></div>
@@ -137,56 +132,56 @@
                   <i class="fas" [ngClass]="sortIcon('event_code')"></i>
                 </div>
               </div>
-              <div
-                class="hb-th"
-                (click)="toggleSort('event_name')"
-                style="justify-content: flex-start; text-align: left"
-              >
+
+              <div class="hb-th th-left" (click)="toggleSort('event_name')">
                 <div class="th-content">
                   <span>SỰ KIỆN & ĐỊA ĐIỂM</span>
                   <i class="fas" [ngClass]="sortIcon('event_name')"></i>
                 </div>
               </div>
+
               <div class="hb-th" (click)="toggleSort('start_at')">
                 <div class="th-content">
                   <span>BẮT ĐẦU</span>
                   <i class="fas" [ngClass]="sortIcon('start_at')"></i>
                 </div>
               </div>
+
               <div class="hb-th">
                 <div class="th-content"><span>KẾT THÚC</span></div>
               </div>
+
               <div class="hb-th" (click)="toggleSort('registered_count')">
                 <div class="th-content">
                   <span>SLOT</span>
                   <i class="fas" [ngClass]="sortIcon('registered_count')"></i>
                 </div>
               </div>
+
               <div class="hb-th">
                 <div class="th-content"><span>GIAI ĐOẠN</span></div>
               </div>
+
               <div class="hb-th" (click)="toggleSort('status')">
                 <div class="th-content">
                   <span>TRẠNG THÁI</span>
                   <i class="fas" [ngClass]="sortIcon('status')"></i>
                 </div>
               </div>
+
               <div class="hb-th"><span>SỬA</span></div>
               <div class="hb-th"><span>XÓA</span></div>
             </div>
 
-            <!-- ROWS -->
             <div
               class="hb-table-row hb-grid-events"
               *ngFor="let r of vm.rows"
               (click)="openDetail(r.event_id)"
             >
-              <div class="hb-td hb-td-center text-muted">
-                {{ r.stt }}
-              </div>
+              <div class="hb-td hb-td-center text-muted">{{ r.stt }}</div>
 
               <div class="hb-td hb-td-center">
-                <span class="text-primary">{{ r.event_code }}</span>
+                <span class="text-primary fw-bold">{{ r.event_code }}</span>
               </div>
 
               <div class="hb-td">
@@ -196,17 +191,9 @@
                 </div>
               </div>
 
-              <div class="hb-td hb-td-center text-muted">
-                {{ r.startText }}
-              </div>
-
-              <div class="hb-td hb-td-center text-muted">
-                {{ r.endText }}
-              </div>
-
-              <div class="hb-td hb-td-center">
-                <span class="">{{ r.capacityText }}</span>
-              </div>
+              <div class="hb-td hb-td-center text-muted">{{ r.startText }}</div>
+              <div class="hb-td hb-td-center text-muted">{{ r.endText }}</div>
+              <div class="hb-td hb-td-center">{{ r.capacityText }}</div>
 
               <div class="hb-td hb-td-center">
                 <span class="hb-pill" [ngClass]="phaseBadgeClass(r.phase)">{{
@@ -221,13 +208,13 @@
               </div>
 
               <div class="hb-td hb-td-center" (click)="stopEvent($event)">
-                <button class="hb-icon-btn" (click)="openEdit(r.event_id)">
+                <button class="hb-icon-btn" type="button" (click)="openEdit(r.event_id)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
               </div>
 
               <div class="hb-td hb-td-center" (click)="stopEvent($event)">
-                <button class="hb-icon-btn danger" (click)="deleteEvent(r.event_id)">
+                <button class="hb-icon-btn danger" type="button" (click)="deleteEvent(r.event_id)">
                   <i class="bi bi-trash3"></i>
                 </button>
               </div>
@@ -239,7 +226,6 @@
           </div>
         </div>
 
-        <!-- Pagination -->
         <div class="hb-pagination">
           <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">
             ‹
@@ -261,20 +247,18 @@
       </div>
     </ng-container>
 
-    <!-- DETAIL MODE -->
+    <!-- DETAIL -->
     <ng-container *ngIf="mode === 'detail' && detail as d">
       <div class="card hb-card hb-card-pad mb-3 p-0 border-0">
-        <div class="hb-event-hero-cover" [style.backgroundImage]="'url(' + d.banner_url + ')'">
+        <div class="hb-event-hero-cover" [style.backgroundImage]="'url(' + getBannerUrl(d) + ')'">
           <div class="hb-event-hero-overlay">
-            <div class="d-flex gap-2">
-              <span
-                class="hb-pill"
-                [ngClass]="phaseBadgeClass(computePhase(d.start_at, d.end_at))"
-                >{{ phaseLabel(computePhase(d.start_at, d.end_at)) }}</span
-              >
-              <span class="hb-pill" [ngClass]="statusBadgeClass(d.status)">{{
-                statusLabel(d.status)
-              }}</span>
+            <div class="d-flex gap-2 flex-wrap">
+              <span class="hb-pill" [ngClass]="phaseBadgeClass(computePhase(d.start_at, d.end_at))">
+                {{ phaseLabel(computePhase(d.start_at, d.end_at)) }}
+              </span>
+              <span class="hb-pill" [ngClass]="statusBadgeClass(d.status)">
+                {{ statusLabel(d.status) }}
+              </span>
             </div>
             <div class="hb-event-title">{{ d.event_name }}</div>
             <div class="hb-event-sub">{{ d.description }}</div>
@@ -303,19 +287,36 @@
                 <div class="hb-tl-dot"></div>
                 <div class="hb-tl-time text-primary">{{ fmtTimeRange(it) }}</div>
                 <div class="hb-tl-content">
-                  <div class="">{{ it.title }}</div>
+                  <div>{{ it.title }}</div>
                   <div class="text-muted small mt-1">{{ it.description }}</div>
                 </div>
               </div>
             </div>
+
+            <hr class="hb-hr" />
+
+            <div class="hb-section-title"><i class="bi bi-images me-2"></i>Gallery ảnh</div>
+            <div
+              class="hb-gallery-grid"
+              *ngIf="(d.images?.gallery?.length || 0) > 0; else noGallery"
+            >
+              <div class="hb-gallery-item" *ngFor="let img of d.images?.gallery">
+                <img [src]="img.url" alt="gallery" />
+                <span class="hb-pill hb-cover-chip" *ngIf="img.is_cover">Ảnh bìa chính</span>
+              </div>
+            </div>
+            <ng-template #noGallery>
+              <div class="text-muted small">Chưa có gallery ảnh.</div>
+            </ng-template>
           </div>
         </div>
 
         <div class="col-lg-4">
-          <div class="card hb-card hb-card-pad sticky-top" style="top: 80px">
+          <div class="card hb-card hb-card-pad hb-sticky-side">
             <div class="hb-section-title">
               <i class="bi bi-info-circle me-2"></i>Thông tin chi tiết
             </div>
+
             <div class="hb-info-kv">
               <div class="kv-item">
                 <div class="kv-label">Mã sự kiện</div>
@@ -351,17 +352,19 @@
       </div>
     </ng-container>
 
-    <!-- EDIT MODE -->
+    <!-- EDIT -->
     <ng-container *ngIf="mode === 'edit' && editModel as em">
       <div class="row g-3">
         <div class="col-lg-8">
           <div class="card hb-card hb-card-pad">
             <div class="hb-section-title">Nội dung sự kiện</div>
+
             <div class="mb-3">
               <label class="form-label">Tên sự kiện *</label>
               <input
                 class="form-control form-control-lg"
                 [(ngModel)]="em.event_name"
+                (ngModelChange)="markDirty()"
                 placeholder="Ví dụ: Interior Expo 2025"
               />
             </div>
@@ -369,16 +372,20 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">Mã định danh</label>
-                <input class="form-control" [(ngModel)]="em.event_code" />
+                <input
+                  class="form-control"
+                  [(ngModel)]="em.event_code"
+                  (ngModelChange)="markDirty()"
+                />
               </div>
               <div class="col-md-6">
                 <label class="form-label">Trạng thái</label>
-                <select class="form-select" [(ngModel)]="em.status">
-                  <option value="draft">Bản nháp (Draft)</option>
-                  <option value="published">Xuất bản (Published)</option>
-                  <option value="paused">Tạm dừng (Paused)</option>
-                  <option value="ended">Đã kết thúc (Ended)</option>
-                  <option value="cancelled">Đã hủy (Cancelled)</option>
+                <select class="form-select" [(ngModel)]="em.status" (ngModelChange)="markDirty()">
+                  <option value="draft">Bản nháp</option>
+                  <option value="published">Xuất bản</option>
+                  <option value="paused">Tạm dừng</option>
+                  <option value="ended">Đã kết thúc</option>
+                  <option value="cancelled">Đã hủy</option>
                 </select>
               </div>
             </div>
@@ -386,11 +393,21 @@
             <div class="row g-3 mt-1">
               <div class="col-md-6">
                 <label class="form-label">Ngày bắt đầu</label>
-                <input class="form-control" type="date" [(ngModel)]="em.start_at" />
+                <input
+                  class="form-control"
+                  type="date"
+                  [(ngModel)]="em.start_at"
+                  (ngModelChange)="markDirty()"
+                />
               </div>
               <div class="col-md-6">
                 <label class="form-label">Ngày kết thúc</label>
-                <input class="form-control" type="date" [(ngModel)]="em.end_at" />
+                <input
+                  class="form-control"
+                  type="date"
+                  [(ngModel)]="em.end_at"
+                  (ngModelChange)="markDirty()"
+                />
               </div>
             </div>
 
@@ -400,15 +417,108 @@
                 class="form-control"
                 rows="4"
                 [(ngModel)]="em.description"
+                (ngModelChange)="markDirty()"
                 placeholder="Mô tả tóm tắt sự kiện..."
               ></textarea>
             </div>
 
             <hr class="hb-hr" />
 
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="hb-section-title mb-0">Banner sự kiện</div>
+              <label class="btn btn-hb-outline btn-sm mb-0">
+                <i class="bi bi-upload me-1"></i> Upload banner
+                <input
+                  type="file"
+                  class="d-none"
+                  accept="image/*"
+                  (change)="onBannerPicked($event)"
+                />
+              </label>
+            </div>
+
+            <div class="hb-banner-editor" *ngIf="bannerPreviewUrl; else noBanner">
+              <img [src]="bannerPreviewUrl" alt="banner preview" />
+              <button
+                class="hb-icon-btn danger hb-float-remove"
+                type="button"
+                (click)="removeBannerPicked()"
+              >
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+            <ng-template #noBanner>
+              <div class="hb-empty-upload">Chưa có banner. Hãy upload ảnh banner cho sự kiện.</div>
+            </ng-template>
+
+            <hr class="hb-hr" />
+
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="hb-section-title mb-0">Gallery ảnh & ảnh bìa chính</div>
+              <label class="btn btn-hb-outline btn-sm mb-0">
+                <i class="bi bi-images me-1"></i> Thêm ảnh
+                <input
+                  type="file"
+                  class="d-none"
+                  accept="image/*"
+                  multiple
+                  (change)="onGalleryPicked($event)"
+                />
+              </label>
+            </div>
+
+            <div class="hb-gallery-grid" *ngIf="editGallery.length > 0; else noEditGallery">
+              <div class="hb-gallery-item edit" *ngFor="let img of editGallery; let i = index">
+                <img [src]="img.url" alt="gallery item" />
+                <div class="hb-gallery-actions">
+                  <button
+                    class="btn btn-sm"
+                    [ngClass]="img.is_cover ? 'btn-hb' : 'btn-hb-outline'"
+                    type="button"
+                    (click)="setCoverImage(img.image_id)"
+                  >
+                    {{ img.is_cover ? 'Đang là ảnh bìa' : 'Đặt làm ảnh bìa' }}
+                  </button>
+
+                  <button class="hb-icon-btn danger" type="button" (click)="removeGalleryImage(i)">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <ng-template #noEditGallery>
+              <div class="hb-empty-upload">
+                Chưa có ảnh gallery. Có thể thêm nhiều ảnh và chọn một ảnh làm bìa chính.
+              </div>
+            </ng-template>
+
+            <hr class="hb-hr" />
+
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div class="hb-section-title mb-0">Highlights</div>
+              <button class="btn btn-hb-outline btn-sm" type="button" (click)="addHighlight()">
+                + Thêm highlight
+              </button>
+            </div>
+
+            <div class="hb-list-editor">
+              <div class="hb-list-row" *ngFor="let h of em.highlights; let i = index">
+                <input
+                  class="form-control"
+                  [(ngModel)]="em.highlights![i]"
+                  (ngModelChange)="markDirty()"
+                />
+                <button class="hb-icon-btn danger" type="button" (click)="removeHighlight(i)">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+
+            <hr class="hb-hr" />
+
             <div class="d-flex align-items-center justify-content-between mb-3">
               <div class="hb-section-title mb-0">Chương trình (Timeline)</div>
-              <button class="btn btn-hb-outline btn-sm" (click)="addScheduleItem()">
+              <button class="btn btn-hb-outline btn-sm" type="button" (click)="addScheduleItem()">
                 + Thêm mục
               </button>
             </div>
@@ -419,29 +529,35 @@
                   <input
                     class="form-control form-control-sm mb-1"
                     [(ngModel)]="it.start_time"
+                    (ngModelChange)="markDirty()"
                     placeholder="09:00"
                   />
                   <input
                     class="form-control form-control-sm"
                     [(ngModel)]="it.end_time"
+                    (ngModelChange)="markDirty()"
                     placeholder="10:00"
                   />
                 </div>
+
                 <div class="min-w-0">
                   <input
                     class="form-control form-control-sm fw-bold mb-1"
                     [(ngModel)]="it.title"
+                    (ngModelChange)="markDirty()"
                     placeholder="Tiêu đề mục..."
                   />
                   <textarea
                     class="form-control form-control-sm"
                     rows="2"
                     [(ngModel)]="it.description"
+                    (ngModelChange)="markDirty()"
                     placeholder="Mô tả ngắn..."
                   ></textarea>
                 </div>
+
                 <div class="d-flex align-items-center">
-                  <button class="hb-icon-btn danger" (click)="removeScheduleItem(i)">
+                  <button class="hb-icon-btn danger" type="button" (click)="removeScheduleItem(i)">
                     <i class="bi bi-trash3"></i>
                   </button>
                 </div>
@@ -451,42 +567,115 @@
         </div>
 
         <div class="col-lg-4">
-          <div class="card hb-card hb-card-pad sticky-top" style="top: 80px">
+          <div class="card hb-card hb-card-pad hb-sticky-side">
             <div class="hb-section-title">Địa điểm & Quy mô</div>
+
             <div class="row g-3">
               <div class="col-12">
                 <label class="form-label">Tên địa điểm</label>
                 <input
                   class="form-control"
                   [(ngModel)]="em.location_name"
+                  (ngModelChange)="markDirty()"
                   placeholder="Ví dụ: SECC"
                 />
               </div>
+
               <div class="col-12">
                 <label class="form-label">Địa chỉ chi tiết</label>
-                <input class="form-control" [(ngModel)]="em.address" />
+                <input
+                  class="form-control"
+                  [(ngModel)]="em.address"
+                  (ngModelChange)="markDirty()"
+                />
               </div>
+
               <div class="col-md-6">
                 <label class="form-label">Thành phố</label>
-                <input class="form-control" [(ngModel)]="em.city" />
+                <input class="form-control" [(ngModel)]="em.city" (ngModelChange)="markDirty()" />
               </div>
+
               <div class="col-md-6">
                 <label class="form-label">Tổng slots</label>
-                <input class="form-control" type="number" [(ngModel)]="em.capacity" />
+                <input
+                  class="form-control"
+                  type="number"
+                  [(ngModel)]="em.capacity"
+                  (ngModelChange)="markDirty()"
+                />
               </div>
-              <hr class="hb-hr" />
+
               <div class="col-12">
                 <label class="form-label">Email liên hệ</label>
-                <input class="form-control" [(ngModel)]="em.contact_email" />
+                <input
+                  class="form-control"
+                  [(ngModel)]="em.contact_email"
+                  (ngModelChange)="markDirty()"
+                />
               </div>
+
               <div class="col-12">
                 <label class="form-label">Phone liên hệ</label>
-                <input class="form-control" [(ngModel)]="em.contact_phone" />
+                <input
+                  class="form-control"
+                  [(ngModel)]="em.contact_phone"
+                  (ngModelChange)="markDirty()"
+                />
               </div>
             </div>
+
+            <hr class="hb-hr" />
+
+            <button
+              class="btn btn-hb w-100 mb-2"
+              type="button"
+              (click)="saveEdit()"
+              [disabled]="!isDirty"
+            >
+              <i class="bi bi-save2 me-1"></i> Lưu sự kiện
+            </button>
+
+            <button class="btn btn-hb-outline w-100" type="button" (click)="cancelEdit()">
+              Hủy bỏ
+            </button>
+
+            <div class="text-warning small mt-2" *ngIf="isDirty">* Bạn có thay đổi chưa lưu.</div>
           </div>
         </div>
       </div>
     </ng-container>
   </div>
+
+  <hb-confirm-modal
+    [isOpen]="saveModalOpen"
+    title="Xác nhận lưu thay đổi"
+    message="Thông tin sự kiện sẽ được cập nhật ngay. Bạn có chắc chắn muốn lưu?"
+    type="info"
+    confirmLabel="Lưu sự kiện"
+    cancelLabel="Ở lại"
+    (confirm)="executeSave()"
+    (cancel)="onCancelSave()"
+  ></hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="discardModalOpen"
+    title="Thay đổi chưa được lưu"
+    message="Bạn đang có thay đổi chưa lưu. Nếu quay lại bây giờ, toàn bộ dữ liệu vừa chỉnh sẽ bị mất."
+    type="warning"
+    confirmLabel="Bỏ thay đổi"
+    cancelLabel="Ở lại"
+    (confirm)="onConfirmDiscard()"
+    (cancel)="onCancelDiscard()"
+  ></hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="deleteModalOpen"
+    title="Xác nhận xóa sự kiện"
+    message="Sự kiện này sẽ bị xóa khỏi danh sách quản lý."
+    type="danger"
+    confirmLabel="Xóa sự kiện"
+    cancelLabel="Đóng"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()"
+  ></hb-confirm-modal>
 </div>

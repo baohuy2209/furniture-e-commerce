@@ -1,5 +1,4 @@
 <div class="hb-page-shell" *ngIf="vm$ | async as vm">
-  <!-- PAGE HEADER (sticky) -->
   <div class="hb-page-header">
     <div class="hb-header-left">
       <div class="hb-title" routerLink="/admin/management-orders" style="cursor: pointer">
@@ -8,7 +7,6 @@
     </div>
 
     <div class="hb-header-actions">
-      <!-- LIST ACTIONS -->
       <ng-container *ngIf="vm.mode === 'list'">
         <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
         <button class="btn btn-hb" type="button" (click)="exportCsv(vm.exportRows)">
@@ -16,21 +14,15 @@
         </button>
       </ng-container>
 
-      <!-- DETAIL ACTIONS -->
       <ng-container *ngIf="vm.mode === 'detail'">
-        <button class="btn btn-hb-outline" type="button" (click)="goList()">
-          <i class="bi bi-arrow-left me-1"></i> Quay lại
-        </button>
-        <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
-          <i class="bi bi-pencil-square me-1"></i> Sửa ghi chú
+        <button class="btn btn-hb-outline" type="button" (click)="onHeaderBack()">
+          <i class="bi bi-arrow-left me-1"></i> Quay lại Danh sách
         </button>
       </ng-container>
 
-      <!-- EDIT ACTIONS -->
       <ng-container *ngIf="vm.mode === 'edit'">
-        <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Huỷ</button>
-        <button class="btn btn-hb" type="button" (click)="saveEdit()">
-          <i class="bi bi-check2-circle me-1"></i> Lưu thay đổi
+        <button class="btn btn-hb-outline" type="button" (click)="onHeaderBack()">
+          <i class="bi bi-arrow-left me-1"></i> Quay lại Chi tiết
         </button>
       </ng-container>
     </div>
@@ -109,7 +101,9 @@
             <option [ngValue]="20">20 / trang</option>
           </select>
 
-          <button class="btn btn-hb-outline hb-filter-reset" (click)="resetFilters()">Reset</button>
+          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
+            Reset
+          </button>
         </div>
       </div>
 
@@ -148,7 +142,6 @@
               <div class="hb-th"><span>SỬA</span></div>
             </div>
 
-            <!-- ROWS -->
             <div
               class="hb-table-row hb-grid-orders"
               *ngFor="let r of vm.rows"
@@ -156,30 +149,38 @@
               [class.is-active]="r.order_id === vm.selectedId"
             >
               <div class="hb-td hb-td-center text-muted fw-bold">{{ r.stt }}</div>
+
               <div class="hb-td">
                 <div class="hb-text-truncate">
                   <div class="text-primary">{{ r.order_number }}</div>
                   <div class="text-muted" style="font-size: 10px">ID: {{ r.order_id }}</div>
                 </div>
               </div>
+
               <div class="hb-td">
                 <div class="hb-text-truncate">
-                  <div class="">{{ r.customer }}</div>
+                  <div>{{ r.customer }}</div>
                   <div class="text-muted small">{{ r.phone }}</div>
                 </div>
               </div>
+
               <div class="hb-td hb-td-center text-muted fw-normal">{{ r.region }}</div>
+
               <div class="hb-td hb-td-center">
                 <span class="hb-pill" [ngClass]="r.statusPillClass">{{ r.statusLabel }}</span>
               </div>
+
               <div class="hb-td hb-td-center">
                 <span class="hb-pill" [ngClass]="r.payPillClass">{{ r.paymentLabel }}</span>
               </div>
+
               <div class="hb-td hb-td-center text-muted fw-normal">{{ r.createdAtText }}</div>
               <div class="hb-td hb-td-num">{{ r.totalText }}</div>
+
               <div class="hb-td hb-td-center">
                 <button
                   class="hb-icon-btn"
+                  type="button"
                   (click)="stopEvent($event); openDetail(r.order_id); enterEdit()"
                 >
                   <i class="bi bi-pencil-square"></i>
@@ -209,20 +210,22 @@
 
     <!-- ===== DETAIL VIEW ===== -->
     <ng-container *ngIf="vm.mode === 'detail' && vm.detail as d">
-      <div class="row g-4 pt-1">
+      <div class="row g-3 pt-1">
         <div class="col-12 col-xl-8">
-          <div class="card hb-card hb-card-pad mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-              <h1 class="hb-h1 mb-0">{{ d.order.order_number }}</h1>
-              <div class="d-flex gap-2">
+          <div class="card hb-card hb-card-pad mb-3">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-3 flex-wrap">
+                <div class="hb-object-title text-primary">{{ d.order.order_number }}</div>
                 <span class="hb-pill" [ngClass]="d.statusPillClass">{{ d.statusLabel }}</span>
                 <span class="hb-pill" [ngClass]="d.payPillClass">{{ d.paymentLabel }}</span>
               </div>
             </div>
+          </div>
 
+          <div class="card hb-card hb-card-pad">
+            <div class="hb-section-title">Chi tiết đơn hàng</div>
             <div class="hb-divider"></div>
 
-            <!-- Items Table -->
             <div class="hb-h2 mb-2">Danh sách sản phẩm</div>
             <div class="table-responsive">
               <table class="table align-middle">
@@ -242,9 +245,10 @@
                           [src]="it.product_image_url"
                           class="rounded"
                           style="width: 44px; height: 44px; object-fit: cover"
+                          alt="product"
                         />
                         <div>
-                          <div class="">{{ it.product_name }}</div>
+                          <div>{{ it.product_name }}</div>
                           <div class="text-muted small">Variant: {{ it.product_variant_id }}</div>
                         </div>
                       </div>
@@ -259,7 +263,6 @@
 
             <div class="hb-divider"></div>
 
-            <!-- Totals -->
             <div class="row justify-content-end">
               <div class="col-md-5">
                 <div class="hb-kv d-flex justify-content-between">
@@ -284,67 +287,103 @@
 
             <div class="hb-divider"></div>
 
-            <!-- Timeline -->
             <div class="hb-h2 mb-3">Lịch sử xử lý đơn hàng</div>
             <div class="hb-timeline">
               <div class="hb-tl-item" *ngFor="let t of d.timeline">
                 <div class="hb-tl-dot" [class.is-done]="t.done"></div>
-                <div>
+
+                <div class="hb-tl-content">
                   <div class="hb-tl-title">{{ t.title }}</div>
-                  <div class="text-muted small">{{ t.desc }}</div>
+                  <div class="hb-tl-desc text-muted small">{{ t.desc }}</div>
                 </div>
-                <div class="text-muted small">{{ t.atText }}</div>
+
+                <div class="hb-tl-time text-muted small">{{ t.atText }}</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Right Side: Logistics & Customer -->
         <div class="col-12 col-xl-4">
-          <div class="card hb-card hb-card-pad mb-3">
-            <div class="hb-h2 mb-3">Thông tin khách hàng</div>
-            <div class="hb-kv">
-              <div class="k">Họ tên:</div>
-              <div class="v">{{ d.userFullName }}</div>
-            </div>
-            <div class="hb-kv">
-              <div class="k">Số điện thoại:</div>
-              <div class="v">{{ d.user?.phone || '—' }}</div>
-            </div>
-            <div class="hb-kv">
-              <div class="k">Địa chỉ nhận hàng:</div>
-              <div class="v small" style="white-space: pre-line">{{ d.addressText }}</div>
-            </div>
-          </div>
+          <div class="hb-side-card">
+            <div class="card hb-card hb-card-pad mb-3">
+              <div class="hb-section-title">Thông tin khách hàng</div>
 
-          <div class="card hb-card hb-card-pad">
-            <div class="hb-h2 mb-3">Ghi chú & Phản hồi</div>
-            <div class="hb-kv">
-              <div class="k">Ghi chú từ khách:</div>
-              <div class="v small text-muted">{{ d.order.note || 'Không có' }}</div>
-            </div>
-            <div class="hb-kv mt-2">
-              <div class="k">Ghi chú nội bộ:</div>
-              <div class="v small text-muted italic">
-                {{ d.order.admin_note || 'Chưa có ghi chú' }}
+              <div class="hb-kv">
+                <div class="k">Họ tên</div>
+                <div class="v">{{ d.userFullName }}</div>
+              </div>
+
+              <div class="hb-kv">
+                <div class="k">Số điện thoại</div>
+                <div class="v">{{ d.user?.phone || '—' }}</div>
+              </div>
+
+              <div class="hb-kv">
+                <div class="k">Địa chỉ nhận hàng</div>
+                <div class="v small" style="white-space: pre-line">{{ d.addressText }}</div>
               </div>
             </div>
-            <div class="hb-divider"></div>
-            <div class="d-grid gap-2">
-              <button
-                class="btn btn-hb-outline w-100"
-                *ngIf="d.canCancel"
-                (click)="confirmCancel(d.order.order_id)"
-              >
-                Huỷ đơn hàng
-              </button>
-              <button
-                class="btn btn-hb-accent w-100"
-                *ngIf="d.canApproveRequest"
-                (click)="approveRequest(d.order.order_id)"
-              >
-                Duyệt đổi trả
-              </button>
+
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-section-title">Ghi chú & Thao tác</div>
+
+              <div class="hb-kv">
+                <div class="k">Ghi chú từ khách</div>
+                <div class="v small text-muted">{{ d.order.note || 'Không có' }}</div>
+              </div>
+
+              <div class="hb-kv mt-2">
+                <div class="k">Ghi chú nội bộ</div>
+                <div class="v small text-muted fst-italic">
+                  {{ d.order.admin_note || 'Chưa có ghi chú' }}
+                </div>
+              </div>
+
+              <div class="hb-divider"></div>
+
+              <div class="d-grid gap-2">
+                <button
+                  class="btn btn-hb-outline-danger w-100"
+                  type="button"
+                  *ngIf="d.canCancel"
+                  (click)="confirmCancel(d.order.order_id)"
+                >
+                  Huỷ đơn hàng
+                </button>
+
+                <button
+                  class="btn btn-hb-accent w-100"
+                  type="button"
+                  *ngIf="d.canApproveRequest"
+                  (click)="approveRequest(d.order.order_id)"
+                >
+                  Duyệt đổi trả
+                </button>
+
+                <button
+                  class="btn btn-hb-outline w-100"
+                  type="button"
+                  *ngIf="d.canRejectRequest"
+                  (click)="rejectRequest(d.order.order_id)"
+                >
+                  Từ chối yêu cầu
+                </button>
+
+                <button
+                  class="btn btn-hb w-100"
+                  type="button"
+                  *ngIf="d.canMarkCompleted"
+                  (click)="markRequestCompleted(d.order.order_id)"
+                >
+                  Hoàn tất xử lý
+                </button>
+
+                <div class="hb-divider my-2"></div>
+
+                <button class="btn btn-hb-accent w-100" type="button" (click)="enterEdit()">
+                  <i class="bi bi-pencil-square me-1"></i> Sửa ghi chú
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -353,10 +392,16 @@
 
     <!-- ===== EDIT VIEW ===== -->
     <ng-container *ngIf="vm.mode === 'edit' && vm.editModel as em">
-      <div class="row g-4 pt-1">
+      <div class="row g-3 pt-1">
         <div class="col-12 col-xl-8">
           <div class="card hb-card hb-card-pad">
-            <h2 class="hb-h1 mb-4">Cập nhật đơn hàng</h2>
+            <div class="hb-section-title">Cập nhật ghi chú đơn hàng</div>
+            <div class="text-muted small mb-3">
+              Thông tin này chỉ hiển thị nội bộ cho quản trị viên / nhân viên xử lý đơn.
+            </div>
+
+            <div class="hb-divider"></div>
+
             <div class="mb-3">
               <label class="form-label fw-bold">Ghi chú nội bộ</label>
               <textarea
@@ -365,22 +410,68 @@
                 [(ngModel)]="$any(em).admin_note"
                 placeholder="Nhập ghi chú cho nhân viên..."
               ></textarea>
-              <div class="form-text mt-1 italic opacity-75">
-                Thông tin này không hiển thị với khách hàng.
+
+              <div class="form-text mt-1 fst-italic opacity-75">
+                Tối đa 500 ký tự. Không hiển thị với khách hàng.
               </div>
+
+              <div class="text-warning small mt-2" *ngIf="isDirty">* Bạn có thay đổi chưa lưu.</div>
             </div>
           </div>
         </div>
+
         <div class="col-12 col-xl-4">
           <div class="hb-side-card">
             <div class="card hb-card hb-card-pad bg-light">
-              <div class="hb-h2 mb-2">Thao tác</div>
-              <button class="btn btn-hb w-100 mb-2" (click)="saveEdit()">Lưu ghi chú</button>
-              <button class="btn btn-hb-outline w-100" (click)="cancelEdit()">Hủy bỏ</button>
+              <div class="hb-section-title">Thao tác</div>
+
+              <button class="btn btn-hb w-100 mb-2" type="button" (click)="saveEdit()">
+                Lưu ghi chú
+              </button>
+
+              <button class="btn btn-hb-outline w-100" type="button" (click)="cancelEdit()">
+                Hủy bỏ
+              </button>
             </div>
           </div>
         </div>
       </div>
     </ng-container>
   </div>
+
+  <hb-confirm-modal
+    [isOpen]="saveModalOpen"
+    title="Xác nhận lưu ghi chú"
+    message="Ghi chú nội bộ của đơn hàng sẽ được cập nhật ngay. Bạn có chắc chắn muốn lưu?"
+    type="info"
+    confirmLabel="Lưu thay đổi"
+    cancelLabel="Ở lại"
+    (confirm)="executeSave()"
+    (cancel)="onCancelSave()"
+  >
+  </hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="discardModalOpen"
+    title="Thay đổi chưa được lưu"
+    message="Bạn đang có thay đổi chưa lưu. Nếu quay lại bây giờ, dữ liệu vừa chỉnh sẽ bị mất."
+    type="warning"
+    confirmLabel="Bỏ thay đổi"
+    cancelLabel="Ở lại"
+    (confirm)="onConfirmDiscard()"
+    (cancel)="onCancelDiscard()"
+  >
+  </hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="cancelModalOpen"
+    title="Xác nhận huỷ đơn hàng"
+    message="Đơn hàng sẽ được chuyển sang trạng thái Đã huỷ. Bạn có chắc chắn muốn tiếp tục?"
+    type="danger"
+    confirmLabel="Huỷ đơn"
+    cancelLabel="Đóng"
+    (confirm)="onConfirmCancelOrder()"
+    (cancel)="onCancelOrderDismiss()"
+  >
+  </hb-confirm-modal>
 </div>

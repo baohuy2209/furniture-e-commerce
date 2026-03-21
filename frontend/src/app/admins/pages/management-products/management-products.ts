@@ -9,6 +9,7 @@ import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 type SortDir = 'asc' | 'desc';
 type ProductId = string;
 type VariantId = string;
+type PageMode = 'list' | 'detail' | 'edit';
 
 interface Product {
   product_id: ProductId;
@@ -57,11 +58,11 @@ interface ProductComment {
   rating: number;
   content: string;
   createdAt: string;
-  hidden?: boolean; // for edit moderation
+  hidden?: boolean;
 }
 
 interface ProductRowVM {
-  id: ProductId; // numeric-like string
+  id: ProductId;
   name: string;
   brand: string;
   discountPercent: number;
@@ -85,18 +86,13 @@ interface ListQuery {
   room: string;
   stock: 'all' | 'in' | 'out' | 'low';
   lowStockThreshold: number;
-
   minPrice: number | null;
   maxPrice: number | null;
-
   sortKey: keyof ProductRowVM;
   sortDir: SortDir;
-
   page: number;
   pageSize: number;
 }
-
-type PageMode = 'list' | 'detail' | 'edit';
 
 interface EditForm {
   product_name: string;
@@ -118,50 +114,61 @@ interface VariantEditVM {
   expected_delivery: string;
 }
 
+interface ProductDetailVM {
+  product: Product;
+  variants: ProductVariant[];
+  images: ProductImage[];
+  comments: ProductComment[];
+  inventoryTotal: number;
+  priceMin: number | null;
+  priceMax: number | null;
+  soldTotal: number;
+  ratingAvg: number | null;
+}
+
 @Component({
   selector: 'app-management-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, HttpClientModule, NgIf, NgFor, DatePipe, ConfirmModal],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    HttpClientModule,
+    NgIf,
+    NgFor,
+    DatePipe,
+    ConfirmModal,
+  ],
   templateUrl: './management-products.html',
   styleUrls: ['./management-products.css'],
 })
 export class ManagementProducts implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  // Seed data stores
   private products$ = new BehaviorSubject<Product[]>([]);
   private variants$ = new BehaviorSubject<ProductVariant[]>([]);
   private images$ = new BehaviorSubject<ProductImage[]>([]);
   private rooms$ = new BehaviorSubject<Room[]>([]);
 
-  // UI state synced with route
   mode: PageMode = 'list';
   selectedProductId: ProductId | null = null;
   detailTab: 'overview' | 'variants' | 'comments' = 'overview';
 
-  // Edit state
   editForm: EditForm | null = null;
   private originalProductSnapshot: Product | null = null;
+  private pendingDiscardAction: (() => void) | null = null;
+
   isDirty = false;
   saving = false;
   localSearchTerm = '';
-
-  // for create flow
   isCreateMode = false;
 
-  // cached rows for CSV export (filtered + sorted, not paged)
   exportRows: ProductRowVM[] = [];
-
-  // editable variants draft in edit mode
   editVariants: VariantEditVM[] = [];
-
-  // editable images draft (object URL for mock upload)
   editImages: { url: string; isNew?: boolean }[] = [];
 
-  // comments store (mock but editable)
   private commentsByProduct = new Map<ProductId, ProductComment[]>();
 
-  // Deletion Modal state
   deleteModalOpen = false;
   deleteItemId: string | null = null;
   deleteItemType: 'product' | 'comment' = 'product';
@@ -169,6 +176,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
   deleteModalMessage = '';
 
   saveModalOpen = false;
+  discardModalOpen = false;
 
   query$ = new BehaviorSubject<ListQuery>({
     q: '',
@@ -177,15 +185,12 @@ export class ManagementProducts implements OnInit, OnDestroy {
     lowStockThreshold: 5,
     minPrice: null,
     maxPrice: null,
-
     sortKey: 'id',
     sortDir: 'asc',
-
     page: 1,
     pageSize: 10,
   });
 
-  // Full rows (unpaged), used to build list vm and export cache
   private rowsAll$ = combineLatest([
     this.products$,
     this.variants$,
@@ -195,21 +200,15 @@ export class ManagementProducts implements OnInit, OnDestroy {
     map(([products, variants, images, rooms]) => {
       return products.map((p) => {
         const pv = variants.filter((v) => v.product_id === p.product_id);
-
         const priceMin = pv.length ? Math.min(...pv.map((x) => x.price)) : null;
         const priceMax = pv.length ? Math.max(...pv.map((x) => x.price)) : null;
-
         const inventoryTotal = pv.reduce((s, x) => s + (x.num_inventory ?? 0), 0);
         const soldTotal = pv.reduce((s, x) => s + (x.num_selled ?? 0), 0);
-
         const ratingAvg = pv.length
           ? round2(pv.reduce((s, x) => s + (x.rating ?? 0), 0) / pv.length)
           : null;
 
-        const roomLabel = inferRoomFromProduct(p, rooms);
-        const coverUrl = inferCoverImage(p, pv, images);
-
-        const row: ProductRowVM = {
+        return {
           id: p.product_id,
           name: p.product_name,
           brand: p.brand_name,
@@ -222,18 +221,16 @@ export class ManagementProducts implements OnInit, OnDestroy {
           inventoryTotal,
           soldTotal,
           ratingAvg,
-          roomLabel,
-          imageCover: coverUrl,
+          roomLabel: inferRoomFromProduct(p, rooms),
+          imageCover: inferCoverImage(p, pv, images),
           stt: 0,
-        };
-        return row;
+        } as ProductRowVM;
       });
     }),
   );
 
   vm$ = combineLatest([this.rowsAll$, this.query$]).pipe(
     map(([rowsAll, query]) => {
-      // FILTER
       let filtered = rowsAll.slice();
 
       const q = (query.q || '').trim().toLowerCase();
@@ -245,48 +242,43 @@ export class ManagementProducts implements OnInit, OnDestroy {
       }
 
       if (query.room) filtered = filtered.filter((r) => r.roomLabel === query.room);
-
-      if (query.minPrice != null)
+      if (query.minPrice != null) {
         filtered = filtered.filter((r) => (r.priceMin ?? 0) >= query.minPrice!);
-      if (query.maxPrice != null)
+      }
+      if (query.maxPrice != null) {
         filtered = filtered.filter((r) => (r.priceMax ?? 0) <= query.maxPrice!);
-
-      if (query.stock !== 'all') {
-        if (query.stock === 'in') filtered = filtered.filter((r) => r.inventoryTotal > 0);
-        if (query.stock === 'out') filtered = filtered.filter((r) => r.inventoryTotal <= 0);
-        if (query.stock === 'low') {
-          filtered = filtered.filter(
-            (r) => r.inventoryTotal > 0 && r.inventoryTotal <= query.lowStockThreshold,
-          );
-        }
       }
 
-      // SORT (fix numeric id issue)
-      filtered.sort((a, b) => compareByKey(a, b, query.sortKey, query.sortDir));
+      if (query.stock === 'in') filtered = filtered.filter((r) => r.inventoryTotal > 0);
+      if (query.stock === 'out') filtered = filtered.filter((r) => r.inventoryTotal <= 0);
+      if (query.stock === 'low') {
+        filtered = filtered.filter(
+          (r) => r.inventoryTotal > 0 && r.inventoryTotal <= query.lowStockThreshold,
+        );
+      }
 
-      // cache for export (avoid async pipe in click)
+      filtered.sort((a, b) => compareByKey(a, b, query.sortKey, query.sortDir));
       this.exportRows = filtered;
 
       const roomOptions = Array.from(new Set(rowsAll.map((x) => x.roomLabel))).sort((a, b) =>
         a.localeCompare(b),
       );
 
-      // PAGINATION
       const total = filtered.length;
       const pageSize = Math.max(1, query.pageSize);
       const totalPages = Math.max(1, Math.ceil(total / pageSize));
       const page = clamp(query.page, 1, totalPages);
 
-       const start = (page - 1) * pageSize;
-       const rows: ProductRowVM[] = filtered.slice(start, start + pageSize).map((r, i) => ({
-         ...r,
-         stt: start + i + 1,
-       }));
+      const start = (page - 1) * pageSize;
+      const rows = filtered.slice(start, start + pageSize).map((r, i) => ({
+        ...r,
+        stt: start + i + 1,
+      }));
 
       const summary = {
         totalProducts: rowsAll.length,
         lowStockProducts: rowsAll.filter((r) => r.inventoryTotal <= query.lowStockThreshold).length,
-        totalSold: rowsAll.reduce((s, r) => s + r.soldTotal, 0)
+        totalSold: rowsAll.reduce((s, r) => s + r.soldTotal, 0),
       };
 
       return {
@@ -303,9 +295,8 @@ export class ManagementProducts implements OnInit, OnDestroy {
   );
 
   detail$ = combineLatest([this.products$, this.variants$, this.images$]).pipe(
-    map(([products, variants, images]) => {
-      if (!this.selectedProductId) return null;
-      if (this.selectedProductId === 'new') return null;
+    map(([products, variants, images]): ProductDetailVM | null => {
+      if (!this.selectedProductId || this.selectedProductId === 'new') return null;
 
       const p = products.find((x) => x.product_id === this.selectedProductId) ?? null;
       if (!p) return null;
@@ -318,15 +309,22 @@ export class ManagementProducts implements OnInit, OnDestroy {
         .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 
       const comments = this.getComments(p.product_id);
+      const inventoryTotal = pv.reduce((s, x) => s + (x.num_inventory ?? 0), 0);
+      const soldTotal = pv.reduce((s, x) => s + (x.num_selled ?? 0), 0);
+      const ratingAvg = pv.length
+        ? round2(pv.reduce((s, x) => s + (x.rating ?? 0), 0) / pv.length)
+        : null;
 
       return {
         product: p,
         variants: pv,
         images: imgs,
         comments,
-        inventoryTotal: pv.reduce((s, x) => s + (x.num_inventory ?? 0), 0),
+        inventoryTotal,
         priceMin: pv.length ? Math.min(...pv.map((x) => x.price)) : null,
         priceMax: pv.length ? Math.max(...pv.map((x) => x.price)) : null,
+        soldTotal,
+        ratingAvg,
       };
     }),
   );
@@ -343,7 +341,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // revoke any objectURLs created during upload mock
     for (const img of this.editImages) {
       if (img.isNew) URL.revokeObjectURL(img.url);
     }
@@ -359,28 +356,18 @@ export class ManagementProducts implements OnInit, OnDestroy {
     }
   }
 
-  // ================== ROUTE SYNC ==================
   private bindRouteState(): void {
     this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((qp) => {
       const id = qp.get('id');
-      const mode = (qp.get('mode') as PageMode) || 'list';
-
+      const edit = qp.get('edit');
       const incomingId = id ? String(id) : null;
-      const incomingMode: PageMode = mode || 'list';
+      const incomingMode: PageMode = !incomingId ? 'list' : edit === 'true' ? 'edit' : 'detail';
 
       const changed = incomingId !== this.selectedProductId || incomingMode !== this.mode;
-
-      if (changed && this.isDirty) {
-        const ok = confirm('Bạn có thay đổi chưa lưu. Thoát sẽ mất dữ liệu. Bạn muốn thoát?');
-        if (!ok) {
-          this.syncRoute(this.selectedProductId, this.mode, false);
-          return;
-        }
-        this.clearEditState();
-      }
+      if (!changed) return;
 
       this.selectedProductId = incomingId;
-      this.mode = incomingId ? incomingMode : 'list';
+      this.mode = incomingMode;
 
       if (this.mode === 'edit') {
         this.initEditForm(incomingId);
@@ -388,18 +375,20 @@ export class ManagementProducts implements OnInit, OnDestroy {
         this.clearEditState();
       }
 
-      if (this.mode === 'detail') this.detailTab = this.detailTab || 'overview';
       if (this.mode === 'list') this.detailTab = 'overview';
     });
   }
 
   private syncRoute(id: string | null, mode: PageMode, push: boolean): void {
     const queryParams: any = {};
-    if (id) queryParams.id = id;
-    else queryParams.id = null;
 
-    if (id && mode !== 'list') queryParams.mode = mode;
-    else queryParams.mode = null;
+    if (id) {
+      queryParams.id = id;
+      queryParams.edit = mode === 'edit' ? 'true' : null;
+    } else {
+      queryParams.id = null;
+      queryParams.edit = null;
+    }
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -409,7 +398,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
     });
   }
 
-  // ================== DATA LOAD ==================
   private loadSeedData(): void {
     forkJoin({
       products: this.http.get<Product[]>('assets/data/product.json'),
@@ -434,7 +422,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
       });
   }
 
-  // ================== LIST BEHAVIOR ==================
   patchQuery(patch: Partial<ListQuery>): void {
     const prev = this.query$.value;
     const next = { ...prev, ...patch };
@@ -493,19 +480,21 @@ export class ManagementProducts implements OnInit, OnDestroy {
   isSortDir(dir: SortDir): boolean {
     return this.query$.value.sortDir === dir;
   }
-  
+
   sortIcon(key: ListQuery['sortKey']): string {
     const q = this.query$.value;
-    if (q.sortKey !== key) return '▲▼'; // both when not active
+    if (q.sortKey !== key) return '▲▼';
     return q.sortDir === 'asc' ? '▲' : '▼';
   }
 
   openDetailById(productId: string): void {
     this.syncRoute(productId, 'detail', true);
   }
+
   openEdit(productId: string): void {
     this.syncRoute(productId, 'edit', true);
   }
+
   openDetail(row: ProductRowVM): void {
     this.openDetailById(row.id);
   }
@@ -514,14 +503,31 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.syncRoute('new', 'edit', true);
   }
 
-  // ================== DETAIL / EDIT NAV ==================
-  backToList(): void {
-    if (this.isDirty) {
-      const ok = confirm('Bạn có thay đổi chưa lưu. Thoát sẽ mất dữ liệu. Bạn muốn thoát?');
-      if (!ok) return;
+  onHeaderBack(): void {
+    if (this.mode === 'edit') {
+      this.cancelEdit();
+      return;
     }
-    this.clearEditState();
-    this.syncRoute(null, 'list', true);
+    this.backToList();
+  }
+
+  backToList(): void {
+    this.attemptLeave(() => {
+      this.clearEditState();
+      this.syncRoute(null, 'list', true);
+    });
+  }
+
+  backToDetail(): void {
+    if (!this.selectedProductId || this.selectedProductId === 'new') {
+      this.backToList();
+      return;
+    }
+
+    this.attemptLeave(() => {
+      this.clearEditState();
+      this.syncRoute(this.selectedProductId, 'detail', true);
+    });
   }
 
   goEdit(): void {
@@ -530,19 +536,36 @@ export class ManagementProducts implements OnInit, OnDestroy {
   }
 
   cancelEdit(): void {
-    if (this.isDirty) {
-      const ok = confirm('Hủy chỉnh sửa sẽ mất thay đổi. Bạn chắc chắn?');
-      if (!ok) return;
+    if (!this.selectedProductId || this.selectedProductId === 'new') {
+      this.backToList();
+      return;
     }
-    this.clearEditState();
-    if (!this.selectedProductId) this.syncRoute(null, 'list', true);
-    else if (this.selectedProductId === 'new') this.syncRoute(null, 'list', true);
-    else this.syncRoute(this.selectedProductId, 'detail', true);
+    this.backToDetail();
   }
 
-  // ================== EDIT FLOW ==================
+  private attemptLeave(action: () => void): void {
+    if (!this.isDirty) {
+      action();
+      return;
+    }
+    this.pendingDiscardAction = action;
+    this.discardModalOpen = true;
+  }
+
+  onConfirmDiscard(): void {
+    this.discardModalOpen = false;
+    const action = this.pendingDiscardAction;
+    this.pendingDiscardAction = null;
+    this.clearEditState();
+    action?.();
+  }
+
+  onCancelDiscard(): void {
+    this.discardModalOpen = false;
+    this.pendingDiscardAction = null;
+  }
+
   private initEditForm(productId: string | null): void {
-    // reset drafts
     this.editVariants = [];
     this.editImages = [];
     this.isCreateMode = productId === 'new';
@@ -550,7 +573,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
     if (!productId) return;
 
     if (productId === 'new') {
-      // create empty form
       this.originalProductSnapshot = null;
       this.editForm = {
         product_name: '',
@@ -561,7 +583,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
         tagsText: '',
         description: '',
       };
-      // create 1 default variant draft
       this.editVariants = [
         {
           product_varant_id: 'new-v1',
@@ -592,7 +613,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
       description: p.description ?? '',
     };
 
-    // variants draft
     const pv = this.variants$.value.filter((v) => v.product_id === productId);
     this.editVariants = pv.map((v) => ({
       product_varant_id: v.product_varant_id,
@@ -604,7 +624,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
       expected_delivery: v.expected_delivery ?? '',
     }));
 
-    // images draft (from product.image_url + variant images)
     const imgsFromProduct = Array.isArray(p.image_url) ? p.image_url : [];
     this.editImages = imgsFromProduct.map((url) => ({ url }));
 
@@ -650,6 +669,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   executeSave(): void {
     if (!this.editForm) return;
+
     this.saveModalOpen = false;
     this.saving = true;
 
@@ -670,12 +690,10 @@ export class ManagementProducts implements OnInit, OnDestroy {
         image_url: this.editImages.map((x) => x.url),
       };
 
-      // push product
       const products = this.products$.value.slice();
       products.push(newProduct);
       this.products$.next(products);
 
-      // create variants
       const variants = this.variants$.value.slice();
       const baseVariantId = `${newId}-v1`;
 
@@ -705,7 +723,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
       });
       this.variants$.next(variants);
 
-      // images: attach to created variant as mock
       const imgs = this.images$.value.slice();
       let pos = 1;
       for (const im of this.editImages) {
@@ -724,8 +741,10 @@ export class ManagementProducts implements OnInit, OnDestroy {
       return;
     }
 
-    // update existing
-    if (!this.selectedProductId || this.selectedProductId === 'new') return;
+    if (!this.selectedProductId || this.selectedProductId === 'new') {
+      this.saving = false;
+      return;
+    }
 
     const updated: Partial<Product> = {
       product_name: this.editForm.product_name.trim(),
@@ -745,7 +764,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
       this.products$.next(products);
     }
 
-    // update variants price/inventory
     const variants = this.variants$.value.slice();
     const vSet = new Map(this.editVariants.map((v) => [v.product_varant_id, v]));
     for (let i = 0; i < variants.length; i++) {
@@ -763,13 +781,13 @@ export class ManagementProducts implements OnInit, OnDestroy {
     }
     this.variants$.next(variants);
 
-    // update images store for default variant (mock)
     const pv = variants.filter((x) => x.product_id === this.selectedProductId);
     const def = pv.find((x) => x.is_default) ?? pv[0];
     if (def) {
       const imgs = this.images$.value
         .slice()
         .filter((im) => im.product_varant_id !== def.product_varant_id);
+
       let pos = 1;
       for (const im of this.editImages) {
         imgs.push({
@@ -784,7 +802,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
     this.isDirty = false;
     this.saving = false;
-
     this.syncRoute(this.selectedProductId, 'detail', true);
   }
 
@@ -795,11 +812,9 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.saving = false;
     this.isCreateMode = false;
     this.editVariants = [];
-    // do not revoke old images URLs (could be used in list), only revoke new ones when removed
     this.editImages = [];
   }
 
-  // ================== CSV EXPORT ==================
   exportCsv(rows: ProductRowVM[]): void {
     const header = [
       'product_id',
@@ -839,12 +854,12 @@ export class ManagementProducts implements OnInit, OnDestroy {
     );
   }
 
-  // ================== DELETE (soft mock) ==================
   softDelete(productId: string): void {
     this.deleteItemId = productId;
     this.deleteItemType = 'product';
     this.deleteModalTitle = 'Xác nhận xóa sản phẩm';
-    this.deleteModalMessage = 'Bạn có chắc chắn muốn xóa sản phẩm này? Dữ liệu sẽ bị gỡ khỏi danh sách quản lý.';
+    this.deleteModalMessage =
+      'Bạn có chắc chắn muốn xóa sản phẩm này? Dữ liệu sẽ bị gỡ khỏi danh sách quản lý.';
     this.deleteModalOpen = true;
   }
 
@@ -854,14 +869,17 @@ export class ManagementProducts implements OnInit, OnDestroy {
     if (this.deleteItemType === 'product') {
       const next = this.products$.value.filter((p) => p.product_id !== this.deleteItemId);
       this.products$.next(next);
-      if (this.selectedProductId === this.deleteItemId) this.backToList();
-    } else {
-      // comment
-      if (this.selectedProductId && this.selectedProductId !== 'new') {
-        const list = this.getComments(this.selectedProductId).filter((x) => x.id !== this.deleteItemId);
-        this.commentsByProduct.set(this.selectedProductId, list);
-        this.isDirty = true;
+
+      if (this.selectedProductId === this.deleteItemId) {
+        this.clearEditState();
+        this.syncRoute(null, 'list', true);
       }
+    } else if (this.selectedProductId && this.selectedProductId !== 'new') {
+      const list = this.getComments(this.selectedProductId).filter(
+        (x) => x.id !== this.deleteItemId,
+      );
+      this.commentsByProduct.set(this.selectedProductId, list);
+      this.isDirty = true;
     }
 
     this.deleteModalOpen = false;
@@ -873,7 +891,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.deleteItemId = null;
   }
 
-  // ================== COMMENTS MODERATION (mock) ==================
   private getComments(productId: ProductId): ProductComment[] {
     const existing = this.commentsByProduct.get(productId);
     if (existing) return existing;
@@ -885,9 +902,11 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   toggleCommentHidden(cmtId: string): void {
     if (!this.selectedProductId || this.selectedProductId === 'new') return;
+
     const list = this.getComments(this.selectedProductId);
     const idx = list.findIndex((x) => x.id === cmtId);
     if (idx < 0) return;
+
     list[idx] = { ...list[idx], hidden: !list[idx].hidden };
     this.commentsByProduct.set(this.selectedProductId, list.slice());
     this.isDirty = true;
@@ -895,6 +914,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   deleteComment(cmtId: string): void {
     if (!this.selectedProductId || this.selectedProductId === 'new') return;
+
     this.deleteItemId = cmtId;
     this.deleteItemType = 'comment';
     this.deleteModalTitle = 'Xác nhận xóa đánh giá';
@@ -902,7 +922,18 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.deleteModalOpen = true;
   }
 
-  // ================== HELPERS ==================
+  headerStatusLabel(inventoryTotal: number): string {
+    if (inventoryTotal <= 0) return 'Hết hàng';
+    if (inventoryTotal <= this.query$.value.lowStockThreshold) return 'Sắp hết';
+    return 'Đang bán';
+  }
+
+  headerStatusClass(inventoryTotal: number): string {
+    if (inventoryTotal <= 0) return 'hb-pill-danger';
+    if (inventoryTotal <= this.query$.value.lowStockThreshold) return 'hb-pill-warn';
+    return 'hb-pill-ok';
+  }
+
   private nextNumericProductId(): number {
     const ids = this.products$.value
       .map((p) => toNumberSafe(p.product_id))
@@ -915,8 +946,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
     ev.stopPropagation();
   }
 }
-
-/* ================= Helpers (pure) ================= */
 
 function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
@@ -940,7 +969,6 @@ function toNumberSafe(v: any): number {
 function compareByKey(a: ProductRowVM, b: ProductRowVM, key: any, dir: SortDir): number {
   const factor = dir === 'asc' ? 1 : -1;
 
-  // FIX numeric sort for product id
   if (key === 'id') {
     const av = toNumberSafe(a.id);
     const bv = toNumberSafe(b.id);
@@ -1066,5 +1094,6 @@ function buildMockComments(productId: ProductId): ProductComment[] {
       hidden: false,
     },
   ];
+
   return base.map((x) => ({ ...x, productId }));
 }

@@ -1,61 +1,68 @@
 :root {
   --hb-primary: #3d529d;
   --hb-accent: #ff911f;
-
-  /* giống mockup figma: bo vừa phải */
   --hb-radius: 16px;
   --hb-radius-sm: 12px;
-
+  --hb-radius-lg: 20px;
   --hb-border: rgba(0, 0, 0, 0.12);
   --hb-text: rgba(0, 0, 0, 0.78);
   --hb-muted: rgba(0, 0, 0, 0.55);
-  --hb-radius-lg: 20px;
 }
 
 :host {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
   display: block;
   height: 100%;
+  min-height: 0;
 }
 
-.fw-black { font-weight: 900 !important; }
-.fs-2 { font-size: 2rem !important; }
-.fs-3 { font-size: 1.5rem !important; }
+.fw-black {
+  font-weight: 900 !important;
+}
 
-/* Product SKU specific card */
+.fs-2 {
+  font-size: 2rem !important;
+}
+
+.fs-3 {
+  font-size: 1.5rem !important;
+}
+
 .hb-sku-card {
-  background: white;
+  background: #fff;
   padding: 12px;
   border-radius: var(--hb-radius);
-  border: 1px solid rgba(0,0,0,0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-
-/* ===== PAGE SHELL (không tràn height) =====
-   Lưu ý: main layout đã scroll ở .hb-admin-main
-   => page không nên max-height:100vh nữa, chỉ cần height:100% và chia vùng.
-*/
+/* ===== PAGE SHELL ===== */
 .hb-page-shell {
   height: 100%;
   min-height: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-/* HEADER sticky trong vùng content */
 .hb-page-header {
   position: sticky;
   top: 0;
   z-index: 50;
   background: #fff;
-
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-
   padding: 4px 0 10px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  flex: 0 0 auto;
 }
 
 .hb-header-left {
@@ -69,14 +76,14 @@
   align-items: center;
 }
 
-/* BODY chiếm phần còn lại */
 .hb-page-body {
   flex: 1 1 auto;
   min-height: 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden; /* fix scroll ngang toàn page */
   display: flex;
   flex-direction: column;
-  padding-top: 14px;
+  padding-top: 10px;
 }
 
 /* ===== TYPO ===== */
@@ -102,6 +109,16 @@
   color: var(--hb-text);
 }
 
+.hb-object-title {
+  font-size: 24px !important;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: none;
+  min-width: 0;
+  max-width: 100%;
+  word-break: break-word;
+}
+
 /* ===== CARD ===== */
 .hb-card {
   border-radius: var(--hb-radius);
@@ -114,11 +131,10 @@
   padding: 16px;
 }
 
-/* table card cần flex để table scroll nội bộ */
 .hb-table-card {
   flex: 1 1 auto;
   min-height: 0;
-  overflow: hidden; /* để sticky pagination không tràn */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -137,17 +153,12 @@
   color: #fff;
 }
 
-.btn-hb-outline {
-  border: 1px solid rgba(61, 82, 157, 0.32);
-  color: var(--hb-primary);
-  font-weight: 800;
-  background: #fff;
-  border-radius: var(--hb-radius-sm);
-}
-
-.btn-hb-outline:hover {
-  background: rgba(61, 82, 157, 0.06);
-  color: var(--hb-primary);
+.btn-hb[disabled] {
+  background: #cbd5e0;
+  border-color: #cbd5e0;
+  color: #fff;
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .btn-hb-accent {
@@ -161,6 +172,38 @@
 .btn-hb-accent:hover {
   filter: brightness(0.96);
   color: #1f1f1f;
+}
+
+.btn-hb-accent[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+.btn-hb-outline {
+  border: 1px solid rgba(61, 82, 157, 0.32);
+  color: var(--hb-primary);
+  font-weight: 800;
+  background: #fff;
+  border-radius: var(--hb-radius-sm);
+}
+
+.btn-hb-outline:hover {
+  background: rgba(61, 82, 157, 0.06);
+  color: var(--hb-primary);
+}
+
+.btn-hb-outline-danger {
+  border: 1px solid rgba(220, 53, 69, 0.25);
+  color: #dc3545;
+  font-weight: 800;
+  background: #fff;
+  border-radius: var(--hb-radius-sm);
+}
+
+.btn-hb-outline-danger:hover {
+  background: rgba(220, 53, 69, 0.06);
+  color: #dc3545;
 }
 
 /* ===== INPUT ===== */
@@ -181,6 +224,7 @@
   font-size: 13px;
 }
 
+/* ===== SUMMARY ===== */
 .hb-summary-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -248,13 +292,12 @@
   color: var(--hb-text);
 }
 
-/* ===== FILTERBAR (giống mockup, gọn trong khung) ===== */
+/* ===== FILTER ===== */
 .hb-filterbar {
   display: grid;
   grid-template-columns: 2.2fr 1fr 1fr 0.8fr 0.8fr 0.7fr auto;
   gap: 10px;
   align-items: center;
-
   padding: 12px;
   border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--hb-radius);
@@ -272,7 +315,7 @@
   gap: 10px;
 }
 
-/* ===== TABLE WRAP (scroll nội bộ card) ===== */
+/* ===== TABLE ===== */
 .hb-table-wrap {
   flex: 1 1 auto;
   min-height: 0;
@@ -280,30 +323,28 @@
   width: 100%;
 }
 
-/* table grid */
 .hb-table {
   width: 100%;
-  min-width: 0;
+  min-width: 1160px; /* giữ layout cột ổn định cho list */
 }
 
 .hb-table-head,
 .hb-table-row {
   display: grid;
   grid-template-columns:
-    60px   /* STT */
-    minmax(260px, 2.5fr) /* Tên */
-    minmax(120px, 1fr)   /* Thương hiệu */
-    minmax(120px, 1fr)   /* Khu vực */
-    minmax(140px, 1.2fr) /* Giá */
-    100px  /* Tồn kho */
-    100px  /* Đã bán */
-    100px  /* Đánh giá */
-    56px   /* Sửa */
-    56px;  /* Xóa */
+    60px
+    minmax(260px, 2.5fr)
+    minmax(120px, 1fr)
+    minmax(120px, 1fr)
+    minmax(140px, 1.2fr)
+    100px
+    100px
+    100px
+    56px
+    56px;
   align-items: center;
 }
 
-/* enable ellipsis inside grid */
 .hb-td,
 .hb-th-label,
 .hb-text-truncate {
@@ -314,14 +355,6 @@
   display: block;
 }
 
-.hb-td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block; /* Required for ellipsis on block elements, but we need flex for vertical centering */
-}
-
-/* Specific text truncation for flex items */
 .hb-td.w-name,
 .hb-td.w-brand,
 .hb-td.w-room,
@@ -332,15 +365,14 @@
   min-width: 0;
 }
 
-/* HEADER row */
 .hb-table-head {
-  background: #f8f9fc; /* Solid background for sticky */
+  background: #f8f9fc;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-  padding: 0; 
+  padding: 0;
   font-weight: 900;
   position: sticky;
   top: 0;
-  z-index: 10; /* Above rows */
+  z-index: 10;
 }
 
 .hb-th {
@@ -362,7 +394,6 @@
   border-right: none;
 }
 
-/* header content (đúng kiểu m đưa: icon không lệch) */
 .th-content {
   display: flex;
   align-items: center;
@@ -370,8 +401,6 @@
   gap: 8px;
   width: 100%;
 }
-
-
 
 .th-content i.fas {
   font-size: 13px;
@@ -381,10 +410,9 @@
   color: rgba(0, 0, 0, 0.55);
 }
 
-/* ROW */
 .hb-table-row {
-  padding: 0; 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Horizontal border */
+  padding: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .hb-row-click {
@@ -392,7 +420,7 @@
 }
 
 .hb-row-click:hover {
-  background: rgba(255, 145, 31, 0.08); /* accent hover */
+  background: rgba(255, 145, 31, 0.08);
 }
 
 .hb-td {
@@ -441,7 +469,6 @@
   min-width: 0;
 }
 
-/* cover */
 .hb-cover {
   width: 40px;
   height: 40px;
@@ -458,7 +485,7 @@
   object-fit: cover;
 }
 
-/* badge / tag */
+/* ===== BADGE / TAG / PILL ===== */
 .hb-badge {
   background: rgba(255, 145, 31, 0.18);
   border: 1px solid rgba(255, 145, 31, 0.32);
@@ -478,7 +505,6 @@
   font-size: 12px;
 }
 
-/* pill */
 .hb-pill {
   display: inline-flex;
   min-width: 52px;
@@ -489,6 +515,12 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   font-weight: 900 !important;
   white-space: nowrap;
+}
+
+.hb-pill-ok {
+  background: rgba(25, 135, 84, 0.14);
+  border-color: rgba(25, 135, 84, 0.24);
+  color: rgba(25, 135, 84, 1);
 }
 
 .hb-pill-warn {
@@ -503,7 +535,7 @@
   color: rgba(160, 0, 0, 1);
 }
 
-/* icon buttons */
+/* ===== ICON BUTTON ===== */
 .hb-icon-btn {
   border: 1px solid rgba(0, 0, 0, 0.12);
   background: #fff;
@@ -514,7 +546,6 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-
   transition:
     background 0.15s ease,
     border-color 0.15s ease,
@@ -540,18 +571,16 @@
   border-color: rgba(255, 0, 0, 0.28);
 }
 
-/* ===== PAGINATION (sticky bottom trong card) ===== */
+/* ===== PAGINATION ===== */
 .hb-pagination {
   position: sticky;
   bottom: 0;
   z-index: 2;
-
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-
-  padding: 12px 12px;
+  padding: 12px;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
   background: #fff;
 }
@@ -592,7 +621,7 @@
   color: rgba(0, 0, 0, 0.78);
 }
 
-/* ===== DETAIL blocks ===== */
+/* ===== DETAIL ===== */
 .hb-detail-title {
   font-size: 28px;
   font-weight: 800;
@@ -626,6 +655,7 @@
 .hb-tabs {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .hb-tab {
@@ -685,14 +715,16 @@
   line-height: 1.6;
 }
 
-/* gallery */
+/* ===== GALLERY ===== */
 .hb-gallery {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
+  width: 100%;
 }
 
 .hb-gitem {
+  min-width: 0;
   border-radius: var(--hb-radius-sm);
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.12);
@@ -729,7 +761,7 @@
   color: rgba(160, 0, 0, 1);
 }
 
-/* comments */
+/* ===== COMMENTS ===== */
 .hb-comment {
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: var(--hb-radius-sm);
@@ -742,13 +774,144 @@
   opacity: 0.55;
 }
 
+/* ===== SIDEBAR ===== */
+.hb-sidebar-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* fix card không bị dính/đè */
+}
+
+.hb-sticky-side {
+  position: sticky;
+  top: 0;
+  z-index: 1; /* hạ xuống để không đè layer quá mức */
+}
+
+.hb-detail-side .hb-card {
+  position: relative;
+  z-index: 0;
+}
+
+.hb-side-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 14px 0;
+}
+
+.hb-side-stat-card {
+  padding: 18px;
+  border-radius: var(--hb-radius);
+  background: rgba(255, 145, 31, 0.06);
+  border: 1px dashed rgba(255, 145, 31, 0.6);
+}
+
+.hb-side-stat-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hb-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.hb-side-stat-value {
+  font-size: 42px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--hb-text);
+}
+
+/* ===== FORM ACTIONS ===== */
+.hb-form-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 0 10px 0;
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  margin-top: 24px;
+}
+
+.btn-hb-confirm {
+  min-width: 220px;
+  height: 48px;
+  font-weight: 800;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.btn-hb-cancel {
+  min-width: 140px;
+  height: 48px;
+  font-weight: 700;
+  border-radius: 12px;
+}
+
+/* ===== DETAIL LAYOUT ===== */
+.hb-detail-layout {
+  min-height: 0;
+  align-items: flex-start;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  overflow-x: hidden;
+}
+
+.hb-detail-main,
+.hb-detail-side {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.hb-detail-main {
+  padding-right: 12px;
+}
+
+.hb-detail-side {
+  padding-left: 12px;
+}
+
+.hb-detail-main > .hb-card:first-child {
+  flex: 0 0 auto;
+}
+
+.hb-detail-main > .hb-card:last-child {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.hb-detail-side .hb-sidebar-stack {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.hb-detail-main .hb-card.mb-3,
+.hb-detail-side .hb-card.mb-3 {
+  margin-bottom: 12px !important;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1200px) {
   .hb-filterbar {
     grid-template-columns: 1.6fr 1fr 1fr 0.9fr 0.9fr 0.8fr auto;
   }
+
   .hb-summary-row {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .hb-sticky-side {
+    position: static;
+    top: auto;
+  }
+
+  .hb-detail-main,
+  .hb-detail-side {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -758,7 +921,7 @@
   }
 
   .hb-table {
-    min-width: 920px; /* nhỏ màn thì scroll ngang */
+    min-width: 920px;
   }
 
   .hb-gallery {

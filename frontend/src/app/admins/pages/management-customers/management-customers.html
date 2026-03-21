@@ -428,7 +428,6 @@
                       <span style="width: 130px">Thanh toán</span>
                       <span style="width: 130px">Trạng thái</span>
                       <span class="text-end" style="width: 130px">Tổng thanh toán</span>
-                      <span class="text-center" style="width: 80px">Thao tác</span>
                     </div>
                     <div
                       class="hb-table-small-row d-flex justify-content-between align-items-center"
@@ -447,20 +446,6 @@
                       <span class="text-end text-accent" style="width: 130px">{{
                         formatMoney(o.total_amount)
                       }}</span>
-                      <span class="text-center" style="width: 80px">
-                        <button
-                          class="btn btn-sm btn-outline-danger w-100"
-                          style="font-size: 11px; padding: 4px"
-                          *ngIf="
-                            o.status === 'pending' ||
-                            o.status === 'processing' ||
-                            o.status === 'confirmed'
-                          "
-                          (click)="initCancelOrder(o.order_id, o.order_number)"
-                        >
-                          Hủy
-                        </button>
-                      </span>
                     </div>
                   </div>
                 </div>

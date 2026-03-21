@@ -20,22 +20,22 @@
     </div>
 
     <!-- DETAIL ACTIONS -->
-    <div class="hb-header-actions" *ngIf="vm.mode === 'detail'">
-      <button class="btn btn-hb-outline" type="button" (click)="goList()">
-        <i class="bi bi-arrow-left me-1"></i> Quay lại
-      </button>
-      <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
-        <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
-      </button>
-    </div>
+    <ng-container *ngIf="vm.mode === 'detail'">
+      <div class="hb-header-actions">
+        <button class="btn btn-hb-outline" type="button" (click)="goList()">
+          <i class="bi bi-arrow-left me-1"></i> Quay lại Danh sách
+        </button>
+      </div>
+    </ng-container>
 
     <!-- EDIT ACTIONS -->
-    <div class="hb-header-actions" *ngIf="vm.mode === 'edit'">
-      <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">Hủy</button>
-      <button class="btn btn-hb" type="button" (click)="saveEdit()">
-        <i class="bi bi-save2 me-1"></i> Lưu bài viết
-      </button>
-    </div>
+    <ng-container *ngIf="vm.mode === 'edit'">
+      <div class="hb-header-actions">
+        <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">
+          <i class="bi bi-arrow-left me-1"></i> Quay lại Chi tiết
+        </button>
+      </div>
+    </ng-container>
   </div>
 
   <!-- PAGE BODY -->
@@ -264,55 +264,116 @@
 
     <!-- DETAIL MODE -->
     <ng-container *ngIf="vm.mode === 'detail' && vm.detail as d">
-      <div class="hb-detail-grid">
-        <div class="hb-main">
+      <div class="row g-3">
+        <!-- Main Content (Left) -->
+        <div class="col-12 col-xl-8">
+          <div class="card hb-card hb-card-pad mb-3">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <div class="d-flex align-items-center gap-3">
+                <div class="hb-title text-primary" style="font-size: 24px">{{ d.blog.title }}</div>
+                <span class="hb-pill" [ngClass]="d.statusClass">{{ d.statusLabel }}</span>
+              </div>
+            </div>
+          </div>
+
           <div class="card hb-card hb-card-pad">
             <img class="hb-detail-hero-cover" [src]="d.blog.cover_url" alt="Hero Cover" />
-            <div class="hb-section-title">Nội dung chi tiết (Xem trước)</div>
+            <div class="hb-section-title mt-3">Nội dung chi tiết (Xem trước)</div>
+            <div class="hb-divider"></div>
             <div
-              class="hb-content-preview border rounded p-4 bg-light"
+              class="hb-content-preview border rounded p-4 bg-light mt-3"
               [innerHTML]="d.blog.content_html"
             ></div>
           </div>
         </div>
 
-        <div class="hb-aside">
-          <div class="card hb-card hb-card-pad">
-            <div class="hb-section-title">Thông tin bài viết</div>
-            <div class="hb-kv">
-              <div class="hb-k">Trạng thái</div>
-              <div class="hb-v">
-                <span class="hb-pill" [ngClass]="d.statusClass">{{ d.statusLabel }}</span>
+        <!-- Sidebar (Right) -->
+        <div class="col-12 col-xl-4">
+          <!-- Action Card -->
+          <div class="card hb-card hb-card-pad mb-3">
+            <div class="hb-section-title">Thao tác</div>
+            <div class="hb-divider"></div>
+
+            <div class="d-grid gap-2">
+              <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
+                <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa bài viết
+              </button>
+
+              <div class="hb-divider my-2"></div>
+
+              <button
+                class="btn btn-hb-outline-danger"
+                type="button"
+                (click)="hardDelete(d.blog.blog_id)"
+              >
+                <i class="bi bi-trash3 me-1"></i> Xóa bài viết
+              </button>
+            </div>
+          </div>
+
+          <!-- Insight Card -->
+          <div
+            class="card hb-card border-0 mb-4"
+            style="background: #fdfdfd; border: 1px solid rgba(0, 0, 0, 0.05) !important"
+          >
+            <div class="p-4">
+              <div class="text-muted small fw-bold mb-3">THÔNG TIN BÀI VIẾT</div>
+              
+              <div class="mb-4">
+                <div class="text-primary fw-bold" style="font-size: 24px; line-height: 1.2">
+                  {{ d.blog.title }}
+                </div>
+                <div class="text-muted small mt-1">Slug: /{{ d.blog.slug }}</div>
               </div>
-            </div>
-            <div class="hb-kv">
-              <div class="hb-k">Danh mục</div>
-              <div class="hb-v">{{ d.blog.category || '—' }}</div>
-            </div>
-            <div class="hb-kv">
-              <div class="hb-k">Tác giả</div>
-              <div class="hb-v">{{ d.blog.author_name || '—' }}</div>
-            </div>
-            <div class="hb-kv">
-              <div class="hb-k">Thời gian đọc</div>
-              <div class="hb-v text-accent">{{ d.readingText }}</div>
-            </div>
-            <div class="hb-kv">
-              <div class="hb-k">Lượt xem</div>
-              <div class="hb-v">{{ d.viewsText }}</div>
-            </div>
-            <div class="hb-kv">
-              <div class="hb-k">Ngày đăng</div>
-              <div class="hb-v">{{ d.publishedAtText }}</div>
-            </div>
-            <div class="hb-kv">
-              <div class="hb-k">Cập nhật cuối</div>
-              <div class="hb-v">{{ d.updatedAtText }}</div>
-            </div>
-            <div class="hb-kv border-0">
-              <div class="hb-k">Tags</div>
-              <div class="hb-tag-list mt-2">
-                <span class="hb-tag" *ngFor="let t of d.blog.tags">{{ t }}</span>
+
+              <div class="hb-divider"></div>
+
+              <div class="d-flex flex-column gap-3">
+                <div>
+                  <div class="text-muted small fw-bold mb-1">THỜI GIAN ĐỌC</div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="fs-3 fw-bold">{{ d.blog.reading_minutes }}</span>
+                    <span class="text-muted small">phút</span>
+                  </div>
+                </div>
+
+                <div
+                  class="p-3 rounded"
+                  style="
+                    background: rgba(255, 145, 31, 0.06);
+                    border: 1px dashed var(--hb-accent);
+                  "
+                >
+                  <div class="text-accent small fw-bold">LƯỢT XEM</div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="fs-2 fw-bold text-accent">{{ d.viewsText }}</span>
+                    <span class="text-accent small fw-bold">lượt</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="text-muted small fw-bold mb-1">DANH MỤC & TÁC GIẢ</div>
+                  <div>{{ d.blog.category || '—' }} &bull; {{ d.blog.author_name || '—' }}</div>
+                </div>
+
+                <div>
+                  <div class="text-muted small fw-bold mb-1">TAGS</div>
+                  <div class="hb-tag-list m-0">
+                    <span class="hb-tag" *ngFor="let t of d.blog.tags">{{ t }}</span>
+                    <span *ngIf="!d.blog.tags || d.blog.tags.length === 0" class="text-muted small fw-normal">Không có tag</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-top">
+                <div class="d-flex align-items-center justify-content-between">
+                  <span class="badge" [ngClass]="d.statusClass">
+                    {{ d.statusLabel }}
+                  </span>
+                  <span class="small text-muted"
+                    >Cập nhật: <b>{{ d.updatedAtText }}</b></span
+                  >
+                </div>
               </div>
             </div>
           </div>
@@ -422,6 +483,14 @@
                   <button type="button" class="hb-ed-btn" (click)="promptLink()">
                     <i class="bi bi-link-45deg"></i>
                   </button>
+                  <span class="hb-ed-sep"></span>
+                  <button type="button" class="hb-ed-btn" (click)="promptImage()" title="Nhập URL ảnh">
+                    <i class="bi bi-image"></i>
+                  </button>
+                  <button type="button" class="hb-ed-btn" (click)="inlineImageInput.click()" title="Tải ảnh lên">
+                    <i class="bi bi-upload"></i>
+                  </button>
+                  <input type="file" #inlineImageInput style="display: none" accept="image/*" (change)="onInlineImageSelected($event)" />
                 </div>
                 <div
                   #editor
@@ -431,6 +500,16 @@
                   (input)="onEditorInput(editor)"
                 ></div>
               </div>
+            </div>
+
+            <div class="hb-divider mt-5"></div>
+            <div class="d-flex gap-2 justify-content-end">
+              <button class="btn btn-hb-outline px-4 py-2" type="button" (click)="cancelEdit()">
+                Hủy bỏ
+              </button>
+              <button class="btn btn-hb px-5 py-2" type="button" (click)="saveEdit()">
+                <i class="bi bi-check2-circle me-1"></i> XÁC NHẬN CẬP NHẬT
+              </button>
             </div>
           </div>
         </div>
@@ -490,4 +569,16 @@
       </div>
     </ng-container>
   </div>
+
+  <!-- DELETION MODAL -->
+  <hb-confirm-modal
+    [isOpen]="deleteModalOpen"
+    title="Xác nhận xóa bài viết"
+    message="Hệ thống sẽ xóa vĩnh viễn bài viết này. Dữ liệu sẽ không thể khôi phục. Tiếp tục?"
+    [type]="'danger'"
+    confirmLabel="Xóa"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()"
+  >
+  </hb-confirm-modal>
 </div>

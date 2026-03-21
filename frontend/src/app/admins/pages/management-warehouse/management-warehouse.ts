@@ -8,7 +8,6 @@ import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 type SortDir = 'asc' | 'desc';
 type ReferenceType = 'purchase_order' | 'order' | 'manual' | 'audit';
-
 type AdjustType = 'IN' | 'ADJUST';
 
 type StockSortKey =
@@ -42,10 +41,8 @@ interface StockItemEntity {
   stock_item_id: string;
   product_variant_id: string;
   warehouse_id: string;
-
   quantity_on_hand: number;
   quantity_reserved: number;
-
   reorder_point: number;
   created_at: string;
   updated_at: string;
@@ -55,37 +52,27 @@ interface StockMovementEntity {
   movement_id: string;
   warehouse_id: string;
   product_variant_id: string;
-
   reference_id: string;
   reference_type: ReferenceType;
-
   quantity_changed: number;
   reason: string;
-
   created_at: string;
   updated_at: string;
 }
 
 interface StockRowVM {
   stock_item_id: string;
-
   product_variant_id: string;
   sku: string;
   product_id: string;
-
   warehouse_id: string;
   warehouse_name: string;
-
   quantity_on_hand: number;
-
   reorder_point: number;
   low_stock: boolean;
-
   updated_at: string;
   updatedAtText: string;
-
   qtyText: string;
-
   statusLabel: string;
   statusPillClass: string;
   stt: number;
@@ -94,13 +81,10 @@ interface StockRowVM {
 interface MovementRowVM {
   movement_id: string;
   createdAtText: string;
-
   reference_type: ReferenceType;
   reference_id: string;
-
   signText: 'IN' | 'OUT';
   qtyText: string;
-
   reason: string;
 }
 
@@ -114,13 +98,10 @@ interface StockDetailVM {
   stock: StockItemEntity;
   warehouse: WarehouseEntity | null;
   variant: ProductVariantMin | null;
-
   statusLabel: string;
   statusPillClass: string;
-
   onHandText: string;
   updatedAtText: string;
-
   recentMovements: MovementRowVM[];
 }
 
@@ -134,28 +115,20 @@ type Mode = 'list' | 'detail' | 'edit';
 
 interface VM {
   mode: Mode;
-
   summary: SummaryVM;
   rowsStock: StockRowVM[];
-
   total: number;
   page: number;
   pageSize: number;
   totalPages: number;
-
   showingFrom: number;
   showingTo: number;
-
   sortKeyStock: StockSortKey;
   sortDirStock: SortDir;
-
   warehouses: WarehouseEntity[];
-
   selectedId: string | null;
   detail: StockDetailVM | null;
-
   editModel: StockAdjustDraft | null;
-
   currentPanel: 'detail' | 'adjust' | null;
 }
 
@@ -170,8 +143,6 @@ interface VM {
 export class ManagementWarehouse implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-
-  // ✅ FIX: ensure takeUntilDestroyed has a valid DestroyRef context
   private destroyRef = inject(DestroyRef);
 
   private warehouses$ = new BehaviorSubject<WarehouseEntity[]>(MOCK_WAREHOUSES);
@@ -179,14 +150,18 @@ export class ManagementWarehouse implements OnInit {
   private stockItems$ = new BehaviorSubject<StockItemEntity[]>(MOCK_STOCK_ITEMS);
   private movements$ = new BehaviorSubject<StockMovementEntity[]>(MOCK_MOVEMENTS);
 
-  private routeState$ = new BehaviorSubject<{ id: string | null; panel: 'adjust' | null }>({
+  private routeState$ = new BehaviorSubject<{ id: string | null; edit: boolean }>({
     id: null,
-    panel: null,
+    edit: false,
   });
 
   private editModel$ = new BehaviorSubject<StockAdjustDraft | null>(null);
+  private originalEditSnapshot: string | null = null;
+  private pendingDiscardAction: (() => void) | null = null;
 
   saveModalOpen = false;
+  discardModalOpen = false;
+  invalidSaveModalOpen = false;
 
   q = '';
   f_warehouse_id = '';
@@ -206,18 +181,21 @@ export class ManagementWarehouse implements OnInit {
   private pageSize$ = new BehaviorSubject<number>(10);
 
   ngOnInit(): void {
-    // ✅ FIX: pass DestroyRef explicitly so query-param changes always propagate
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((pm) => {
       const id = pm.get('id');
-      const panelRaw = pm.get('panel');
-      const panel = panelRaw === 'adjust' ? 'adjust' : null;
+      const edit = pm.get('edit') === 'true';
 
-      this.routeState$.next({ id, panel });
+      const prev = this.routeState$.value;
+      const next = { id, edit };
 
-      if (id && panel === 'adjust') {
-        if (!this.editModel$.value) this.seedAdjustDraft();
+      if (prev.id === next.id && prev.edit === next.edit) return;
+
+      this.routeState$.next(next);
+
+      if (id && edit) {
+        this.seedAdjustDraft();
       } else {
-        this.editModel$.next(null);
+        this.clearEditState();
       }
     });
   }
@@ -253,8 +231,8 @@ export class ManagementWarehouse implements OnInit {
         sortKeyStock,
         sortDirStock,
       ]) => {
-        const { id: selectedId, panel } = routeState;
-        const mode: Mode = !selectedId ? 'list' : panel === 'adjust' ? 'edit' : 'detail';
+        const { id: selectedId, edit } = routeState;
+        const mode: Mode = !selectedId ? 'list' : edit ? 'edit' : 'detail';
 
         const variantMap = new Map<string, ProductVariantMin>(
           variants.map((v) => [v.product_variant_id, v]),
@@ -284,10 +262,10 @@ export class ManagementWarehouse implements OnInit {
             updated_at: si.updated_at,
             updatedAtText: fmtDate(si.updated_at),
             qtyText: String(si.quantity_on_hand),
-             statusLabel,
-             statusPillClass: statusClass,
-             stt: 0,
-           };
+            statusLabel,
+            statusPillClass: statusClass,
+            stt: 0,
+          };
         });
 
         const totalSkus = baseStock.length;
@@ -304,6 +282,7 @@ export class ManagementWarehouse implements OnInit {
         };
 
         const key = q.trim().toLowerCase();
+
         let filtered = baseStock
           .filter((r) => (whId ? r.warehouse_id === whId : true))
           .filter((r) => (lowOnly ? r.low_stock : true))
@@ -389,7 +368,7 @@ export class ManagementWarehouse implements OnInit {
           selectedId,
           detail: detailVM,
           editModel,
-          currentPanel: !selectedId ? null : panel === 'adjust' ? 'adjust' : 'detail',
+          currentPanel: !selectedId ? null : edit ? 'adjust' : 'detail',
         };
 
         return vm;
@@ -442,8 +421,9 @@ export class ManagementWarehouse implements OnInit {
     const curKey = this.sortKeyStock$.value;
     const curDir = this.sortDirStock$.value;
 
-    if (curKey === key) this.sortDirStock$.next(curDir === 'asc' ? 'desc' : 'asc');
-    else {
+    if (curKey === key) {
+      this.sortDirStock$.next(curDir === 'asc' ? 'desc' : 'asc');
+    } else {
       this.sortKeyStock$.next(key);
       this.sortDirStock$.next('asc');
     }
@@ -455,54 +435,77 @@ export class ManagementWarehouse implements OnInit {
   }
 
   openDetail(stockItemId: string) {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { id: stockItemId, panel: null },
-      queryParamsHandling: 'merge',
-    });
+    this.syncRoute(stockItemId, 'detail');
   }
 
   openAdjust(stockItemId: string) {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { id: stockItemId, panel: 'adjust' },
-      queryParamsHandling: 'merge',
-    });
+    this.syncRoute(stockItemId, 'edit');
   }
 
   goList() {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { id: null, panel: null },
-      queryParamsHandling: 'merge',
+    this.attemptLeave(() => {
+      this.syncRoute(null, 'list');
     });
   }
 
   enterEdit() {
     const cur = this.routeState$.value.id;
     if (!cur) return;
-    this.openAdjust(cur);
+    this.syncRoute(cur, 'edit');
   }
 
-  cancelEdit() {
+  onHeaderBack() {
+    const state = this.routeState$.value;
+    if (state.id && state.edit) {
+      this.backToDetail();
+      return;
+    }
+    this.goList();
+  }
+
+  backToDetail() {
     const cur = this.routeState$.value.id;
-    if (!cur) return;
-    this.openDetail(cur);
+    if (!cur) {
+      this.goList();
+      return;
+    }
+
+    this.attemptLeave(() => {
+      this.syncRoute(cur, 'detail');
+    });
   }
 
-  private seedAdjustDraft() {
-    const draft: StockAdjustDraft = {
-      adjustType: 'IN',
-      qtyAbs: 1,
-      reason: '',
-    };
-    this.editModel$.next(draft);
+  updateAdjustType(v: AdjustType) {
+    const cur = this.editModel$.value;
+    if (!cur) return;
+    const next = { ...cur, adjustType: v };
+    this.editModel$.next(next);
+  }
+
+  updateAdjustQty(v: number) {
+    const cur = this.editModel$.value;
+    if (!cur) return;
+    const next = { ...cur, qtyAbs: Number(v ?? 0) };
+    this.editModel$.next(next);
+  }
+
+  updateAdjustReason(v: string) {
+    const cur = this.editModel$.value;
+    if (!cur) return;
+    const next = { ...cur, reason: v };
+    this.editModel$.next(next);
+  }
+
+  get isDirty(): boolean {
+    const cur = this.editModel$.value;
+    if (!cur || !this.originalEditSnapshot) return false;
+    return JSON.stringify(cur) !== this.originalEditSnapshot;
   }
 
   saveEdit() {
     const em = this.editModel$.value;
     if (!em || !String(em.reason || '').trim()) {
-      alert('Vui lòng nhập lý do biến động để ghi nhật ký hệ thống.');
+      this.invalidSaveModalOpen = true;
       return;
     }
     this.saveModalOpen = true;
@@ -512,29 +515,43 @@ export class ManagementWarehouse implements OnInit {
     this.saveModalOpen = false;
   }
 
+  onConfirmDiscard() {
+    this.discardModalOpen = false;
+    const action = this.pendingDiscardAction;
+    this.pendingDiscardAction = null;
+    this.clearEditState();
+    action?.();
+  }
+
+  onCancelDiscard() {
+    this.discardModalOpen = false;
+    this.pendingDiscardAction = null;
+  }
+
   executeSave() {
     const selected = this.routeState$.value.id;
     const em = this.editModel$.value;
+
     if (!selected || !em || !String(em.reason || '').trim()) {
       this.saveModalOpen = false;
       return;
     }
 
     const stock = this.stockItems$.value.find((x) => x.stock_item_id === selected);
-    if (!stock) return;
+    if (!stock) {
+      this.saveModalOpen = false;
+      return;
+    }
 
     const qtyAbs = Math.max(0, Number(em.qtyAbs ?? 0));
     if (!qtyAbs && em.adjustType !== 'ADJUST') {
-       this.saveModalOpen = false;
-       return;
+      this.saveModalOpen = false;
+      return;
     }
 
     let delta = 0;
     if (em.adjustType === 'IN') delta = qtyAbs;
-    else {
-      // ADJUSTMENT
-      delta = Number(em.qtyAbs); 
-    }
+    else delta = Number(em.qtyAbs);
 
     const updatedStock: StockItemEntity = {
       ...stock,
@@ -563,8 +580,8 @@ export class ManagementWarehouse implements OnInit {
     this.movements$.next([mv, ...this.movements$.value]);
 
     this.saveModalOpen = false;
-    this.editModel$.next(null);
-    this.openDetail(selected);
+    this.clearEditState();
+    this.syncRoute(selected, 'detail');
   }
 
   exportCsvStock() {
@@ -632,6 +649,7 @@ export class ManagementWarehouse implements OnInit {
     });
 
     const key = this.q.trim().toLowerCase();
+
     return base
       .filter((r) => (this.f_warehouse_id ? r.warehouse_id === this.f_warehouse_id : true))
       .filter((r) => (this.f_low_only ? r.low_stock : true))
@@ -646,6 +664,42 @@ export class ManagementWarehouse implements OnInit {
   stopEvent(e: MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
+  }
+
+  private syncRoute(id: string | null, mode: Mode) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        id: id ?? null,
+        edit: id && mode === 'edit' ? 'true' : null,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  private attemptLeave(action: () => void) {
+    if (!this.isDirty) {
+      action();
+      return;
+    }
+
+    this.pendingDiscardAction = action;
+    this.discardModalOpen = true;
+  }
+
+  private seedAdjustDraft() {
+    const draft: StockAdjustDraft = {
+      adjustType: 'IN',
+      qtyAbs: 1,
+      reason: '',
+    };
+    this.editModel$.next(draft);
+    this.originalEditSnapshot = JSON.stringify(draft);
+  }
+
+  private clearEditState() {
+    this.editModel$.next(null);
+    this.originalEditSnapshot = null;
   }
 }
 
@@ -737,6 +791,7 @@ const MOCK_VARIANTS: ProductVariantMin[] = [
 ];
 
 const now = Date.now();
+
 const MOCK_STOCK_ITEMS: StockItemEntity[] = [
   {
     stock_item_id: 'si_001',

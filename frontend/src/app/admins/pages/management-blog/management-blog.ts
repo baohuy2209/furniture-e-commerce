@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 type Mode = 'list' | 'detail' | 'edit';
 type SortDir = 'asc' | 'desc';
@@ -121,7 +122,7 @@ interface VM {
 @Component({
   selector: 'app-management-blog',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConfirmModal],
   templateUrl: './management-blog.html',
   styleUrls: ['./management-blog.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -176,6 +177,10 @@ export class ManagementBlog implements OnInit {
   // ====== cover upload preview (edit) ======
   coverUploadName = '';
   coverUploadError = '';
+
+  // ====== modal state ======
+  deleteModalOpen = false;
+  deleteBlogId: string | null = null;
 
   // ====== VM pipeline ======
   vm$ = combineLatest([
@@ -575,11 +580,67 @@ export class ManagementBlog implements OnInit {
     this.applyEditorCmd('createLink', url);
   }
 
+  promptImage() {
+    const url = window.prompt('Nhập URL ảnh:', 'https://');
+    if (!url) return;
+    this.applyEditorCmd('insertImage', url);
+  }
+
+  onInlineImageSelected(ev: Event) {
+    const input = ev.target as HTMLInputElement | null;
+    const file = input?.files?.[0];
+    if (!file) return;
+
+    const maxMB = 4;
+    if (file.size > maxMB * 1024 * 1024) {
+      alert(`File quá lớn. Tối đa ${maxMB}MB.`);
+      if (input) input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const url = String(reader.result || '');
+      this.editorRef?.nativeElement.focus();
+      this.applyEditorCmd('insertImage', url);
+      if (input) input.value = '';
+      
+      const em = this.editModel$.value;
+      if (em && this.editorRef) {
+        (em as any).content_html = this.editorRef.nativeElement.innerHTML;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  hardDelete(id: string) {
+    this.deleteBlogId = id;
+    this.deleteModalOpen = true;
+  }
+
+  onConfirmDelete() {
+    if (!this.deleteBlogId) return;
+    const next = this.blogs$.value.filter(b => b.blog_id !== this.deleteBlogId);
+    this.blogs$.next(next);
+    
+    if (this.routeState$.value.id === this.deleteBlogId) {
+      this.goList();
+    }
+    
+    this.deleteModalOpen = false;
+    this.deleteBlogId = null;
+  }
+
+  onCancelDelete() {
+    this.deleteModalOpen = false;
+    this.deleteBlogId = null;
+  }
+
   /** Called from template: (input)="onEditorInput(editor)" */
   onEditorInput(editorEl: HTMLElement) {
-    const em = this.editModel$.value;
-    if (!em) return;
-    (em as any).content_html = editorEl?.innerHTML ?? '';
+    // DO NOT sync innerHTML to editModel here because it triggers re-render 
+    // and causes the cursor to jump to the start of the line or "reverse" input.
+    // The content will be read from editorRef.nativeElement.innerHTML during saveEdit().
   }
 
   // ===== cover upload (mock) =====
@@ -641,6 +702,11 @@ export class ManagementBlog implements OnInit {
     const em = this.editModel$.value;
     const id = this.routeState$.value.id;
     if (!em || !id) return;
+
+    // Extract latest content from editor DOM before saving
+    if (this.editorRef) {
+      (em as any).content_html = this.editorRef.nativeElement.innerHTML;
+    }
 
     const title = String((em as any).title ?? '').trim();
     if (!title) return;

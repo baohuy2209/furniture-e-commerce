@@ -199,6 +199,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     applied_products_text: string;
   } | null = null;
   saveModalOpen = false;
+  discardModalOpen = false;
 
   // Deletion Modal state
   deleteModalOpen = false;
@@ -327,9 +328,11 @@ export class ManagementVoucher implements OnInit, OnDestroy {
   );
 
   ngOnInit(): void {
-    // read query param id -> open detail
+    // read query params -> handle list/detail/edit
     this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((qm) => {
       const id = qm.get('id');
+      const isEdit = qm.get('edit') === 'true';
+
       if (!id) {
         this.mode = 'list';
         this.selectedId = null;
@@ -338,14 +341,40 @@ export class ManagementVoucher implements OnInit, OnDestroy {
         return;
       }
 
-      const found = this.repo.getSnapshot().find((x) => x.voucher_id === id);
-      if (!found) return;
-
-      this.mode = 'detail';
       this.selectedId = id;
+      const found = this.repo.getSnapshot().find((x) => x.voucher_id === id);
+
+      if (!found) {
+        // Fallback or alert if id not found
+        this.backToList();
+        return;
+      }
+
       this.detail = this.toRowVM(found, 0);
-      this.editModel = null;
+
+      if (isEdit) {
+        this.mode = 'edit';
+        // Initialize editModel if not already set or if it's a new ID
+        if (!this.editModel || this.selectedId !== id) {
+          this.initEditModel(this.detail);
+        }
+      } else {
+        this.mode = 'detail';
+        this.editModel = null;
+      }
     });
+  }
+
+  private initEditModel(d: VoucherRowVM) {
+    this.editModel = {
+      value: d.value,
+      min_order_value: d.min_order_value,
+      usage_limit: d.usage_limit,
+      start_date: d.start_date,
+      end_date: d.end_date,
+      appliedTo: d.appliedTo || 'all',
+      applied_products_text: (d.applied_products || []).join(', '),
+    };
   }
 
   ngOnDestroy(): void {
@@ -366,12 +395,53 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     });
   }
 
-  backToList() {
+  openEdit(id: string) {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { id: null },
+      queryParams: { id, edit: 'true' },
       queryParamsHandling: 'merge',
     });
+  }
+
+  backToList() {
+    // If in edit mode and has changes, ask before going back
+    if (this.mode === 'edit' && this.isDirty()) {
+      this.discardModalOpen = true;
+      return;
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { id: null, edit: null },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  backToDetail() {
+    if (this.mode === 'edit' && this.isDirty()) {
+      this.discardModalOpen = true;
+      return;
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { edit: null },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  isDirty(): boolean {
+    if (!this.editModel || !this.detail) return false;
+    const currentText = (this.detail.applied_products || []).join(', ');
+    return (
+      this.editModel.value !== this.detail.value ||
+      this.editModel.min_order_value !== this.detail.min_order_value ||
+      this.editModel.usage_limit !== this.detail.usage_limit ||
+      this.editModel.start_date !== this.detail.start_date ||
+      this.editModel.end_date !== this.detail.end_date ||
+      this.editModel.appliedTo !== this.detail.appliedTo ||
+      this.editModel.applied_products_text !== currentText
+    );
   }
 
   // ====== FILTER + PAGE ======
@@ -431,23 +501,31 @@ export class ManagementVoucher implements OnInit, OnDestroy {
 
   // ====== DETAIL -> EDIT ======
   enterEdit() {
-    if (!this.detail) return;
+    if (!this.selectedId) return;
 
-    this.mode = 'edit';
-    this.editModel = {
-      value: this.detail.value,
-      min_order_value: this.detail.min_order_value,
-      usage_limit: this.detail.usage_limit,
-      start_date: this.detail.start_date,
-      end_date: this.detail.end_date,
-      appliedTo: this.detail.appliedTo || 'all',
-      applied_products_text: (this.detail.applied_products || []).join(', '),
-    };
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { edit: 'true' },
+      queryParamsHandling: 'merge',
+    });
   }
 
   cancelEdit() {
-    this.mode = 'detail';
-    this.editModel = null;
+    this.backToDetail();
+  }
+
+  onConfirmDiscard() {
+    this.discardModalOpen = false;
+    // Actually navigate away from edit
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { edit: null },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  onCancelDiscard() {
+    this.discardModalOpen = false;
   }
 
   saveEdit() {
@@ -488,8 +566,11 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     const fresh = this.repo.getSnapshot().find((x) => x.voucher_id === id);
     if (fresh) this.detail = this.toRowVM(fresh, this.detail.stt);
 
-    this.mode = 'detail';
-    this.editModel = null;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { edit: null },
+      queryParamsHandling: 'merge',
+    });
     this.saveModalOpen = false;
   }
 

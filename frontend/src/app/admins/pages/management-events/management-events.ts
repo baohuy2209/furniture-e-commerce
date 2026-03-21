@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, combineLatest, map, take, takeUntil } from 'rxjs';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 type EventStatus = 'draft' | 'published' | 'paused' | 'ended' | 'cancelled';
 type EventVisibility = 'public' | 'private';
@@ -14,34 +15,48 @@ type SortKey = 'event_code' | 'event_name' | 'start_at' | 'status' | 'registered
 
 interface EventScheduleItem {
   item_id: string;
-  start_time: string; // "09:00"
-  end_time: string; // "10:00"
+  start_time: string;
+  end_time: string;
   title: string;
   description?: string;
 }
 
-/**
- * Backend-ready gợi ý:
- * images: { banner: { url, publicId }, gallery: [{ url, publicId }] }
- */
+interface EventImageItem {
+  image_id: string;
+  url: string;
+  file_name?: string;
+  is_cover?: boolean;
+  public_id?: string; // backend-ready for cloud storage / MongoDB reference
+}
+
+interface EventImages {
+  banner: {
+    url: string;
+    file_name?: string;
+    public_id?: string;
+  } | null;
+  gallery: EventImageItem[];
+  coverImageId: string | null;
+}
+
 interface EventEntity {
   event_id: string;
   event_code: string;
   event_name: string;
   description: string;
 
-  start_at: string; // ISO
-  end_at: string; // ISO
+  start_at: string;
+  end_at: string;
 
   location_name: string;
   address: string;
   city: string;
 
-  // legacy for demo/seed (UI edit không dùng URL nữa)
+  // legacy
   banner_url: string;
   cover_url?: string;
 
-  visibility: EventVisibility; // UI không show nữa (mày bảo bỏ)
+  visibility: EventVisibility;
   status: EventStatus;
 
   capacity: number;
@@ -55,6 +70,9 @@ interface EventEntity {
 
   created_at: string;
   updated_at: string;
+
+  // backend-ready
+  images?: EventImages;
 }
 
 interface EventRowVM {
@@ -63,7 +81,7 @@ interface EventRowVM {
   event_code: string;
   event_name: string;
 
-  startText: string; // dd/mm/yyyy
+  startText: string;
   endText: string;
 
   locationText: string;
@@ -91,7 +109,7 @@ interface ListVM {
 @Component({
   selector: 'app-management-events',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ConfirmModal],
   templateUrl: './management-events.html',
   styleUrls: ['./management-events.css'],
 })
@@ -104,26 +122,33 @@ export class ManagementEvents implements OnInit, OnDestroy {
   ) {}
 
   mode: Mode = 'list';
-
   selectedId: string | null = null;
   detail: EventEntity | null = null;
-
-  // Partial để backend-ready patch
   editModel: Partial<EventEntity> | null = null;
 
-  // ===== NEW: upload states (demo local) =====
+  // ===== image upload states =====
   bannerFile: File | null = null;
   bannerPreviewUrl: string | null = null;
 
-  galleryFiles: File[] = [];
-  galleryPreviewUrls: string[] = [];
+  // local editor gallery state
+  editGallery: EventImageItem[] = [];
+
+  // dirty tracking
+  isDirty = false;
+  private originalSnapshot = '';
+  private pendingDiscardAction: (() => void) | null = null;
+
+  saveModalOpen = false;
+  discardModalOpen = false;
+  deleteModalOpen = false;
+  deleteTargetId: string | null = null;
 
   // filters
   q = '';
   f_phase: '' | Phase = '';
   f_status: '' | EventStatus = '';
-  f_from = ''; // YYYY-MM-DD
-  f_to = ''; // YYYY-MM-DD
+  f_from = '';
+  f_to = '';
 
   // paging
   page = 1;
@@ -149,7 +174,9 @@ export class ManagementEvents implements OnInit, OnDestroy {
           !q ||
           e.event_code.toLowerCase().includes(q) ||
           e.event_name.toLowerCase().includes(q) ||
-          e.event_id.toLowerCase().includes(q);
+          e.event_id.toLowerCase().includes(q) ||
+          e.location_name.toLowerCase().includes(q) ||
+          e.city.toLowerCase().includes(q);
 
         const matchPhase = !this.f_phase || phase === this.f_phase;
         const matchStatus = !this.f_status || e.status === this.f_status;
@@ -182,14 +209,16 @@ export class ManagementEvents implements OnInit, OnDestroy {
           capacityText: `${e.registered_count}/${e.capacity}`,
           phase,
           status: e.status,
-          banner_url: e.banner_url,
+          banner_url: this.getBannerUrl(e),
         };
       });
 
       const summary = {
         totalCount: events.length,
-        ongoingCount: events.filter(e => this.computePhase(e.start_at, e.end_at) === 'ongoing').length,
-        upcomingCount: events.filter(e => this.computePhase(e.start_at, e.end_at) === 'upcoming').length,
+        ongoingCount: events.filter((e) => this.computePhase(e.start_at, e.end_at) === 'ongoing')
+          .length,
+        upcomingCount: events.filter((e) => this.computePhase(e.start_at, e.end_at) === 'upcoming')
+          .length,
       };
 
       const vm: ListVM = { rows, total, page, pageSize: this.pageSize, totalPages, summary };
@@ -207,14 +236,12 @@ export class ManagementEvents implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ================== ROUTE SYNC: query params (?id=...&mode=detail|edit) ==================
   private bindRouteState(): void {
     this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((qp) => {
       const id = qp.get('id');
-      const modeRaw = qp.get('mode');
+      const isEdit = qp.get('edit') === 'true';
 
       const incomingId = id ? String(id) : null;
-      const incomingMode: Mode = incomingId ? (modeRaw === 'edit' ? 'edit' : 'detail') : 'list';
 
       if (!incomingId) {
         this.mode = 'list';
@@ -222,6 +249,8 @@ export class ManagementEvents implements OnInit, OnDestroy {
         this.detail = null;
         this.editModel = null;
         this.resetUploadsState();
+        this.isDirty = false;
+        this.originalSnapshot = '';
         return;
       }
 
@@ -234,90 +263,103 @@ export class ManagementEvents implements OnInit, OnDestroy {
       this.selectedId = incomingId;
       this.detail = e;
 
-      if (incomingMode === 'edit') {
+      if (isEdit) {
         this.mode = 'edit';
-
-        this.editModel = {
-          event_name: e.event_name,
-          description: e.description,
-
-          // date-only for UI
-          start_at: this.isoToDateOnly(e.start_at),
-          end_at: this.isoToDateOnly(e.end_at),
-
-          location_name: e.location_name,
-          address: e.address,
-          city: e.city,
-
-          capacity: e.capacity,
-
-          status: e.status,
-
-          highlights: [...(e.highlights || [])],
-          schedule: JSON.parse(JSON.stringify(e.schedule || [])),
-
-          contact_phone: e.contact_phone,
-          contact_email: e.contact_email,
-
-          // keep visibility in model for backend later, but UI không show
-          visibility: e.visibility,
-        };
-
-        // init previews from current entity banner
-        this.resetUploadsState();
-        this.bannerPreviewUrl = e.banner_url || null;
+        this.initEditModel(e);
       } else {
         this.mode = 'detail';
         this.editModel = null;
         this.resetUploadsState();
+        this.isDirty = false;
+        this.originalSnapshot = '';
       }
     });
   }
 
   private syncRoute(id: string | null, mode: Mode, push: boolean): void {
-    const queryParams: Record<string, string | null> = {
-      id: id ? id : null,
-      mode: id ? (mode === 'edit' ? 'edit' : 'detail') : null,
-    };
-
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams,
+      queryParams: {
+        id: id ?? null,
+        edit: id && mode === 'edit' ? 'true' : null,
+      },
       queryParamsHandling: 'merge',
       replaceUrl: !push,
     });
   }
 
-  private refreshList() {
-    this._tick$.next(this._tick$.value + 1);
+  private initEditModel(e: EventEntity) {
+    this.editModel = {
+      event_name: e.event_name,
+      event_code: e.event_code,
+      description: e.description,
+      start_at: this.isoToDateOnly(e.start_at),
+      end_at: this.isoToDateOnly(e.end_at),
+      location_name: e.location_name,
+      address: e.address,
+      city: e.city,
+      capacity: e.capacity,
+      status: e.status,
+      visibility: e.visibility,
+      registered_count: e.registered_count,
+      highlights: [...(e.highlights || [])],
+      schedule: JSON.parse(JSON.stringify(e.schedule || [])),
+      contact_phone: e.contact_phone,
+      contact_email: e.contact_email,
+      images: deepClone(this.normalizeImages(e)),
+    };
+
+    this.resetUploadsState();
+    this.bannerPreviewUrl = this.getBannerUrl(e);
+    this.editGallery = deepClone(this.normalizeImages(e).gallery);
+
+    this.originalSnapshot = JSON.stringify(this.buildDirtyPayload());
+    this.isDirty = false;
   }
 
-  // ====== filters ======
+  markDirty() {
+    this.isDirty = JSON.stringify(this.buildDirtyPayload()) !== this.originalSnapshot;
+  }
+
+  private buildDirtyPayload() {
+    return {
+      editModel: this.editModel,
+      bannerPreviewUrl: this.bannerPreviewUrl,
+      editGallery: this.editGallery,
+    };
+  }
+
+  // ===== filters =====
   onChangeQ(v: string) {
     this.q = v;
     this.page = 1;
     this.refreshList();
   }
+
   onChangePhase(v: '' | Phase) {
     this.f_phase = v;
     this.page = 1;
     this.refreshList();
   }
+
   onChangeStatus(v: '' | EventStatus) {
     this.f_status = v;
     this.page = 1;
     this.refreshList();
   }
+
   onChangeFrom(v: string) {
     this.f_from = v;
     this.page = 1;
     this.refreshList();
   }
+
   onChangeTo(v: string) {
     this.f_to = v;
     this.page = 1;
     this.refreshList();
   }
+
   onChangePageSize(v: number) {
     this.pageSize = Number(v);
     this.page = 1;
@@ -337,13 +379,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
     this.refreshList();
   }
 
-  // ====== paging ======
   setPage(p: number) {
     this.page = p;
     this.refreshList();
   }
 
-  // ====== sorting ======
   toggleSort(key: SortKey) {
     if (this.sortBy === key) this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
     else {
@@ -358,14 +398,10 @@ export class ManagementEvents implements OnInit, OnDestroy {
     return this.sortDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
-  isSortKey(key: SortKey) {
-    return this.sortBy === key;
-  }
-  isSortDir(dir: SortDir) {
-    return this.sortDir === dir;
+  private refreshList() {
+    this._tick$.next(this._tick$.value + 1);
   }
 
-  // ================== CSV ==================
   exportCsvSnapshot() {
     this.vm$
       .pipe(
@@ -412,7 +448,6 @@ export class ManagementEvents implements OnInit, OnDestroy {
       });
   }
 
-  // ================== ACTIONS (query param routing) ==================
   openDetail(id: string) {
     this.syncRoute(id, 'detail', true);
   }
@@ -421,8 +456,18 @@ export class ManagementEvents implements OnInit, OnDestroy {
     this.syncRoute(id, 'edit', true);
   }
 
+  onHeaderBack() {
+    if (this.mode === 'edit') {
+      this.backToDetail();
+      return;
+    }
+    this.backToList();
+  }
+
   backToList() {
-    this.syncRoute(null, 'list', true);
+    this.attemptLeave(() => {
+      this.syncRoute(null, 'list', true);
+    });
   }
 
   enterEdit() {
@@ -430,9 +475,43 @@ export class ManagementEvents implements OnInit, OnDestroy {
     this.syncRoute(this.detail.event_id, 'edit', true);
   }
 
+  backToDetail() {
+    if (!this.selectedId) {
+      this.backToList();
+      return;
+    }
+    this.attemptLeave(() => {
+      this.syncRoute(this.selectedId, 'detail', true);
+    });
+  }
+
   cancelEdit() {
-    if (!this.selectedId) return;
-    this.syncRoute(this.selectedId, 'detail', true);
+    this.backToDetail();
+  }
+
+  private attemptLeave(action: () => void) {
+    if (!this.isDirty) {
+      action();
+      return;
+    }
+    this.pendingDiscardAction = action;
+    this.discardModalOpen = true;
+  }
+
+  onConfirmDiscard() {
+    this.discardModalOpen = false;
+    const action = this.pendingDiscardAction;
+    this.pendingDiscardAction = null;
+    this.editModel = null;
+    this.resetUploadsState();
+    this.isDirty = false;
+    this.originalSnapshot = '';
+    action?.();
+  }
+
+  onCancelDiscard() {
+    this.discardModalOpen = false;
+    this.pendingDiscardAction = null;
   }
 
   createNewEvent() {
@@ -448,32 +527,31 @@ export class ManagementEvents implements OnInit, OnDestroy {
       event_code: code,
       event_name: 'Sự kiện mới',
       description: '',
-
       start_at: startISO,
       end_at: endISO,
-
       location_name: 'HomeBase',
       address: '',
       city: 'TP.HCM',
-
       banner_url:
         'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
       cover_url: '',
-
       visibility: 'public',
       status: 'draft',
-
       capacity: 50,
       registered_count: 0,
-
       highlights: [],
       schedule: [],
-
       contact_phone: '',
       contact_email: '',
-
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      images: {
+        banner: {
+          url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
+        },
+        gallery: [],
+        coverImageId: null,
+      },
     };
 
     this._events$.next([draft, ...this._events$.value]);
@@ -482,98 +560,207 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   deleteEvent(id: string) {
-    const e = this._events$.value.find((x) => x.event_id === id);
-    if (!e) return;
+    this.deleteTargetId = id;
+    this.deleteModalOpen = true;
+  }
 
-    const ok = window.confirm(`Xóa sự kiện "${e.event_name}"?\nHành động này không thể hoàn tác.`);
-    if (!ok) return;
+  onCancelDelete() {
+    this.deleteModalOpen = false;
+    this.deleteTargetId = null;
+  }
+
+  onConfirmDelete() {
+    const id = this.deleteTargetId;
+    this.deleteModalOpen = false;
+    this.deleteTargetId = null;
+    if (!id) return;
 
     const next = this._events$.value.filter((x) => x.event_id !== id);
     this._events$.next(next);
     this.refreshList();
 
-    // nếu đang đứng detail/edit của event đó -> quay về list
     if (this.selectedId === id) this.backToList();
   }
 
-  // ================== Upload handlers (demo local) ==================
+  // ===== banner =====
   onBannerPicked(evt: Event) {
     const input = evt.target as HTMLInputElement;
     const file = input.files?.[0] || null;
-
     if (!file) return;
 
-    // revoke old preview if it was objectURL
     this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
 
     this.bannerFile = file;
     this.bannerPreviewUrl = URL.createObjectURL(file);
+
+    if (this.editModel?.images) {
+      this.editModel.images.banner = {
+        url: this.bannerPreviewUrl,
+        file_name: file.name,
+      };
+    }
+
+    this.markDirty();
+    input.value = '';
   }
 
   removeBannerPicked() {
     this.bannerFile = null;
     this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
-    // fallback về banner hiện tại của entity (nếu có)
-    this.bannerPreviewUrl = this.detail?.banner_url || null;
+    this.bannerPreviewUrl = null;
+
+    if (this.editModel?.images) {
+      this.editModel.images.banner = null;
+    }
+
+    this.markDirty();
   }
 
+  // ===== gallery =====
   onGalleryPicked(evt: Event) {
     const input = evt.target as HTMLInputElement;
     const files = Array.from(input.files || []);
-
     if (!files.length) return;
 
-    // revoke all previous gallery previews
-    for (const u of this.galleryPreviewUrls) this.revokePreviewIfObjectUrl(u);
+    files.forEach((file) => {
+      const preview = URL.createObjectURL(file);
+      const item: EventImageItem = {
+        image_id: cryptoId(),
+        url: preview,
+        file_name: file.name,
+        is_cover: false,
+      };
+      this.editGallery.push(item);
+    });
 
-    this.galleryFiles = files;
-    this.galleryPreviewUrls = files.map((f) => URL.createObjectURL(f));
+    if (this.editModel?.images) {
+      this.editModel.images.gallery = this.editGallery;
+      if (!this.editModel.images.coverImageId && this.editGallery.length > 0) {
+        this.editModel.images.coverImageId = this.editGallery[0].image_id;
+        this.syncCoverFlags();
+      }
+    }
+
+    this.markDirty();
+    input.value = '';
   }
 
   removeGalleryImage(i: number) {
-    if (i < 0 || i >= this.galleryFiles.length) return;
-    const url = this.galleryPreviewUrls[i];
-    this.revokePreviewIfObjectUrl(url);
+    const img = this.editGallery[i];
+    if (!img) return;
 
-    this.galleryFiles.splice(i, 1);
-    this.galleryPreviewUrls.splice(i, 1);
+    this.revokePreviewIfObjectUrl(img.url);
+    const removedId = img.image_id;
+
+    this.editGallery.splice(i, 1);
+
+    if (this.editModel?.images) {
+      this.editModel.images.gallery = this.editGallery;
+
+      if (this.editModel.images.coverImageId === removedId) {
+        this.editModel.images.coverImageId = this.editGallery[0]?.image_id ?? null;
+      }
+
+      this.syncCoverFlags();
+    }
+
+    this.markDirty();
   }
 
-  clearGallery() {
-    for (const u of this.galleryPreviewUrls) this.revokePreviewIfObjectUrl(u);
-    this.galleryFiles = [];
-    this.galleryPreviewUrls = [];
+  setCoverImage(imageId: string) {
+    if (!this.editModel?.images) return;
+    this.editModel.images.coverImageId = imageId;
+    this.syncCoverFlags();
+    this.markDirty();
+  }
+
+  private syncCoverFlags() {
+    if (!this.editModel?.images) return;
+    const coverId = this.editModel.images.coverImageId;
+    this.editGallery = this.editGallery.map((img) => ({
+      ...img,
+      is_cover: img.image_id === coverId,
+    }));
+    this.editModel.images.gallery = this.editGallery;
+  }
+
+  private normalizeImages(e: EventEntity): EventImages {
+    if (e.images) {
+      return {
+        banner: e.images.banner ?? (e.banner_url ? { url: e.banner_url } : null),
+        gallery: e.images.gallery ?? [],
+        coverImageId: e.images.coverImageId ?? null,
+      };
+    }
+
+    return {
+      banner: e.banner_url ? { url: e.banner_url } : null,
+      gallery: e.cover_url
+        ? [
+            {
+              image_id: cryptoId(),
+              url: e.cover_url,
+              is_cover: true,
+            },
+          ]
+        : [],
+      coverImageId: null,
+    };
+  }
+
+  getBannerUrl(e: EventEntity): string {
+    return e.images?.banner?.url || e.banner_url || '';
   }
 
   private resetUploadsState() {
     this.bannerFile = null;
-    // bannerPreviewUrl set from detail when needed
     this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
     this.bannerPreviewUrl = null;
 
-    this.clearGallery();
+    this.editGallery.forEach((x) => this.revokePreviewIfObjectUrl(x.url));
+    this.editGallery = [];
   }
 
   private revokeAllPreviews() {
     this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
-    for (const u of this.galleryPreviewUrls) this.revokePreviewIfObjectUrl(u);
+    this.editGallery.forEach((x) => this.revokePreviewIfObjectUrl(x.url));
   }
 
   private revokePreviewIfObjectUrl(url: string | null) {
     if (!url) return;
-    // objectURL thường bắt đầu bằng blob:
     if (url.startsWith('blob:')) URL.revokeObjectURL(url);
   }
 
-  // ================== Save ==================
   saveEdit() {
     if (!this.detail || !this.editModel) return;
+    this.saveModalOpen = true;
+  }
+
+  onCancelSave() {
+    this.saveModalOpen = false;
+  }
+
+  executeSave() {
+    if (!this.detail || !this.editModel) {
+      this.saveModalOpen = false;
+      return;
+    }
+
+    const normalizedImages: EventImages = {
+      banner:
+        this.editModel.images?.banner ??
+        (this.bannerPreviewUrl ? { url: this.bannerPreviewUrl } : null),
+      gallery: this.editGallery,
+      coverImageId: this.editModel.images?.coverImageId ?? null,
+    };
+
+    const coverImg =
+      normalizedImages.gallery.find((x) => x.image_id === normalizedImages.coverImageId) ?? null;
 
     const patched: EventEntity = {
       ...this.detail,
       ...this.editModel,
 
-      // date-only -> ISO
       start_at: dateOnlyToISO(
         String(this.editModel.start_at || this.isoToDateOnly(this.detail.start_at)),
       ),
@@ -582,31 +769,29 @@ export class ManagementEvents implements OnInit, OnDestroy {
         true,
       ),
 
-      // demo: nếu có banner file -> dùng objectURL làm banner_url để preview (sau này thay bằng upload API)
-      banner_url: this.bannerFile
-        ? this.bannerPreviewUrl || this.detail.banner_url
-        : this.detail.banner_url,
+      banner_url: normalizedImages.banner?.url || this.bannerPreviewUrl || this.detail.banner_url,
+      cover_url: coverImg?.url || '',
+      images: normalizedImages,
 
       updated_at: new Date().toISOString(),
     } as EventEntity;
 
-    if (patched.capacity < patched.registered_count) patched.capacity = patched.registered_count;
+    if (patched.capacity! < patched.registered_count) {
+      patched.capacity = patched.registered_count;
+    }
 
     const all = this._events$.value.map((x) => (x.event_id === patched.event_id ? patched : x));
     this._events$.next(all);
 
     this.detail = patched;
     this.editModel = null;
+    this.saveModalOpen = false;
 
-    // giữ banner preview = banner url (seed/object url)
     this.resetUploadsState();
-    this.bannerPreviewUrl = patched.banner_url;
-
     this.refreshList();
     this.syncRoute(patched.event_id, 'detail', true);
   }
 
-  // ================== UI helpers ==================
   stopEvent(e: MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
@@ -617,6 +802,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     const list = (this.editModel.highlights ?? []) as string[];
     list.push('Highlight mới...');
     this.editModel.highlights = list;
+    this.markDirty();
   }
 
   removeHighlight(i: number) {
@@ -624,6 +810,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     const list = (this.editModel.highlights ?? []) as string[];
     list.splice(i, 1);
     this.editModel.highlights = list;
+    this.markDirty();
   }
 
   addScheduleItem() {
@@ -637,6 +824,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
       description: '',
     });
     this.editModel.schedule = list;
+    this.markDirty();
   }
 
   removeScheduleItem(i: number) {
@@ -644,6 +832,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     const list = (this.editModel.schedule ?? []) as EventScheduleItem[];
     list.splice(i, 1);
     this.editModel.schedule = list;
+    this.markDirty();
   }
 
   phaseLabel(p: Phase) {
@@ -756,11 +945,13 @@ function cryptoId() {
 }
 
 function dateOnlyToISO(yyyyMmDd: string, endOfDay = false) {
-  // yyyy-mm-dd -> ISO
-  // endOfDay=true => 23:59:59 local để range filter/hiển thị hợp lý
   const t = endOfDay ? '23:59:59' : '00:00:00';
   const d = new Date(`${yyyyMmDd}T${t}`);
   return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+}
+
+function deepClone<T>(v: T): T {
+  return JSON.parse(JSON.stringify(v));
 }
 
 function seedEvents(): EventEntity[] {
@@ -778,7 +969,8 @@ function seedEvents(): EventEntity[] {
     city: 'TP.HCM',
     banner_url:
       'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
-    cover_url: '',
+    cover_url:
+      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
     visibility: 'public',
     status: 'published',
     capacity: 200,
@@ -802,6 +994,23 @@ function seedEvents(): EventEntity[] {
     contact_email: 'events@homebase.vn',
     created_at: new Date(now - 1000 * 60 * 60 * 24 * 10).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 60 * 2).toISOString(),
+    images: {
+      banner: {
+        url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
+      },
+      gallery: [
+        {
+          image_id: 'IMG_001',
+          url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
+          is_cover: true,
+        },
+        {
+          image_id: 'IMG_002',
+          url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=60',
+        },
+      ],
+      coverImageId: 'IMG_001',
+    },
   };
 
   const e2: EventEntity = {
@@ -830,6 +1039,13 @@ function seedEvents(): EventEntity[] {
     contact_email: 'events@homebase.vn',
     created_at: new Date(now - 1000 * 60 * 60 * 24 * 2).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 60 * 1).toISOString(),
+    images: {
+      banner: {
+        url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
+      },
+      gallery: [],
+      coverImageId: null,
+    },
   };
 
   const e3: EventEntity = {
@@ -857,6 +1073,13 @@ function seedEvents(): EventEntity[] {
     contact_email: 'vip@homebase.vn',
     created_at: new Date(now - 1000 * 60 * 60 * 24 * 1).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 20).toISOString(),
+    images: {
+      banner: {
+        url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=60',
+      },
+      gallery: [],
+      coverImageId: null,
+    },
   };
 
   return [e1, e2, e3];
