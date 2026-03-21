@@ -46,6 +46,7 @@ class CartController {
           .status(400)
           .json({ message: "Dữ liệu không hợp lệ", data: null });
       }
+      console.log(req.body);
       await cartService.updateQuantity(req.userId, item_id, quantity);
       return res
         .status(200)

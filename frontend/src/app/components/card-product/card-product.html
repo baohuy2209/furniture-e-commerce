@@ -11,7 +11,7 @@
       <button class="action-btn view-btn" title="Xem nhanh" (click)="navigateProductDetail()">
         <i class="far fa-eye"></i>
       </button>
-      <button class="action-btn" title="Thêm vào giỏ">
+      <button class="action-btn" title="Thêm vào giỏ" (click)="addCart()">
         <i class="fas fa-shopping-cart"></i>
       </button>
     </div>
@@ -50,3 +50,30 @@
     </div>
   </div>
 </div>
+@if (isDisplayWarrning) {
+  <div class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Cảnh bảo !!!</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Sản phẩm này đã hết tồn kho, nên thời gian giao hàng sẽ bị kéo dài thêm khoảng 1-2 ngày.
+            Bạn có tiếp tục xem
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="button" class="btn btn-primary" (click)="navigate()">Tiếp tục xem</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

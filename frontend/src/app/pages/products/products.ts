@@ -8,6 +8,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ProductColors } from '../../services/product-colors';
 import { formatPrice } from '../../utils/utils';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../services/toast-service';
 @Component({
   selector: 'app-products',
   imports: [CardProduct, CommonModule, NgxPaginationModule, FormsModule],
@@ -54,23 +55,28 @@ export class Products implements OnInit {
     private productService: Product,
     private productCategoryService: ProductCategoryService,
     private productColorService: ProductColors,
+    private toastService: ToastService,
   ) {}
   ngOnInit(): void {
-    this.productService.getAllProducts(this.getRequestParams).subscribe({
-      next: (res) => {
-        this.listProduct = res.data;
-        this.success = res.message;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        if (err.status === 404 || err.status === 400 || err.status === 401) {
-          this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
-        } else {
-          this.error = 'Có lỗi ở phía server';
-        }
-        this.cdr.detectChanges();
-      },
-    });
+    this.productService
+      .getAllProducts(this.getRequestParams('', this.page, this.pageSize))
+      .subscribe({
+        next: (res) => {
+          this.listProduct = res.data;
+          this.success = res.message;
+          this.toastService.success(`${this.success}`);
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          if (err.status === 404 || err.status === 400 || err.status === 401) {
+            this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
+          } else {
+            this.error = 'Có lỗi ở phía server';
+          }
+          this.toastService.error(`${this.error}`);
+          this.cdr.detectChanges();
+        },
+      });
     this.productCategoryService.getAllProductTypeCategories().subscribe({
       next: (res) => {
         this.listProductType = res.data;

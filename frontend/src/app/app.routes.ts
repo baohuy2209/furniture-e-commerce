@@ -3,7 +3,6 @@ import { ClientLayout } from './components/layout/client-layout/client-layout';
 import { AuthLayout } from './components/layout/auth-layout/auth-layout';
 import { SettingLayout } from './components/layout/setting-layout/setting-layout';
 import { AdminLayout } from './components/layout/admin-layout/admin-layout';
-import { SignIn } from './pages/sign-in/sign-in';
 import { EventsLayout } from './components/layout/events-layout/events-layout';
 import { authGuard } from './guards/auth-guard';
 export const routes: Routes = [
@@ -15,6 +14,10 @@ export const routes: Routes = [
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',
+      },
+      {
+        path: 'about',
+        loadComponent: () => import('./pages/about-us/about-us').then((m) => m.AboutUs),
       },
       {
         path: 'home',
@@ -32,6 +35,11 @@ export const routes: Routes = [
       {
         path: 'cart',
         loadComponent: () => import('./pages/cart/cart').then((m) => m.Cart),
+        canActivate: [authGuard],
+      },
+      {
+        path: 'checkout',
+        loadComponent: () => import('./pages/checkout/checkout').then((m) => m.Checkout),
         canActivate: [authGuard],
       },
       {

@@ -4,4 +4,8 @@ router.get(
   "/product-variants/:id",
   productVariantImageController.getAllImageByProductVariantId,
 );
+router.get(
+  "/product-variants/default/:id",
+  productVariantImageController.getDefaultImageByProductVariantId
+)
 module.exports = router;

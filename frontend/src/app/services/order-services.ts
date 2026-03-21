@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { IOrder, IOrderItem } from '../../interface';
+import { IOrder, IOrderItem, IOrderItemShipping, IPayment } from '../../interface';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -27,16 +27,34 @@ export class OrderServices {
       )
       .pipe(retry(2), catchError(this.handleError));
   }
-  getUserOrders(): Observable<{ message: string; data: IOrder[] }> {
+  getUserOrders(): Observable<{
+    message: string;
+    data: IOrder[];
+  }> {
     return this.http
-      .get<{ message: string; data: IOrder[] }>(`${environment.backend_url}/orders`, {
+      .get<{
+        message: string;
+        data: IOrder[];
+      }>(`${environment.backend_url}/orders`, {
         withCredentials: true,
       })
       .pipe(retry(2), catchError(this.handleError));
   }
-  getOrderDetail(id: string) {
+  getOrderDetail(id: string): Observable<{
+    message: string;
+    data: {
+      order: IOrder;
+      items: { item: IOrderItem; shipping: IOrderItemShipping; payment: IPayment }[];
+    };
+  }> {
     return this.http
-      .get<{ message: string; data: IOrder }>(`${environment.backend_url}/orders/${id}`, {
+      .get<{
+        message: string;
+        data: {
+          order: IOrder;
+          items: { item: IOrderItem; shipping: IOrderItemShipping; payment: IPayment }[];
+        };
+      }>(`${environment.backend_url}/orders/${id}`, {
         withCredentials: true,
       })
       .pipe(retry(2), catchError(this.handleError));

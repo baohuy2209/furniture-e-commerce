@@ -1,0 +1,262 @@
+<!-- Breadcrumb -->
+<div class="checkout-breadcrumb">
+  <div class="container">
+    <nav class="breadcrumb-nav">
+      <a routerLink="/cart" class="bc-item">Giỏ hàng</a>
+      <i class="fas fa-chevron-right bc-sep"></i>
+      <span class="bc-item bc-active">Thanh toán</span>
+      <i class="fas fa-chevron-right bc-sep"></i>
+      <span class="bc-item bc-muted">Hoàn tất</span>
+    </nav>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="checkout-page">
+  <div class="container">
+    <div class="row g-4 align-items-start">
+      <!-- ── LEFT ────────────────────────────────────────────────── -->
+      <div class="col-lg-7 col-xl-8">
+        <!-- 1. Địa chỉ giao hàng -->
+        <div class="co-card fade-in" style="animation-delay: 0ms">
+          <div class="co-card__header">
+            <i class="fas fa-map-marker-alt co-icon"></i>
+            <h2 class="co-card__title">Địa chỉ giao hàng</h2>
+          </div>
+
+          @if (loading()) {
+            <div class="text-center py-3">
+              <div class="spinner-border spinner-border-sm" style="color: var(--co-primary)"></div>
+              <p class="mt-2 text-muted small">Đang tải địa chỉ...</p>
+            </div>
+          }
+
+          @if (!loading() && addresses().length === 0) {
+            <div class="co-empty">
+              <i class="fas fa-map-marker-slash"></i>
+              <p>
+                Bạn chưa có địa chỉ nào.<br />
+                <a routerLink="/settings">Thêm địa chỉ ngay</a>
+              </p>
+            </div>
+          }
+
+          @if (!loading()) {
+            @for (addr of addresses(); track addr._id) {
+              <div
+                class="address-card"
+                [class.selected]="selectedAddressId() === addr._id"
+                (click)="selectAddress(addr._id)"
+              >
+                <div class="radio-dot">
+                  @if (selectedAddressId() === addr._id) {
+                    <div class="radio-dot__fill"></div>
+                  }
+                </div>
+                <div class="address-card__body">
+                  <div class="address-card__top">
+                    <span class="address-name">{{ addr.name }}</span>
+                    @if (addr.is_default) {
+                      <span class="badge-default">Mặc định</span>
+                    }
+                  </div>
+                  <p class="address-phone"><i class="fas fa-phone-alt"></i> {{ addr.phone }}</p>
+                  <p class="address-detail">
+                    {{ addr.address_detail }}, {{ addr.ward }}, {{ addr.province }}
+                  </p>
+                </div>
+              </div>
+            }
+          }
+
+          <a routerLink="/settings" class="btn-add-address">
+            <i class="fas fa-plus"></i> Thêm địa chỉ mới
+          </a>
+        </div>
+
+        <!-- 2. Phương thức vận chuyển -->
+        <div class="co-card fade-in" style="animation-delay: 80ms">
+          <div class="co-card__header">
+            <i class="fas fa-truck co-icon"></i>
+            <h2 class="co-card__title">Phương thức vận chuyển</h2>
+          </div>
+
+          @if (isFreeShipping()) {
+            <div class="free-shipping-badge">
+              <i class="fas fa-gift"></i>
+              Miễn phí vận chuyển cho đơn hàng trên {{ formatVND(15000000) }}!
+            </div>
+          }
+
+          <div class="method-list">
+            @for (method of shippingMethods; track method.id) {
+              <div
+                class="method-card"
+                [class.selected]="selectedShipping() === method.id"
+                (click)="selectShipping(method.id)"
+              >
+                <div class="radio-dot">
+                  @if (selectedShipping() === method.id) {
+                    <div class="radio-dot__fill"></div>
+                  }
+                </div>
+                <div class="method-card__icon">
+                  <i class="fas {{ method.icon }}"></i>
+                </div>
+                <
+                <div class="method-card__info">
+                  <span class="method-name">{{ method.name }}</span>
+                  <span class="method-sub">{{ method.desc }} • {{ method.time }}</span>
+                </div>
+                <span class="method-fee" [class.free]="isFreeShipping()">
+                  {{ isFreeShipping() ? 'Miễn phí' : formatVND(method.fee) }}
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- 3. Phương thức thanh toán -->
+        <div class="co-card fade-in" style="animation-delay: 160ms">
+          <div class="co-card__header">
+            <i class="fas fa-credit-card co-icon"></i>
+            <h2 class="co-card__title">Phương thức thanh toán</h2>
+          </div>
+
+          <div class="method-list">
+            @for (method of paymentMethods; track method.id) {
+              <div
+                class="method-card"
+                [class.selected]="selectedPayment() === method.id"
+                (click)="selectPayment(method.id)"
+              >
+                <div class="radio-dot">
+                  @if (selectedPayment() === method.id) {
+                    <div class="radio-dot__fill"></div>
+                  }
+                </div>
+                <div class="method-card__icon">
+                  <i class="fas {{ method.icon }}"></i>
+                </div>
+                <div class="method-card__info">
+                  <span class="method-name">{{ method.name }}</span>
+                  <span class="method-sub">{{ method.desc }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- 4. Ghi chú -->
+        <div class="co-card fade-in" style="animation-delay: 240ms">
+          <div class="co-card__header">
+            <i class="fas fa-sticky-note co-icon"></i>
+            <h2 class="co-card__title">Ghi chú đơn hàng</h2>
+          </div>
+          <textarea
+            class="co-textarea"
+            [(ngModel)]="orderNote"
+            rows="3"
+            placeholder="VD: Giao hàng giờ hành chính, gọi trước 30 phút..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- ── RIGHT — Order Summary ────────────────────────────── -->
+      <div class="col-lg-5 col-xl-4">
+        <div class="summary-card fade-in" style="animation-delay: 100ms">
+          <div class="summary-card__header">
+            <h2 class="summary-title">Đơn hàng của bạn</h2>
+            <span class="summary-count">{{ cartState.items().length }} sản phẩm</span>
+          </div>
+
+          <!-- Danh sách sản phẩm -->
+          <div class="summary-items">
+            @if (cartState.items().length === 0) {
+              <div class="co-empty py-4">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Giỏ hàng trống</p>
+              </div>
+            }
+            @for (item of cartState.items(); track item._id) {
+              <div class="summary-item">
+                <img
+                  [src]="item.product_variant_id.product.main_image || 'logo.png'"
+                  [alt]="item.product_variant_id.product.product_name"
+                  class="summary-item__img"
+                  onerror="this.src = 'assets/placeholder.png'"
+                />
+                <div class="summary-item__info">
+                  <p class="summary-item__name">
+                    {{ item.product_variant_id.product.product_name }}
+                  </p>
+                  <p class="summary-item__sku">{{ item.product_variant_id.sku }}</p>
+                  <div class="summary-item__bottom">
+                    <span class="summary-item__qty">SL: {{ item.quantity }}</span>
+                    <div class="d-flex align-items-center gap-2">
+                      @if (item.discount_percent > 0) {
+                        <span class="discount-badge">-{{ item.discount_percent }}%</span>
+                      }
+                      <span class="summary-item__price">{{ formatVND(item.price) }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Tổng tiền -->
+          <div class="summary-totals">
+            <div class="total-row">
+              <span>Tạm tính</span>
+              <span>{{ formatVND(subtotal()) }}</span>
+            </div>
+            @if (discountTotal() > 0) {
+              <div class="total-row">
+                <span>Giảm giá</span>
+                <span class="total-green">-{{ formatVND(discountTotal()) }}</span>
+              </div>
+            }
+            <div class="total-row">
+              <span>Phí vận chuyển</span>
+              <span
+                [class.total-green]="isFreeShipping() && !!selectedShipping()"
+                [class.total-muted]="!selectedShipping()"
+              >
+                {{ getShippingFeeDisplay() }}
+              </span>
+            </div>
+            <div class="total-divider"></div>
+            <div class="total-row total-row--grand">
+              <span>Tổng cộng</span>
+              <span class="grand-total">{{ formatVND(total()) }}</span>
+            </div>
+          </div>
+
+          <!-- Nút đặt hàng -->
+          <div class="summary-cta">
+            <div class="position-relative">
+              <button class="btn-place-order" [disabled]="!canPlaceOrder()" (click)="placeOrder()">
+                @if (placingOrder()) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Đang xử lý...
+                } @else {
+                  <i class="fas fa-shield-halved me-2"></i>
+                  Đặt hàng
+                }
+              </button>
+
+              @if (!canPlaceOrder() && !placingOrder()) {
+                <div class="order-tooltip">{{ tooltipMessage }}</div>
+              }
+            </div>
+
+            <p class="secure-note">
+              <i class="fas fa-lock"></i> Thông tin được mã hóa & bảo mật tuyệt đối
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

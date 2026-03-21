@@ -3,7 +3,10 @@
   color: #b8c5d6;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
+.homebase-footer-container {
+  width: 90%;
+  margin: auto;
+}
 .footer-logo {
   width: 200px;
   height: auto;

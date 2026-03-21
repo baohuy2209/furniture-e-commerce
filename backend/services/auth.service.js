@@ -78,7 +78,6 @@ class AuthService {
       const username = generateUsernameFromEmail(email);
       const salt = await bcrypt.genSalt(saltRounds);
       const hashedPassword = await bcrypt.hash(password, salt);
-      console.log(hashedPassword);
       const user = new User({
         username: username,
         email,

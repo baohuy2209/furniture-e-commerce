@@ -1,7 +1,8 @@
 <footer class="homebase-footer">
-  <div class="container d-flex flex-column justify-content-center align-items-center">
+  <div class="homebase-footer-container d-flex flex-column justify-content-center align-items-center">
     <div class="row py-5">
-      <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+      <!-- Cột 1: Logo -->
+      <div class="col-lg-4 col-md-6 col-12 mb-4 mb-xl-0">
         <div class="d-flex align-items-center mb-3">
           <img src="logo_white.png" alt="HomeBase Logo" class="footer-logo me-2" />
         </div>
@@ -10,33 +11,48 @@
           đọng cập át dạy cần
         </p>
         <div class="social-icons d-flex gap-3 mt-3">
-          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
-          <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+          <a routerLink="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a routerLink="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a routerLink="#" class="social-link"><i class="fab fa-youtube"></i></a>
+          <a routerLink="#" class="social-link"><i class="fab fa-tiktok"></i></a>
         </div>
       </div>
 
-      <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+      <!-- Cột 2: Về chúng tôi -->
+      <div class="col-lg-2 col-md-6 col-6 mb-4 mb-xl-0">
+        <h6 class="footer-heading">Về chúng tôi</h6>
+        <ul class="footer-links list-unstyled">
+          <li><a routerLink="/about">Giới thiệu Homebase</a></li>
+          <li><a routerLink="#">Câu chuyện thương hiệu</a></li>
+          <li><a routerLink="#">Hệ thống showroom</a></li>
+          <li><a routerLink="#">Đối tác và nhà cung cấp</a></li>
+          <li><a routerLink="#">Cam kết bền vững</a></li>
+        </ul>
+      </div>
+
+      <!-- Cột 3: Dịch vụ khách hàng -->
+      <div class="col-lg-2 col-md-6 col-6 mb-4 mb-xl-0">
         <h6 class="footer-heading">Dịch Vụ Khách Hàng</h6>
         <ul class="footer-links list-unstyled">
-          <li><a href="#">Trung tâm trợ giúp</a></li>
-          <li><a href="#">Theo dõi đơn hàng</a></li>
-          <li><a href="#">Chính sách đổi trả</a></li>
-          <li><a href="#">Thông tin vận chuyển</a></li>
+          <li><a routerLink="/settings/support">Trung tâm trợ giúp</a></li>
+          <li><a routerLink="#">Theo dõi đơn hàng</a></li>
+          <li><a routerLink="#">Chính sách đổi trả</a></li>
+          <li><a routerLink="#">Thông tin vận chuyển</a></li>
         </ul>
       </div>
 
-      <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+      <!-- Cột 4: Thông tin -->
+      <div class="col-lg-2 col-md-6 col-6 mb-4 mb-xl-0">
         <h6 class="footer-heading">Thông tin</h6>
         <ul class="footer-links list-unstyled">
-          <li><a href="#">Tuyển dụng</a></li>
-          <li><a href="#">Tin tức & sự kiện</a></li>
-          <li><a href="#">Hướng dẫn mua hàng</a></li>
+          <li><a routerLink="#">Tuyển dụng</a></li>
+          <li><a routerLink="#">Tin tức & sự kiện</a></li>
+          <li><a routerLink="#">Hướng dẫn mua hàng</a></li>
         </ul>
       </div>
 
-      <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+      <!-- Cột 5: Liên hệ -->
+      <div class="col-lg-2 col-md-6 col-6 mb-4 mb-xl-0">
         <h6 class="footer-heading">Liên hệ</h6>
         <ul class="footer-contact list-unstyled">
           <li class="d-flex mb-2">
@@ -59,14 +75,14 @@
       class="footer-policy border-top pb-3 d-flex flex-row justify-content-between align-items-center px-4"
     >
       <div class="text-center">
-        <p class="copyright-text mb-0">© 2025 HomeBase Interior Living. Bảo lưu mọi quyền</p>
+        <p class="copyright-text mb-0">© 2026 HomeBase Interior Living. Bảo lưu mọi quyền</p>
       </div>
       <div class="text-center">
         <ul
           class="footer-links list-unstyled mt-4 d-flex flex-row justify-content-end align-items-center gap-lg-5 gap-5"
         >
-          <li><a href="#">Chính sách bảo mật</a></li>
-          <li><a href="#">Điều khoản sử dụng</a></li>
+          <li><a routerLink="#">Chính sách bảo mật</a></li>
+          <li><a routerLink="#">Điều khoản sử dụng</a></li>
         </ul>
       </div>
     </div>

@@ -1,30 +1,40 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, NgZone } from '@angular/core';
 import { IToast, ToastType } from '../../interface/toast.model';
 
 @Injectable({ providedIn: 'root' })
 export class ToastService {
   toasts = signal<IToast[]>([]);
 
-  private add(type: ToastType, message: string, title?: string, duration = 4000) {
-    const id = crypto.randomUUID();
-    this.toasts.update((list) => [...list, { id, type, message, title, duration }]);
+  constructor(private zone: NgZone) {}
 
-    // bắt đầu hide animation trước khi xóa
-    setTimeout(() => this.startHide(id), duration - 300);
-    setTimeout(() => this.remove(id), duration);
+  private add(type: ToastType, message: string, title?: string, duration = 4000) {
+    this.zone.run(() => {
+      const id = crypto.randomUUID();
+      this.toasts.update((list) => [...list, { id, type, message, title, duration }]);
+
+      // ✅ Wrap callback của setTimeout vào zone.run()
+      setTimeout(() => this.zone.run(() => this.startHide(id)), duration - 300);
+      setTimeout(() => this.zone.run(() => this.remove(id)), duration);
+    });
   }
 
   private startHide(id: string) {
-    this.toasts.update((list) => list.map((t) => (t.id === id ? { ...t, hiding: true } : t)));
+    this.zone.run(() => {
+      this.toasts.update((list) => list.map((t) => (t.id === id ? { ...t, hiding: true } : t)));
+    });
   }
 
   private remove(id: string) {
-    this.toasts.update((list) => list.filter((t) => t.id !== id));
+    this.zone.run(() => {
+      this.toasts.update((list) => list.filter((t) => t.id !== id));
+    });
   }
 
   dismiss(id: string) {
-    this.startHide(id);
-    setTimeout(() => this.remove(id), 300);
+    this.zone.run(() => {
+      this.startHide(id);
+      setTimeout(() => this.zone.run(() => this.remove(id)), 300);
+    });
   }
 
   success(message: string, title = 'Thành công') {

@@ -212,6 +212,17 @@ export interface ICartItem {
   discount_percent: number;
   subtotal: number;
 }
+export interface ICartItemDetail {
+  _id: string;
+  cart_id: string;
+  product_variant_id: Omit<Iproduct_variants, 'product'> & {
+    product: Iproduct;
+  };
+  quantity: number;
+  price: number;
+  discount_percent: number;
+  subtotal: number;
+}
 export interface IOrder {
   _id: string;
   user_id: string;
@@ -338,4 +349,35 @@ export interface IPaymentMethod {
   cardNumber: string;
   owner: string;
   isDefault: string;
+}
+export interface IAdminStockItem {
+  _id: string;
+  product_variant_id: Iproduct_variants;
+  warehouse_id: string;
+  quantity_on_hand: number;
+  quantity_reserved: number;
+}
+export interface IStockItem {
+  _id: string;
+  product_variant_id: string;
+  warehouse_id: string;
+  quantity_on_hand: number;
+  quantity_reserved: number;
+}
+export interface IOrderItemShipping {
+  _id: string;
+  shipping_discount_percent: number;
+  address_id: string;
+  shipping_method: string;
+  shipping_fee: number;
+  estimate_delivery: string;
+  note: string;
+  shipping_provider: string;
+}
+export interface IPayment {
+  _id: string;
+  order_item_shipping_id: string;
+  payment_method: string;
+  status: string;
+  paid_at: string | Date;
 }

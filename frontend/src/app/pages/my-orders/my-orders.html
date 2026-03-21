@@ -1,231 +1,227 @@
 <div class="container py-5">
-  <!-- Toolbar (Thanh công cụ trên cùng) -->
-  <div class="orders-toolbar d-flex justify-content-between align-items-center mb-4">
-    <div class="search-and-count d-flex align-items-center gap-3">
-      <div class="search-container position-relative">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Tìm kiếm đơn hàng"
-          [ngModel]="searchQuery()"
-          (ngModelChange)="searchQuery.set($event)"
-        />
-        <i class="bi bi-search search-icon"></i>
-      </div>
+  <!-- Toolbar -->
+  <div class="orders-toolbar mb-4">
+    <div class="search-container position-relative">
+      <i class="fas fa-search search-icon"></i>
+      <input
+        type="text"
+        class="form-control search-input"
+        placeholder="Tìm theo mã đơn hoặc tên sản phẩm..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+      />
     </div>
   </div>
 
   <!-- Status Tabs -->
-  <div class="status-tabs mb-5">
-    <button [class.active]="activeTab() === 'waiting'" (click)="activeTab.set('waiting')">
-      Chờ xác nhận
-    </button>
-    <button [class.active]="activeTab() === 'shipping'" (click)="activeTab.set('shipping')">
-      Chờ giao hàng
-    </button>
-    <button [class.active]="activeTab() === 'received'" (click)="activeTab.set('received')">
-      Đã nhận
-    </button>
-    <button [class.active]="activeTab() === 'returned'" (click)="activeTab.set('returned')">
-      Đã trả
-    </button>
-    <button [class.active]="activeTab() === 'cancelled'" (click)="activeTab.set('cancelled')">
-      Đã hủy
-    </button>
+  <div class="status-tabs mb-4">
+    @for (tab of tabs; track tab.key) {
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === tab.key"
+        (click)="activeTab.set(tab.key)"
+      >
+        {{ tab.label }}
+        @if (countForTab(tab.key) > 0) {
+          <span class="tab-badge">{{ countForTab(tab.key) }}</span>
+        }
+      </button>
+    }
   </div>
 
-  @for (order of filteredOrders(); track order.orderId) {
-    <div class="order-wrapper mb-5">
-      <!-- MAIN ORDER CARD (Collapsed View) -->
-      <div class="order-card-luxury p-4">
-        <!-- THÊM LẠI DÒNG NÀY VÀ THÊM p-4 -->
-        <!-- Checkbox góc trên bên phải của từng order card -->
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border" style="color: var(--co-primary)"></div>
+      <p class="mt-3 text-muted">Đang tải đơn hàng...</p>
+    </div>
+  }
 
-        <div class="row g-4 align-items-center">
-          <!-- Cột 1: Ảnh đại diện & Mặt hàng / Tổng số -->
-          <div class="col-lg-3 col-md-4 col-sm-12">
-            <div class="beige-square-container shadow-sm">
-              <img [src]="order.items[order.currentImageIndex].imageGallery[0]" alt="Product" />
-            </div>
-            <div class="mt-3 text-center small text-muted image-navigation-controls">
-              <button
-                class="btn btn-sm btn-link-img-nav"
-                (click)="changeMainProductImage(order, -1)"
-                [disabled]="order.items.length <= 1"
-              >
-                <i class="bi bi-chevron-left"></i>
-              </button>
-              Mặt hàng: {{ order.currentImageIndex + 1 }}/{{ order.items.length }}
-              <button
-                class="btn btn-sm btn-link-img-nav"
-                (click)="changeMainProductImage(order, 1)"
-                [disabled]="order.items.length <= 1"
-              >
-                <i class="bi bi-chevron-right"></i>
-              </button>
-            </div>
+  <!-- Empty -->
+  @if (!loading() && filteredOrders().length === 0) {
+    <div class="empty-state">
+      <i class="fas fa-box-open"></i>
+      <p>Không có đơn hàng nào</p>
+      <a routerLink="/products" class="btn-browse">Khám phá sản phẩm</a>
+    </div>
+  }
+
+  <!-- Orders list -->
+  @for (order of filteredOrders(); track order._id) {
+    <div class="order-wrapper mb-4">
+      @if (order.loadingItems) {
+        <div class="text-center py-4">
+          <div class="spinner-border spinner-border-sm text-muted"></div>
+          <p class="small text-muted mt-2">Đang tải sản phẩm...</p>
+        </div>
+      }
+      <!-- Main card -->
+      <div class="order-card">
+        <div class="order-card__header">
+          <div class="order-meta">
+            <span class="order-number">
+              <i class="fas fa-receipt me-2"></i>{{ order.order_number }}
+            </span>
+            <span class="order-count text-muted small">
+              {{ getTabItems(order).length }} sản phẩm
+            </span>
           </div>
-
-          <!-- Cột 2: Thông tin chi tiết - Hiển thị thông tin của sản phẩm hiện tại -->
-          <div class="col-lg-5 col-md-8 col-sm-12 px-lg-4 border-md-end">
-            <h4 class="product-name-title mb-2">{{ order.items[order.currentImageIndex].name }}</h4>
-            <p class="mb-4 text-muted small-text">
-              Ghế: {{ order.items[order.currentImageIndex].color }} | Chân:
-              {{ order.items[order.currentImageIndex].material }}
-            </p>
-
-            <div class="order-info-grid">
-              <div class="info-item">
-                <span class="label">Ngày đặt:</span>
-                <span class="value">{{ order.orderDate }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label">Mã vận đơn:</span>
-                <span class="value fw-bold text-dark">{{ order.orderId }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label">Địa chỉ:</span>
-                <span class="value text-truncate">{{ order.address }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label">Trạng thái:</span>
-                <span class="value">{{ order.statusText }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cột 3: Giá & Nút bấm - Hiển thị giá của sản phẩm hiện tại -->
-          <div class="col-lg-4 col-md-12 text-end d-flex flex-column justify-content-between h-100">
-            <div class="price-summary-block">
-              <div class="d-flex justify-content-between mb-1">
-                <span>Đơn giá:</span>
-                <span class="price-value"
-                  >{{ order.items[order.currentImageIndex].price | number }} VND</span
-                >
-              </div>
-              <div class="d-flex justify-content-between text-danger mb-2">
-                <span>Khuyến mãi:</span>
-                <span class="price-value"
-                  >-{{ order.items[order.currentImageIndex].discount | number }} VND</span
-                >
-              </div>
-              <div class="total-item-line">
-                <span class="fw-bold">Thành tiền: </span>
-                <span class="text-danger fw-700 fs-4 price-value">
-                  {{
-                    order.items[order.currentImageIndex].price *
-                      order.items[order.currentImageIndex].qty -
-                      order.items[order.currentImageIndex].discount | number
-                  }}
-                  VND
-                </span>
-              </div>
-              <div class="total-order-value mt-3">
-                Tổng giá trị đơn:
-                <b class="text-total-brown fs-5">{{ calculateTotal(order) | number }} VND</b>
-              </div>
-            </div>
-
-            <div class="action-btns-group mt-4">
-              <!-- TAB: Chờ xác nhận hoặc Chờ giao hàng -->
-              @if (order.status === 'waiting' || order.status === 'shipping') {
-                <button class="btn-luxury-outline me-2" (click)="markAsReceived(order)">
-                  Đã nhận
-                </button>
-              }
-
-              <!-- TAB: Đã nhận (Bổ sung nút Mua lại) -->
-              @if (order.status === 'received') {
-                <button class="btn-luxury-outline me-2" (click)="buyAgain(order)">Mua lại</button>
-              }
-
-              <!-- TAB: Đã nhận, Đã trả, Đã hủy (Khôi phục nút Đánh giá) -->
-              @if (
-                order.status === 'received' ||
-                order.status === 'returned' ||
-                order.status === 'cancelled'
-              ) {
-                <button class="btn-luxury-outline me-2">Đánh giá</button>
-              }
-
-              <!-- Nút Mở rộng/Thu gọn luôn luôn hiển thị ngoài cùng bên phải -->
-              <button
-                class="btn-luxury-outline"
-                [class.active]="order.isExpanded"
-                (click)="order.isExpanded = !order.isExpanded"
-              >
-                {{ order.isExpanded ? 'Thu gọn' : 'Mở rộng' }}
-              </button>
-            </div>
+          <div class="order-header-right">
+            <span class="payment-status" [class.paid]="order.payment_status === 'paid'">
+              <i class="fas fa-circle-dot me-1" style="font-size: 8px"></i>
+              {{ order.payment_status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}
+            </span>
           </div>
         </div>
-      </div>
-      <!-- ĐÓNG THẺ div.order-card-luxury Ở ĐÂY -->
 
-      <!-- EXPANDED ORDER DETAILS (Phần Thông tin đơn hàng và chi tiết các mặt hàng) -->
-      @if (order.isExpanded) {
-        <div class="order-details-expanded p-4 animate-slide-down mt-4">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="fw-bold text-dark"><i class="bi bi-receipt me-2"></i>Thông tin đơn hàng</h5>
-            <button class="btn-link-figma-brown" (click)="order.isExpanded = !order.isExpanded">
-              Thu gọn
-            </button>
-          </div>
+        <!-- Items trong tab hiện tại -->
+        <div class="order-items">
+          @if (order.loadingItems) {
+            <div class="text-center py-3">
+              <div class="spinner-border spinner-border-sm text-muted"></div>
+            </div>
+          }
 
-          <!-- Thông tin tổng quan đơn hàng -->
-          <div class="order-summary-details-grid mb-4">
-            <div class="detail-item">
-              <span class="label">Ngày đặt:</span>
-              <span class="value">{{ order.orderDate }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Mã vận đơn:</span>
-              <span class="value fw-bold text-dark">{{ order.orderId }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Phương thức thanh toán:</span>
-              <span class="value">{{ order.paymentMethod }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Địa chỉ:</span>
-              <span class="value">{{ order.address }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Trạng thái:</span>
-              <span class="value fw-bold text-primary">{{ order.statusText }}</span>
-            </div>
-            <div class="detail-item total-detail-item">
-              <span class="label fw-bold">Tổng giá trị đơn:</span>
-              <span class="value text-total-brown fw-bold fs-5"
-                >{{ calculateTotal(order) | number }} VND</span
-              >
-            </div>
-          </div>
-
-          <h5 class="fw-bold text-dark mb-3">
-            <i class="bi bi-box-seam me-2"></i>Chi tiết các mặt hàng
-          </h5>
-          @for (item of order.items; track item.id) {
-            <div class="sub-product-card d-flex align-items-center p-3 mb-3">
-              <div class="beige-square-sm me-3">
-                <img [src]="item.imageGallery[0]" alt="Thumb" />
-              </div>
-              <div class="flex-grow-1">
-                <h6 class="fw-bold mb-1 text-dark">{{ item.name }}</h6>
-                <p class="small text-muted mb-2">
-                  Phân loại: {{ item.color }} | {{ item.material }}
-                </p>
-                <button class="btn-link-figma-brown">Đánh giá</button>
-              </div>
-              <div class="text-end border-start px-4">
-                <div class="small text-muted">Số lượng: {{ item.qty }}</div>
-                <div class="fw-bold text-danger fs-5 d-flex align-items-center justify-content-end">
-                  {{ item.price * item.qty - item.discount | number }} VND
-                  <span class="red-dot ms-2"></span>
+          @for (item of getTabItems(order); track item.item._id) {
+            <div class="order-item">
+              <!-- Info -->
+              <div class="order-item__info">
+                <p class="item-name">{{ item.item.product_name }}</p>
+                <div class="item-meta">
+                  <span class="item-qty">Số lượng: {{ item.item.quantity }}</span>
+                  @if (item.item.discount_percent > 0) {
+                    <span class="item-discount">-{{ item.item.discount_percent }}%</span>
+                  }
                 </div>
+              </div>
+
+              <!-- Price -->
+              <div class="order-item__price">
+                <span class="item-unit-price text-muted small">
+                  {{ formatVND(item.item.unit_price) }} / sp
+                </span>
+                <span class="item-subtotal">{{ formatVND(item.item.item_subtotal) }}</span>
+              </div>
+
+              <!-- Status -->
+              <div class="order-item__status">
+                <span class="status-badge {{ getStatusClass(item.item.status) }}">
+                  {{ getStatusLabel(item.item.status) }}
+                </span>
+                @if (item.item.status === 'delivered' && !item.item.reviewed) {
+                  <button class="btn-review"><i class="fas fa-star me-1"></i>Đánh giá</button>
+                }
+                @if (item.item.status === 'delivered' && item.item.reviewed) {
+                  <span class="reviewed-badge"> <i class="fas fa-check me-1"></i>Đã đánh giá </span>
+                }
               </div>
             </div>
           }
+        </div>
+
+        <!-- Footer tổng tiền + actions -->
+        <div class="order-card__footer">
+          <div class="order-totals">
+            <span class="total-label">Tổng đơn hàng:</span>
+            <div class="total-breakdown">
+              @if (order.discount_total > 0) {
+                <span class="total-before text-muted text-decoration-line-through small me-2">
+                  {{ formatVND(order.before_total) }}
+                </span>
+                <span class="total-discount text-success small me-2">
+                  -{{ formatVND(order.discount_total) }}
+                </span>
+              }
+              <span class="grand-total">{{ formatVND(order.total_amount) }}</span>
+            </div>
+          </div>
+
+          <div class="order-actions">
+            @if (order.note) {
+              <span class="order-note text-muted small">
+                <i class="fas fa-sticky-note me-1"></i>{{ order.note }}
+              </span>
+            }
+            <button
+              class="btn-expand"
+              [class.active]="order.isExpanded"
+              (click)="toggleExpand(order)"
+            >
+              <i
+                class="fas"
+                [class.fa-chevron-down]="!order.isExpanded"
+                [class.fa-chevron-up]="order.isExpanded"
+              ></i>
+              {{ order.isExpanded ? 'Thu gọn' : 'Chi tiết đơn' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expanded: tất cả items kể cả tab khác -->
+      @if (order.isExpanded) {
+        <div class="order-expanded animate-slide-down">
+          <h6 class="expanded-title">
+            <i class="fas fa-box-open me-2"></i>Tất cả sản phẩm trong đơn
+          </h6>
+
+          @for (item of order.items; track item.item._id) {
+            <div class="expanded-item">
+              <div class="expanded-item__info">
+                <p class="item-name mb-1">{{ item.item.product_name }}</p>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="text-muted small">SL: {{ item.item.quantity }}</span>
+                  <span class="status-badge {{ getStatusClass(item.item.status) }}">
+                    {{ getStatusLabel(item.item.status) }}
+                  </span>
+                </div>
+              </div>
+              <div class="expanded-item__price">
+                <span class="text-muted small"
+                  >{{ formatVND(item.item.unit_price) }} × {{ item.item.quantity }}</span
+                >
+                <span class="fw-bold">{{ formatVND(item.item.item_subtotal) }}</span>
+              </div>
+              @if (item.item.status === 'delivered' && !item.item.reviewed) {
+                <button class="btn-review ms-3"><i class="fas fa-star me-1"></i>Đánh giá</button>
+              }
+            </div>
+          }
+
+          <!-- Tổng chi tiết -->
+          <div class="expanded-totals">
+            <div class="expanded-total-row">
+              <span>Tạm tính</span>
+              <span>{{ formatVND(order.before_total) }}</span>
+            </div>
+            @if (order.discount_total > 0) {
+              <div class="expanded-total-row text-success">
+                <span>Giảm giá</span>
+                <span>-{{ formatVND(order.discount_total) }}</span>
+              </div>
+            }
+            @if (order.total_shipping_fee > 0) {
+              <div class="expanded-total-row">
+                <span>Phí vận chuyển</span>
+                <span>{{ formatVND(order.total_shipping_fee) }}</span>
+              </div>
+            } @else {
+              <div class="expanded-total-row text-success">
+                <span>Phí vận chuyển</span>
+                <span>Miễn phí</span>
+              </div>
+            }
+            <div class="expanded-total-row expanded-total-row--grand">
+              <span>Tổng cộng</span>
+              <span>{{ formatVND(order.total_amount) }}</span>
+            </div>
+            @if (order.cancel_reason) {
+              <div class="cancel-reason">
+                <i class="fas fa-circle-exclamation me-1"></i>
+                Lý do hủy: {{ order.cancel_reason }}
+              </div>
+            }
+          </div>
         </div>
       }
     </div>

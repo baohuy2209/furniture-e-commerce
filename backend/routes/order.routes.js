@@ -9,6 +9,7 @@ router.post(
   protectedRoute,
   orderController.checkout.bind(orderController),
 );
+router.post("/checkout-without-login", orderController.checkoutWithoutLogin);
 router.get(
   "/",
   protectedRoute,
@@ -19,7 +20,7 @@ router.get(
   protectedRoute,
   orderController.getOrderDetail.bind(orderController),
 );
-router.put(
+router.patch(
   "/:id/cancel",
   protectedRoute,
   orderController.cancelOrder.bind(orderController),

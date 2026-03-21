@@ -3,7 +3,11 @@ const customerInquiryController = require("../app/controllers/customerInquiry.co
 const { authJwt } = require("../middlewares");
 const router = express.Router();
 
-router.post("/", customerInquiryController.createTicket);
+router.post(
+  "/",
+  [authJwt.protectedRoute],
+  customerInquiryController.createTicket,
+);
 router.get(
   "/user",
   [authJwt.protectedRoute],
