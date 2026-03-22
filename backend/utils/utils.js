@@ -1,4 +1,4 @@
-const { cloudinary } = require("../server");
+const cloudinary = require("../app/config/cloudinary");
 const { OAuth2Client } = require("google-auth-library");
 // Chuẩn hóa tên
 function normalize(str = "") {

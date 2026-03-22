@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 type SortDir = 'asc' | 'desc';
 type ReferenceType = 'purchase_order' | 'order' | 'manual' | 'audit';
@@ -206,7 +208,7 @@ interface VM {
 @Component({
   selector: 'app-management-warehouse',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmModal],
+  imports: [CommonModule, FormsModule, ConfirmModal, HttpClientModule],
   templateUrl: './management-warehouse.html',
   styleUrls: ['./management-warehouse.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -215,12 +217,14 @@ export class ManagementWarehouse implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
+  private http = inject(HttpClient);
 
-  private warehouses$ = new BehaviorSubject<WarehouseEntity[]>(MOCK_WAREHOUSES);
-  private variants$ = new BehaviorSubject<ProductVariantMin[]>(MOCK_VARIANTS);
-  private stockItems$ = new BehaviorSubject<StockItemEntity[]>(MOCK_STOCK_ITEMS);
-  private movements$ = new BehaviorSubject<StockMovementEntity[]>(MOCK_MOVEMENTS);
-  private poItems$ = new BehaviorSubject<POEntity[]>(MOCK_PO_LIST);
+  private warehouses$ = new BehaviorSubject<WarehouseEntity[]>([]);
+  private variants$ = new BehaviorSubject<ProductVariantMin[]>([]);
+  private stockItems$ = new BehaviorSubject<StockItemEntity[]>([]);
+  private movements$ = new BehaviorSubject<StockMovementEntity[]>([]);
+  private poItems$ = new BehaviorSubject<POEntity[]>([]);
+  private brands$ = new BehaviorSubject<BrandEntity[]>([]);
 
   private routeState$ = new BehaviorSubject<{ id: string | null; edit: boolean; createPO: boolean }>({
     id: null,
@@ -256,6 +260,7 @@ export class ManagementWarehouse implements OnInit {
   private pageSize$ = new BehaviorSubject<number>(10);
 
   ngOnInit(): void {
+    this.loadData();
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((pm) => {
       const id = pm.get('id');
       const edit = pm.get('edit') === 'true';
@@ -289,6 +294,46 @@ export class ManagementWarehouse implements OnInit {
     });
   }
 
+  private loadData(): void {
+    this.http.get<any>('http://localhost:3000/api/admin/warehouse/stock-items')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          if (res.data) {
+            this.stockItems$.next(res.data.stockItems || []);
+            this.warehouses$.next(res.data.warehouses || []);
+            this.movements$.next(res.data.movements || []);
+            this.poItems$.next(res.data.purchaseOrders || []);
+          }
+        }
+      });
+
+    this.http.get<any>('http://localhost:3000/api/admin/products?size=1000')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          if (res.data) {
+            const list: ProductVariantMin[] = [];
+            const raw = Array.isArray(res.data) ? res.data : [];
+            raw.forEach((p: any) => {
+              if (p.variants) list.push(...p.variants);
+            });
+            this.variants$.next(list);
+          }
+        }
+      });
+
+    this.http.get<any>('http://localhost:3000/api/brands')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          if (res.data) {
+             this.brands$.next(res.data || []);
+          }
+        }
+      });
+  }
+
   vm$ = combineLatest([
     this.routeState$,
     this.editModel$,
@@ -306,6 +351,7 @@ export class ManagementWarehouse implements OnInit {
     this.sortKeyStock$,
     this.sortDirStock$,
     this.poItems$,
+    this.brands$,
   ]).pipe(
     map(
       ([
@@ -325,6 +371,7 @@ export class ManagementWarehouse implements OnInit {
         sortKeyStock,
         sortDirStock,
         poItems,
+        brands,
       ]) => {
         const { id: selectedId, edit, createPO } = routeState;
         const mode: Mode = createPO ? 'create_po' : !selectedId ? 'list' : edit ? 'edit' : 'detail';
@@ -503,7 +550,7 @@ export class ManagementWarehouse implements OnInit {
           importStep,
           importPreviewList,
           importTotalCost,
-          brands: MOCK_BRANDS,
+          brands,
           currentPanel: createPO ? 'import' : !selectedId ? null : edit ? 'adjust' : 'detail',
           poList,
           transferList: movements
@@ -690,7 +737,7 @@ export class ManagementWarehouse implements OnInit {
     this.pendingDiscardAction = null;
   }
 
-  executeSave() {
+  async executeSave() {
     const selected = this.routeState$.value.id;
     const em = this.editModel$.value;
 
@@ -711,138 +758,62 @@ export class ManagementWarehouse implements OnInit {
       return;
     }
 
-    const updatedSourceStock: StockItemEntity = {
-      ...stock,
-      quantity_on_hand: Math.max(0, stock.quantity_on_hand - qtyAbs),
-      updated_at: new Date().toISOString(),
-    };
-
-    // Find or create target stock
-    let allStocks = [...this.stockItems$.value];
-    let targetStock = allStocks.find(
-      (x) => x.product_variant_id === stock.product_variant_id && x.warehouse_id === em.targetWarehouseId
-    );
-
-    if (targetStock) {
-      const updatedTargetStock: StockItemEntity = {
-        ...targetStock,
-        quantity_on_hand: targetStock.quantity_on_hand + qtyAbs,
-        updated_at: new Date().toISOString(),
-      };
-      allStocks = allStocks.map(s => s.stock_item_id === updatedTargetStock.stock_item_id ? updatedTargetStock : s);
-    } else {
-      const newTargetStock: StockItemEntity = {
-        stock_item_id: `si_${id16()}`,
+    try {
+      // 1. Log OUT from source
+      await lastValueFrom(this.http.post('http://localhost:3000/api/admin/warehouse/adjust', {
+        warehouse_id: stock.warehouse_id,
         product_variant_id: stock.product_variant_id,
+        quantity_changed: -qtyAbs,
+        reason: em.reason,
+        reference_type: 'adjustment'
+      }));
+
+      // 2. Log IN to target
+      await lastValueFrom(this.http.post('http://localhost:3000/api/admin/warehouse/adjust', {
         warehouse_id: em.targetWarehouseId,
-        quantity_on_hand: qtyAbs,
-        quantity_reserved: 0,
-        reorder_point: 10,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-      allStocks.push(newTargetStock);
+        product_variant_id: stock.product_variant_id,
+        quantity_changed: qtyAbs,
+        reason: em.reason,
+        reference_type: 'adjustment'
+      }));
+
+      this.loadData();
+      this.saveModalOpen = false;
+      this.clearEditState();
+      this.syncRoute(selected, 'detail');
+    } catch (e) {
+      console.error(e);
+      alert('Lỗi điều chuyển kho');
+      this.saveModalOpen = false;
     }
-
-    // Update source
-    allStocks = allStocks.map(s => s.stock_item_id === updatedSourceStock.stock_item_id ? updatedSourceStock : s);
-
-    this.stockItems$.next(allStocks);
-
-    const refId = `TRF-${id16().slice(0, 6)}`;
-    
-    // Log OUT for source
-    const mvOut: StockMovementEntity = {
-      movement_id: `mv_${id16()}`,
-      warehouse_id: stock.warehouse_id,
-      product_variant_id: stock.product_variant_id,
-      reference_type: 'manual',
-      reference_id: refId,
-      quantity_changed: -qtyAbs,
-      reason: String(em.reason ?? ''),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
-    // Log IN for target
-    const mvIn: StockMovementEntity = {
-      movement_id: `mv_${id16()}`,
-      warehouse_id: em.targetWarehouseId,
-      product_variant_id: stock.product_variant_id,
-      reference_type: 'manual',
-      reference_id: refId,
-      quantity_changed: qtyAbs,
-      reason: String(em.reason ?? ''),
-      created_at: new Date(new Date().getTime() + 100).toISOString(),
-      updated_at: new Date(new Date().getTime() + 100).toISOString(),
-    };
-
-    this.movements$.next([mvIn, mvOut, ...this.movements$.value]);
-
-    this.saveModalOpen = false;
-    this.clearEditState();
-    this.syncRoute(selected, 'detail');
   }
 
-  executePO() {
+  async executePO() {
     const draft = this.importDraft$.value;
     if (!draft || draft.items.length === 0) {
       return;
     }
 
-    let stockItems = [...this.stockItems$.value];
-    let newMovements: StockMovementEntity[] = [];
-    const poRefId = `PO-${id16().slice(0, 6).toUpperCase()}`;
+    try {
+      await lastValueFrom(this.http.post('http://localhost:3000/api/admin/warehouse/purchase-order', {
+        brand_id: draft.brand_id,
+        note: draft.note,
+        items: draft.items.map(it => ({
+          warehouse_id: it.warehouse_id,
+          product_variant_id: it.product_variant_id,
+          quantity: it.quantity,
+          unit_cost: it.unit_cost
+        }))
+      }));
 
-    // 1. Process items
-    for (const item of draft.items) {
-      let stock = stockItems.find(s => s.warehouse_id === item.warehouse_id && s.product_variant_id === item.product_variant_id);
-      
-      let targetStockId = '';
-      if (!stock) {
-        targetStockId = `si_${id16()}`;
-        stock = {
-          stock_item_id: targetStockId,
-          product_variant_id: item.product_variant_id,
-          warehouse_id: item.warehouse_id,
-          quantity_on_hand: item.quantity,
-          quantity_reserved: 0,
-          reorder_point: DEFAULT_REORDER_POINT,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        };
-        stockItems.unshift(stock);
-      } else {
-        targetStockId = stock.stock_item_id;
-        const updatedStock: StockItemEntity = {
-          ...stock,
-          quantity_on_hand: stock.quantity_on_hand + item.quantity,
-          updated_at: new Date().toISOString()
-        };
-        stockItems = stockItems.map(s => s.stock_item_id === targetStockId ? updatedStock : s);
-      }
-
-      // 2. Add Stock Movement per item
-      const mv: StockMovementEntity = {
-        movement_id: `mv_${id16()}`,
-        warehouse_id: item.warehouse_id,
-        product_variant_id: item.product_variant_id,
-        reference_type: 'purchase_order',
-        reference_id: poRefId,
-        quantity_changed: item.quantity,
-        reason: draft.note || `Nhập hàng theo cấu trúc Đơn PO (Brand: ${draft.brand_id || 'N/A'})`,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-      newMovements.push(mv);
+      alert('Đã tạo đơn nhập hàng và cập nhật kho!');
+      this.loadData();
+      this.importDraft$.next(null);
+      this.goList();
+    } catch (e) {
+      console.error(e);
+      alert('Lỗi tạo đơn nhập hàng');
     }
-
-    this.stockItems$.next(stockItems);
-    this.movements$.next([...newMovements, ...this.movements$.value]);
-
-    // 3. Clear draft and return to list
-    this.importDraft$.next(null);
-    this.goList();
   }
 
   addImportItem() {

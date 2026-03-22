@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5001/api"
+      "url": "http://localhost:3000/api"
     }
   ],
   "paths": {
@@ -268,6 +268,119 @@
               }
             }
           }
+        }
+      }
+    },
+    "/admin/products": {
+      "get": {
+        "summary": "Get Admin Products",
+        "description": "Lấy danh sách tất cả sản phẩm, kèm variants và images",
+        "tags": ["Admin Products"],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      },
+      "post": {
+        "summary": "Create Admin Product",
+        "description": "Tạo mới sản phẩm, variants và images",
+        "tags": ["Admin Products"],
+        "responses": {
+          "201": { "description": "Created" }
+        }
+      }
+    },
+    "/admin/products/{id}": {
+      "get": {
+        "summary": "Get Admin Product By Id",
+        "tags": ["Admin Products"],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      },
+      "put": {
+        "summary": "Update Admin Product",
+        "description": "Cập nhật sản phẩm, variants và images",
+        "tags": ["Admin Products"],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      },
+      "delete": {
+        "summary": "Delete Admin Product",
+        "description": "Xoá sản phẩm, variants và images",
+        "tags": ["Admin Products"],
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "summary": "Upload Image",
+        "description": "Upload ảnh lên Cloudinary",
+        "tags": ["Uploads"],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      }
+    },
+    "/admin/warehouse/warehouses": {
+      "get": {
+        "summary": "Get Admin Warehouses",
+        "tags": ["Admin Warehouse"],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      }
+    },
+    "/admin/warehouse/stock-items": {
+      "get": {
+        "summary": "Get Admin Stock High Level",
+        "tags": ["Admin Warehouse"],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      }
+    },
+    "/admin/warehouse/adjust": {
+      "post": {
+        "summary": "Adjust Stock",
+        "tags": ["Admin Warehouse"],
+        "responses": {
+          "200": { "description": "Success" }
+        }
+      }
+    },
+    "/admin/warehouse/purchase-order": {
+      "post": {
+        "summary": "Create Purchase Order",
+        "tags": ["Admin Warehouse"],
+        "responses": {
+          "201": { "description": "Created" }
         }
       }
     }

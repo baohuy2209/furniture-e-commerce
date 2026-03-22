@@ -1,5 +1,8 @@
 const authRoute = require("./authentication.routes");
 const productRoute = require("./product.routes");
+const adminProductRoute = require("./admin.product.routes");
+const adminWarehouseRoute = require("./admin.warehouse.routes");
+const uploadRoute = require("./upload.routes");
 const blogRoute = require("./blog.routes");
 const eventRoute = require("./event.routes");
 const userRoute = require("./user.route");
@@ -51,5 +54,10 @@ function route(app) {
   app.use("/api/stock-items", stockItemRoute);
   app.use("/api/stock-movements", stockMovementRoute);
   app.use("/api/warehouse", warehouseRoute);
+
+  // Admin and Utility Routes
+  app.use("/api/admin/products", adminProductRoute);
+  app.use("/api/admin/warehouse", adminWarehouseRoute);
+  app.use("/api/upload", uploadRoute);
 }
 module.exports = route;

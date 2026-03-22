@@ -29,6 +29,7 @@ const productVariantSchema = new mongoose.Schema(
 
     // JSON động (height, width, diameter, seating_height...)
     measurement: mongoose.Schema.Types.Mixed,
+    component_variants: mongoose.Schema.Types.Mixed,
 
     is_default: {
       type: Boolean,

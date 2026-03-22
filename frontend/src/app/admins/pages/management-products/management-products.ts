@@ -3,7 +3,15 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { BehaviorSubject, Subject, combineLatest, forkJoin, map, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject,
+  Subject,
+  combineLatest,
+  forkJoin,
+  map,
+  takeUntil,
+  lastValueFrom,
+} from 'rxjs';
 import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 type SortDir = 'asc' | 'desc';
@@ -122,7 +130,7 @@ interface VariantEditVM {
   weight: number;
   designed_by: string;
   // dynamic key-value fields
-  componentEntries: KVEntry[];   // from component_variants
+  componentEntries: KVEntry[]; // from component_variants
   measurementEntries: KVEntry[]; // from measurement
   // Variant specific images
   images: { url: string; isNew?: boolean }[];
@@ -183,7 +191,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
   editVariants: VariantEditVM[] = [];
   editImages: { url: string; isNew?: boolean }[] = [];
 
-  private commentsByProduct = new Map<ProductId, ProductComment[]>();
+  commentsByProduct = new Map<string, any[]>();
 
   deleteModalOpen = false;
   deleteItemId: string | null = null;
@@ -281,9 +289,9 @@ export class ManagementProducts implements OnInit, OnDestroy {
       const roomOptions = Array.from(new Set(rowsAll.map((x) => x.roomLabel))).sort((a, b) =>
         a.localeCompare(b),
       );
-      const brandOptions = Array.from(new Set(rowsAll.map((x) => x.brand))).filter(b => b).sort((a, b) =>
-        a.localeCompare(b),
-      );
+      const brandOptions = Array.from(new Set(rowsAll.map((x) => x.brand)))
+        .filter((b) => b)
+        .sort((a, b) => a.localeCompare(b));
 
       const total = filtered.length;
       const pageSize = Math.max(1, query.pageSize);
@@ -330,7 +338,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
         .filter((im) => pvIds.has(im.product_varant_id))
         .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 
-      const comments = this.getComments(p.product_id);
+      const comments: ProductComment[] = [];
       const inventoryTotal = pv.reduce((s, x) => s + (x.num_inventory ?? 0), 0);
       const soldTotal = pv.reduce((s, x) => s + (x.num_selled ?? 0), 0);
       const ratingAvg = pv.length
@@ -355,7 +363,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadSeedData();
@@ -421,21 +429,40 @@ export class ManagementProducts implements OnInit, OnDestroy {
   }
 
   private loadSeedData(): void {
-    forkJoin({
-      products: this.http.get<Product[]>('assets/data/product.json'),
-      variants: this.http.get<ProductVariant[]>('assets/data/product_variants.json'),
-      images: this.http.get<ProductImage[]>('assets/data/product_image.json'),
-      rooms: this.http.get<Room[]>('assets/home/room.json'),
-    })
+    this.http
+      .get<any>('http://localhost:3000/api/admin/products?size=1000')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this.products$.next(Array.isArray(res.products) ? res.products : []);
-          this.variants$.next(Array.isArray(res.variants) ? res.variants : []);
-          this.images$.next(Array.isArray(res.images) ? res.images : []);
-          this.rooms$.next(Array.isArray(res.rooms) ? res.rooms : []);
+          const productList: Product[] = [];
+          const variantList: ProductVariant[] = [];
+          const imageList: ProductImage[] = [];
+
+          (res.data || []).forEach((p: any) => {
+            productList.push({
+              product_id: String(p.product_id || ''),
+              product_name: p.product_name || p.title || '',
+              brand_name: p.brand_name || '',
+              description: p.description || '',
+              discount_percent: p.discount_percent || 0,
+              is_assembly: !!p.is_assembly,
+              warranty: p.warranty || 12,
+              tags: p.tags || [],
+              important_funtions: p.important_funtions || [],
+              product_component: p.product_component || {},
+              image_url: p.image_url || [],
+            });
+            if (p.variants) variantList.push(...p.variants);
+            if (p.images) imageList.push(...p.images);
+          });
+
+          this.products$.next(productList);
+          this.variants$.next(variantList);
+          this.images$.next(imageList);
+          this.rooms$.next([{ name: 'Phòng khách' }, { name: 'Phòng ngủ' }, { name: 'Khác' }]);
         },
-        error: () => {
+        error: (err) => {
+          console.error('API Load Error:', err);
           this.products$.next([]);
           this.variants$.next([]);
           this.images$.next([]);
@@ -480,7 +507,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
       pageSize: 10,
     });
   }
-
 
   onSearchChange(val: string): void {
     this.localSearchTerm = val;
@@ -655,8 +681,14 @@ export class ManagementProducts implements OnInit, OnDestroy {
       weight: Number(v.weight ?? 0),
       designed_by: v.designed_by ?? '',
       expected_delivery: v.expected_delivery ?? '',
-      componentEntries: Object.entries(v.component_variants ?? {}).map(([key, value]) => ({ key, value: String(value) })),
-      measurementEntries: Object.entries(v.measurement ?? {}).map(([key, value]) => ({ key, value: String(value) })),
+      componentEntries: Object.entries(v.component_variants ?? {}).map(([key, value]) => ({
+        key,
+        value: String(value),
+      })),
+      measurementEntries: Object.entries(v.measurement ?? {}).map(([key, value]) => ({
+        key,
+        value: String(value),
+      })),
       images: this.images$.value
         .filter((im) => im.product_varant_id === v.product_varant_id)
         .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
@@ -692,7 +724,10 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   variantPreviewLabel(v: VariantEditVM): string {
     if (!v.componentEntries?.length) return v.product_varant_id;
-    return v.componentEntries.map(e => e.value).filter(Boolean).join(' · ');
+    return v.componentEntries
+      .map((e) => e.value)
+      .filter(Boolean)
+      .join(' · ');
   }
 
   addComponentEntry(v: VariantEditVM): void {
@@ -716,7 +751,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
   }
 
   setDefaultVariant(v: VariantEditVM): void {
-    this.editVariants.forEach(ev => ev.is_default = false);
+    this.editVariants.forEach((ev) => (ev.is_default = false));
     v.is_default = true;
     this.onVariantChange();
   }
@@ -798,154 +833,64 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.saveModalOpen = true;
   }
 
-  executeSave(): void {
+  async executeSave(): Promise<void> {
     if (!this.editForm) return;
 
     this.saveModalOpen = false;
     this.saving = true;
 
-    if (this.isCreateMode) {
-      const newId = this.nextNumericProductId();
+    try {
+      // 1. Upload new product images
+      for (let i = 0; i < this.editImages.length; i++) {
+        if (this.editImages[i].isNew && this.editImages[i].url.startsWith('blob:')) {
+          this.editImages[i].url = await this.uploadBlob(this.editImages[i].url);
+        }
+      }
 
-      const newProduct: Product = {
-        product_id: String(newId),
-        product_name: this.editForm.product_name.trim() || `New product ${newId}`,
-        brand_name: this.editForm.brand_name.trim() || 'Unknown',
-        description: this.editForm.description || '',
-        discount_percent: clampNumber(this.editForm.discount_percent, 0, 100),
-        is_assembly: !!this.editForm.is_assembly,
-        warranty: Math.max(0, Number(this.editForm.warranty || 0)),
-        tags: parseTags(this.editForm.tagsText),
-        important_funtions: [],
-        product_component: {},
-        image_url: this.editImages.map((x) => x.url),
+      // 2. Upload variant images
+      for (const ev of this.editVariants) {
+        for (let i = 0; i < ev.images.length; i++) {
+          if (ev.images[i].isNew && ev.images[i].url.startsWith('blob:')) {
+            ev.images[i].url = await this.uploadBlob(ev.images[i].url);
+          }
+        }
+      }
+
+      const payload = {
+        editForm: this.editForm,
+        editVariants: this.editVariants,
       };
 
-      const products = this.products$.value.slice();
-      products.push(newProduct);
-      this.products$.next(products);
+      if (this.isCreateMode) {
+        await lastValueFrom(this.http.post('http://localhost:3000/api/admin/products', payload));
+      } else {
+        await lastValueFrom(
+          this.http.put(
+            `http://localhost:3000/api/admin/products/${this.selectedProductId}`,
+            payload,
+          ),
+        );
+      }
 
-      const variants = this.variants$.value.slice();
-      const imgs = this.images$.value.slice();
-
-      this.editVariants.forEach((vDraft, idx) => {
-        const vId = this.isCreateMode ? `${newId}-v${idx + 1}` : vDraft.product_varant_id;
-
-        // Map entries to JSON
-        const comp: Record<string, string> = {};
-        vDraft.componentEntries.forEach(e => { if (e.key) comp[e.key] = e.value; });
-
-        const meas: Record<string, number> = {};
-        vDraft.measurementEntries.forEach(e => { if (e.key) meas[e.key] = Number(e.value) || 0; });
-
-        variants.push({
-          product_id: String(newId),
-          product_varant_id: vId,
-          price: Number(vDraft.price ?? 0),
-          weight: Number(vDraft.weight ?? 0),
-          num_inventory: Number(vDraft.num_inventory ?? 0),
-          num_selled: Number(vDraft.num_selled ?? 0),
-          designed_by: vDraft.designed_by ?? '',
-          rating: Number(vDraft.rating ?? 0),
-          expected_delivery: vDraft.expected_delivery ?? '',
-          component_variants: comp,
-          is_default: !!vDraft.is_default,
-          measurement: meas,
-        });
-
-        // Add variant images
-        vDraft.images.forEach((vIm, vImIdx) => {
-          imgs.push({
-            product_varant_id: vId,
-            url: vIm.url,
-            is_main: vImIdx === 0,
-            position: vImIdx + 1
-          });
-        });
-      });
-
-      this.variants$.next(variants);
-      this.images$.next(imgs);
-
+      this.isDirty = false;
       this.saving = false;
+
+      this.loadSeedData();
       this.clearEditState();
-      this.syncRoute(String(newId), 'detail', true);
-      return;
-    }
-
-    if (!this.selectedProductId || this.selectedProductId === 'new') {
+      this.syncRoute(null, 'list', true);
+    } catch (e) {
+      console.error(e);
+      alert('Lỗi lưu thay đổi sản phẩm!');
       this.saving = false;
-      return;
     }
+  }
 
-    const updated: Partial<Product> = {
-      product_name: this.editForm.product_name.trim(),
-      brand_name: this.editForm.brand_name.trim(),
-      discount_percent: clampNumber(this.editForm.discount_percent, 0, 100),
-      warranty: Math.max(0, Number(this.editForm.warranty || 0)),
-      is_assembly: !!this.editForm.is_assembly,
-      tags: parseTags(this.editForm.tagsText),
-      description: this.editForm.description,
-      image_url: this.editImages.map((x) => x.url),
-    };
-
-    const products = this.products$.value.slice();
-    const idx = products.findIndex((x) => x.product_id === this.selectedProductId);
-    if (idx >= 0) {
-      products[idx] = { ...products[idx], ...updated };
-      this.products$.next(products);
-    }
-
-    const variants = this.variants$.value.slice();
-    const imgs = this.images$.value.slice().filter(im => {
-      // Keep images that don't belong to the variants of this product 
-      // AND also remove currently existing images of these variants to overwrite
-      return !this.editVariants.some(ev => ev.product_varant_id === im.product_varant_id);
-    });
-
-    const vSet = new Map(this.editVariants.map((v) => [v.product_varant_id, v]));
-
-    for (let i = 0; i < variants.length; i++) {
-      const v = variants[i];
-      if (v.product_id !== this.selectedProductId) continue;
-      const draft = vSet.get(v.product_varant_id);
-      if (!draft) continue;
-
-      // Map entries back
-      const comp: Record<string, string> = {};
-      draft.componentEntries.forEach(e => { if (e.key) comp[e.key] = e.value; });
-
-      const meas: Record<string, number> = {};
-      draft.measurementEntries.forEach(e => { if (e.key) meas[e.key] = Number(e.value) || 0; });
-
-      variants[i] = {
-        ...v,
-        price: Number(draft.price ?? v.price),
-        weight: Number(draft.weight ?? v.weight),
-        num_inventory: Number(draft.num_inventory ?? v.num_inventory),
-        expected_delivery: draft.expected_delivery ?? v.expected_delivery,
-        is_default: !!draft.is_default,
-        designed_by: draft.designed_by ?? v.designed_by,
-        component_variants: comp,
-        measurement: meas
-      };
-
-      // Overwrite images for this variant
-      draft.images.forEach((vIm, vImIdx) => {
-        imgs.push({
-          product_varant_id: v.product_varant_id,
-          url: vIm.url,
-          is_main: vImIdx === 0,
-          position: vImIdx + 1
-        });
-      });
-    }
-    this.variants$.next(variants);
-    this.images$.next(imgs);
-
-    this.isDirty = false;
-    this.saving = false;
-    this.syncRoute(this.selectedProductId, 'detail', true);
+  private async uploadBlob(blobUrl: string): Promise<string> {
+    const blob = await fetch(blobUrl).then((r) => r.blob());
+    const fd = new FormData();
+    fd.append('image', blob, 'image.jpg');
+    const res = await lastValueFrom(this.http.post<any>('http://localhost:3000/api/upload', fd));
+    return res?.data?.imageUrl || blobUrl;
   }
 
   private clearEditState(): void {
@@ -1006,13 +951,19 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.deleteModalOpen = true;
   }
 
-  onConfirmDelete(): void {
+  async onConfirmDelete(): Promise<void> {
     if (!this.deleteItemId) return;
 
     if (this.deleteItemType === 'product') {
-      const next = this.products$.value.filter((p) => p.product_id !== this.deleteItemId);
-      this.products$.next(next);
-
+      try {
+        await lastValueFrom(
+          this.http.delete(`http://localhost:3000/api/admin/products/${this.deleteItemId}`),
+        );
+        this.loadSeedData();
+      } catch (e) {
+        console.error(e);
+        alert('Lỗi xoá sản phẩm');
+      }
       if (this.selectedProductId === this.deleteItemId) {
         this.clearEditState();
         this.syncRoute(null, 'list', true);
@@ -1021,7 +972,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
       const list = this.getComments(this.selectedProductId).filter(
         (x) => x.id !== this.deleteItemId,
       );
-      this.commentsByProduct.set(this.selectedProductId, list);
+
       this.isDirty = true;
     }
 
@@ -1034,13 +985,10 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.deleteItemId = null;
   }
 
-  private getComments(productId: ProductId): ProductComment[] {
+  private getComments(productId: string): any[] {
     const existing = this.commentsByProduct.get(productId);
     if (existing) return existing;
-
-    const seed = buildMockComments(productId);
-    this.commentsByProduct.set(productId, seed);
-    return seed;
+    return [];
   }
 
   toggleCommentHidden(cmtId: string): void {
@@ -1192,51 +1140,4 @@ function downloadText(content: string, filename: string, mime: string): void {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
-}
-
-function buildMockComments(productId: ProductId): ProductComment[] {
-  const base: Omit<ProductComment, 'productId'>[] = [
-    {
-      id: 'cmt-001',
-      userName: 'Mai Anh',
-      rating: 5,
-      content: 'Chất lượng tốt, form chắc. Giao nhanh hơn dự kiến.',
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
-      hidden: false,
-    },
-    {
-      id: 'cmt-002',
-      userName: 'Nguyễn Khánh Xuân',
-      rating: 4,
-      content: 'Màu đúng như hình. Lắp ráp hơi mất thời gian nhưng ổn.',
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
-      hidden: false,
-    },
-    {
-      id: 'cmt-003',
-      userName: 'Võ Hồng Phúc',
-      rating: 5,
-      content: 'Ngồi êm, vải đẹp. Sẽ mua thêm cho phòng ngủ.',
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 8).toISOString(),
-      hidden: false,
-    },
-    {
-      id: 'cmt-004',
-      userName: 'Nguyễn Minh Quân',
-      rating: 3,
-      content: 'Đóng gói tốt. Tuy nhiên giao chậm 1 ngày so với hẹn.',
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 12).toISOString(),
-      hidden: false,
-    },
-    {
-      id: 'cmt-005',
-      userName: 'Nguyễn Quang Phúc',
-      rating: 4,
-      content: 'Giá hợp lý, nhìn sang. Hy vọng dùng lâu bền.',
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 18).toISOString(),
-      hidden: false,
-    },
-  ];
-
-  return base.map((x) => ({ ...x, productId }));
 }
