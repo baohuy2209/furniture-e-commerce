@@ -321,7 +321,7 @@
   </section>
 </section>
 @if (isShowAddressModel) {
-  <div class="modal fade" id="addAddressModal" tabindex="-1">
+  <div class="modal fade" id="addAddressModal" #addAddressModal tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -329,6 +329,19 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
+          <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
+            <i class="bi bi-info-circle-fill fs-5 mt-1 text-warning"></i>
+            <div>
+              <p class="mb-1 fw-semibold">Bạn chưa đăng nhập</p>
+              <p class="mb-0 small text-muted">
+                Vui lòng điền đầy đủ thông tin bên dưới để tiến hành đặt hàng mà không cần tài
+                khoản. Hoặc
+                <a routerLink="/auth/sign-in" class="text-primary fw-semibold">đăng nhập</a> /
+                <a routerLink="/auth/sign-up" class="text-primary fw-semibold">đăng ký</a>
+                để trải nghiệm tốt hơn và hưởng được nhiều ưu đãi hơn.
+              </p>
+            </div>
+          </div>
           <form #f="ngForm" (ngSubmit)="createAddressForGuest(f)">
             <div class="mb-3">
               <label class="form-label">Họ và tên<span class="text-danger">*</span></label>
@@ -420,7 +433,7 @@
               >
                 Hủy
               </button>
-              <button type="submit" class="btn btn-primary">Thêm Địa Chỉ</button>
+              <button type="submit" class="btn btn-primary">Đặt hàng</button>
             </div>
           </form>
         </div>
@@ -429,14 +442,29 @@
   </div>
 }
 @if (isShowUserInfoModal) {
-  <div class="modal fade" id="createNewGuestModal" tabindex="-1">
+  <div class="modal fade" id="createNewGuestModal" #userInfoModal tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Thêm Địa Chỉ Mới</h5>
+          <h5 class="modal-title">
+            <i class="bi bi-plus-circle me-2"></i>Nhập thông tin để đặt hàng
+          </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
+          <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
+            <i class="bi bi-info-circle-fill fs-5 mt-1 text-warning"></i>
+            <div>
+              <p class="mb-1 fw-semibold">Bạn chưa đăng nhập</p>
+              <p class="mb-0 small text-muted">
+                Vui lòng điền đầy đủ thông tin bên dưới để tiến hành đặt hàng mà không cần tài
+                khoản. Hoặc
+                <a routerLink="/auth/sign-in" class="text-primary fw-semibold">đăng nhập</a> /
+                <a routerLink="/auth/sign-up" class="text-primary fw-semibold">đăng ký</a>
+                để trải nghiệm tốt hơn.
+              </p>
+            </div>
+          </div>
           <form #f="ngForm" (ngSubmit)="createUserGuest(f)">
             <div class="mb-3">
               <label class="form-label">Họ và tên<span class="text-danger">*</span></label>
@@ -491,7 +519,7 @@
               >
                 Hủy
               </button>
-              <button type="submit" class="btn btn-primary">Thêm Địa Chỉ</button>
+              <button type="submit" class="btn btn-primary">Thêm thông tin</button>
             </div>
           </form>
         </div>

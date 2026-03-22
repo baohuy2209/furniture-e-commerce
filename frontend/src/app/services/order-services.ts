@@ -27,6 +27,47 @@ export class OrderServices {
       )
       .pipe(retry(2), catchError(this.handleError));
   }
+  checkoutWithoutLogin(
+    user_id: string,
+    product_variant_id: string,
+    quantity: number,
+    address_id: string,
+    shipping_fee: number,
+    note: string,
+  ): Observable<{
+    message: string;
+    data: {
+      order: IOrder;
+      orderItem: IOrderItem;
+      payment: IPayment;
+      orderItemShipping: IOrderItemShipping;
+    };
+  }> {
+    return this.http
+      .post<{
+        message: string;
+        data: {
+          order: IOrder;
+          orderItem: IOrderItem;
+          payment: IPayment;
+          orderItemShipping: IOrderItemShipping;
+        };
+      }>(
+        `${environment.backend_url}/orders/checkout-without-login`,
+        {
+          user_id,
+          product_variant_id,
+          quantity,
+          address_id,
+          shipping_fee,
+          note,
+        },
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
   getUserOrders(): Observable<{
     message: string;
     data: IOrder[];

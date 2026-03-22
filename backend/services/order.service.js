@@ -6,10 +6,12 @@ const Cart = require("../app/models/cart.model");
 const CartItem = require("../app/models/cartItem.model");
 const ProductVariant = require("../app/models/productVariant.model");
 const Product = require("../app/models/product.model");
+const User = require("../app/models/user.model");
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 const path = require("path");
-const formatVND = require("../utils/utils");
+const { formatVND } = require("../utils/utils");
+const UserAddress = require("../app/models/userAddress.model");
 class OrderService {
   async checkout(userId, checkoutData) {
     const { address_id, shipping_method, shipping_fee, payment_method, note } =
@@ -92,14 +94,17 @@ class OrderService {
   }
   async checkoutWithoutLogin(
     userId,
-    email,
-    name,
     product_variant_id,
     quantity,
     address_id,
     shipping_fee,
     note,
   ) {
+    const userInfo = await User.findById({ _id: userId });
+    const addressInfo = await UserAddress.findOne({
+      _id: address_id,
+      user: userId,
+    });
     const productVariant = await ProductVariant.findById({
       _id: product_variant_id,
     });
@@ -109,7 +114,7 @@ class OrderService {
     const productInfo = await Product.findById({ _id: productVariant.product });
     const before_total = quantity * productVariant.price;
     const discount_total =
-      quantity * productVariant.price * productInfo.discount_percent;
+      (quantity * productVariant.price * productInfo.discount_percent) / 100;
     const total_amount =
       before_total - discount_total + shipping_fee * quantity;
     const orderNumber =
@@ -161,7 +166,7 @@ class OrderService {
       },
     });
     let html = fs.readFileSync(
-      path.join(__dirname, "order-email-template.html"),
+      path.join(__dirname, "../templates/order-email-template.html"),
       "utf8",
     );
 
@@ -185,14 +190,17 @@ class OrderService {
       .replace("{{estimate_delivery}}", orderItemShipping.estimate_delivery)
       .replace("{{payment_method}}", payment.payment_method.toUpperCase())
       .replace("{{note}}", order.note || "")
-      .replace(
-        "{{order_detail_url}}",
-        `https://homebase.vn/settings/my-orders`,
-      );
+      .replace("{{order_detail_url}}", `https://homebase.vn/settings/my-orders`)
+      .replace("{{customer_name}}", userInfo.name)
+      .replace("{{customer_phone}}", userInfo.phone)
+      .replace("{{address_detail}}", addressInfo.address_detail)
+      .replace("{{ward}}", addressInfo.ward)
+      .replace("{{province}}", addressInfo.province);
+
     const mailOptions = {
       from: process.env.EMAIL_SERVICE,
-      to: email,
-      subject: `Thông tin đơn hàng của khách hàng ${name}`,
+      to: userInfo.email,
+      subject: `Thông tin đơn hàng của khách hàng ${userInfo.name}`,
       html,
     };
     await transporter.sendMail(mailOptions);

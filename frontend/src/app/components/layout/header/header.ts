@@ -44,9 +44,12 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
     private cdr: ChangeDetectorRef,
     public cartState: CartStateService,
   ) {
-    afterNextRender(() => {
-      this.cartState.syncCart().subscribe();
-    });
+    this.currentToken = this.authService.getAccessToken();
+    if (this.currentToken) {
+      afterNextRender(() => {
+        this.cartState.syncCart().subscribe();
+      });
+    }
   }
 
   ngOnInit(): void {

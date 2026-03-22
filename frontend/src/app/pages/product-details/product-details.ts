@@ -1,11 +1,12 @@
 import { CartStateService } from './../../services/cart-state-service';
 import { ProductVariantService } from './../../services/product-variant-service';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal, ViewChild, ElementRef } from '@angular/core';
 import { ImageGallery } from '../../components/product-details/image-gallery/image-gallery';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductVariantImageService } from '../../services/product-variant-image-service';
 import {
+  IAddress,
   IListProducts,
   Iproduct,
   Iproduct_variants,
@@ -22,7 +23,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AddressService } from '../../services/address-service';
 import { UserService } from '../../services/user-service';
-
+import { OrderServices } from '../../services/order-services';
+declare var bootstrap: any;
+const SHIPPING_FEE_FOR_GUEST = 150000;
 interface Province {
   code: number;
   name: string;
@@ -39,6 +42,9 @@ interface Ward {
   styleUrl: './product-details.css',
 })
 export class ProductDetails implements OnInit {
+  @ViewChild('userInfoModal') userInfoModal!: ElementRef;
+  @ViewChild('addAddressModal') addAddressModal!: ElementRef;
+  private addressModalInstance: any;
   product_id: string | null = '';
   relatedProducts: IListProducts[] = [];
   // Chọn hình ảnh cho product
@@ -72,6 +78,7 @@ export class ProductDetails implements OnInit {
     email: '',
   };
   newGuestUser: IUser | null = null;
+  newAddressGuestUser: IAddress | null = null;
   provinces = signal<Province[]>([]);
   wards = signal<Ward[]>([]);
   isShowAddressModel: boolean = false;
@@ -90,6 +97,7 @@ export class ProductDetails implements OnInit {
     private http: HttpClient,
     private userAddressService: AddressService,
     private userService: UserService,
+    private orderService: OrderServices,
   ) {}
   setActive(index: number): void {
     this.activeIndex = index;
@@ -223,6 +231,10 @@ export class ProductDetails implements OnInit {
       this.router.navigate(['/checkout']);
     } else {
       this.isShowUserInfoModal = true;
+      setTimeout(() => {
+        const modal = new bootstrap.Modal(this.userInfoModal.nativeElement);
+        modal.show();
+      }, 0);
     }
   }
   getType(value: any): string {
@@ -247,7 +259,35 @@ export class ProductDetails implements OnInit {
         this.success = `Đã tạo địa chỉ mới thành công cho người dùng ${res.data.name}`;
         this.toastService.success(`${this.success}`);
         f.reset();
-        window.location.reload();
+        this.isShowAddressModel = false;
+        this.newAddressGuestUser = res.data;
+        this.addressModalInstance?.hide();
+        this.orderService
+          .checkoutWithoutLogin(
+            this.newGuestUser?._id!,
+            this.current_product_variant?._id!,
+            this.qty,
+            this.newAddressGuestUser._id,
+            SHIPPING_FEE_FOR_GUEST,
+            '',
+          )
+          .subscribe({
+            next: (res) => {
+              this.success = `Tạo đơn hàng thành công cho ${this.newGuestUser?.name}`;
+              this.toastService.success(`${this.success}`);
+              this.cdr.detectChanges();
+            },
+            error: (err) => {
+              if (err.status === 404 || err.status === 400 || err.status === 401) {
+                this.error =
+                  err.error?.message || 'Có lỗi khi tạo đơn hàng khi người dùng không đăng nhập';
+              } else {
+                this.error = 'Có lỗi ở phía server';
+              }
+              this.toastService.error(`${this.error}`);
+              this.cdr.detectChanges();
+            },
+          });
       },
       error: (err) => {
         if (err.status === 404 || err.status === 400 || err.status === 401) {
@@ -269,7 +309,17 @@ export class ProductDetails implements OnInit {
       next: (res) => {
         this.newGuestUser = res.data;
         this.isShowUserInfoModal = false;
+        this.newAddress.name = this.newGuestUser.name;
+        this.newAddress.phone = this.newGuestUser.phone;
         this.isShowAddressModel = true;
+        this.toastService.success(`Thêm thông tin khách hàng thành công`);
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          if (this.addAddressModal?.nativeElement) {
+            this.addressModalInstance = new bootstrap.Modal(this.addAddressModal.nativeElement);
+            this.addressModalInstance.show();
+          }
+        }, 1000);
       },
       error: (err) => {
         if (err.status === 404 || err.status === 400 || err.status === 401) {

@@ -1,5 +1,5 @@
 const orderService = require("../../services/order.service");
-const userService = require("../../services/user.service");
+
 class OrderController {
   // [POST] /api/orders/checkout
   async checkout(req, res) {
@@ -18,29 +18,15 @@ class OrderController {
       const {
         product_variant_id,
         quantity,
-        email,
-        phone,
-        name,
+        user_id,
         address_id,
         shipping_fee,
         note,
       } = req.body;
-      const { data, message } = await userService.createUser(
-        email,
-        name,
-        phone,
-      );
-      if (!data) {
-        console.error(message);
-        return res
-          .status(401)
-          .json({ message: "Lỗi không tạo được user", data: null });
-      }
+
       const { dataOrder, errorMessage } =
         await orderService.checkoutWithoutLogin(
-          data._id,
-          email,
-          name,
+          user_id,
           product_variant_id,
           quantity,
           address_id,
@@ -55,6 +41,7 @@ class OrderController {
         data: dataOrder,
       });
     } catch (error) {
+      console.error(error);
       return res
         .status(500)
         .json({ message: "Lỗi server: " + error.message, data: null });
