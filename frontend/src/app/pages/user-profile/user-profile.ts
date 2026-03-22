@@ -69,14 +69,17 @@ export class UserProfile implements OnInit {
     private authService: AuthService,
   ) {}
   ngOnInit(): void {
-    this.userService.getUserInfo().subscribe({
-      next: (res) => {
-        this.user = res.data;
+    this.userService.user$.subscribe(user => {
+      if (user) {
+        this.user = { ...user };
         if (this.user.dob) {
           this.user.dob = new Date(this.user.dob).toISOString().substring(0, 10);
         }
         this.cdr.detectChanges();
-      },
+      }
+    });
+
+    this.userService.getUserInfo().subscribe({
       error: (err) => {
         if (err.status === 404 || err.status === 400 || err.status === 401) {
           this.error = err.error?.message || 'Không tìm thấy thông tin người dùng nào';
@@ -104,6 +107,19 @@ export class UserProfile implements OnInit {
     this.http
       .get<Province[]>('http://localhost:3000/provinces')
       .subscribe((data) => this.provinces.set(data));
+  }
+
+  onAvatarSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.user.avatar = e.target.result;
+        // Automatically save the new avatar
+        this.updateUserInfo();
+      };
+      reader.readAsDataURL(file);
+    }
   }
   formatDateTime(date: Date | string) {
     return formatDate(date);

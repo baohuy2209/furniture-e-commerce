@@ -84,13 +84,17 @@ export class SettingLayout {
       .subscribe((event: any) => {
         this.checkRoute(event.urlAfterRedirects);
       });
+    this.userService.user$.subscribe(user => {
+      if (user) {
+        this.user.set(user);
+        this.cdr.detectChanges();
+      }
+    });
+
     this.userService.getUserInfo().subscribe({
-      next: (res) => {
-        this.user.set(res.data);
-      },
       error: (err) => {
         if (err.status === 404 || err.status === 400 || err.status === 401) {
-          this.error = err.error?.message || 'Không tìm thây sản phẩm nào';
+          this.error = err.error?.message || 'Không tìm thấy sản phẩm nào';
         } else {
           this.error = 'Có lỗi ở phía server';
         }

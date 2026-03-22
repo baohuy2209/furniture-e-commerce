@@ -51,7 +51,7 @@ export interface IListProducts {
   main_image: string;
   categories: string[];
 }
-export interface IListEvent {}
+export interface IListEvent { }
 export interface Iproduct {
   _id: string;
   product_name: string;
@@ -129,11 +129,14 @@ export interface IUpholstery {
 export interface IWarrantyRequest {
   _id: string;
   user_id: string;
+  order_id: string;
   request_date: Date;
   fullname: string;
   email: string;
   phone: string;
   issue_description: string;
+  warranty_method: string;
+  warranty_reasons: string[];
   warranty_status: string;
   approved_by: string;
   approved_data: Date;

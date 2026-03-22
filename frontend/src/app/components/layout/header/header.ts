@@ -85,7 +85,7 @@ export class Header implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void { }
 
   getCurrentUrl(): string {
     const segments = this.router.url.split('/');

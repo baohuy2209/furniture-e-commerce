@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, retry, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, retry, tap, throwError } from 'rxjs';
 import { IUser } from '../../interface';
 import { environment } from '../../environments/environment.development';
 
@@ -8,20 +8,33 @@ import { environment } from '../../environments/environment.development';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private http: HttpClient) {}
+  private userSubject = new BehaviorSubject<IUser | null>(null);
+  user$ = this.userSubject.asObservable();
+
+  constructor(private http: HttpClient) { }
+
   getUserInfo(): Observable<{ message: string; data: IUser }> {
     return this.http
       .get<{ message: string; data: IUser }>(`${environment.backend_url}/user`, {
         withCredentials: true,
       })
-      .pipe(retry(2), catchError(this.handleError));
+      .pipe(
+        retry(2),
+        tap(res => this.userSubject.next(res.data)),
+        catchError(this.handleError)
+      );
   }
+
   updateUserProfile(data: IUser): Observable<{ message: string; data: IUser }> {
     return this.http
       .patch<{ message: string; data: IUser }>(`${environment.backend_url}/user/profile`, data, {
         withCredentials: true,
       })
-      .pipe(retry(2), catchError(this.handleError));
+      .pipe(
+        retry(2),
+        tap(res => this.userSubject.next(res.data)),
+        catchError(this.handleError)
+      );
   }
   changePassword(oldPassword: string, newPassword: string): Observable<{ message: string }> {
     return this.http

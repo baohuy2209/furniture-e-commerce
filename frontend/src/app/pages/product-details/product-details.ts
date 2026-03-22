@@ -90,7 +90,7 @@ export class ProductDetails implements OnInit {
     private http: HttpClient,
     private userAddressService: AddressService,
     private userService: UserService,
-  ) {}
+  ) { }
   setActive(index: number): void {
     this.activeIndex = index;
   }
@@ -265,7 +265,7 @@ export class ProductDetails implements OnInit {
       this.error = 'Vui lòng kiểm tra lại thông tin địa chỉ';
       return;
     }
-    this.userService.createUser(this.guestUSer).subscribe({
+    this.userService.createUser(this.guestUser).subscribe({
       next: (res) => {
         this.newGuestUser = res.data;
         this.isShowUserInfoModal = false;
