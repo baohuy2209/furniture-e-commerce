@@ -33,7 +33,7 @@ export interface Tab {
 @Component({
   selector: 'app-my-orders',
   standalone: true,
-  imports: [CommonModule, FormsModule, DecimalPipe, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './my-orders.html',
   styleUrl: './my-orders.css',
 })

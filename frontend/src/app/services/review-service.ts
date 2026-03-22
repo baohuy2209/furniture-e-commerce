@@ -33,6 +33,16 @@ export class ReviewService {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
+  getNewsReviewByAdmin(): Observable<{ message: string; data: IReview[] }> {
+    return this.http
+      .get<{ message: string; data: IReview[] }>(
+        `${environment.backend_url}/reviews/admin/news-review`,
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
   handleError(err: HttpErrorResponse) {
     return throwError(() => err);
   }

@@ -1,1 +1,500 @@
-<p>management-events works!</p>
+<div class="hb-page-shell" *ngIf="vm$ | async as vm">
+  <!-- PAGE HEADER -->
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title" routerLink="/admin/management-events" style="cursor: pointer">
+        QUẢN LÝ SỰ KIỆN
+      </div>
+    </div>
+
+    <!-- LIST ACTIONS -->
+    <div class="hb-header-actions" *ngIf="vm.mode === 'list'">
+      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
+        <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+      </button>
+      <button class="btn btn-hb" type="button" (click)="exportCsvSnapshot()">
+        <i class="bi bi-download me-1"></i> Xuất CSV
+      </button>
+      <button class="btn btn-hb-accent" type="button" (click)="createNewEvent()">
+        <i class="bi bi-plus-lg me-1"></i> Tạo sự kiện
+      </button>
+    </div>
+
+    <!-- DETAIL/EDIT ACTIONS -->
+    <ng-container *ngIf="vm.mode === 'detail' || vm.mode === 'edit'">
+      <div class="hb-header-actions">
+        <ng-container *ngIf="vm.createStep === 1">
+          <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">
+            <i class="bi bi-x-lg me-1"></i> Hủy soạn thảo
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="vm.createStep === 3">
+          <button class="btn btn-hb" type="button" (click)="goList()">
+            <i class="bi bi-list-task me-1"></i> Về danh sách
+          </button>
+        </ng-container>
+
+        <div class="hb-divider-v mx-2" *ngIf="vm.createStep !== 3"></div>
+        <button class="btn btn-hb-outline" (click)="goList()" *ngIf="vm.createStep !== 3">
+          <i class="bi bi-house me-1"></i> Thoát
+        </button>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- BODY wrapper -->
+  <div class="hb-page-body">
+    <!-- LIST VIEW -->
+    <ng-container *ngIf="vm.mode === 'list'">
+      <div class="hb-summary-row">
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon"><i class="bi bi-calendar-event"></i></div>
+          <div class="hb-sc-content">
+            <div class="hb-sc-label">Tổng sự kiện</div>
+            <div class="hb-sc-value">{{ vm.summary.totalCount }}</div>
+          </div>
+        </div>
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon ok"><i class="bi bi-activity"></i></div>
+          <div class="hb-sc-content">
+            <div class="hb-sc-label">Đang diễn ra</div>
+            <div class="hb-sc-value">{{ vm.summary.ongoingCount }}</div>
+          </div>
+        </div>
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon warn"><i class="bi bi-clock-history"></i></div>
+          <div class="hb-sc-content">
+            <div class="hb-sc-label">Sắp diễn ra</div>
+            <div class="hb-sc-value">{{ vm.summary.upcomingCount }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hb-card hb-card-pad mb-3">
+        <div class="hb-filterbar">
+          <input
+            class="form-control"
+            [ngModel]="q"
+            (ngModelChange)="onChangeQ($event)"
+            placeholder="ID / Tên sự kiện / Địa điểm / Thành phố..."
+          />
+          <select class="form-select" [ngModel]="f_phase" (ngModelChange)="onChangePhase($event)">
+            <option value="">-- Giai đoạn --</option>
+            <option value="ongoing">Đang diễn ra</option>
+            <option value="upcoming">Sắp diễn ra</option>
+            <option value="past">Đã kết thúc</option>
+          </select>
+          <select class="form-select" [ngModel]="f_status" (ngModelChange)="onChangeStatus($event)">
+            <option value="">-- Trạng thái --</option>
+            <option value="published">Đang mở</option>
+            <option value="draft">Bản nháp</option>
+            <option value="paused">Tạm dừng</option>
+            <option value="ended">Đã kết thúc</option>
+            <option value="cancelled">Đã hủy</option>
+          </select>
+          <input
+            class="form-control"
+            type="date"
+            [ngModel]="f_from"
+            (ngModelChange)="onChangeFrom($event)"
+          />
+          <input
+            class="form-control"
+            type="date"
+            [ngModel]="f_to"
+            (ngModelChange)="onChangeTo($event)"
+          />
+
+          <!-- Empty placeholders (2) to align Reset to column 8 -->
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
+
+          <button class="btn btn-hb-outline hb-filter-reset" (click)="resetFilters()">
+            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+          </button>
+        </div>
+      </div>
+
+      <div class="card hb-card hb-table-card">
+        <div class="hb-table-wrap">
+          <div class="hb-table">
+            <div class="hb-table-head hb-grid-events">
+              <div class="hb-th">STT</div>
+              <div class="hb-th" (click)="toggleSort('event_code')">MÃ</div>
+              <div class="hb-th th-left" (click)="toggleSort('event_name')">SỰ KIỆN & ĐỊA ĐIỂM</div>
+              <div class="hb-th" (click)="toggleSort('start_at')">BẮT ĐẦU</div>
+              <div class="hb-th">KẾT THÚC</div>
+              <div class="hb-th">SLOT</div>
+              <div class="hb-th">GIAI ĐOẠN</div>
+              <div class="hb-th">TRẠNG THÁI</div>
+              <div class="hb-th">SỬA</div>
+              <div class="hb-th">XÓA</div>
+            </div>
+            <div
+              class="hb-table-row hb-grid-events"
+              *ngFor="let r of vm.rows"
+              (click)="openDetail(r.event_id)"
+            >
+              <div class="hb-td hb-td-center text-muted">{{ r.stt }}</div>
+              <div class="hb-td hb-td-center">
+                <span class="text-primary fw-bold">{{ r.event_code }}</span>
+              </div>
+              <div class="hb-td">
+                <div class="min-w-0">
+                  <div class="hb-name hb-text-truncate">{{ r.event_name }}</div>
+                  <div class="hb-subline hb-text-truncate">{{ r.locationText }}</div>
+                </div>
+              </div>
+              <div class="hb-td hb-td-center text-muted">{{ r.startText }}</div>
+              <div class="hb-td hb-td-center text-muted">{{ r.endText }}</div>
+              <div class="hb-td hb-td-center">{{ r.capacityText }}</div>
+              <div class="hb-td hb-td-center">
+                <span class="hb-pill" [ngClass]="phaseBadgeClass(r.phase)">{{
+                  phaseLabel(r.phase)
+                }}</span>
+              </div>
+              <div class="hb-td hb-td-center">
+                <span class="hb-pill" [ngClass]="statusBadgeClass(r.status)">{{
+                  statusLabel(r.status)
+                }}</span>
+              </div>
+              <div class="hb-td hb-td-center" (click)="stopEvent($event)">
+                <button class="hb-icon-btn" (click)="openEdit(r.event_id)">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </div>
+              <div class="hb-td hb-td-center" (click)="stopEvent($event)">
+                <button class="hb-icon-btn danger" (click)="deleteEvent(r.event_id)">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- STEPPER HEADER -->
+    <div class="card hb-card mb-4" *ngIf="vm.mode !== 'list'">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <h4 style="font-weight: 800; color: #fff; margin: 0">LẬP THAY ĐỔI SỰ KIỆN MỚI</h4>
+          <span class="hb-pill" style="font-size: 11px">Mã: Tự sinh khi hoàn tất</span>
+          <span class="hb-pill pill-warn" style="font-size: 11px">Bản nháp</span>
+        </div>
+        <div class="hb-wizard-steps">
+          <div
+            class="hb-step"
+            [class.active]="vm.createStep === 1"
+            [class.done]="vm.createStep > 1"
+            (click)="vm.createStep > 1 && enterEdit()"
+          >
+            <div class="step-circle">1</div>
+            <div class="step-label">Thiết lập sự kiện</div>
+          </div>
+          <div class="step-connector" [class.filled]="vm.createStep > 1"></div>
+          <div
+            class="hb-step"
+            [class.active]="vm.createStep === 2"
+            [class.done]="vm.createStep > 2"
+            (click)="vm.createStep > 2 && openDetail(vm.selectedId!)"
+          >
+            <div class="step-circle">2</div>
+            <div class="step-label">Rà soát chi tiết</div>
+          </div>
+          <div class="step-connector" [class.filled]="vm.createStep > 2"></div>
+          <div class="hb-step" [class.active]="vm.createStep === 3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Hoàn tất xuất bản</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <ng-container *ngIf="vm.mode !== 'list' && vm.createStep === 3">
+      <div class="card hb-card hb-card-pad text-center py-5">
+        <div class="mb-4">
+          <i class="bi bi-patch-check-fill text-success" style="font-size: 80px"></i>
+        </div>
+        <h2 class="hb-h1 mb-3">SỰ KIỆN ĐÃ ĐƯỢC XUẤT BẢN!</h2>
+        <p class="text-muted mb-5">Thông tin sự kiện đã được cập nhật và sẵn sàng để đăng ký.</p>
+        <div class="d-flex justify-content-center gap-3">
+          <button class="btn btn-hb-outline" (click)="openDetail(vm.selectedId!)">
+            Xem lại sự kiện
+          </button>
+          <button class="btn btn-hb px-5" (click)="goList()">Về trang quản lý</button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- DETAIL VIEW -->
+    <ng-container *ngIf="vm.mode === 'detail' && vm.createStep !== 3 && vm.detail as eventDetail">
+      <div class="row g-3">
+        <div class="col-lg-8">
+          <div class="card hb-card mb-3 p-0 border-0 overflow-hidden">
+            <div
+              class="hb-event-hero-cover"
+              [style.backgroundImage]="'url(' + getBannerUrl(eventDetail) + ')'"
+            >
+              <div class="hb-event-hero-overlay">
+                <div class="d-flex gap-2">
+                  <span
+                    class="hb-pill"
+                    [ngClass]="
+                      phaseBadgeClass(computePhase(eventDetail.start_at, eventDetail.end_at))
+                    "
+                  >
+                    {{ phaseLabel(computePhase(eventDetail.start_at, eventDetail.end_at)) }}
+                  </span>
+                  <span class="hb-pill" [ngClass]="statusBadgeClass(eventDetail.status)">
+                    {{ statusLabel(eventDetail.status) }}
+                  </span>
+                </div>
+                <div class="hb-event-title">{{ eventDetail.event_name }}</div>
+                <div class="hb-event-sub">{{ eventDetail.description }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="card hb-card hb-card-pad">
+            <div class="hb-section-title"><i class="bi bi-star me-2"></i>Điểm nổi bật</div>
+            <div class="hb-highlight-list">
+              <div class="hb-highlight-item" *ngFor="let h of eventDetail.highlights">
+                <i class="bi bi-check2-circle"></i><span>{{ h }}</span>
+              </div>
+            </div>
+            <hr class="hb-hr" />
+            <div class="hb-section-title">
+              <i class="bi bi-clock-history me-2"></i>Chương trình sự kiện
+            </div>
+            <div class="hb-timeline">
+              <div class="hb-tl-item" *ngFor="let it of eventDetail.schedule">
+                <div class="hb-tl-dot"></div>
+                <div class="hb-tl-time text-primary">{{ fmtTimeRange(it) }}</div>
+                <div class="hb-tl-content">
+                  <div>{{ it.title }}</div>
+                  <div class="text-muted small mt-1">{{ it.description }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card hb-card hb-card-pad mb-3">
+            <div class="hb-section-title">Thao tác</div>
+            <div class="hb-divider"></div>
+            <div class="d-grid gap-2">
+              <button class="btn btn-hb-accent" (click)="enterEdit()">
+                <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa thông tin
+              </button>
+              <button
+                class="btn btn-hb-publish py-2 my-2"
+                (click)="publishEvent()"
+                *ngIf="vm.createStep === 2"
+              >
+                <i class="bi bi-send-check me-2 fs-5"></i> XÁC NHẬN ĐĂNG BÀI
+              </button>
+              <div class="hb-divider my-2"></div>
+              <button class="btn btn-hb-danger-outline" (click)="deleteEvent(eventDetail.event_id)">
+                <i class="bi bi-trash3 me-1"></i> Hủy & Xóa sự kiện
+              </button>
+            </div>
+          </div>
+          <div class="card hb-card hb-card-pad">
+            <div class="hb-section-title">
+              <i class="bi bi-info-circle me-2"></i>Thông tin chi tiết
+            </div>
+            <div class="hb-info-kv">
+              <div class="kv-item">
+                <div class="kv-label">Mã sự kiện</div>
+                <div class="kv-value">{{ eventDetail.event_code }}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Thời gian</div>
+                <div class="kv-value">
+                  {{ fmtDateRange(eventDetail.start_at, eventDetail.end_at) }}
+                </div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Địa điểm</div>
+                <div class="kv-value">{{ eventDetail.location_name }} · {{ eventDetail.city }}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Địa chỉ</div>
+                <div class="kv-value">{{ eventDetail.address }}</div>
+              </div>
+              <div class="kv-item">
+                <div class="kv-label">Quy mô</div>
+                <div class="kv-value">
+                  {{ eventDetail.registered_count }} / {{ $any(eventDetail).capacity }} slots
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- EDIT VIEW -->
+    <ng-container *ngIf="vm.mode === 'edit' && vm.createStep !== 3">
+      <div class="row g-3" *ngIf="$any(vm.editModel) as em">
+        <div class="col-lg-8">
+          <div class="card hb-card hb-card-pad">
+            <div class="hb-section-title">Nội dung sự kiện</div>
+            <div class="mb-3">
+              <label class="form-label">Tên sự kiện *</label>
+              <input
+                class="form-control form-control-lg"
+                [(ngModel)]="em.event_name"
+                (ngModelChange)="markDirty()"
+                placeholder="Ví dụ: Interior Expo 2025"
+              />
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Mã định danh</label
+                ><input
+                  class="form-control"
+                  [(ngModel)]="em.event_code"
+                  (ngModelChange)="markDirty()"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Trạng thái</label>
+                <select class="form-select" [(ngModel)]="em.status" (ngModelChange)="markDirty()">
+                  <option value="draft">Bản nháp</option>
+                  <option value="published">Xuất bản</option>
+                  <option value="paused">Tạm dừng</option>
+                  <option value="ended">Đã kết thúc</option>
+                  <option value="cancelled">Đã hủy</option>
+                </select>
+              </div>
+            </div>
+            <div class="row g-3 mt-1">
+              <div class="col-md-6">
+                <label class="form-label">Ngày bắt đầu</label
+                ><input
+                  class="form-control"
+                  type="date"
+                  [(ngModel)]="em.start_at"
+                  (ngModelChange)="markDirty()"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Ngày kết thúc</label
+                ><input
+                  class="form-control"
+                  type="date"
+                  [(ngModel)]="em.end_at"
+                  (ngModelChange)="markDirty()"
+                />
+              </div>
+            </div>
+            <div class="mt-4">
+              <label class="form-label">Mô tả sự kiện</label
+              ><textarea
+                class="form-control"
+                rows="4"
+                [(ngModel)]="em.description"
+                (ngModelChange)="markDirty()"
+                placeholder="Mô tả tóm tắt sự kiện..."
+              ></textarea>
+            </div>
+            <hr class="hb-hr" />
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <div class="hb-section-title mb-0">Banner sự kiện</div>
+              <label class="btn btn-hb-outline btn-sm mb-0"
+                ><i class="bi bi-upload me-1"></i> Upload banner<input
+                  type="file"
+                  class="d-none"
+                  accept="image/*"
+                  (change)="onBannerPicked($event)"
+              /></label>
+            </div>
+            <div class="hb-banner-editor" *ngIf="bannerPreviewUrl; else noBanner">
+              <img [src]="bannerPreviewUrl" alt="banner preview" />
+              <button class="hb-icon-btn danger hb-float-remove" (click)="removeBannerPicked()">
+                <i class="bi bi-trash3"></i>
+              </button>
+            </div>
+            <ng-template #noBanner
+              ><div class="hb-empty-upload">
+                Chưa có banner. Hãy upload ảnh banner cho sự kiện.
+              </div></ng-template
+            >
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card hb-card hb-card-pad hb-sticky-side">
+            <div class="hb-section-title">Địa điểm & Quy mô</div>
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Tên địa điểm</label
+                ><input
+                  class="form-control"
+                  [(ngModel)]="em.location_name"
+                  (ngModelChange)="markDirty()"
+                />
+              </div>
+              <div class="col-12">
+                <label class="form-label">Địa chỉ chi tiết</label
+                ><input
+                  class="form-control"
+                  [(ngModel)]="em.address"
+                  (ngModelChange)="markDirty()"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Thành phố</label
+                ><input class="form-control" [(ngModel)]="em.city" (ngModelChange)="markDirty()" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Tổng slots</label
+                ><input
+                  class="form-control"
+                  type="number"
+                  [(ngModel)]="em.capacity"
+                  (ngModelChange)="markDirty()"
+                />
+              </div>
+            </div>
+            <hr class="hb-hr" />
+            <button
+              class="btn btn-hb w-100 mb-2 py-2"
+              (click)="saveEdit()"
+              [disabled]="!em.event_name || (vm.selectedId !== 'NEW' && !isDirty)"
+            >
+              <i class="bi bi-arrow-right-circle me-1"></i> TIẾP THEO: XEM TRƯỚC
+            </button>
+            <button class="btn btn-hb-outline w-100 py-2" (click)="cancelEdit()">Hủy bỏ</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <!-- closes hb-page-body -->
+
+  <hb-confirm-modal
+    [isOpen]="saveModalOpen"
+    title="Xác nhận lưu thay đổi"
+    [type]="'info'"
+    (confirm)="executeSave()"
+    (cancel)="onCancelSave()"
+  ></hb-confirm-modal>
+  <hb-confirm-modal
+    [isOpen]="discardModalOpen"
+    title="Thay đổi chưa được lưu"
+    [type]="'warning'"
+    (confirm)="onConfirmDiscard()"
+    (cancel)="onCancelDiscard()"
+  ></hb-confirm-modal>
+  <hb-confirm-modal
+    [isOpen]="deleteModalOpen"
+    title="Xác nhận xóa sự kiện"
+    [type]="'danger'"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()"
+  ></hb-confirm-modal>
+</div>
+<!-- closes hb-page-shell -->

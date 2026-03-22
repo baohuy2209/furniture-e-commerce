@@ -1,1 +1,501 @@
-<p>management-customers works!</p>
+<div class="hb-page-shell">
+  <!-- ══════════════ LIST ══════════════ -->
+  <ng-container *ngIf="mode === 'list'">
+    <ng-container *ngIf="vm$ | async as vm">
+      <div class="hb-page-header">
+        <div class="hb-header-left">
+          <div class="hb-title" style="cursor: pointer">QUẢN LÝ KHÁCH HÀNG</div>
+        </div>
+        <div class="hb-header-actions">
+          <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
+            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+          </button>
+          <button class="btn btn-hb" type="button" (click)="exportCsv(vm.items)">
+            <i class="bi bi-download me-1"></i> Xuất CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="hb-page-body">
+        <!-- Loading -->
+        <div class="hb-loading-wrap" *ngIf="loading">
+          <div class="spinner-border text-primary" role="status"></div>
+          <span class="ms-3 text-muted">Đang tải danh sách khách hàng...</span>
+        </div>
+
+        <ng-container *ngIf="!loading">
+          <!-- Summary -->
+          <div class="hb-summary-row" *ngIf="vm.summary">
+            <div class="hb-summary-card">
+              <div class="hb-sc-icon"><i class="bi bi-people"></i></div>
+              <div>
+                <div class="hb-sc-label">Tổng khách hàng</div>
+                <div class="hb-sc-value">{{ vm.summary.totalCustomers }}</div>
+              </div>
+            </div>
+            <div class="hb-summary-card">
+              <div class="hb-sc-icon ok"><i class="bi bi-person-plus"></i></div>
+              <div>
+                <div class="hb-sc-label">Mới trong tháng</div>
+                <div class="hb-sc-value">{{ vm.summary.newThisMonth }}</div>
+              </div>
+            </div>
+            <div class="hb-summary-card">
+              <div class="hb-sc-icon danger"><i class="bi bi-lock"></i></div>
+              <div>
+                <div class="hb-sc-label">Tài khoản bị khóa</div>
+                <div class="hb-sc-value">{{ vm.summary.lockedCount }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter bar -->
+          <div class="card hb-card hb-card-pad mb-3">
+            <div class="hb-filterbar">
+              <input
+                class="form-control"
+                placeholder="ID / Tên / Email / SĐT / Username..."
+                [ngModel]="q"
+                (ngModelChange)="onSearchChange($event)"
+              />
+              <select class="form-select" [ngModel]="f_status" (ngModelChange)="setStatus($event)">
+                <option value="all">-- Trạng thái --</option>
+                <option value="unlocked">Hoạt động</option>
+                <option value="locked">Tạm khóa</option>
+              </select>
+              <select
+                class="form-select"
+                [ngModel]="pageSize"
+                (ngModelChange)="setPageSize($event)"
+              >
+                <option [ngValue]="10">10 / trang</option>
+                <option [ngValue]="20">20 / trang</option>
+                <option [ngValue]="50">50 / trang</option>
+              </select>
+              <div class="d-none d-xl-block"></div>
+              <div class="d-none d-xl-block"></div>
+              <div class="d-none d-xl-block"></div>
+              <div class="d-none d-xl-block"></div>
+              <button
+                class="btn btn-hb-outline hb-filter-reset"
+                type="button"
+                (click)="resetFilters()"
+              >
+                <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+              </button>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="card hb-card hb-table-card">
+            <div class="hb-table-wrap">
+              <div class="hb-table">
+                <div class="hb-table-head hb-grid-customers">
+                  <div class="hb-th">
+                    <div class="th-content"><span>STT</span></div>
+                  </div>
+
+                  <div class="hb-th" (click)="toggleSort('name')">
+                    <div class="th-content">
+                      <span>KHÁCH HÀNG</span><i class="fas" [ngClass]="sortIcon('name')"></i>
+                    </div>
+                  </div>
+
+                  <div class="hb-th">
+                    <div class="th-content"><span>SĐT</span></div>
+                  </div>
+                  <div class="hb-th">
+                    <div class="th-content"><span>HẠNG</span></div>
+                  </div>
+
+                  <div class="hb-th">
+                    <div class="th-content"><span>TRẠNG THÁI</span></div>
+                  </div>
+
+                  <div class="hb-th" (click)="toggleSort('orders')">
+                    <div class="th-content">
+                      <span>ĐƠN HÀNG</span><i class="fas" [ngClass]="sortIcon('orders')"></i>
+                    </div>
+                  </div>
+
+                  <div class="hb-th" (click)="toggleSort('spent')">
+                    <div class="th-content">
+                      <span>TỔNG CHI</span><i class="fas" [ngClass]="sortIcon('spent')"></i>
+                    </div>
+                  </div>
+
+                  <div class="hb-th" (click)="toggleSort('createdAt')">
+                    <div class="th-content">
+                      <span>NGÀY TẠO</span><i class="fas" [ngClass]="sortIcon('createdAt')"></i>
+                    </div>
+                  </div>
+
+                  <div class="hb-th"><span>KHÓA</span></div>
+                  <div class="hb-th"><span>CHI TIẾT</span></div>
+                </div>
+
+                <!-- Rows -->
+                <div
+                  class="hb-table-row hb-grid-customers"
+                  *ngFor="let r of vm.items"
+                  (click)="openDetail(r.user._id)"
+                >
+                  <div class="hb-td hb-td-stt text-muted">{{ r.stt }}</div>
+
+                  <div class="hb-td">
+                    <div class="d-flex align-items-center gap-3">
+                      <div class="hb-avatar">
+                        <span>{{ r.initials }}</span>
+                      </div>
+                      <div class="hb-name-block">
+                        <div class="hb-text-truncate">
+                          <span class="hb-name">{{ r.displayName }}</span>
+                          <span class="hb-id">#{{ r.user._id | slice: 0 : 8 }}</span>
+                        </div>
+                        <div class="hb-subline hb-text-truncate">{{ r.user.email }}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="hb-td hb-td-center text-muted fw-semibold">
+                    {{ r.user.phone ?? '—' }}
+                  </div>
+
+                  <div class="hb-td hb-td-center">
+                    <span class="hb-pill" [ngClass]="r.rankClass">{{ r.rank }}</span>
+                  </div>
+
+                  <div class="hb-td hb-td-center">
+                    <span
+                      class="hb-pill"
+                      [class.is-locked]="r.user.status === 'locked'"
+                      [class.is-soft]="r.user.status !== 'locked'"
+                    >
+                      {{ statusLabel(r.user.status) }}
+                    </span>
+                  </div>
+
+                  <div class="hb-td hb-td-center">{{ r.ordersCount }}</div>
+
+                  <div class="hb-td hb-td-num">{{ formatMoney(r.totalSpent) }}</div>
+
+                  <div class="hb-td hb-td-center text-muted">
+                    {{ r.user.createdAt | date: 'dd/MM/yyyy' }}
+                  </div>
+
+                  <!-- Lock / Unlock -->
+                  <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
+                    <button
+                      class="hb-icon-btn"
+                      [class.danger]="r.user.status !== 'locked'"
+                      [title]="r.user.status === 'locked' ? 'Mở khóa' : 'Tạm khóa'"
+                      (click)="openLockModal(r.user)"
+                    >
+                      <i
+                        class="bi"
+                        [ngClass]="r.user.status === 'locked' ? 'bi-unlock-fill' : 'bi-lock'"
+                      ></i>
+                    </button>
+                  </div>
+
+                  <!-- Detail -->
+                  <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
+                    <button
+                      class="hb-icon-btn"
+                      title="Xem chi tiết"
+                      (click)="openDetail(r.user._id)"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="p-5 text-center text-muted" *ngIf="vm.items.length === 0">
+                  Không tìm thấy khách hàng phù hợp.
+                </div>
+              </div>
+            </div>
+
+            <div class="hb-pagination">
+              <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">
+                ‹
+              </button>
+              <div class="hb-page-info">
+                Trang <b>{{ vm.page }}</b> / <b>{{ vm.pageCount }}</b>
+              </div>
+              <button
+                class="hb-page-btn"
+                [disabled]="vm.page >= vm.pageCount"
+                (click)="setPage(vm.page + 1)"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <!-- ══════════════ DETAIL ══════════════ -->
+  <ng-container *ngIf="mode === 'detail'">
+    <div class="hb-page-header">
+      <div class="hb-header-left">
+        <div class="hb-title">CHI TIẾT KHÁCH HÀNG</div>
+      </div>
+      <div class="hb-header-actions">
+        <button class="btn btn-hb-outline" (click)="backToList()">
+          <i class="bi bi-arrow-left me-1"></i> Quay lại
+        </button>
+        <button
+          class="btn btn-hb-accent"
+          *ngIf="detail"
+          (click)="openLockModal(detail.user)"
+          [disabled]="lockLoading"
+        >
+          <span *ngIf="lockLoading" class="spinner-border spinner-border-sm me-1"></span>
+          <i
+            class="bi me-1"
+            [class.bi-unlock]="detail.user.status === 'locked'"
+            [class.bi-lock]="detail.user.status !== 'locked'"
+            *ngIf="!lockLoading"
+          ></i>
+          {{ detail?.user?.status === 'locked' ? 'Mở khóa tài khoản' : 'Tạm khóa tài khoản' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading detail -->
+    <div class="hb-loading-wrap" *ngIf="detailLoading">
+      <div class="spinner-border text-primary" role="status"></div>
+      <span class="ms-3 text-muted">Đang tải thông tin khách hàng...</span>
+    </div>
+
+    <!-- Not found -->
+    <div class="hb-loading-wrap" *ngIf="!detailLoading && !detail">
+      <div class="text-center">
+        <i class="bi bi-person-x" style="font-size: 2.5rem; color: var(--hb-muted)"></i>
+        <div class="mt-2 text-muted">Không tìm thấy khách hàng.</div>
+        <button class="btn btn-hb-outline mt-3" (click)="backToList()">Quay lại</button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <ng-container *ngIf="!detailLoading && detail as d">
+      <div class="hb-page-body mt-4">
+        <div class="row g-4 pt-1">
+          <!-- ASIDE -->
+          <aside class="col-12 col-xl-4">
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-profile-top">
+                <div class="hb-avatar hb-avatar-lg">
+                  <span>{{ d.initials }}</span>
+                </div>
+                <div class="hb-profile-name">{{ d.displayName }}</div>
+                <span
+                  class="hb-pill"
+                  [class.is-locked]="d.user.status === 'locked'"
+                  [class.is-soft]="d.user.status !== 'locked'"
+                >
+                  {{ statusLabel(d.user.status) }}
+                </span>
+                <span class="hb-pill mt-1" [ngClass]="d.rankClass">{{ d.rank }}</span>
+              </div>
+
+              <div class="hb-profile-stats">
+                <div class="hb-stat">
+                  <div class="hb-stat-num">{{ d.ordersCount }}</div>
+                  <div class="hb-stat-label">Đơn hàng</div>
+                </div>
+                <div class="hb-stat">
+                  <div class="hb-stat-num" style="font-size: 16px">
+                    {{ formatMoney(d.totalSpent) }}
+                  </div>
+                  <div class="hb-stat-label">Tổng chi</div>
+                </div>
+              </div>
+
+              <div class="hb-profile-kv">
+                <div class="hb-kv">
+                  <div class="hb-k">Username</div>
+                  <div class="hb-v">{{ d.user.username }}</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Email</div>
+                  <div class="hb-v">{{ d.user.email }}</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Số điện thoại</div>
+                  <div class="hb-v">{{ d.user.phone ?? '—' }}</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Giới tính</div>
+                  <div class="hb-v">{{ d.user.gender ?? '—' }}</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Điểm tích lũy</div>
+                  <div class="hb-v text-primary fw-bold">{{ d.user.points ?? 0 | number }} pt</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Ngày tham gia</div>
+                  <div class="hb-v">{{ d.user.createdAt | date: 'dd/MM/yyyy' }}</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Đăng nhập lần cuối</div>
+                  <div class="hb-v">
+                    {{
+                      d.user.last_login
+                        ? (d.user.last_login | date: 'dd/MM/yyyy HH:mm')
+                        : 'Chưa đăng nhập'
+                    }}
+                  </div>
+                </div>
+                <div class="hb-kv">
+                  <div class="hb-k">Xác thực email</div>
+                  <div class="hb-v">
+                    <span
+                      class="hb-pill"
+                      [class.is-soft]="d.user.is_verified"
+                      [class.is-locked]="!d.user.is_verified"
+                    >
+                      {{ d.user.is_verified ? 'Đã xác thực' : 'Chưa xác thực' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- MAIN TABS -->
+          <section class="col-12 col-xl-8">
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-tabs">
+                <button
+                  class="hb-tab"
+                  [class.is-active]="detailTab === 'overview'"
+                  (click)="setDetailTab('overview')"
+                >
+                  Tổng quan
+                </button>
+                <button
+                  class="hb-tab"
+                  [class.is-active]="detailTab === 'orders'"
+                  (click)="setDetailTab('orders')"
+                >
+                  Lịch sử đơn hàng ({{ d.ordersCount }})
+                </button>
+              </div>
+
+              <!-- OVERVIEW -->
+              <div *ngIf="detailTab === 'overview'">
+                <div class="hb-panels">
+                  <div class="hb-mini-card">
+                    <div class="hb-mini-title">Điểm tích lũy</div>
+                    <div class="hb-mini-value">{{ d.user.points ?? 0 | number }} pt</div>
+                  </div>
+                  <div class="hb-mini-card">
+                    <div class="hb-mini-title">Hạng thành viên</div>
+                    <div class="hb-mini-value">{{ d.rank }}</div>
+                  </div>
+                  <div class="hb-mini-card">
+                    <div class="hb-mini-title">Đơn hoàn thành</div>
+                    <div class="hb-mini-value">
+                      {{ completedCount(d.orders) }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="hb-subtitle">5 đơn hàng gần nhất</div>
+                <div class="hb-table-wrap-small">
+                  <div class="hb-table-small-header d-flex justify-content-between">
+                    <span style="width: 160px">Mã đơn</span>
+                    <span style="width: 110px">Ngày tạo</span>
+                    <span style="width: 130px">Thanh toán</span>
+                    <span style="width: 130px">Trạng thái</span>
+                    <span class="text-end" style="width: 130px">Tổng tiền</span>
+                  </div>
+                  <div
+                    class="hb-table-small-row d-flex justify-content-between align-items-center"
+                    *ngFor="let o of d.orders.slice(0, 5)"
+                  >
+                    <span class="text-primary fw-bold" style="width: 160px; font-size: 13px">{{
+                      o.order_number
+                    }}</span>
+                    <span style="width: 110px">{{ o.createdAt | date: 'dd/MM/yyyy' }}</span>
+                    <span style="width: 130px">
+                      <span class="hb-pill" [ngClass]="payStatusPillClass(o.payment_status)">{{
+                        payStatusLabel(o.payment_status)
+                      }}</span>
+                    </span>
+                    <span style="width: 130px">
+                      <span class="hb-pill" [ngClass]="orderStatusPillClass(o.status)">{{
+                        orderStatusLabel(o.status)
+                      }}</span>
+                    </span>
+                    <span class="text-end fw-bold" style="width: 130px">{{
+                      formatMoney(o.total_amount)
+                    }}</span>
+                  </div>
+                  <div class="hb-empty" *ngIf="d.orders.length === 0">
+                    Khách hàng chưa có đơn hàng.
+                  </div>
+                </div>
+              </div>
+
+              <!-- ORDERS -->
+              <div *ngIf="detailTab === 'orders'">
+                <div class="hb-subtitle">Tất cả đơn hàng</div>
+                <div class="hb-table-wrap-small">
+                  <div class="hb-table-small-header d-flex justify-content-between">
+                    <span style="width: 160px">Mã đơn</span>
+                    <span style="width: 110px">Ngày đặt</span>
+                    <span style="width: 130px">Thanh toán</span>
+                    <span style="width: 130px">Trạng thái</span>
+                    <span class="text-end" style="width: 130px">Tổng tiền</span>
+                  </div>
+                  <div
+                    class="hb-table-small-row d-flex justify-content-between align-items-center"
+                    *ngFor="let o of d.orders"
+                  >
+                    <span class="text-primary fw-bold" style="width: 160px; font-size: 13px">{{
+                      o.order_number
+                    }}</span>
+                    <span style="width: 110px">{{ o.createdAt | date: 'dd/MM/yyyy' }}</span>
+                    <span style="width: 130px">
+                      <span class="hb-pill" [ngClass]="payStatusPillClass(o.payment_status)">{{
+                        payStatusLabel(o.payment_status)
+                      }}</span>
+                    </span>
+                    <span style="width: 130px">
+                      <span class="hb-pill" [ngClass]="orderStatusPillClass(o.status)">{{
+                        orderStatusLabel(o.status)
+                      }}</span>
+                    </span>
+                    <span class="text-end fw-bold" style="width: 130px">{{
+                      formatMoney(o.total_amount)
+                    }}</span>
+                  </div>
+                  <div class="hb-empty" *ngIf="d.orders.length === 0">
+                    Khách hàng chưa có đơn hàng.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <!-- ══════════════ MODAL: Lock/Unlock ══════════════ -->
+  <hb-confirm-modal
+    [isOpen]="lockModalOpen"
+    [title]="lockModalTitle"
+    [message]="lockModalMessage"
+    [type]="lockTargetUser?.status === 'locked' ? 'info' : 'danger'"
+    [confirmLabel]="lockTargetUser?.status === 'locked' ? 'Mở khóa' : 'Tạm khóa'"
+    cancelLabel="Đóng"
+    (confirm)="onConfirmLock()"
+    (cancel)="onCancelLock()"
+  ></hb-confirm-modal>
+</div>

@@ -1,1 +1,472 @@
-<p>general-dashboard works!</p>
+<div class="hb-page-shell">
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title" routerLink="/admin" style="cursor: pointer">DASHBOARD</div>
+    </div>
+
+    <!-- HEADER ACTIONS -->
+    <div class="hb-header-actions">
+      <button class="btn btn-hb-outline" (click)="resetGlobalFilters()">
+        <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+      </button>
+      <button class="btn btn-hb-accent" (click)="loadData()">
+        <i class="bi bi-lightning-charge me-1"></i> Làm mới dữ liệu
+      </button>
+    </div>
+  </div>
+
+  <div class="hb-page-body">
+    <!-- TOP ANALYTICS BAR -->
+    <div class="hb-analytics-header mb-4">
+      <div class="hb-filter-section">
+        <div class="btn-group hb-preset-group">
+          <button
+            class="btn btn-hb-preset"
+            [class.active]="isGlobalPresetActive(7)"
+            (click)="applyGlobalPreset(7)"
+          >
+            7D
+          </button>
+          <button
+            class="btn btn-hb-preset"
+            [class.active]="isGlobalPresetActive(30)"
+            (click)="applyGlobalPreset(30)"
+          >
+            30D
+          </button>
+          <button
+            class="btn btn-hb-preset"
+            [class.active]="isGlobalPresetActive(90)"
+            (click)="applyGlobalPreset(90)"
+          >
+            90D
+          </button>
+        </div>
+
+        <div class="hb-date-range-picker">
+          <div class="hb-date-field">
+            <label>TỪ</label>
+            <input
+              type="date"
+              [(ngModel)]="g_from_date"
+              (ngModelChange)="onGlobalDateChange()"
+              [attr.max]="todayStr"
+            />
+          </div>
+          <div class="hb-date-field">
+            <label>ĐẾN</label>
+            <input
+              type="date"
+              [(ngModel)]="g_to_date"
+              (ngModelChange)="onGlobalDateChange()"
+              [attr.min]="g_from_date"
+              [attr.max]="todayStr"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY KPI ROW -->
+    <section class="hb-summary-grid mb-4">
+      <div class="hb-summary-card-v2">
+        <div class="card-top">
+          <div class="hb-sc-icon revenue"><i class="bi bi-currency-dollar"></i></div>
+          <div
+            class="hb-growth-badge"
+            [class.up]="vm.revGrowth >= 0"
+            [class.down]="vm.revGrowth < 0"
+          >
+            {{ vm.revGrowth >= 0 ? '+' : '' }}{{ vm.revGrowth | number: '1.1-1' }}%
+          </div>
+        </div>
+        <div class="card-bottom">
+          <div class="hb-sc-label">DOANH THU</div>
+          <div class="hb-sc-value-lg">{{ fmtVND(vm.revenue) }}</div>
+        </div>
+      </div>
+
+      <div class="hb-summary-card-v2">
+        <div class="card-top">
+          <div class="hb-sc-icon orders"><i class="bi bi-bag-check"></i></div>
+          <div
+            class="hb-growth-badge"
+            [class.up]="vm.ordGrowth >= 0"
+            [class.down]="vm.ordGrowth < 0"
+          >
+            {{ vm.ordGrowth >= 0 ? '+' : '' }}{{ vm.ordGrowth | number: '1.1-1' }}%
+          </div>
+        </div>
+        <div class="card-bottom">
+          <div class="hb-sc-label">TỔNG ĐƠN HÀNG</div>
+          <div class="hb-sc-value-lg">{{ vm.totalOrders }}</div>
+        </div>
+      </div>
+
+      <div class="hb-summary-card-v2">
+        <div class="card-top">
+          <div class="hb-sc-icon active"><i class="bi bi-lightning-charge"></i></div>
+          <div class="hb-growth-badge stable">Stable</div>
+        </div>
+        <div class="card-bottom">
+          <div class="hb-sc-label">ĐANG XỬ LÝ</div>
+          <div class="hb-sc-value-lg">{{ vm.activeOrders }}</div>
+        </div>
+      </div>
+
+      <div class="hb-summary-card-v2">
+        <div class="card-top">
+          <div class="hb-sc-icon customers"><i class="bi bi-people"></i></div>
+          <div class="hb-growth-badge up">+2%</div>
+        </div>
+        <div class="card-bottom">
+          <div class="hb-sc-label">KHÁCH HÀNG</div>
+          <div class="hb-sc-value-lg">{{ vm.customers }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHARTS & STATUS ROW -->
+    <div class="row g-4 mb-4">
+      <!-- TREND CHART -->
+      <div class="col-lg-8">
+        <div class="hb-panel-v2 h-100">
+          <div class="panel-header">
+            <h5 class="m-0">XU HƯỚNG DOANH THU & ĐƠN HÀNG</h5>
+            <div class="hb-chart-legend-v2">
+              <div class="legend-item"><span class="dot rev"></span> Doanh thu</div>
+              <div class="legend-item"><span class="dot ord"></span> Đơn hàng</div>
+            </div>
+          </div>
+          <div class="panel-body p-0">
+            <div class="hb-chart-container">
+              <svg
+                #chartSvg
+                [attr.viewBox]="'0 0 ' + vm.series.svg.width + ' ' + vm.series.svg.height"
+                (mousemove)="onChartMouseMove($event, chartSvg)"
+                (mouseleave)="onChartMouseLeave()"
+                preserveAspectRatio="none"
+                style="cursor: crosshair"
+              >
+                <defs>
+                  <linearGradient id="gradientRev" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#818cf8" stop-opacity="0.3" />
+                    <stop offset="100%" stop-color="#818cf8" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <polygon
+                  [attr.points]="
+                    '0,' +
+                    vm.series.svg.height +
+                    ' ' +
+                    vm.series.svg.revPoints +
+                    ' ' +
+                    vm.series.svg.width +
+                    ',' +
+                    vm.series.svg.height
+                  "
+                  fill="url(#gradientRev)"
+                />
+                <polyline
+                  [attr.points]="vm.series.svg.revPoints"
+                  fill="none"
+                  class="chart-line-rev"
+                  stroke-width="4"
+                />
+                <polyline
+                  [attr.points]="vm.series.svg.ordPoints"
+                  fill="none"
+                  class="chart-line-ord"
+                  stroke-width="3"
+                  stroke-dasharray="8 4"
+                />
+
+                <ng-container
+                  *ngFor="
+                    let b of vm.series.buckets;
+                    let i = index;
+                    let last = last;
+                    let first = first
+                  "
+                >
+                  <text
+                    *ngIf="first || last || i % 5 === 0"
+                    [attr.x]="
+                      (i * (vm.series.svg.width - 36)) / (vm.series.buckets.length - 1) + 18
+                    "
+                    [attr.y]="vm.series.svg.height - 5"
+                    text-anchor="middle"
+                  >
+                    {{ b.label }}
+                  </text>
+                </ng-container>
+
+                <!-- INTERACTIVE OVERLAYS -->
+                <g *ngIf="hoveredBucket" class="chart-interactions">
+                  <!-- Vertical Guideline -->
+                  <line
+                    [attr.x1]="hoveredX"
+                    [attr.y1]="0"
+                    [attr.x2]="hoveredX"
+                    [attr.y2]="vm.series.svg.height"
+                    stroke="rgba(255,255,255,0.2)"
+                    stroke-width="1"
+                    stroke-dasharray="4 4"
+                  />
+
+                  <!-- Revenue Point Highlight -->
+                  <circle
+                    [attr.cx]="hoveredX"
+                    [attr.cy]="
+                      18 +
+                      (vm.series.svg.height - 36) *
+                        (1 - (hoveredBucket.smoothedRev || 0) / vm.series.svg.revMax)
+                    "
+                    r="6"
+                    fill="#818cf8"
+                    stroke="white"
+                    stroke-width="2"
+                    style="filter: drop-shadow(0 0 4px #818cf8)"
+                  />
+
+                  <!-- Orders Point Highlight -->
+                  <circle
+                    [attr.cx]="hoveredX"
+                    [attr.cy]="
+                      18 +
+                      (vm.series.svg.height - 36) *
+                        (1 - (hoveredBucket.smoothedOrd || 0) / vm.series.svg.ordMax)
+                    "
+                    r="4"
+                    fill="#fbbf24"
+                    stroke="white"
+                    stroke-width="2"
+                    style="filter: drop-shadow(0 0 4px #fbbf24)"
+                  />
+
+                  <!-- Tooltip Box -->
+                  <g
+                    class="chart-tooltip"
+                    [attr.transform]="
+                      'translate(' +
+                      (hoveredX > vm.series.svg.width - 180 ? hoveredX - 190 : hoveredX + 15) +
+                      ', 20)'
+                    "
+                  >
+                    <rect
+                      width="170"
+                      height="90"
+                      rx="14"
+                      fill="rgba(15, 23, 42, 0.95)"
+                      stroke="rgba(255,255,255,0.15)"
+                      style="backdrop-filter: blur(8px)"
+                    />
+                    <text x="15" y="28" fill="#fff" font-weight="700" font-size="13">
+                      {{ hoveredBucket.label }}
+                    </text>
+
+                    <text x="15" y="52" fill="#94a3b8" font-size="11">Doanh thu:</text>
+                    <text
+                      x="155"
+                      y="52"
+                      text-anchor="end"
+                      fill="#818cf8"
+                      font-weight="700"
+                      font-size="12"
+                    >
+                      {{ fmtVND(hoveredBucket.smoothedRev || 0) }}
+                    </text>
+
+                    <text x="15" y="74" fill="#94a3b8" font-size="11">Đơn hàng:</text>
+                    <text
+                      x="155"
+                      y="74"
+                      text-anchor="end"
+                      fill="#fbbf24"
+                      font-weight="700"
+                      font-size="12"
+                    >
+                      {{ hoveredBucket.smoothedOrd || 0 | number: '1.0-1' }}
+                    </text>
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS DONUT -->
+      <div class="col-lg-4">
+        <div class="hb-panel-v2 h-100">
+          <div class="panel-header">
+            <h5 class="m-0">TRẠNG THÁI CÁC SẢN PHẨM TRONG ĐƠN HÀNG</h5>
+          </div>
+          <div class="panel-body d-flex flex-column align-items-center justify-content-center pt-4">
+            <div class="hb-donut-container mb-4">
+              <svg viewBox="0 0 160 160" class="hb-donut-svg">
+                <circle
+                  cx="80"
+                  cy="80"
+                  [attr.r]="vm.donut.r"
+                  fill="transparent"
+                  stroke="rgba(255,255,255,0.05)"
+                  stroke-width="12"
+                ></circle>
+                <circle
+                  *ngFor="let s of vm.donut.segments"
+                  cx="80"
+                  cy="80"
+                  [attr.r]="vm.donut.r"
+                  fill="transparent"
+                  [attr.stroke]="statusPillColor(s.key)"
+                  stroke-width="14"
+                  [attr.stroke-dasharray]="s.dash"
+                  [attr.stroke-dashoffset]="-s.offset"
+                  stroke-linecap="round"
+                ></circle>
+              </svg>
+              <div class="donut-center">
+                <div class="val">{{ vm.totalOrderItems }}</div>
+                <div class="lab">ITEM/TẤT CẢ ĐƠN HÀNG</div>
+              </div>
+            </div>
+
+            <div class="hb-status-legend">
+              <div *ngFor="let s of vm.donut.segments" class="legend-item">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="dot" [style.background-color]="statusPillColor(s.key)"></span>
+                  <span class="name">{{ statusLabel(s.key) }}</span>
+                </div>
+                <span class="count">{{ s.value }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT ORDERS -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-12">
+        <div class="hb-panel-v2">
+          <div class="panel-header">
+            <h5 class="m-0">ĐƠN HÀNG MỚI TRONG KỲ</h5>
+            <a routerLink="/admin/management-orders" class="btn btn-sm btn-hb-ghost"
+              >Xem tất cả <i class="bi bi-arrow-right"></i
+            ></a>
+          </div>
+          <div class="panel-body p-0">
+            <div class="hb-list-item-v2" *ngFor="let o of vm.recent">
+              <div
+                class="item-img"
+                [style.background]="
+                  'linear-gradient(135deg, ' +
+                  statusPillColor(o.status) +
+                  '20, ' +
+                  statusPillColor(o.status) +
+                  '08)'
+                "
+                [style.border]="'1.5px solid ' + statusPillColor(o.status) + '40'"
+                style="
+                  border-radius: 12px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                <i
+                  class="bi bi-receipt"
+                  style="font-size: 20px"
+                  [style.color]="statusPillColor(o.status)"
+                ></i>
+              </div>
+              <div class="item-info">
+                <span class="name">#{{ o.order_number }}</span>
+                <span class="sub">{{ o.customer_name }} — {{ o.customer_phone }}</span>
+              </div>
+              <div class="d-flex flex-column align-items-end gap-1">
+                <span
+                  class="hb-pill"
+                  [class]="statusPillClass(o.status)"
+                  style="font-size: 10px; padding: 3px 10px"
+                >
+                  {{ statusLabel(o.status) }}
+                </span>
+                <span style="font-size: 12px; font-weight: 700; color: #e2e8f0">{{
+                  fmtVND(o.total_amount)
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM LISTS -->
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="hb-panel-v2 h-100">
+          <div class="panel-header">
+            <h5 class="m-0">SẢN PHẨM BÁN CHẠY</h5>
+          </div>
+          <div class="panel-body p-0">
+            @for (product of products; track $index) {
+              <div class="hb-list-item-v2">
+                <div class="item-img">
+                  <img
+                    [src]="
+                      product.main_image || 'https://via.placeholder.com/48/111827/ffffff?text=P'
+                    "
+                    alt="product"
+                  />
+                </div>
+                <div class="item-info">
+                  <span class="name">{{ product.product_name }}</span>
+                  <span class="sub">ID: {{ product._id }}</span>
+                </div>
+                <div class="item-stats">
+                  <span class="val">{{ product.num_selled }}</span>
+                  <span class="lab">SL BÁN</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hb-panel-v2 h-100">
+          <div class="panel-header">
+            <h5 class="m-0">ĐÁNH GIÁ MỚI</h5>
+          </div>
+          <div class="panel-body p-0">
+            @if (reviews.length > 0) {
+              @for (r of reviews; track $index) {
+                <div class="hb-list-item-v2">
+                  <div class="item-img">
+                    <!-- <img
+                    [src]="r.product_id?.main_image || 'https://via.placeholder.com/48/111827/ffffff?text=U'"
+                    alt="u"
+                  /> -->
+                  </div>
+                  <div class="item-info">
+                    <span class="name">{{ r.user_id }}</span>
+                    <span class="sub line-clamp-1 fst-italic">"{{ r.comments }}"</span>
+                  </div>
+                  <div class="item-rating">
+                    <span class="stars" style="color: #fbbf24">{{ stars(r.rating) }}</span>
+                    <span class="sub" style="font-size: 11px; opacity: 0.6">{{
+                      fmtDateTime(r.createdAt)
+                    }}</span>
+                  </div>
+                </div>
+              }
+            } @else {
+              <p class="text-muted p-4">Chưa có đánh giá nào</p>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

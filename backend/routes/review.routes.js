@@ -10,5 +10,6 @@ router.get(
   [authJwt.protectedRoute],
   reviewController.getReviewsByUser,
 );
+router.get("/admin/news-review", reviewController.getNewsReviewByAdmin);
 
 module.exports = router;

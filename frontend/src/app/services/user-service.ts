@@ -55,6 +55,27 @@ export class UserService {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
+  getAllInfoUser(): Observable<{ message: string; data: IUser[] }> {
+    return this.http
+      .get<{ message: string; data: IUser[] }>(`${environment.backend_url}/user/admin/`, {
+        withCredentials: true,
+      })
+      .pipe(retry(2), catchError(this.handleError));
+  }
+  changeStatusAccount(
+    userId: string,
+    status: string,
+  ): Observable<{ message: string; data: IUser }> {
+    return this.http
+      .post<{ message: string; data: IUser }>(
+        `${environment.backend_url}/user/admin/${userId}`,
+        { status },
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
   handleError(err: HttpErrorResponse) {
     return throwError(() => err);
   }

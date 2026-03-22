@@ -18,6 +18,8 @@ export interface IUser {
   points: number;
   roles: string[];
   dob: string;
+  authProvider?: string;
+  googleId?: string;
   createdAt: Date;
 }
 export interface ILogin {
@@ -44,7 +46,7 @@ export interface IListProducts {
   product_name: string;
   description: string;
   discount_percent: number;
-  tags: string;
+  tags: string[];
   price: number;
   num_selled: number;
   rating: number;
@@ -136,7 +138,7 @@ export interface IWarrantyRequest {
   issue_description: string;
   warranty_status: string;
   approved_by: string;
-  approved_data: Date;
+  approved_date: Date;
   resolution_note: string;
   completed_date: Date;
   product_variant_id: string;
@@ -153,6 +155,8 @@ export interface IReview {
   rating: number;
   comments: string;
   images: string[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 export interface IEvent {
   _id: string;
@@ -237,6 +241,8 @@ export interface IOrder {
   note: string;
   completed_at: string;
   cancel_reason: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 export interface IOrderItem {
   _id: string;
@@ -249,6 +255,8 @@ export interface IOrderItem {
   item_subtotal: number;
   status: 'pending' | 'packed' | 'shipped' | 'delivered' | 'cancelled' | 'returned';
   reviewed: boolean;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 export interface ICustomerInquiry {
   _id: string;
@@ -380,4 +388,23 @@ export interface IPayment {
   payment_method: string;
   status: string;
   paid_at: string | Date;
+}
+export interface IOrderAdmin {
+  _id: string;
+  user_id: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  order_number: string;
+  status: string;
+  before_total: number;
+  discount_total: number;
+  total_shipping_fee: number;
+  total_amount: number;
+  payment_status: string;
+  note: string;
+  cancel_reason: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }

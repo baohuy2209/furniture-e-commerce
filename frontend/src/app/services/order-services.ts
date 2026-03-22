@@ -1,9 +1,18 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { IOrder, IOrderItem, IOrderItemShipping, IPayment } from '../../interface';
+import { IOrder, IOrderAdmin, IOrderItem, IOrderItemShipping, IPayment } from '../../interface';
 import { environment } from '../../environments/environment.development';
+export interface IOrderItemDetail {
+  item: IOrderItem;
+  shipping: IOrderItemShipping | null;
+  payment: IPayment | null;
+}
 
+export interface IOrderDetailResponse {
+  order: IOrderAdmin;
+  items: IOrderItemDetail[];
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -108,19 +117,28 @@ export class OrderServices {
       }>(`${environment.backend_url}/orders/${id}`, { cancel_reason }, { withCredentials: true })
       .pipe(retry(2), catchError(this.handleError));
   }
-  getAllOrdersAdmin(): Observable<{ message: string; data: IOrder[] }> {
+  getAllOrdersAdmin(): Observable<{ message: string; data: IOrderAdmin[] }> {
     return this.http
       .get<{
         message: string;
-        data: IOrder[];
+        data: IOrderAdmin[];
       }>(`${environment.backend_url}/orders/admin/all`, { withCredentials: true })
       .pipe(retry(2), catchError(this.handleError));
   }
-  getOrderDetailAdmin(id: string): Observable<{ message: string; data: IOrder }> {
+  getOrderDetailAdmin(id: string): Observable<{
+    message: string;
+    data: {
+      order: IOrder;
+      items: { item: IOrderItem; shipping: IOrderItemShipping; payment: IPayment }[];
+    };
+  }> {
     return this.http
       .get<{
         message: string;
-        data: IOrder;
+        data: {
+          order: IOrder;
+          items: { item: IOrderItem; shipping: IOrderItemShipping; payment: IPayment }[];
+        };
       }>(`${environment.backend_url}/orders/admin/${id}`, { withCredentials: true })
       .pipe(retry(2), catchError(this.handleError));
   }
@@ -129,7 +147,7 @@ export class OrderServices {
     status: string,
   ): Observable<{ message: string; data: IOrderItem }> {
     return this.http
-      .put<{ message: string; data: IOrderItem }>(
+      .patch<{ message: string; data: IOrderItem }>(
         `${environment.backend_url}/orders/admin/item-status/${orderItemId}`,
         { status },
         {
@@ -141,9 +159,9 @@ export class OrderServices {
   updatePaymentStatus(
     paymentId: string,
     status: string,
-  ): Observable<{ message: string; data: IOrderItem }> {
+  ): Observable<{ message: string; data: IPayment }> {
     return this.http
-      .put<{ message: string; data: IOrderItem }>(
+      .patch<{ message: string; data: IPayment }>(
         `${environment.backend_url}/orders/admin/payment-status/${paymentId}`,
         { status },
         {
@@ -152,6 +170,7 @@ export class OrderServices {
       )
       .pipe(retry(2), catchError(this.handleError));
   }
+
   handleError(err: HttpErrorResponse) {
     return throwError(() => err);
   }

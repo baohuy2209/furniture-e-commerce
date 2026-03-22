@@ -1,1 +1,510 @@
-<p>management-orders works!</p>
+<div class="hb-page-shell" *ngIf="vm$ | async as vm">
+  <!-- ══════════════ HEADER ══════════════ -->
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title" routerLink="/admin/management-orders" style="cursor: pointer">
+        QUẢN LÝ ĐƠN HÀNG
+      </div>
+    </div>
+
+    <div class="hb-header-actions">
+      <ng-container *ngIf="mode === 'list'">
+        <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
+          <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+        </button>
+        <button class="btn btn-hb" type="button" (click)="exportCsv(vm.exportRows)">
+          <i class="bi bi-download me-1"></i> Xuất CSV
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mode === 'detail'">
+        <button class="btn btn-hb-outline" type="button" (click)="onHeaderBack()">
+          <i class="bi bi-arrow-left me-1"></i> Quay lại Danh sách
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- ══════════════ BODY ══════════════ -->
+  <div class="hb-page-body">
+    <!-- ══════════ LIST ══════════ -->
+    <ng-container *ngIf="mode === 'list'">
+      <!-- Loading -->
+      <div class="hb-loading-wrap" *ngIf="loading">
+        <div class="spinner-border text-primary" role="status"></div>
+        <span class="ms-3 text-muted">Đang tải danh sách đơn hàng...</span>
+      </div>
+
+      <ng-container *ngIf="!loading">
+        <!-- Summary -->
+        <div class="hb-summary-row" *ngIf="vm.summary">
+          <div class="hb-summary-card">
+            <div class="hb-sc-icon ok"><i class="bi bi-currency-dollar"></i></div>
+            <div>
+              <div class="hb-sc-label">Tổng doanh thu</div>
+              <div class="hb-sc-value">{{ vm.summary.totalRevenue }}</div>
+            </div>
+          </div>
+          <div class="hb-summary-card">
+            <div class="hb-sc-icon warn"><i class="bi bi-clock-history"></i></div>
+            <div>
+              <div class="hb-sc-label">Chưa hoàn tất</div>
+              <div class="hb-sc-value">{{ vm.summary.pendingCount }}</div>
+            </div>
+          </div>
+          <div class="hb-summary-card">
+            <div class="hb-sc-icon"><i class="bi bi-check2-circle"></i></div>
+            <div>
+              <div class="hb-sc-label">Hoàn tất</div>
+              <div class="hb-sc-value">{{ vm.summary.completedCount }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="card hb-card hb-card-pad mb-3">
+          <div class="hb-filterbar">
+            <input
+              class="form-control"
+              [ngModel]="q"
+              (ngModelChange)="onChangeQ($event)"
+              placeholder="Mã đơn / Tên khách hàng / Email..."
+            />
+            <select
+              class="form-select"
+              [ngModel]="f_status"
+              (ngModelChange)="onChangeStatus($event)"
+            >
+              <option value="">-- Trạng thái đơn --</option>
+              <option value="uncompleted">Chưa hoàn tất</option>
+              <option value="completed">Hoàn tất</option>
+            </select>
+            <select
+              class="form-select"
+              [ngModel]="f_payment"
+              (ngModelChange)="onChangePayment($event)"
+            >
+              <option value="">-- Thanh toán --</option>
+              <option value="unpaid">Chưa thanh toán</option>
+              <option value="paid">Đã thanh toán</option>
+              <option value="refunded">Đã hoàn tiền</option>
+            </select>
+            <select
+              class="form-select"
+              [ngModel]="pageSize"
+              (ngModelChange)="onChangePageSize($event)"
+            >
+              <option [ngValue]="10">10 / trang</option>
+              <option [ngValue]="20">20 / trang</option>
+              <option [ngValue]="50">50 / trang</option>
+            </select>
+            <div class="d-none d-xl-block"></div>
+            <div class="d-none d-xl-block"></div>
+            <div class="d-none d-xl-block"></div>
+            <button
+              class="btn btn-hb-outline hb-filter-reset"
+              type="button"
+              (click)="resetFilters()"
+            >
+              <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+            </button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="card hb-card hb-table-card">
+          <div class="hb-table-wrap">
+            <div class="hb-table">
+              <div class="hb-table-head hb-grid-orders">
+                <div class="hb-th"><span>STT</span></div>
+                <div class="hb-th" (click)="toggleSort('order_number')">
+                  <div class="th-content">
+                    <span>MÃ ĐƠN</span><i class="fas" [ngClass]="sortIcon('order_number')"></i>
+                  </div>
+                </div>
+                <div class="hb-th" (click)="toggleSort('customer')">
+                  <div class="th-content">
+                    <span>KHÁCH HÀNG</span><i class="fas" [ngClass]="sortIcon('customer')"></i>
+                  </div>
+                </div>
+                <div class="hb-th" (click)="toggleSort('status')">
+                  <div class="th-content">
+                    <span>TRẠNG THÁI</span><i class="fas" [ngClass]="sortIcon('status')"></i>
+                  </div>
+                </div>
+                <div class="hb-th" (click)="toggleSort('payment_status')">
+                  <div class="th-content">
+                    <span>THANH TOÁN</span
+                    ><i class="fas" [ngClass]="sortIcon('payment_status')"></i>
+                  </div>
+                </div>
+                <div class="hb-th" (click)="toggleSort('createdAt')">
+                  <div class="th-content">
+                    <span>NGÀY ĐẶT</span><i class="fas" [ngClass]="sortIcon('createdAt')"></i>
+                  </div>
+                </div>
+                <div class="hb-th" (click)="toggleSort('total_amount')">
+                  <div class="th-content">
+                    <span>TỔNG TIỀN</span><i class="fas" [ngClass]="sortIcon('total_amount')"></i>
+                  </div>
+                </div>
+                <div class="hb-th"><span>CHI TIẾT</span></div>
+                <div class="hb-th"></div>
+              </div>
+
+              <!-- Rows -->
+              <div
+                class="hb-table-row hb-grid-orders"
+                *ngFor="let r of vm.rows"
+                (click)="openDetail(r.id)"
+                [class.is-active]="r.id === selectedId"
+              >
+                <div class="hb-td hb-td-center text-muted fw-bold">{{ r.stt }}</div>
+
+                <div class="hb-td">
+                  <div class="hb-text-truncate">
+                    <div class="text-primary fw-bold">{{ r.order_number }}</div>
+                    <div class="text-muted" style="font-size: 11px">
+                      {{ r.id | slice: 0 : 12 }}...
+                    </div>
+                  </div>
+                </div>
+
+                <div class="hb-td">
+                  <div class="hb-text-truncate">
+                    <div class="hb-name">{{ r.customer }}</div>
+                    <div class="text-muted small">{{ r.customerEmail }}</div>
+                  </div>
+                </div>
+
+                <div class="hb-td hb-td-center">
+                  <span class="hb-pill" [ngClass]="r.statusPillClass">{{ r.statusLabel }}</span>
+                </div>
+
+                <div class="hb-td hb-td-center">
+                  <span class="hb-pill" [ngClass]="r.payPillClass">{{ r.paymentLabel }}</span>
+                </div>
+
+                <div class="hb-td hb-td-center text-muted">{{ r.createdAtText }}</div>
+                <div class="hb-td hb-td-num">{{ r.totalText }}</div>
+
+                <div class="hb-td hb-td-center">
+                  <button
+                    class="hb-icon-btn"
+                    type="button"
+                    (click)="stopEvent($event); openDetail(r.id)"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+
+                <div class="hb-td"></div>
+              </div>
+
+              <div class="p-5 text-center text-muted" *ngIf="vm.rows.length === 0 && !loading">
+                Không tìm thấy đơn hàng nào.
+              </div>
+            </div>
+          </div>
+
+          <div class="hb-pagination">
+            <button class="hb-page-btn" [disabled]="vm.page <= 1" (click)="setPage(vm.page - 1)">
+              ‹
+            </button>
+            <div class="hb-page-info">
+              Trang <b>{{ vm.page }}</b> / <b>{{ vm.totalPages }}</b>
+            </div>
+            <button
+              class="hb-page-btn"
+              [disabled]="vm.page >= vm.totalPages"
+              (click)="setPage(vm.page + 1)"
+            >
+              ›
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- ══════════ DETAIL ══════════ -->
+    <ng-container *ngIf="mode === 'detail'">
+      <!-- Loading chi tiết -->
+      <div class="hb-loading-wrap" *ngIf="detailLoading">
+        <div class="spinner-border text-primary" role="status"></div>
+        <span class="ms-3 text-muted">Đang tải chi tiết đơn hàng...</span>
+      </div>
+
+      <!-- Lỗi -->
+      <div class="hb-loading-wrap" *ngIf="!detailLoading && detailError">
+        <div class="text-center">
+          <i class="bi bi-exclamation-triangle" style="font-size: 2.5rem; color: #dc3545"></i>
+          <div class="mt-2 text-muted">Không tải được chi tiết đơn hàng.</div>
+          <div class="d-flex gap-2 justify-content-center mt-3">
+            <button class="btn btn-hb" type="button" (click)="retryDetail()">
+              <i class="bi bi-arrow-clockwise me-1"></i> Thử lại
+            </button>
+            <button class="btn btn-hb-outline" type="button" (click)="goList()">
+              <i class="bi bi-arrow-left me-1"></i> Quay lại
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nội dung chi tiết — chỉ render khi có data -->
+      <ng-container *ngIf="!detailLoading && !detailError && detail as d">
+        <div class="row g-3 pt-1">
+          <!-- ─── LEFT ─── -->
+          <div class="col-12 col-xl-8">
+            <!-- Header đơn -->
+            <div class="card hb-card hb-card-pad mb-3">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+                  <div class="hb-object-title text-primary">{{ d.order.order_number }}</div>
+                  <span class="hb-pill" [ngClass]="d.statusPillClass">{{ d.statusLabel }}</span>
+                  <span class="hb-pill" [ngClass]="d.payPillClass">{{ d.paymentLabel }}</span>
+                </div>
+                <div class="text-muted small">
+                  Tạo: {{ d.order.createdAt | date: 'dd/MM/yyyy HH:mm' }} &nbsp;|&nbsp; Cập nhật:
+                  {{ d.order.updatedAt | date: 'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Danh sách sản phẩm + shipping + payment mỗi item -->
+            <div class="card hb-card hb-card-pad mb-3">
+              <div class="hb-section-title">Danh sách sản phẩm trong đơn</div>
+              <div class="hb-divider"></div>
+
+              <div class="hb-item-block" *ngFor="let row of d.itemRows; let i = index">
+                <div class="hb-item-header">
+                  <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <div>
+                      <div class="fw-bold">{{ row.item.product_name }}</div>
+                      <div class="text-muted small">
+                        SKU: {{ row.item.product_variant_id | slice: 0 : 16 }}... &nbsp;|&nbsp; Đơn
+                        giá: {{ row.unitPriceText }} &nbsp;×&nbsp;
+                        {{ row.item.quantity }} &nbsp;=&nbsp;
+                        <span class="text-primary fw-bold">{{ row.subtotalText }}</span>
+                      </div>
+                      <div class="text-muted small" *ngIf="row.item.discount_percent > 0">
+                        Giảm giá: {{ row.item.discount_percent }}%
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center gap-2 mt-2 flex-wrap">
+                    <!-- Item status -->
+                    <span class="hb-pill" [ngClass]="row.statusPillClass">{{
+                      row.statusLabel
+                    }}</span>
+                    <button
+                      class="hb-icon-btn"
+                      type="button"
+                      title="Cập nhật trạng thái sản phẩm"
+                      (click)="openUpdateItemStatus(row.item._id, $any(row.item.status))"
+                    >
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+
+                    <!-- Payment status -->
+                    <ng-container *ngIf="row.payment">
+                      <span class="hb-pill ms-2" [ngClass]="row.paymentPillClass">{{
+                        row.paymentLabel
+                      }}</span>
+                      <button
+                        class="hb-icon-btn"
+                        type="button"
+                        title="Cập nhật thanh toán"
+                        (click)="openUpdatePayment(row.payment._id, $any(row.payment.status))"
+                      >
+                        <i class="bi bi-cash-stack"></i>
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+
+                <!-- Shipping info của item này -->
+                <div class="hb-item-shipping" *ngIf="row.shipping">
+                  <div class="row g-2 mt-1">
+                    <div class="col-sm-4">
+                      <div class="hb-kv">
+                        <div class="k">Phương thức giao</div>
+                        <div class="v">{{ row.shippingMethod }}</div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="hb-kv">
+                        <div class="k">Phí vận chuyển</div>
+                        <div class="v">{{ row.shippingFeeText }}</div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="hb-kv">
+                        <div class="k">Dự kiến giao</div>
+                        <div class="v">{{ row.shipping.estimate_delivery }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="hb-divider" *ngIf="i < d.itemRows.length - 1"></div>
+              </div>
+
+              <!-- Tổng tiền -->
+              <div class="hb-divider"></div>
+              <div class="row justify-content-end">
+                <div class="col-md-5">
+                  <div class="hb-kv d-flex justify-content-between">
+                    <span class="k">Tạm tính:</span>
+                    <span class="v">{{ d.beforeTotalText }}</span>
+                  </div>
+                  <div class="hb-kv d-flex justify-content-between">
+                    <span class="k">Giảm giá:</span>
+                    <span class="v text-danger">- {{ d.discountTotalText }}</span>
+                  </div>
+                  <div class="hb-kv d-flex justify-content-between">
+                    <span class="k">Phí vận chuyển:</span>
+                    <span class="v">{{ d.shippingFeeText }}</span>
+                  </div>
+                  <div class="hb-divider"></div>
+                  <div class="hb-kv d-flex justify-content-between">
+                    <span class="k hb-total fw-bold">TỔNG CỘNG:</span>
+                    <span class="v hb-total fw-bold text-primary">{{ d.totalText }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="card hb-card hb-card-pad">
+              <div class="hb-section-title">Lịch sử xử lý</div>
+              <div class="hb-divider"></div>
+              <div class="hb-timeline">
+                <div class="hb-tl-item" *ngFor="let t of d.timeline">
+                  <div class="hb-tl-dot" [class.is-done]="t.done"></div>
+                  <div class="hb-tl-content">
+                    <div class="hb-tl-title">{{ t.title }}</div>
+                    <div class="hb-tl-desc text-muted small">{{ t.desc }}</div>
+                  </div>
+                  <div class="hb-tl-time text-muted small">{{ t.atText }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ─── RIGHT ─── -->
+          <div class="col-12 col-xl-4">
+            <div class="hb-side-card">
+              <!-- Khách hàng -->
+              <div class="card hb-card hb-card-pad mb-3">
+                <div class="hb-section-title">Thông tin khách hàng</div>
+                <div class="hb-kv">
+                  <div class="k">Họ tên</div>
+                  <div class="v">{{ d.customerName }}</div>
+                </div>
+                <div class="hb-kv">
+                  <div class="k">Email</div>
+                  <div class="v">{{ d.customerEmail }}</div>
+                </div>
+              </div>
+
+              <!-- Ghi chú & Thao tác -->
+              <div class="card hb-card hb-card-pad">
+                <div class="hb-section-title">Ghi chú & Thao tác</div>
+
+                <div class="hb-kv">
+                  <div class="k">Ghi chú từ khách</div>
+                  <div class="v small text-muted">{{ d.order.note || 'Không có' }}</div>
+                </div>
+
+                <div class="hb-kv" *ngIf="d.order.cancel_reason">
+                  <div class="k">Lý do huỷ</div>
+                  <div class="v small text-danger">{{ d.order.cancel_reason }}</div>
+                </div>
+
+                <div class="hb-divider"></div>
+
+                <!-- Huỷ đơn — chỉ hiện khi tất cả items pending -->
+                <button
+                  class="btn btn-hb-outline-danger w-100"
+                  type="button"
+                  *ngIf="d.canCancel"
+                  (click)="confirmCancel(d.order._id)"
+                >
+                  <i class="bi bi-x-circle me-1"></i> Huỷ đơn hàng
+                </button>
+
+                <!-- Thông báo khi đơn đã hoàn tất -->
+                <div
+                  class="text-center text-muted small py-2"
+                  *ngIf="d.order.status === 'completed'"
+                >
+                  <i class="bi bi-check2-circle me-1 text-success"></i>
+                  Đơn hàng đã hoàn tất
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+  <!-- /hb-page-body -->
+
+  <!-- ══════════════ MODALS ══════════════ -->
+
+  <!-- Cancel order -->
+  <hb-confirm-modal
+    [isOpen]="cancelModalOpen"
+    title="Xác nhận huỷ đơn hàng"
+    message="Tất cả sản phẩm đang chờ soạn sẽ chuyển sang trạng thái Đã huỷ. Backend sẽ tự hoàn tất đơn khi tất cả items xong."
+    type="danger"
+    confirmLabel="Huỷ đơn"
+    cancelLabel="Đóng"
+    (confirm)="onConfirmCancelOrder()"
+    (cancel)="onCancelOrderDismiss()"
+  ></hb-confirm-modal>
+
+  <!-- Update item status -->
+  <div class="hb-modal-overlay" *ngIf="updateItemStatusModalOpen" (click)="onCancelItemStatus()">
+    <div class="hb-modal-box" (click)="$event.stopPropagation()">
+      <div class="hb-modal-title">Cập nhật trạng thái sản phẩm</div>
+      <p class="text-muted small mb-3">
+        Khi tất cả sản phẩm trong đơn đạt trạng thái
+        <b>Đã giao / Đã huỷ / Trả hàng</b>, đơn hàng sẽ tự chuyển sang <b>Hoàn tất</b>.
+      </p>
+      <div class="mb-3">
+        <label class="form-label">Trạng thái mới</label>
+        <select class="form-select" [(ngModel)]="updateItemStatusValue">
+          <option *ngFor="let opt of itemStatusOptions" [value]="opt.value">{{ opt.label }}</option>
+        </select>
+      </div>
+      <div class="d-flex gap-2 justify-content-end">
+        <button class="btn btn-hb-outline" type="button" (click)="onCancelItemStatus()">Huỷ</button>
+        <button class="btn btn-hb" type="button" (click)="onConfirmItemStatus()">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update payment status -->
+  <div class="hb-modal-overlay" *ngIf="updatePaymentModalOpen" (click)="onCancelPayment()">
+    <div class="hb-modal-box" (click)="$event.stopPropagation()">
+      <div class="hb-modal-title">Cập nhật trạng thái thanh toán</div>
+      <p class="text-muted small mb-3">
+        Khi tất cả payment của đơn đạt <b>Đã thanh toán</b>, đơn hàng sẽ tự cập nhật
+        <b>payment_status = paid</b>.
+      </p>
+      <div class="mb-3">
+        <label class="form-label">Trạng thái thanh toán</label>
+        <select class="form-select" [(ngModel)]="updatePaymentValue">
+          <option *ngFor="let opt of paymentItemStatusOptions" [value]="opt.value">
+            {{ opt.label }}
+          </option>
+        </select>
+      </div>
+      <div class="d-flex gap-2 justify-content-end">
+        <button class="btn btn-hb-outline" type="button" (click)="onCancelPayment()">Huỷ</button>
+        <button class="btn btn-hb" type="button" (click)="onConfirmPayment()">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>

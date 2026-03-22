@@ -64,6 +64,27 @@ class ReviewController {
         .json({ message: "Lỗi hệ thống: " + e, data: null });
     }
   }
+  // [GET] /api/reviews/admin/news-review
+  async getNewsReviewByAdmin(req, res) {
+    try {
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      const reviews = await Review.find({
+        createdAt: { $gte: thirtyDaysAgo },
+      })
+        .populate("product_id", "product_name")
+        .populate("user_id", "fullname email")
+        .sort({ createdAt: -1 });
+      return res
+        .status(200)
+        .json({ message: "Lấy dữ liệu thành công", data: reviews });
+    } catch (e) {
+      console.error(e);
+      return res
+        .status(500)
+        .json({ message: "Lỗi hệ thống: " + e, data: null });
+    }
+  }
 }
 
 module.exports = new ReviewController();

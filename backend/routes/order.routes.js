@@ -16,6 +16,12 @@ router.get(
   orderController.getUserOrders.bind(orderController),
 );
 router.get(
+  "/admin/all",
+  protectedRoute,
+  isAdmin,
+  orderController.getAllOrdersAdmin.bind(orderController),
+);
+router.get(
   "/:id",
   protectedRoute,
   orderController.getOrderDetail.bind(orderController),
@@ -28,25 +34,20 @@ router.patch(
 
 // Admin routes (requires protectedRoute + isAdmin usually in real app, here we use what's configured)
 // Following project pattern:
-router.get(
-  "/admin/all",
-  protectedRoute,
-  isAdmin,
-  orderController.getAllOrdersAdmin.bind(orderController),
-);
+
 router.get(
   "/admin/:id",
   protectedRoute,
   isAdmin,
   orderController.getOrderDetailAdmin.bind(orderController),
 );
-router.put(
+router.patch(
   "/admin/item-status/:orderItemId",
   protectedRoute,
   isAdmin,
   orderController.updateOrderItemStatus.bind(orderController),
 );
-router.put(
+router.patch(
   "/admin/payment-status/:paymentId",
   protectedRoute,
   isAdmin,

@@ -117,6 +117,43 @@ class UserController {
       });
     }
   }
+  // [POST] /api/user/admin/
+  async getAllInfoUser(req, res) {
+    try {
+      const listUserInfo = await User.find();
+      return res
+        .status(200)
+        .json({ message: "Lấy dữ liệu thành công", data: listUserInfo });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Lỗi Server",
+        error: error.message,
+      });
+    }
+  }
+  // [POST] /api/user/admin/:id
+  async changeStatusAccount(req, res) {
+    try {
+      const userId = req.params.id;
+      const { status } = req.body;
+      const findedUser = await User.findByIdAndUpdate(userId, {
+        status: status,
+      });
+      if (!findedUser) {
+        return res
+          .status(404)
+          .json({ message: "Không tìm thấy tài khoản cần khóa", data: null });
+      }
+      return res
+        .status(200)
+        .json({ message: "Lấy dữ liệu thành công", data: findedUser });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Lỗi Server",
+        error: error.message,
+      });
+    }
+  }
 }
 
 module.exports = new UserController();

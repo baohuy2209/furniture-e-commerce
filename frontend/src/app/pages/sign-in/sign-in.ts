@@ -39,10 +39,10 @@ export class SignIn {
         }
         this.success = res.message;
         f.reset();
-        // if (res.data.roles.includes('ROLE_ADMIN')) {
-        //   this.router.navigate(['/admin']);
-        //   return;
-        // }
+        if (res.data.roles.includes('ROLE_ADMIN')) {
+          this.router.navigate(['/admin']);
+          return;
+        }
         this.router.navigate(['/']);
       },
       error: (err) => {

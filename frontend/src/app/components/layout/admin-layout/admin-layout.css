@@ -1,0 +1,25 @@
+:host {
+  --hb-primary: #3d529d;
+  --hb-accent: #ff911f;
+  --hb-main-bg: #ffffff;
+}
+
+/* chia 2 cột: sidebar cố định + main co giãn */
+.hb-admin-root {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  height: 100vh; /* đổi min-height -> height */
+  overflow: hidden; /* chặn body scroll */
+}
+
+/* main scroll riêng */
+.hb-admin-main {
+  background: var(--hb-main-bg);
+  min-width: 0;
+  height: 100vh; /* đảm bảo full viewport */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding: 24px;
+  box-sizing: border-box;
+}
