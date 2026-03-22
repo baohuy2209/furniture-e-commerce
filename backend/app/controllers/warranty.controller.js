@@ -54,15 +54,15 @@ class WarrantyController {
         await newImages.save();
       }
 
-      return res.status(200).json({
+      return res.status(201).json({
         message: "Gửi yêu cầu bảo hành thành công",
         data: newRequest,
       });
     } catch (e) {
-      console.error(e);
+      console.error("Create Warranty Error:", e);
       return res
         .status(500)
-        .json({ message: "Lỗi hệ thống: " + e, data: null });
+        .json({ message: "Lỗi hệ thống: " + e.message, data: null });
     }
   }
 

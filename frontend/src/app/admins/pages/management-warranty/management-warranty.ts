@@ -940,3 +940,11 @@ function buildSeed(): WarrantyRequest[] {
     },
   ];
 }
+}
+
+function csvEscape(v: string): string {
+  if (v.includes(',') || v.includes('"') || v.includes('\n')) {
+    return `"${v.replaceAll('"', '""')}"`;
+  }
+  return v;
+}

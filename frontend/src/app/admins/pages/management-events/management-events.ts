@@ -1084,3 +1084,29 @@ function seedEvents(): EventEntity[] {
 
   return [e1, e2, e3];
 }
+      gallery: (item.images || []).map((url: string) => ({ image_id: url, url, is_cover: false })),
+      coverImageId: item.images?.[0] || null
+    }
+  };
+}
+
+function dateOnlyToISO(d: string, endOfDay = false): string {
+  if (!d) return '';
+  return endOfDay ? `${d}T23:59:59.000Z` : `${d}T00:00:00.000Z`;
+}
+
+function cryptoId() {
+  return Math.random().toString(36).slice(2, 11);
+}
+
+function deepClone<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function csvEsc(s: any): string {
+  const v = String(s ?? '');
+  if (v.includes(',') || v.includes('"') || v.includes('\n')) {
+    return `"${v.replaceAll('"', '""')}"`;
+  }
+  return v;
+}

@@ -18,13 +18,13 @@ class RegisterEventController {
       if (!data) {
         return res.status(403).json({ message, data: null });
       }
-      return res.status(200).json({
+      return res.status(201).json({
         message: "Đăng kí sự kiện thành công",
         data: newRegisterEvent,
       });
     } catch (e) {
-      console.error(e);
-      return res.status(500).json({ message: "Lỗi hệ thống" + e, data: null });
+      console.error("Register Event Error:", e);
+      return res.status(500).json({ message: "Lỗi hệ thống: " + e.message, data: null });
     }
   }
   // [GET] /api/register-events
