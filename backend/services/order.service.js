@@ -4,16 +4,16 @@ const OrderItemShipping = require("../app/models/orderItemShipping.model");
 const Payment = require("../app/models/payment.model");
 const Cart = require("../app/models/cart.model");
 const CartItem = require("../app/models/cartItem.model");
-
+const ProductVariant = require("../app/models/productVariant.model");
+const Product = require("../app/models/product.model");
+const nodemailer = require("nodemailer");
+const fs = require("fs");
+const path = require("path");
+const formatVND = require("../utils/utils");
 class OrderService {
   async checkout(userId, checkoutData) {
-    const {
-      address_id,
-      shipping_method,
-      shipping_fee,
-      payment_method,
-      note,
-    } = checkoutData;
+    const { address_id, shipping_method, shipping_fee, payment_method, note } =
+      checkoutData;
 
     const cart = await Cart.findOne({ user_id: userId, cart_status: "active" });
     if (!cart || cart.total_item === 0) throw new Error("Giỏ hàng trống");
@@ -90,7 +90,122 @@ class OrderService {
 
     return order;
   }
-  async checkoutWithoutLogin(){}
+  async checkoutWithoutLogin(
+    userId,
+    email,
+    name,
+    product_variant_id,
+    quantity,
+    address_id,
+    shipping_fee,
+    note,
+  ) {
+    const productVariant = await ProductVariant.findById({
+      _id: product_variant_id,
+    });
+    if (!productVariant) {
+      return { errorMessage: "Không tìm thấy sản phẩm cần đặt hàng" };
+    }
+    const productInfo = await Product.findById({ _id: productVariant.product });
+    const before_total = quantity * productVariant.price;
+    const discount_total =
+      quantity * productVariant.price * productInfo.discount_percent;
+    const total_amount =
+      before_total - discount_total + shipping_fee * quantity;
+    const orderNumber =
+      "ORD-" + Date.now().toString() + "-" + Math.floor(Math.random() * 1000);
+
+    const order = await Order.create({
+      user_id: userId,
+      order_number: orderNumber,
+      status: "uncompleted",
+      total_items: quantity,
+      before_total,
+      discount_total,
+      total_shipping_fee: shipping_fee * quantity,
+      total_amount,
+      payment_status: "unpaid",
+      note,
+    });
+    const orderItem = await OrderItem.create({
+      order_id: order._id,
+      product_variant_id: product_variant_id,
+      product_name: productInfo.product_name || "Sản phẩm",
+      unit_price: productVariant.price,
+      quantity: quantity,
+      discount_percent: productInfo.discount_percent,
+      item_subtotal: total_amount,
+      status: "pending",
+    });
+
+    const orderItemShipping = await OrderItemShipping.create({
+      order_item_id: orderItem._id,
+      address_id,
+      shipping_method: "STANDARD_DELIVERY",
+      shipping_fee: shipping_fee * quantity,
+      estimate_delivery: "7-16 ngày",
+    });
+
+    const payment = await Payment.create({
+      order_item_shipping_id: orderItemShipping._id,
+      payment_method: "cod",
+      status: "pending",
+    });
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+    let html = fs.readFileSync(
+      path.join(__dirname, "order-email-template.html"),
+      "utf8",
+    );
+
+    // Thay placeholder
+    html = html
+      .replace("{{order_number}}", order.order_number)
+      .replace(
+        "{{order_date}}",
+        new Date(order.createdAt).toLocaleDateString("vi-VN"),
+      )
+      .replace("{{product_name}}", orderItem.product_name)
+      .replace("{{quantity}}", orderItem.quantity)
+      .replace("{{unit_price}}", formatVND(orderItem.unit_price))
+      .replace("{{item_subtotal}}", formatVND(orderItem.item_subtotal))
+      .replace("{{discount_percent}}", orderItem.discount_percent + "%")
+      .replace("{{before_total}}", formatVND(order.before_total))
+      .replace("{{discount_total}}", formatVND(order.discount_total))
+      .replace("{{total_shipping_fee}}", formatVND(order.total_shipping_fee))
+      .replace("{{total_amount}}", formatVND(order.total_amount))
+      .replace("{{shipping_method}}", orderItemShipping.shipping_method)
+      .replace("{{estimate_delivery}}", orderItemShipping.estimate_delivery)
+      .replace("{{payment_method}}", payment.payment_method.toUpperCase())
+      .replace("{{note}}", order.note || "")
+      .replace(
+        "{{order_detail_url}}",
+        `https://homebase.vn/settings/my-orders`,
+      );
+    const mailOptions = {
+      from: process.env.EMAIL_SERVICE,
+      to: email,
+      subject: `Thông tin đơn hàng của khách hàng ${name}`,
+      html,
+    };
+    await transporter.sendMail(mailOptions);
+    return {
+      dataOrder: {
+        order,
+        orderItem,
+        payment,
+        orderItemShipping,
+      },
+      errorMessage: "Tạo thành công đơn hàng",
+    };
+  }
   async getUserOrders(userId) {
     return await Order.find({ user_id: userId }).sort({ createdAt: -1 });
   }

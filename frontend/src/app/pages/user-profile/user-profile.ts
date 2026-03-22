@@ -139,7 +139,7 @@ export class UserProfile implements OnInit {
   }
   createNewAddress(f: any) {
     if (f.invalid) {
-      this.error = 'Vui lòng kiểm tra lại thông tin đăng nhập';
+      this.error = 'Vui lòng kiểm tra lại thông tin địa chỉ';
       return;
     }
     const selectedProvince = this.provinces().find(
@@ -147,7 +147,6 @@ export class UserProfile implements OnInit {
     );
     this.newAddress.user = this.user._id;
     this.newAddress.province = selectedProvince?.name!;
-    console.log(this.newAddress);
     this.userAddressService.createNewAddress(this.newAddress).subscribe({
       next: (res) => {
         this.success = `Đã tạo địa chỉ mới thành công cho người dùng ${res.data.name}`;

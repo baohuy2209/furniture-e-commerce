@@ -320,3 +320,182 @@
     </div>
   </section>
 </section>
+@if (isShowAddressModel) {
+  <div class="modal fade" id="addAddressModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Thêm Địa Chỉ Mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form #f="ngForm" (ngSubmit)="createAddressForGuest(f)">
+            <div class="mb-3">
+              <label class="form-label">Họ và tên<span class="text-danger">*</span></label>
+              <input
+                #name="ngModel"
+                type="text"
+                class="form-control"
+                name="name"
+                [(ngModel)]="newAddress.name"
+                placeholder="Nguyen Van A"
+                [class.is-invalid]="name.invalid && name.touched"
+                [class.error-border]="name.invalid && name.touched"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+              <input
+                #phone="ngModel"
+                name="phone"
+                [(ngModel)]="newAddress.phone"
+                placeholder="0375686583"
+                [class.is-invalid]="phone.invalid && phone.touched"
+                [class.error-border]="phone.invalid && phone.touched"
+                type="tel"
+                class="form-control"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Tỉnh/Thành phố <span class="text-danger">*</span></label>
+              <select
+                class="form-select"
+                #province="ngModel"
+                name="province"
+                [(ngModel)]="newAddress.province"
+                [class.is-invalid]="province.invalid && province.touched"
+                [class.error-border]="province.invalid && province.touched"
+                (ngModelChange)="onProvinceChange($event)"
+                required
+              >
+                <option value="">Chọn tỉnh/thành phố</option>
+                @for (p of provinces(); track p.code) {
+                  <option [value]="p.code">{{ p.name }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Phường/Xã <span class="text-danger">*</span></label>
+              <select
+                class="form-select"
+                #ward="ngModel"
+                name="ward"
+                [(ngModel)]="newAddress.ward"
+                [disabled]="!newAddress.province"
+                [class.is-invalid]="ward.invalid && ward.touched"
+                [class.error-border]="ward.invalid && ward.touched"
+                required
+              >
+                <option value="">Chọn phường/xã</option>
+                @for (w of wards(); track w.code) {
+                  <option [value]="w.name">{{ w.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Địa chỉ cụ thể <span class="text-danger">*</span></label>
+              <textarea
+                class="form-control"
+                rows="3"
+                #addressDetail="ngModel"
+                name="addressDetail"
+                [(ngModel)]="newAddress.address_detail"
+                [class.is-invalid]="addressDetail.invalid && addressDetail.touched"
+                [class.error-border]="addressDetail.invalid && addressDetail.touched"
+                placeholder="Số nhà, tên đường..."
+                required
+              ></textarea>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                (click)="isShowAddressModel = false"
+              >
+                Hủy
+              </button>
+              <button type="submit" class="btn btn-primary">Thêm Địa Chỉ</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+@if (isShowUserInfoModal) {
+  <div class="modal fade" id="createNewGuestModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Thêm Địa Chỉ Mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form #f="ngForm" (ngSubmit)="createUserGuest(f)">
+            <div class="mb-3">
+              <label class="form-label">Họ và tên<span class="text-danger">*</span></label>
+              <input
+                #name="ngModel"
+                type="text"
+                class="form-control"
+                name="name"
+                [(ngModel)]="guestUser.name"
+                placeholder="Nguyen Van A"
+                [class.is-invalid]="name.invalid && name.touched"
+                [class.error-border]="name.invalid && name.touched"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+              <input
+                #phone="ngModel"
+                name="phone"
+                [(ngModel)]="guestUser.phone"
+                placeholder="0375686583"
+                [class.is-invalid]="phone.invalid && phone.touched"
+                [class.error-border]="phone.invalid && phone.touched"
+                type="tel"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email <span class="text-danger">*</span></label>
+              <input
+                #email="ngModel"
+                name="email"
+                [(ngModel)]="guestUser.email"
+                placeholder="huynguyen002311@gmail.com"
+                [class.is-invalid]="email.invalid && email.touched"
+                [class.error-border]="email.invalid && email.touched"
+                type="email"
+                class="form-control"
+                required
+              />
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                (click)="isShowAddressModel = false"
+              >
+                Hủy
+              </button>
+              <button type="submit" class="btn btn-primary">Thêm Địa Chỉ</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+}
