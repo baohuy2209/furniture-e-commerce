@@ -4,9 +4,10 @@ class RegisterEventController {
   // [POST] /api/register-events
   async registerEvents(req, res) {
     try {
-      const { event_id, fullname, email, phone, note } = req.body;
+      const { event_id, user_id, fullname, email, phone, note } = req.body;
       const newRegisterEvent = await RegisterEvent.create({
         event_id,
+        user_id,
         fullname,
         email,
         phone,
@@ -29,7 +30,13 @@ class RegisterEventController {
   // [GET] /api/register-events
   async getAllRegister(req, res) {
     try {
-      const listUserRegisterEvent = await RegisterEvent.find();
+      const { event_id } = req.query;
+      const query = event_id ? { event_id } : {};
+      const listUserRegisterEvent = await RegisterEvent.find(query)
+        .populate("event_id")
+        .populate("user_id")
+        .sort({ createdAt: -1 });
+
       return res.status(200).json({
         message: "Load dữ liệu thành công",
         data: listUserRegisterEvent,
@@ -43,10 +50,13 @@ class RegisterEventController {
   async getDetailRegisterEventInfo(req, res) {
     try {
       const registerEventId = req.params.id;
-      const detailRegisterEvent = await RegisterEvent.findById(registerEventId);
-      if (detailRegisterEvent) {
+      const detailRegisterEvent = await RegisterEvent.findById(registerEventId)
+        .populate("event_id")
+        .populate("user_id");
+
+      if (!detailRegisterEvent) {
         return res.status(404).json({
-          message: "Không tìm tháy dữ liệu",
+          message: "Không tìm thấy dữ liệu",
         });
       }
       return res

@@ -1,10 +1,12 @@
 const Event = require("../models/event.model");
 const eventService = require("../../services/event.service");
+const { uploadImage, generateSlug } = require("../../utils/utils");
+
 class EventController {
   // [GET] /api/events/
   async getAllEvents(req, res) {
     try {
-      const events = await Event.find({});
+      const events = await Event.find({}).sort({ createdAt: -1 });
       return res.status(200).json({
         data: events,
         message: "Lấy dữ liệu các sự kiện thành công",
@@ -86,7 +88,26 @@ class EventController {
   // [POST] /api/events
   async createEvent(req, res) {
     try {
-      const newEvent = await Event.create(req.body);
+      const eventData = { ...req.body };
+
+      // Xử lý slug
+      if (!eventData.slug && eventData.title) {
+        eventData.slug = generateSlug(eventData.title);
+      }
+
+      // Xử lý upload ảnh nếu có file
+      if (req.files && req.files.length > 0) {
+        const uploadPromises = req.files.map((file) =>
+          uploadImage(file.path, "events"),
+        );
+        const uploadResults = await Promise.all(uploadPromises);
+        eventData.images = uploadResults.map((result, index) => ({
+          url_image: result.url,
+          is_main: index === 0, // Ảnh đầu tiên làm ảnh chính mặc định
+        }));
+      }
+
+      const newEvent = await Event.create(eventData);
       return res
         .status(200)
         .json({ message: "Tạo dữ liệu thành công", data: newEvent });
@@ -101,9 +122,40 @@ class EventController {
   async updateEvent(req, res) {
     try {
       const eventId = req.params.id;
-      const updatedEvent = await Event.findByIdAndUpdate(eventId, {
-        ...req.body,
-      });
+      const eventData = { ...req.body };
+
+      // Xử lý slug nếu title thay đổi
+      if (eventData.title && !eventData.slug) {
+        eventData.slug = generateSlug(eventData.title);
+      }
+
+      // Xử lý upload ảnh mới nếu có
+      if (req.files && req.files.length > 0) {
+        const uploadPromises = req.files.map((file) =>
+          uploadImage(file.path, "events"),
+        );
+        const uploadResults = await Promise.all(uploadPromises);
+        const newImages = uploadResults.map((result) => ({
+          url_image: result.url,
+          is_main: false,
+        }));
+
+        // Option: Ghi đè hoặc append ảnh? Ở đây tôi sẽ append nếu frontend không gửi mảng images mới
+        if (!eventData.images) {
+          const currentEvent = await Event.findById(eventId);
+          eventData.images = [...(currentEvent.images || []), ...newImages];
+        } else {
+          // Nếu frontend gửi mảng images (chứa URL cũ), ta merge với ảnh mới
+          eventData.images = [...eventData.images, ...newImages];
+        }
+      }
+
+      const updatedEvent = await Event.findByIdAndUpdate(
+        eventId,
+        { ...eventData },
+        { new: true },
+      );
+
       if (!updatedEvent) {
         return res
           .status(404)
@@ -124,15 +176,15 @@ class EventController {
   async deleteEvent(req, res) {
     try {
       const eventId = req.params.id;
-      const deleteEvent = await Event.findByIdAndDelete(eventId);
-      if (!deleteEvent) {
+      const deletedEvent = await Event.findByIdAndDelete(eventId);
+      if (!deletedEvent) {
         return res
           .status(404)
           .json({ message: "Không tìm thấy sự kiện nào", data: null });
       }
       return res.status(200).json({
-        messsage: "Xóa dữ liệu thành công",
-        data: deleteEvent,
+        message: "Xóa dữ liệu thành công",
+        data: deletedEvent,
       });
     } catch (e) {
       console.error(e);

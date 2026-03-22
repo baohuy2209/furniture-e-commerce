@@ -33,11 +33,7 @@ app.use(
     secure: false,
   }),
 );
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+require("./app/config/cloudinary");
 
 app.get("/", (req, res) => {
   res.send("Welcome to furniture e-commerce");
@@ -62,4 +58,3 @@ route(app);
 app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
 });
-module.exports = { cloudinary };

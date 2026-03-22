@@ -6,6 +6,11 @@ const registerEventSchema = new mongoose.Schema(
       ref: "Event",
       required: true,
     },
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: false, // Phân biệt với người dùng vãng lai nếu cần
+    },
     fullname: {
       type: String,
       required: true,
@@ -23,7 +28,7 @@ const registerEventSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
   },
 );
 module.exports = mongoose.model("RegisterEvent", registerEventSchema);
