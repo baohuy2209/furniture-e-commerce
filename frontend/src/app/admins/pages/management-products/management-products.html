@@ -66,24 +66,21 @@
         <!-- FILTER BAR - single row -->
         <div class="card hb-card hb-card-pad mb-3">
           <div class="hb-filterbar">
-            <div class="hb-search-input-wrapper">
-              <i class="bi bi-search hb-search-icon"></i>
-              <input class="form-control hb-search-input" placeholder="Tên, mã, thương hiệu, tag..."
-                [(ngModel)]="localSearchTerm" (ngModelChange)="onSearchChange($event)" />
-            </div>
+            <input class="form-control" placeholder="ID / Tên sản phẩm / SKU / Thương hiệu / Tag..."
+              [(ngModel)]="localSearchTerm" (ngModelChange)="onSearchChange($event)" />
 
             <select class="form-select" [(ngModel)]="vm.query.room" (ngModelChange)="patchQuery({ room: $event })">
-              <option value="">Tất cả khu vực</option>
+              <option value="">-- Khu vực --</option>
               <option *ngFor="let r of vm.roomOptions" [value]="r">{{ r }}</option>
             </select>
 
             <select class="form-select" [(ngModel)]="vm.query.brand" (ngModelChange)="patchQuery({ brand: $event })">
-              <option value="">Tất cả thương hiệu</option>
+              <option value="">-- Thương hiệu --</option>
               <option *ngFor="let b of vm.brandOptions" [value]="b">{{ b }}</option>
             </select>
 
             <select class="form-select" [(ngModel)]="vm.query.stock" (ngModelChange)="patchQuery({ stock: $event })">
-              <option value="all">Tình trạng kho</option>
+              <option value="all">-- Tình trạng kho --</option>
               <option value="in">Còn hàng</option>
               <option value="out">Hết hàng</option>
               <option value="low">Sắp hết</option>
@@ -95,6 +92,10 @@
               <option [ngValue]="20">20 / trang</option>
               <option [ngValue]="50">50 / trang</option>
             </select>
+
+            <!-- Empty placeholders to align the Reset button to the end (column 8) -->
+            <div class="d-none d-xl-block"></div>
+            <div class="d-none d-xl-block"></div>
 
             <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
               <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại

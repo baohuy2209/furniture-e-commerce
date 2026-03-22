@@ -78,21 +78,18 @@
       <!-- FILTER BAR - synchronized with Products -->
       <div class="card hb-card hb-card-pad mb-3">
         <div class="hb-filterbar">
-          <div class="hb-search-input-wrapper">
-            <i class="bi bi-search hb-search-icon"></i>
-            <input class="form-control hb-search-input" [ngModel]="q" (ngModelChange)="onChangeQ($event)"
-              placeholder="Tìm SKU / Kho..." />
-          </div>
+            <input class="form-control" [ngModel]="q" (ngModelChange)="onChangeQ($event)"
+              placeholder="SKU / Tên sản phẩm / Kho / Nhà cung cấp..." />
 
-          <div class="d-flex align-items-center gap-2 px-2">
-            <input type="checkbox" class="form-check-input mt-0" style="width: 18px; height: 18px; cursor: pointer;"
+          <div class="d-flex align-items-center gap-2 px-2 border rounded" style="height: 38px; background: rgba(255,255,255,0.02); border-color: var(--hb-border) !important;">
+            <input type="checkbox" class="form-check-input mt-0" style="width: 16px; height: 16px; cursor: pointer;"
               [ngModel]="f_low_only" (ngModelChange)="onToggleLowOnly($event)" id="lowOnlyCheck" />
-            <label for="lowOnlyCheck" class="mb-0"
-              style="cursor: pointer; font-size: 13px; font-weight: 600; color: #94a3b8;">Sắp hết hàng</label>
+            <label for="lowOnlyCheck" class="mb-0 text-nowrap"
+              style="cursor: pointer; font-size: 12px; font-weight: 600; color: #94a3b8;">Sắp hết hàng</label>
           </div>
 
           <select class="form-select" [ngModel]="f_warehouse_id" (ngModelChange)="onChangeWarehouse($event)">
-            <option value="">Tất cả kho</option>
+            <option value="">-- Tất cả kho --</option>
             <option *ngFor="let w of vm.warehouses" [value]="w.warehouse_id">{{ w.name }}</option>
           </select>
 
@@ -101,6 +98,11 @@
             <option [ngValue]="20">20 / trang</option>
             <option [ngValue]="50">50 / trang</option>
           </select>
+
+          <!-- Empty placeholders to align the Reset button to the end (column 8) -->
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
 
           <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
             <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại

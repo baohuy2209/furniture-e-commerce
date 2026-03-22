@@ -351,7 +351,7 @@ section {
 }
 
 .hb-page-body {
-  padding: 24px !important;
+  padding: 10px 24px 24px 24px !important;
   background-color: var(--hb-bg-main) !important;
 }
 
@@ -375,7 +375,7 @@ section {
   gap: 12px !important;
   background-color: transparent !important;
   border-bottom: 1px solid var(--hb-border) !important;
-  padding: 24px 48px 24px 24px !important;
+  padding: 12px 48px 12px 24px !important;
   /* Right padding 48px to accommodate scrollbars/layout spacing */
 }
 
@@ -401,8 +401,8 @@ section {
   display: inline-block;
   font-weight: 800 !important;
   line-height: 1.4 !important;
-  padding: 8px 0 !important;
-  /* Fixes WebKit clipping Vietnamese diacritics */
+  padding: 0 !important;
+  /* Sync with tighter header */
 }
 
 .hb-h1,
@@ -438,8 +438,8 @@ section {
   background-color: var(--hb-surface) !important;
   border: 1px solid var(--hb-border) !important;
   box-shadow: none !important;
-  border-radius: 20px !important;
-  padding: 20px !important;
+  border-radius: var(--hb-radius) !important;
+  padding: 14px 16px !important;
   display: flex !important;
   flex-direction: row !important;
   /* Back to horizontal icon + text */
@@ -726,8 +726,7 @@ svg text {
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 10px !important;
-  margin-top: 2px !important;
-  /* Sync with title alignment */
+  margin-top: 0 !important;
 }
 
 /* Explicit Synchronized Accent Style (Matching "Thêm sản phẩm") */
@@ -1096,35 +1095,66 @@ svg text {
 
 /* Tweak pill styles to match the template's soft background style with strong text */
 .hb-st-active,
-.pill-ok {
+.pill-ok,
+.pill-paid,
+.is-soft {
   background: rgba(16, 185, 129, 0.1) !important;
   color: #10b981 !important;
 }
 
 .hb-st-paused,
 .pill-muted,
-.pill-pending {
+.pill-pending,
+.pill-returned,
+.pill-unpaid {
   background: rgba(156, 163, 175, 0.1) !important;
   color: #9ca3af !important;
 }
 
+.rank-bronze {
+  background: rgba(180, 83, 9, 0.1) !important; /* Bronze - Brownish */
+  color: #d97706 !important;
+}
+
+.rank-silver {
+  background: rgba(148, 163, 184, 0.1) !important; /* Silver - Slate Gray */
+  color: #cbd5e1 !important;
+}
+
 .hb-st-frozen,
-.pill-warn {
+.pill-warn,
+.pill-refunded {
   background: rgba(245, 158, 11, 0.1) !important;
   color: #f59e0b !important;
 }
 
+.rank-gold {
+  background: rgba(234, 179, 8, 0.1) !important; /* Gold - Yellow/Amber */
+  color: #eab308 !important;
+}
+
 .hb-st-expired,
 .hb-st-danger,
-.pill-cancelled {
+.pill-cancelled,
+.pill-return-req,
+.pill-exchange-req,
+.is-locked {
   background: rgba(239, 68, 68, 0.1) !important;
   color: #ef4444 !important;
 }
 
 .hb-st-new,
-.pill-delivered {
+.pill-delivered,
+.pill-confirmed,
+.pill-shipping {
   background: rgba(59, 130, 246, 0.1) !important;
   color: #3b82f6 !important;
+}
+
+.rank-diamond {
+  background: rgba(14, 165, 233, 0.1) !important; /* Diamond - Cyan Blue */
+  color: #0ea5e9 !important;
+  text-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
 }
 
 /* DASHBOARD HEADER EXTRAS */
@@ -1209,7 +1239,8 @@ svg text {
 .th-content {
   color: #ffffff !important;
   font-weight: 700 !important;
-  background-color: rgba(255, 255, 255, 0.05) !important;
+  background-color: #111827 !important; /* Solid background for stickiness */
+  z-index: 20;
 }
 
 .hb-dashboard-table tbody td,

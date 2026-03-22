@@ -86,10 +86,10 @@
       <div class="card hb-card hb-card-pad mb-3">
         <div class="hb-filterbar">
           <input class="form-control" [(ngModel)]="q" (ngModelChange)="onChangeQ($event)"
-            placeholder="Tìm theo Mã / Tên / ID..." />
+            placeholder="ID / Mã KM / Tên chương trình..." />
 
           <select class="form-select" [(ngModel)]="f_status" (ngModelChange)="onChangeStatus($event)">
-            <option value="">Tất cả trạng thái</option>
+            <option value="">-- Trạng thái --</option>
             <option value="active">Hoạt động</option>
             <option value="pending">Chưa publish</option>
             <option value="paused">Tạm dừng</option>
@@ -97,7 +97,7 @@
           </select>
 
           <select class="form-select" [(ngModel)]="f_type" (ngModelChange)="onChangeType($event)">
-            <option value="">Tất cả loại hình</option>
+            <option value="">-- Loại hình --</option>
             <option value="percent">Giảm theo %</option>
             <option value="fixed">Giảm tiền mặt</option>
             <option value="freeship">Miễn phí giao hàng</option>
@@ -109,8 +109,13 @@
             <option [ngValue]="50">50 / trang</option>
           </select>
 
+          <!-- Empty placeholders (3) to align Reset to column 8 -->
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
+
           <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
-            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại bộ lọc
+            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
           </button>
         </div>
       </div>

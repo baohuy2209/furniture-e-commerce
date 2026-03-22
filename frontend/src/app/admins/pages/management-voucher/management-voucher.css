@@ -25,13 +25,7 @@
   min-height: 0;
 }
 
-/* ===== PAGE SHELL ===== */
-.hb-page-shell {
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
+/* Shell managed globally */
 
 /* Headers & Actions are now managed globally in admin-dark.css */
 .hb-header-left {
@@ -45,14 +39,7 @@
   align-items: center;
 }
 
-.hb-page-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  padding-top: 14px;
-}
+/* Body managed globally */
 
 /* Visual Styles for Titles and Buttons are now managed globally */
 .hb-detail-title {
@@ -119,8 +106,8 @@
 
 /* ===== FILTERBAR ===== */
 .hb-filterbar {
-  display: grid;
-  grid-template-columns: 2.2fr 1fr 1fr 0.7fr auto;
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
   gap: 10px;
   align-items: center;
 
@@ -159,7 +146,7 @@
 .hb-grid-vouchers {
   display: grid;
   grid-template-columns:
-    55px 175px minmax(180px, 1.6fr) 100px 115px 115px 100px 125px 65px 65px;
+    55px 160px minmax(200px, 1.2fr) 100px 110px 120px 120px 130px 60px 60px;
   align-items: center;
 }
 

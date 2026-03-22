@@ -4,24 +4,10 @@
   min-height: 0;
 }
 
-/* ===== PAGE SHELL ===== */
-.hb-page-shell {
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
+/* Shell managed globally */
 
 
-.hb-page-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  padding-top: 10px;
-}
+/* Body managed globally */
 
 /* ===== TYPO ===== */
 /* Global Sync */
@@ -447,13 +433,14 @@
 
 /* Brand pill in list */
 .hb-brand-pill {
-  font-size: 12px;
-  font-weight: 600;
-  color: #94a3b8;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #818cf8;
+  background: rgba(129, 140, 248, 0.08);
+  border: 1px solid rgba(129, 140, 248, 0.15);
+  border-radius: 4px;
+  padding: 1px 10px;
+  text-transform: uppercase;
 }
 
 /* Stock badges */
@@ -461,11 +448,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
+  min-width: 0;
+  padding: 1px 0;
+  font-size: 14px;
+  font-weight: 800;
+  background: transparent !important;
+  border: none !important;
 }
 
 .stock-ok {
@@ -734,26 +722,10 @@
 
 /* ===== FILTER BAR (single row) ===== */
 .hb-filterbar {
-  display: flex;
-  align-items: center;
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
   gap: 10px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-}
-
-.hb-filterbar .form-select,
-.hb-filterbar .form-control {
-  min-width: 0;
-}
-
-.hb-filterbar .hb-search-input-wrapper {
-  flex: 2;
-  min-width: 160px;
-}
-
-.hb-filter-reset {
-  white-space: nowrap;
-  flex-shrink: 0;
+  align-items: center;
 }
 
 /* ===== TABLE LAYOUT ===== */
@@ -767,8 +739,11 @@
 
 .hb-table-wrap {
   overflow-x: auto;
+  overflow-y: auto;
   flex: 1 1 auto;
   min-height: 0;
+  /* Support sticky header properly */
+  background: var(--hb-bg-main);
 }
 
 .hb-table {
@@ -779,12 +754,14 @@
 
 .hb-table-head {
   display: grid;
-  background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: #111827 !important; /* var(--hb-surface) solid background */
+  border-bottom: 2px solid var(--hb-border);
   padding: 0 12px;
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 10;
+  /* Elevate shadow on scroll */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .hb-table-row {
@@ -811,6 +788,7 @@
   letter-spacing: 0.5px;
   white-space: nowrap;
   user-select: none;
+  background: transparent !important;
 }
 
 .hb-th .th-content {

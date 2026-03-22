@@ -1,12 +1,6 @@
 :host { display: block; height: 100%; min-height: 0; }
 
-/* ===== PAGE SHELL ===== */
-.hb-page-shell {
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
+/* Shell managed globally */
 
 .hb-header-actions {
   display: flex;
@@ -15,15 +9,7 @@
   align-items: center;
 }
 
-.hb-page-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  padding-top: 14px;
-}
+/* Body managed globally */
 
 /* ===== TYPO ===== */
 .hb-h1 { font-size: 28px; font-weight: 800; color: var(--hb-text); }
@@ -52,78 +38,33 @@
 
 /* ===== SUMMARY CARDS (same as warranty) ===== */
 .hb-summary-row {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  margin-top: 14px !important;
+  margin-bottom: 8px !important;
 }
 
-.hb-summary-card {
-  flex: 1;
-  min-width: 200px;
-  background: rgba(17,24,39,0.8) !important;
-  border: 1px solid var(--hb-border) !important;
-  border-radius: 20px !important;
-  padding: 20px !important;
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  gap: 16px !important;
-  transition: all 0.2s ease;
-}
-
-.hb-summary-card:hover {
-  border-color: rgba(129,140,248,0.3) !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
-}
-
-.hb-sc-icon {
-  width: 56px !important;
-  height: 56px !important;
-  border-radius: 14px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 24px !important;
-  background: rgba(255,255,255,0.05) !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  color: #fff !important;
-  flex-shrink: 0;
-}
-
-.hb-sc-icon.ok { color: #22c55e !important; }
-.hb-sc-icon.warn { color: #fbbf24 !important; }
-
-.hb-sc-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--hb-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
+/* Let the values inherit from global to ensure uniform height and sizing */
 .hb-sc-value {
-  font-size: 32px;
-  font-weight: 900;
-  color: #fff;
-  line-height: 1.1;
+  font-size: 28px;
+  font-weight: 800;
 }
 
 /* ===== FILTER BAR ===== */
 .hb-filterbar {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 0.6fr auto;
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
   gap: 10px;
   align-items: center;
   padding: 12px;
   border: 1px solid var(--hb-border) !important;
   border-radius: var(--hb-radius);
-  background: rgba(17,24,39,0.8) !important;
+  background: rgba(17, 24, 39, 0.8) !important;
   backdrop-filter: blur(12px) !important;
 }
 
-.hb-filter-reset { white-space: nowrap; }
+.hb-filter-reset { white-space: nowrap; flex-shrink: 0; }
 
 @media (max-width: 1200px) {
   .hb-filterbar { grid-template-columns: 1fr 1fr; }
@@ -139,23 +80,22 @@
 
 .hb-table {
   width: 100%;
-  min-width: 1500px;
+  min-width: 1400px;
 }
 
 .hb-grid-cs {
   display: grid;
   grid-template-columns:
     50px     /* STT */
-    110px    /* Mã YC */
-    160px    /* Khách hàng */
-    130px    /* SĐT */
-    minmax(200px, 1.8fr) /* Chủ đề & danh mục */
-    70px     /* Kênh */
-    110px    /* Ưu tiên */
-    140px    /* Người xử lý */
-    140px    /* Trạng thái */
-    120px    /* Hạn phản hồi */
-    120px    /* Tình trạng SLA */
+    100px    /* Mã YC */
+    minmax(140px, 1fr) /* Khách hàng */
+    120px    /* SĐT */
+    minmax(200px, 2.5fr) /* Chủ đề & danh mục */
+    100px    /* Ưu tiên */
+    130px    /* Người xử lý */
+    130px    /* Trạng thái */
+    110px    /* Hạn phản hồi */
+    110px    /* Tình trạng SLA */
     50px     /* Sửa */
     50px;    /* Xóa */
   align-items: center;
@@ -182,7 +122,7 @@
   height: 100%;
   text-transform: uppercase;
   font-weight: 800;
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -206,7 +146,7 @@
   transition: background 0.15s ease;
 }
 
-.hb-table-row:hover { background: rgba(129,140,248,0.05) !important; }
+.hb-table-row:hover { background: rgba(255, 145, 31, 0.08) !important; }
 
 .hb-td {
   padding: 12px;
@@ -215,7 +155,7 @@
   display: flex;
   align-items: center;
   color: var(--hb-text);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -225,7 +165,7 @@
 .hb-td-center { justify-content: center; text-align: center; }
 
 .hb-subline {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--hb-muted);
   margin-top: 2px;
   white-space: nowrap;

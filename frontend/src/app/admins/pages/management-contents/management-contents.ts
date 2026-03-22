@@ -64,6 +64,7 @@ export class ManagementContents implements OnInit {
   search = '';
   selectedCategory = '';
   selectedStatus = '';
+  pageSize = 10;
 
   currentPost: BLOG_POSTS | null = null;
   selectedTagIds: string[] = [];
@@ -138,6 +139,12 @@ export class ManagementContents implements OnInit {
 
   backToList() {
     this.router.navigate([], { queryParams: { mode: 'list' } });
+  }
+
+  resetFilters() {
+    this.search = '';
+    this.selectedCategory = '';
+    this.selectedStatus = '';
   }
 
   loadEdit(id: string) {

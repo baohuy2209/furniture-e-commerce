@@ -594,6 +594,29 @@ export class ManagementCustomers {
     return m[s] || s;
   }
 
+  orderStatusPillClass(s: ORDER_STATUS) {
+    const m: Record<ORDER_STATUS, string> = {
+      pending: 'pill-pending',
+      confirmed: 'pill-confirmed',
+      processing: 'pill-confirmed',
+      shipping: 'pill-shipping',
+      completed: 'pill-ok',
+      cancelled: 'pill-cancelled',
+      refunded: 'pill-refunded',
+    };
+    return m[s] || '';
+  }
+
+  payStatusPillClass(s: PAYMENT_STATUS) {
+    const m: Record<PAYMENT_STATUS, string> = {
+      unpaid: 'pill-unpaid',
+      paid: 'pill-paid',
+      refunded: 'pill-refunded',
+      failed: 'pill-cancelled',
+    };
+    return m[s] || '';
+  }
+
   private compareRows(a: CustomerRowVM, b: CustomerRowVM, key: SortKey, dir: SortDir) {
     const m = dir === 'asc' ? 1 : -1;
     const av = this.getSortValue(a, key);

@@ -1,12 +1,6 @@
 :host { display: block; height: 100%; min-height: 0; }
 
-/* ===== PAGE SHELL ===== */
-.hb-page-shell {
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
+/* Shell managed globally */
 
 .hb-header-actions {
   display: flex;
@@ -15,15 +9,7 @@
   align-items: center;
 }
 
-.hb-page-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  padding-top: 14px;
-}
+/* Body managed globally */
 
 /* ===== TYPO ===== */
 .hb-h1 {
@@ -118,14 +104,14 @@
 }
 
 .hb-card-pad {
-  padding: 20px;
+  padding: 16px;
 }
 
 .hb-summary-card {
   background-color: var(--hb-surface);
   border: 1px solid var(--hb-border);
-  border-radius: 20px;
-  padding: 20px;
+  border-radius: var(--hb-radius);
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -155,10 +141,17 @@
 .hb-sc-icon.warn { color: #f59e0b; }
 
 .hb-filterbar {
-  display: flex;
-  gap: 12px;
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
+  gap: 10px;
+  align-items: center;
   padding: 12px;
-  flex-wrap: wrap;
+}
+
+@media (max-width: 1100px) {
+  .hb-filterbar {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .hb-table-card {

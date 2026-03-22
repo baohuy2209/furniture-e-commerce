@@ -4,13 +4,7 @@
   min-height: 0;
 }
 
-/* ===== PAGE SHELL ===== */
-.hb-page-shell {
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
+/* Shell managed globally */
 
 /* Header managed globally */
 
@@ -25,14 +19,7 @@
   align-items: center;
 }
 
-.hb-page-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  padding-top: 14px;
-}
+/* Body managed globally */
 
 /* ===== TYPO ===== */
 /* Global Sync */
@@ -134,8 +121,8 @@
 
 /* ===== FILTERBAR ===== */
 .hb-filterbar {
-  display: grid;
-  grid-template-columns: 2.2fr 1.2fr 1fr auto;
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
   gap: 10px;
   align-items: center;
   padding: 12px;
@@ -171,11 +158,11 @@
     minmax(140px, 1fr)   /* Phone */
     minmax(100px, 1fr)   /* Rank */
     minmax(110px, 1fr)   /* Status */
-    minmax(90px, 0.8fr)  /* Orders */
+    minmax(120px, 1fr)  /* Orders */
     minmax(140px, 1.2fr) /* Spent (Expanded) */
     minmax(110px, 1fr)   /* Date */
-    66px   /* Lock */
-    66px;  /* Detail */
+    70px   /* Lock */
+    85px;  /* Detail */
   align-items: center;
 }
 

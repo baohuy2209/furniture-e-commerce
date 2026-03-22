@@ -64,20 +64,10 @@
         <div class="hb-filterbar">
           <input
             class="form-control"
-            placeholder="Tìm theo tên, SĐT, email, chủ đề, mã YC..."
+            placeholder="ID / Khách hàng / Số điện thoại / Chủ đề..."
             [ngModel]="vm.query.q"
             (ngModelChange)="patchQuery({ q: $event })"
           />
-
-          <select class="form-select"
-            [ngModel]="vm.query.channel"
-            (ngModelChange)="patchQuery({ channel: $event })">
-            <option value="all">-- Kênh --</option>
-            <option value="chat">Live Chat</option>
-            <option value="email">Email</option>
-            <option value="phone">Điện thoại</option>
-            <option value="form">Form liên hệ</option>
-          </select>
 
           <select class="form-select"
             [ngModel]="vm.query.status"
@@ -96,10 +86,15 @@
           <select class="form-select"
             [ngModel]="vm.query.pageSize"
             (ngModelChange)="patchQuery({ pageSize: $event })">
-            <option [ngValue]="10">10</option>
-            <option [ngValue]="20">20</option>
-            <option [ngValue]="50">50</option>
+            <option [ngValue]="10">10 / trang</option>
+            <option [ngValue]="20">20 / trang</option>
+            <option [ngValue]="50">50 / trang</option>
           </select>
+
+          <!-- Empty placeholders to align the Reset button to the end (column 8) -->
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
 
           <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
             <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
@@ -141,10 +136,6 @@
                   <span>CHỦ ĐỀ & DANH MỤC</span>
                   <i class="fas" [ngClass]="sortIcon('subject')"></i>
                 </div>
-              </div>
-
-              <div class="hb-th">
-                <div class="th-content"><span>KÊNH</span></div>
               </div>
 
               <div class="hb-th" (click)="toggleSort('priority')">
@@ -205,10 +196,6 @@
                   <div class="hb-name hb-text-truncate">{{ r.subject }}</div>
                   <div class="hb-subline hb-text-truncate" style="font-size:11px;">{{ r.categoryLabel | titlecase }}</div>
                 </div>
-              </div>
-
-              <div class="hb-td hb-td-center">
-                <i class="bi fs-5" [ngClass]="channelIcon(r.channel)" [title]="r.channel"></i>
               </div>
 
               <div class="hb-td hb-td-center">

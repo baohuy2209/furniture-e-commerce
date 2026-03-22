@@ -2,13 +2,7 @@
 
 :host { display: block; height: 100%; min-height: 0; }
 
-/* ===== PAGE SHELL ===== */
-.hb-page-shell {
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
+/* Shell managed globally */
 
 /* Header managed globally */
 
@@ -23,14 +17,7 @@
   align-items: center;
 }
 
-.hb-page-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  padding-top: 14px;
-}
+/* Body managed globally */
 
 /* ===== TYPO ===== */
 /* Global Sync */
@@ -142,7 +129,8 @@
 
 /* ===== FILTERBAR ===== */
 .hb-filterbar {
-  display: grid;
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr auto;
   gap: 10px;
   align-items: center;
   padding: 12px;
@@ -150,10 +138,6 @@
   border-radius: var(--hb-radius);
   background: rgba(17, 24, 39, 0.8) !important;
   backdrop-filter: blur(12px) !important;
-}
-
-.hb-filterbar-orders {
-  grid-template-columns: 1.7fr 0.85fr 0.7fr 0.65fr 0.45fr auto;
 }
 
 .hb-filter-reset {
@@ -541,7 +525,7 @@
 }
 
 @media (max-width: 992px) {
-  .hb-filterbar-orders {
+  .hb-filterbar {
     grid-template-columns: 1fr 1fr;
   }
 

@@ -360,8 +360,8 @@ export class ManageCustomerService implements OnInit, OnDestroy {
   }
 
   sortIcon(key: keyof ListRowVM): string {
-    if (this.query$.value.sortKey !== key) return 'bi-arrow-down-up';
-    return this.query$.value.sortDir === 'asc' ? 'bi-sort-up' : 'bi-sort-down';
+    if (this.query$.value.sortKey !== key) return 'fa-sort';
+    return this.query$.value.sortDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
   goPage(page: number): void {

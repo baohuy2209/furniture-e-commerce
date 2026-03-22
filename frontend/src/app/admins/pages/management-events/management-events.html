@@ -73,7 +73,7 @@
 
       <div class="card hb-card hb-card-pad mb-3">
         <div class="hb-filterbar">
-          <input class="form-control" [ngModel]="q" (ngModelChange)="onChangeQ($event)" placeholder="Tìm mã, tên, địa điểm..."/>
+          <input class="form-control" [ngModel]="q" (ngModelChange)="onChangeQ($event)" placeholder="ID / Tên sự kiện / Địa điểm / Thành phố..."/>
           <select class="form-select" [ngModel]="f_phase" (ngModelChange)="onChangePhase($event)">
             <option value="">-- Giai đoạn --</option>
             <option value="ongoing">Đang diễn ra</option>
@@ -90,7 +90,12 @@
           </select>
           <input class="form-control" type="date" [ngModel]="f_from" (ngModelChange)="onChangeFrom($event)"/>
           <input class="form-control" type="date" [ngModel]="f_to" (ngModelChange)="onChangeTo($event)"/>
-          <button class="btn btn-hb-outline" (click)="resetFilters()"><i class="bi bi-arrow-clockwise me-1"></i> Đặt lại</button>
+          
+          <!-- Empty placeholders (2) to align Reset to column 8 -->
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
+
+          <button class="btn btn-hb-outline hb-filter-reset" (click)="resetFilters()"><i class="bi bi-arrow-clockwise me-1"></i> Đặt lại</button>
         </div>
       </div>
 

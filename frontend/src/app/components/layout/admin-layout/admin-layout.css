@@ -12,14 +12,15 @@
   overflow: hidden; /* chặn body scroll */
 }
 
-/* main scroll riêng */
+/* main scroll separately - now handled by page-shell/body */
 .hb-admin-main {
   background: var(--hb-main-bg);
-  min-width: 0;
-  height: 100vh; /* đảm bảo full viewport */
+  flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-gutter: stable;
-  padding: 24px;
+  min-height: 0;
+  background: var(--hb-bg);
+  display: flex;
+  flex-direction: column;
+  padding: 0; /* Remove padding to let header be absolute top */
   box-sizing: border-box;
 }

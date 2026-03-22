@@ -1,139 +1,198 @@
-<div class="hb-wrap">
-  <!-- TITLE -->
-  <div class="hb-titlebar">
-    <h1 class="hb-title" routerLink="/admin/management-contents" style="cursor: pointer;">QUẢN LÝ NỘI DUNG</h1>
-    <div class="hb-actions" *ngIf="mode === 'list'">
-      <button class="btn btn-primary" (click)="goCreate()">+ Thêm nội dung</button>
+<div class="hb-page-shell">
+  <!-- PAGE HEADER (sticky) -->
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title" routerLink="/admin/management-contents" style="cursor: pointer">
+        QUẢN LÝ NỘI DUNG
+      </div>
+    </div>
+
+    <div class="hb-header-actions">
+      <!-- LIST ACTIONS -->
+      <ng-container *ngIf="mode === 'list'">
+        <button class="btn btn-hb" type="button" (click)="resetFilters()">
+          <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+        </button>
+        <button class="btn btn-hb-accent" type="button" (click)="goCreate()">
+          <i class="bi bi-plus-lg me-1"></i> Thêm nội dung
+        </button>
+      </ng-container>
+
+      <!-- EDIT ACTIONS -->
+      <ng-container *ngIf="mode !== 'list'">
+        <button class="btn btn-hb-outline" type="button" (click)="backToList()">
+          <i class="bi bi-arrow-left me-1"></i> Quay lại Danh sách
+        </button>
+      </ng-container>
     </div>
   </div>
 
-  <div class="hb-card">
-    <div class="hb-card-body">
-      <!-- LIST MODE -->
-      <ng-container *ngIf="mode === 'list'">
-        <div class="row mb-3">
-          <div class="col">
-            <input class="form-control" placeholder="Tìm theo tiêu đề" [(ngModel)]="search" />
-          </div>
-          <div class="col">
-            <select class="form-select" [(ngModel)]="selectedCategory">
-              <option value="">Tất cả danh mục</option>
-              <option *ngFor="let c of categories$ | async" [value]="c.category_id">
-                {{ c.name }}
-              </option>
-            </select>
-          </div>
-          <div class="col">
-            <select class="form-select" [(ngModel)]="selectedStatus">
-              <option value="">Tất cả trạng thái</option>
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
+  <div class="hb-page-body">
+    <!-- LIST MODE -->
+    <ng-container *ngIf="mode === 'list'">
+      
+      <!-- Summary Row (Placeholder) -->
+      <div class="hb-summary-row">
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon ok"><i class="bi bi-file-earmark-text"></i></div>
+          <div>
+            <div class="hb-sc-label">Tổng bài viết</div>
+            <div class="hb-sc-value">{{ (posts$ | async)?.length || 0 }}</div>
           </div>
         </div>
+      </div>
 
-        <div class="hb-table-wrap">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Tiêu đề</th>
-                <th>Danh mục</th>
-                <th>Trạng thái</th>
-                <th>Chỉnh sửa</th>
-                <th>Xóa mềm</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let p of filterPosts()">
-                <td>{{ p.title }}</td>
-                <td>{{ p.blog_category_id }}</td>
-                <td>{{ p.post_status }}</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary" (click)="goEdit(p.post_id)">
-                    Edit
-                  </button>
-                </td>
-                <td>
-                  <button class="btn btn-sm btn-outline-danger" (click)="softDelete(p.post_id)">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </ng-container>
-
-      <!-- CREATE / EDIT MODE -->
-      <ng-container *ngIf="mode !== 'list'">
-        <div class="mb-3">
-          <label>Tiêu đề</label>
-          <input
-            class="form-control"
-            [(ngModel)]="currentPost!.title"
-            (ngModelChange)="currentPost!.slug = generateSlug($event)"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label>Slug</label>
-          <input class="form-control" [(ngModel)]="currentPost!.slug" />
-        </div>
-
-        <div class="mb-3">
-          <label>Danh mục</label>
-          <select class="form-select" [(ngModel)]="currentPost!.blog_category_id">
+      <!-- FILTER BAR -->
+      <div class="card hb-card hb-card-pad mb-3">
+        <div class="hb-filterbar">
+          <input class="form-control" placeholder="ID / Tiêu đề / Tóm tắt..." [(ngModel)]="search" />
+          
+          <select class="form-select" [(ngModel)]="selectedCategory">
+            <option value="">-- Danh mục --</option>
             <option *ngFor="let c of categories$ | async" [value]="c.category_id">
               {{ c.name }}
             </option>
           </select>
-        </div>
 
-        <div class="mb-3">
-          <label>Thumbnail URL</label>
-          <input class="form-control" [(ngModel)]="currentPost!.thumbnail_url" />
-        </div>
+          <select class="form-select" [(ngModel)]="selectedStatus">
+            <option value="">-- Trạng thái --</option>
+            <option value="draft">Bản nháp</option>
+            <option value="published">Đã đăng</option>
+          </select>
 
-        <div class="mb-3">
-          <label>Nội dung</label>
-          <textarea class="form-control" rows="5" [(ngModel)]="currentPost!.content"></textarea>
-        </div>
+          <select class="form-select" [(ngModel)]="pageSize">
+            <option [ngValue]="10">10 / trang</option>
+            <option [ngValue]="20">20 / trang</option>
+            <option [ngValue]="50">50 / trang</option>
+          </select>
 
-        <div class="mb-3">
-          <label>Tags</label>
-          <div class="d-flex gap-2 flex-wrap">
-            <button
-              type="button"
-              *ngFor="let t of tags$ | async"
-              class="btn btn-sm"
-              [class.btn-primary]="selectedTagIds.includes(t.tag_id)"
-              [class.btn-outline-primary]="!selectedTagIds.includes(t.tag_id)"
-              (click)="toggleTag(t.tag_id)"
-            >
-              {{ t.name }}
-            </button>
-          </div>
-        </div>
+          <!-- Empty placeholders (3) to align Reset to column 8 -->
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
 
-        <div class="mb-3">
-          <label>Upload hình ảnh (nhập URL mock)</label>
-          <input #imgUrl class="form-control mb-2" />
-          <button
-            class="btn btn-secondary btn-sm"
-            (click)="addImage(imgUrl.value); imgUrl.value = ''"
-          >
-            Thêm ảnh
+          <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
+            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
           </button>
-          <div class="mt-2 d-flex gap-2">
-            <img *ngFor="let img of uploadedImages" [src]="img.image_url" width="80" />
+        </div>
+      </div>
+
+      <div class="card hb-card hb-table-card">
+        <div class="hb-table-wrap">
+          <div class="hb-table">
+            <!-- Table Header -->
+            <div class="hb-table-head hb-grid-contents">
+              <div class="hb-th"><span>Tiêu đề</span></div>
+              <div class="hb-th"><span>Danh mục</span></div>
+              <div class="hb-th"><span>Trạng thái</span></div>
+              <div class="hb-th"><span>Sửa</span></div>
+              <div class="hb-th"><span>Xóa</span></div>
+            </div>
+
+            <!-- Table Rows -->
+            <div class="hb-table-row hb-grid-contents" *ngFor="let p of filterPosts()">
+              <div class="hb-td">
+                <span class="hb-text-truncate" [title]="p.title">{{ p.title }}</span>
+              </div>
+              <div class="hb-td hb-td-center">
+                <span class="text-muted small">{{ p.blog_category_id }}</span>
+              </div>
+              <div class="hb-td hb-td-center">
+                <span class="hb-badge" [ngClass]="'hb-st-' + p.post_status">
+                  {{ p.post_status === 'published' ? 'Đã đăng' : 'Bản nháp' }}
+                </span>
+              </div>
+              <div class="hb-td hb-td-center">
+                <button class="hb-icon-btn" (click)="goEdit(p.post_id)">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </div>
+              <div class="hb-td hb-td-center">
+                <button class="hb-icon-btn danger" (click)="softDelete(p.post_id)">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="hb-empty" *ngIf="filterPosts().length === 0">
+              Chưa có nội dung nào phù hợp.
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- CREATE / EDIT MODE -->
+    <ng-container *ngIf="mode !== 'list'">
+      <div class="card hb-card hb-card-pad">
+        <div class="hb-section-title">{{ mode === 'create' ? 'Tạo nội dung mới' : 'Chỉnh sửa nội dung' }}</div>
+        <div class="hb-divider"></div>
+        
+        <div class="row g-3">
+          <div class="col-md-8">
+            <div class="mb-3">
+              <label class="form-label small text-muted">TIÊU ĐỀ</label>
+              <input
+                class="form-control"
+                [(ngModel)]="currentPost!.title"
+                (ngModelChange)="currentPost!.slug = generateSlug($event)"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small text-muted">SLUG</label>
+              <input class="form-control" [(ngModel)]="currentPost!.slug" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small text-muted">NỘI DUNG</label>
+              <textarea class="form-control" rows="10" [(ngModel)]="currentPost!.content"></textarea>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+             <div class="mb-3">
+              <label class="form-label small text-muted">DANH MỤC</label>
+              <select class="form-select" [(ngModel)]="currentPost!.blog_category_id">
+                <option *ngFor="let c of categories$ | async" [value]="c.category_id">
+                  {{ c.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small text-muted">THUMBNAIL URL</label>
+              <input class="form-control" [(ngModel)]="currentPost!.thumbnail_url" />
+              <div class="mt-2" *ngIf="currentPost!.thumbnail_url">
+                <img [src]="currentPost!.thumbnail_url" class="img-fluid rounded" style="max-height: 150px;">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small text-muted">TAGS</label>
+              <div class="d-flex gap-2 flex-wrap">
+                <button
+                  type="button"
+                  *ngFor="let t of tags$ | async"
+                  class="btn btn-sm"
+                  [class.btn-hb]="selectedTagIds.includes(t.tag_id)"
+                  [class.btn-hb-outline]="!selectedTagIds.includes(t.tag_id)"
+                  (click)="toggleTag(t.tag_id)"
+                >
+                  {{ t.name }}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="mt-4">
-          <button class="btn btn-primary me-2" (click)="savePost()">Lưu</button>
-          <button class="btn btn-outline-secondary" (click)="backToList()">Hủy</button>
+        <div class="hb-divider"></div>
+        
+        <div class="d-flex gap-2 justify-content-end">
+          <button class="btn btn-hb-outline px-4" (click)="backToList()">Hủy</button>
+          <button class="btn btn-hb-accent px-5" (click)="savePost()">Lưu bài viết</button>
         </div>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
   </div>
 </div>
