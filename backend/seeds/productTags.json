@@ -1,0 +1,188 @@
+[
+  {
+    "name": "Sofa",
+    "slug": "sofa",
+    "description": "Các loại ghế sofa dùng trong không gian sinh hoạt"
+  },
+  {
+    "name": "Corner Sofa",
+    "slug": "corner-sofa",
+    "description": "Sofa góc chữ L giúp tối ưu không gian phòng"
+  },
+  {
+    "name": "Living Room",
+    "slug": "living-room",
+    "description": "Sản phẩm phù hợp cho không gian phòng khách"
+  },
+  {
+    "name": "Adjustable Back",
+    "slug": "adjustable-back",
+    "description": "Sản phẩm có khả năng điều chỉnh phần tựa lưng"
+  },
+  {
+    "name": "Storage",
+    "slug": "storage",
+    "description": "Nội thất có tích hợp không gian lưu trữ"
+  },
+
+  {
+    "name": "Sculpture",
+    "slug": "sculpture",
+    "description": "Tác phẩm điêu khắc trang trí nội thất"
+  },
+  {
+    "name": "Decor",
+    "slug": "decor",
+    "description": "Đồ trang trí giúp tăng tính thẩm mỹ cho không gian"
+  },
+  {
+    "name": "Art",
+    "slug": "art",
+    "description": "Sản phẩm mang tính nghệ thuật cao"
+  },
+  {
+    "name": "Handmade",
+    "slug": "handmade",
+    "description": "Sản phẩm thủ công được làm bằng tay"
+  },
+  {
+    "name": "Geometric",
+    "slug": "geometric",
+    "description": "Thiết kế dựa trên các hình khối hình học"
+  },
+  {
+    "name": "Nature Inspired",
+    "slug": "nature-inspired",
+    "description": "Thiết kế lấy cảm hứng từ thiên nhiên"
+  },
+
+  {
+    "name": "Vase",
+    "slug": "vase",
+    "description": "Bình trang trí dùng cắm hoa hoặc trưng bày"
+  },
+  {
+    "name": "Metal",
+    "slug": "metal",
+    "description": "Sản phẩm làm từ kim loại hoặc có chi tiết kim loại"
+  },
+  {
+    "name": "Glass",
+    "slug": "glass",
+    "description": "Sản phẩm làm từ thủy tinh hoặc có chi tiết thủy tinh"
+  },
+
+  {
+    "name": "Bathroom",
+    "slug": "bathroom",
+    "description": "Sản phẩm sử dụng trong không gian phòng tắm"
+  },
+  {
+    "name": "Outdoor",
+    "slug": "outdoor",
+    "description": "Sản phẩm dùng cho không gian ngoài trời"
+  },
+  {
+    "name": "Kitchen",
+    "slug": "kitchen",
+    "description": "Sản phẩm phù hợp cho khu vực nhà bếp"
+  },
+  {
+    "name": "Dining Room",
+    "slug": "dining-room",
+    "description": "Sản phẩm sử dụng trong phòng ăn"
+  },
+
+  {
+    "name": "Chair",
+    "slug": "chair",
+    "description": "Các loại ghế ngồi"
+  },
+  {
+    "name": "Armchair",
+    "slug": "armchair",
+    "description": "Ghế đơn có tay vịn, mang lại sự thoải mái"
+  },
+  {
+    "name": "Bar Stool",
+    "slug": "bar-stool",
+    "description": "Ghế cao dùng cho quầy bar hoặc đảo bếp"
+  },
+  {
+    "name": "Bench",
+    "slug": "bench",
+    "description": "Ghế dài dùng cho nhiều người ngồi"
+  },
+
+  {
+    "name": "Mirror",
+    "slug": "mirror",
+    "description": "Gương trang trí và sử dụng hằng ngày"
+  },
+  {
+    "name": "Minimal",
+    "slug": "minimal",
+    "description": "Sản phẩm mang phong cách tối giản"
+  },
+
+  {
+    "name": "Hammpton",
+    "slug": "hammpton",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Hammpton"
+  },
+  {
+    "name": "Princeton",
+    "slug": "princeton",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Princeton"
+  },
+  {
+    "name": "Belize",
+    "slug": "belize",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Belize"
+  },
+  {
+    "name": "Float",
+    "slug": "float",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Float"
+  },
+  {
+    "name": "Flora",
+    "slug": "flora",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Flora"
+  },
+  {
+    "name": "Luna",
+    "slug": "luna",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Luna"
+  },
+  {
+    "name": "Magnolia",
+    "slug": "magnolia",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Magnolia"
+  },
+  {
+    "name": "Mango",
+    "slug": "mango",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Mango"
+  },
+  {
+    "name": "Rubble",
+    "slug": "rubble",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Rubble"
+  },
+  {
+    "name": "Sweet Art",
+    "slug": "sweet-art",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Sweet Art"
+  },
+  {
+    "name": "Tone",
+    "slug": "tone",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Tone"
+  },
+  {
+    "name": "Medina",
+    "slug": "medina",
+    "description": "Thẻ thương hiệu dành cho các sản phẩm Medina"
+  }
+]

@@ -1,0 +1,152 @@
+[
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30001",
+    "name": "Phong cách Tối giản",
+    "slug": "phong-cach-toi-gian"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30002",
+    "name": "Nội thất Hiện đại",
+    "slug": "noi-that-hien-dai"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30003",
+    "name": "Scandinavian",
+    "slug": "scandinavian"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30004",
+    "name": "Gỗ tự nhiên",
+    "slug": "go-tu-nhien"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30005",
+    "name": "Gỗ công nghiệp",
+    "slug": "go-cong-nghiep"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30006",
+    "name": "Căn hộ chung cư",
+    "slug": "can-ho-chung-cu"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30007",
+    "name": "Nhà phố diện tích nhỏ",
+    "slug": "nha-pho-dien-tich-nho"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30008",
+    "name": "Sofa phòng khách",
+    "slug": "sofa-phong-khach"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30009",
+    "name": "Giường ngủ êm ái",
+    "slug": "giuong-ngu-em-ai"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30010",
+    "name": "Bàn ăn gia đình",
+    "slug": "ban-an-gia-dinh"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30011",
+    "name": "Màu trung tính",
+    "slug": "mau-trung-tinh"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30012",
+    "name": "Ánh sáng tự nhiên",
+    "slug": "anh-sang-tu-nhien"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30013",
+    "name": "Phong thủy phòng ngủ",
+    "slug": "phong-thuy-phong-ngu"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30014",
+    "name": "Vệ sinh đồ da",
+    "slug": "ve-sinh-do-da"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30015",
+    "name": "Bảo quản đồ gỗ",
+    "slug": "bao-quan-do-go"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30016",
+    "name": "Trang trí tường",
+    "slug": "trang-tri-tuong"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30017",
+    "name": "Cây xanh trong nhà",
+    "slug": "cay-xanh-trong-nha"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30018",
+    "name": "Tiết kiệm không gian",
+    "slug": "tiet-kiem-khong-gian"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30019",
+    "name": "Nội thất thông minh",
+    "slug": "noi-that-thong-minh"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30020",
+    "name": "DIY trang trí",
+    "slug": "diy-trang-tri"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30021",
+    "name": "Xu hướng 2025",
+    "slug": "xu-huong-2025"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30022",
+    "name": "Quà tặng tân gia",
+    "slug": "qua-tang-tan-gia"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30023",
+    "name": "Văn phòng tại gia",
+    "slug": "van-phong-tai-gia"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30024",
+    "name": "Ban công xanh",
+    "slug": "ban-cong-xanh"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30025",
+    "name": "Nội thất trẻ em",
+    "slug": "noi-that-tre-em"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30026",
+    "name": "Da thật cao cấp",
+    "slug": "da-that-cao-cap"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30027",
+    "name": "Vải nỉ nhập khẩu",
+    "slug": "vai-ni-nhap-khau"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30028",
+    "name": "Đèn trang trí hiện đại",
+    "slug": "den-trang-tri-hien-dai"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30029",
+    "name": "Thảm trải sàn",
+    "slug": "tham-trai-san"
+  },
+  {
+    "_id": "65b2c3c3e3c3e3c3e3c30030",
+    "name": "Tủ quần áo đa năng",
+    "slug": "tu-quan-ao-da-nang"
+  }
+]

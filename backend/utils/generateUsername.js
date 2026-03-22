@@ -1,4 +1,4 @@
-function generateFromEmail(email) {
+function generateUsernameFromEmail(email) {
   if (!email || typeof email !== "string") return null;
 
   return email
@@ -9,5 +9,5 @@ function generateFromEmail(email) {
 }
 
 module.exports = {
-  generateFromEmail,
+  generateUsernameFromEmail,
 };

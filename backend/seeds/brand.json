@@ -1,0 +1,75 @@
+[
+  {
+    "name": "Hammpton",
+    "address": "123 Hammpton St, London, UK",
+    "phone": "+44 20 7946 0000",
+    "contact_email": "info@hammpton.com"
+  },
+  {
+    "name": "Princeton",
+    "address": "456 Princeton Ave, New Jersey, USA",
+    "phone": "+1 609-258-3000",
+    "contact_email": "support@princeton-furniture.com"
+  },
+  {
+    "name": "Mango",
+    "address": "789 Mango Rd, Barcelona, Spain",
+    "phone": "+34 93 432 10 00",
+    "contact_email": "contact@mango-home.es"
+  },
+  {
+    "name": "Rubble",
+    "address": "101 Rubble Ln, Berlin, Germany",
+    "phone": "+49 30 123456",
+    "contact_email": "hello@rubble.de"
+  },
+  {
+    "name": "Sweet Art",
+    "address": "202 Sweet Art Blvd, Paris, France",
+    "phone": "+33 1 42 68 53 00",
+    "contact_email": "art@sweetart.fr"
+  },
+  {
+    "name": "Belize",
+    "address": "303 Belize Way, Belmopan, Belize",
+    "phone": "+501 223-4567",
+    "contact_email": "sales@belize-interiors.bz"
+  },
+  {
+    "name": "Float",
+    "address": "404 Float Dr, Copenhagen, Denmark",
+    "phone": "+45 33 12 34 56",
+    "contact_email": "info@float-design.dk"
+  },
+  {
+    "name": "Flora",
+    "address": "505 Flora Terrace, Milan, Italy",
+    "phone": "+39 02 1234567",
+    "contact_email": "ciao@flora-milan.it"
+  },
+  {
+    "name": "Geometric",
+    "address": "606 Geometric Sq, Tokyo, Japan",
+    "phone": "+81 3-1234-5678",
+    "contact_email": "design@geometric.jp"
+  },
+  {
+    "name": "Luna",
+    "address": "707 Luna Path, Stockholm, Sweden",
+    "phone": "+46 8 123 45 67",
+    "contact_email": "contact@luna-sweden.se"
+  },
+  {
+    "name": "Magnolia",
+    "address": "808 Magnolia Cir, Atlanta, USA",
+    "phone": "+1 404-555-0199",
+    "contact_email": "hello@magnolia.com"
+  },
+  {
+    "name": "Medina",
+    "address": "909 Medina Rd, Casablanca, Morocco",
+    "phone": "+212 522-123456",
+    "contact_email": "info@medina.ma"
+  }
+]
+

@@ -3,7 +3,7 @@ const Role = require("../../models/role.model");
 async function connect() {
   try {
     await mongoose
-      .connect(process.env.DATABASE_URL)
+      .connect("mongodb://localhost:27017/furniture-e-commerce")
       .then(() => {
         console.log("Connect successfully");
         initial();

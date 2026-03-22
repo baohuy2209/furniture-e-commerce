@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xác nhận đơn hàng - HomeBase</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #f0ede8;
+        font-family: "DM Sans", sans-serif;
+        color: #2a2a2a;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .email-wrapper {
+        max-width: 620px;
+        margin: 40px auto;
+        background: #ffffff;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 4px 40px rgba(0, 0, 0, 0.08);
+      }
+
+      /* ── Header ── */
+      .header {
+        background: #2c3e6b;
+        padding: 36px 48px 32px;
+        text-align: center;
+        position: relative;
+      }
+
+      .header::after {
+        content: "";
+        display: block;
+        width: 60px;
+        height: 3px;
+        background: #e07b39;
+        margin: 16px auto 0;
+        border-radius: 2px;
+      }
+
+      .logo-text {
+        font-family: "Playfair Display", serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+      }
+
+      .logo-sub {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.5);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+
+      /* ── Hero ── */
+      .hero {
+        background: linear-gradient(135deg, #f8f6f2 0%, #ede9e2 100%);
+        padding: 40px 48px;
+        text-align: center;
+        border-bottom: 1px solid #e8e4dc;
+      }
+
+      .hero-icon {
+        width: 64px;
+        height: 64px;
+        background: #e07b39;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .hero-icon svg {
+        width: 30px;
+        height: 30px;
+        fill: none;
+        stroke: #fff;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .hero-title {
+        font-family: "Playfair Display", serif;
+        font-size: 26px;
+        font-weight: 700;
+        color: #1a1f36;
+        margin-bottom: 10px;
+        line-height: 1.3;
+      }
+
+      .hero-sub {
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.7;
+        max-width: 380px;
+        margin: 0 auto;
+      }
+
+      /* ── Body ── */
+      .body {
+        padding: 36px 48px;
+      }
+
+      /* ── Order number banner ── */
+      .order-banner {
+        background: #f8f6f2;
+        border: 1px solid #e8e4dc;
+        border-left: 4px solid #e07b39;
+        border-radius: 4px;
+        padding: 16px 20px;
+        margin-bottom: 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .order-banner-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+      }
+
+      .order-banner-value {
+        font-family: "Courier New", monospace;
+        font-size: 16px;
+        font-weight: 700;
+        color: #2c3e6b;
+        letter-spacing: 1px;
+      }
+
+      .order-banner-date {
+        font-size: 13px;
+        color: #6b7280;
+        text-align: right;
+      }
+
+      /* ── Section title ── */
+      .section-title {
+        font-family: "Playfair Display", serif;
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1f36;
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f0ede8;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .section-title::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 16px;
+        background: #e07b39;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      /* ── Product item ── */
+      .product-section {
+        margin-bottom: 28px;
+      }
+
+      .product-item {
+        display: table;
+        width: 100%;
+        border: 1px solid #f0ede8;
+        border-radius: 6px;
+        padding: 18px;
+        background: #fafaf9;
+      }
+
+      .product-item-inner {
+        display: table-row;
+      }
+
+      .product-details {
+        display: table-cell;
+        vertical-align: middle;
+        padding-right: 16px;
+      }
+
+      .product-price-col {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: right;
+        white-space: nowrap;
+        width: 140px;
+      }
+
+      .product-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1f36;
+        margin-bottom: 6px;
+        line-height: 1.4;
+      }
+
+      .product-meta {
+        font-size: 12px;
+        color: #9ca3af;
+        line-height: 1.8;
+      }
+
+      .product-meta span {
+        display: inline-block;
+        background: #f0ede8;
+        padding: 2px 8px;
+        border-radius: 3px;
+        margin-right: 4px;
+        margin-bottom: 3px;
+      }
+
+      .price-unit {
+        font-size: 12px;
+        color: #9ca3af;
+        margin-bottom: 4px;
+      }
+
+      .price-subtotal {
+        font-size: 17px;
+        font-weight: 700;
+        color: #e07b39;
+        font-family: "Playfair Display", serif;
+      }
+
+      .price-discount {
+        font-size: 11px;
+        color: #10b981;
+        font-weight: 600;
+        margin-top: 3px;
+      }
+
+      /* ── Summary table ── */
+      .summary-section {
+        margin-bottom: 28px;
+      }
+
+      .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .summary-row td {
+        padding: 9px 0;
+        font-size: 13.5px;
+        border-bottom: 1px solid #f5f3f0;
+      }
+
+      .summary-row td:last-child {
+        text-align: right;
+        font-weight: 500;
+        color: #374151;
+      }
+
+      .summary-row td:first-child {
+        color: #6b7280;
+      }
+
+      .summary-row.discount td {
+        color: #10b981;
+      }
+      .summary-row.discount td:last-child {
+        color: #10b981;
+      }
+
+      .summary-row.total td {
+        border-top: 2px solid #e8e4dc;
+        border-bottom: none;
+        padding-top: 14px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .summary-row.total td:first-child {
+        color: #1a1f36;
+        font-family: "Playfair Display", serif;
+      }
+
+      .summary-row.total td:last-child {
+        color: #e07b39;
+        font-size: 18px;
+      }
+
+      /* ── Info grid ── */
+      .info-section {
+        margin-bottom: 28px;
+      }
+
+      .info-grid {
+        display: table;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 10px 0;
+      }
+
+      .info-col {
+        display: table-cell;
+        width: 50%;
+        background: #f8f6f2;
+        border: 1px solid #e8e4dc;
+        border-radius: 6px;
+        padding: 18px;
+        vertical-align: top;
+      }
+
+      .info-col-title {
+        font-size: 10px;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 10px;
+      }
+
+      .info-col-value {
+        font-size: 13.5px;
+        color: #374151;
+        line-height: 1.7;
+        font-weight: 500;
+      }
+
+      /* ── Shipping badge ── */
+      .shipping-badge {
+        display: inline-block;
+        background: rgba(44, 62, 107, 0.08);
+        color: #2c3e6b;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 3px;
+        letter-spacing: 0.5px;
+        margin-top: 6px;
+      }
+
+      .payment-badge {
+        display: inline-block;
+        background: rgba(224, 123, 57, 0.1);
+        color: #e07b39;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 3px;
+        letter-spacing: 0.5px;
+        margin-top: 6px;
+      }
+
+      /* ── Status timeline ── */
+      .timeline-section {
+        margin-bottom: 28px;
+      }
+
+      .timeline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        padding: 0 10px;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 18px;
+        left: 40px;
+        right: 40px;
+        height: 2px;
+        background: #e8e4dc;
+        z-index: 0;
+      }
+
+      .timeline-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .timeline-dot {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .timeline-dot.active {
+        background: #e07b39;
+        color: #fff;
+        box-shadow: 0 0 0 4px rgba(224, 123, 57, 0.15);
+      }
+
+      .timeline-dot.done {
+        background: #2c3e6b;
+        color: #fff;
+      }
+
+      .timeline-dot.pending {
+        background: #f0ede8;
+        color: #d1c9be;
+        border: 2px solid #e8e4dc;
+      }
+
+      .timeline-label {
+        font-size: 10px;
+        font-weight: 600;
+        color: #6b7280;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        max-width: 60px;
+        line-height: 1.3;
+      }
+
+      .timeline-label.active {
+        color: #e07b39;
+      }
+      .timeline-label.done {
+        color: #2c3e6b;
+      }
+
+      /* ── Note ── */
+      .note-section {
+        background: #f8f6f2;
+        border: 1px dashed #d4cfc8;
+        border-radius: 6px;
+        padding: 16px 20px;
+        margin-bottom: 28px;
+        font-size: 13px;
+        color: #6b7280;
+        line-height: 1.7;
+      }
+
+      .note-section strong {
+        color: #374151;
+      }
+
+      /* ── CTA ── */
+      .cta-section {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .cta-btn {
+        display: inline-block;
+        background: #2c3e6b;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 14px 36px;
+        border-radius: 4px;
+        letter-spacing: 0.5px;
+        transition: background 0.2s;
+      }
+
+      /* ── Footer ── */
+      .footer {
+        background: #1a2540;
+        padding: 32px 48px;
+        text-align: center;
+      }
+
+      .footer-logo {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+
+      .footer-links {
+        margin-bottom: 16px;
+      }
+
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.5);
+        text-decoration: none;
+        font-size: 12px;
+        margin: 0 10px;
+      }
+
+      .footer-divider {
+        width: 40px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.15);
+        margin: 16px auto;
+      }
+
+      .footer-copy {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.3);
+        line-height: 1.7;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 600px) {
+        .email-wrapper {
+          margin: 0;
+          border-radius: 0;
+        }
+        .header,
+        .hero,
+        .body,
+        .footer {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+        .order-banner {
+          flex-direction: column;
+          gap: 8px;
+        }
+        .order-banner-date {
+          text-align: left;
+        }
+        .info-grid {
+          display: block;
+        }
+        .info-col {
+          display: block;
+          width: 100%;
+          margin-bottom: 10px;
+        }
+        .product-item {
+          display: block;
+        }
+        .product-item-inner {
+          display: block;
+        }
+        .product-details {
+          display: block;
+          padding-right: 0;
+          margin-bottom: 12px;
+        }
+        .product-price-col {
+          display: block;
+          text-align: left;
+          width: 100%;
+        }
+        .timeline {
+          gap: 4px;
+        }
+        .timeline-label {
+          font-size: 9px;
+          max-width: 50px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-wrapper">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo-text">HomeBase</div>
+        <div class="logo-sub">Style Your Nest</div>
+      </div>
+
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-icon">
+          <svg viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="hero-title">Đơn hàng đã được xác nhận!</div>
+        <div class="hero-sub">
+          Cảm ơn bạn đã tin tưởng HomeBase. Chúng tôi sẽ xử lý đơn hàng và thông
+          báo khi hàng được giao.
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="body">
+        <!-- Order number -->
+        <div class="order-banner">
+          <div>
+            <div class="order-banner-label">Mã đơn hàng</div>
+            <div class="order-banner-value">{{order_number}}</div>
+          </div>
+          <div class="order-banner-date">
+            <div class="order-banner-label">Ngày đặt</div>
+            <div
+              style="
+                font-size: 13px;
+                color: #374151;
+                font-weight: 500;
+                margin-top: 2px;
+              "
+            >
+              {{order_date}}
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-section">
+          <div class="section-title">Trạng thái đơn hàng</div>
+          <div class="timeline">
+            <div class="timeline-step">
+              <div class="timeline-dot done">✓</div>
+              <div class="timeline-label done">Đã đặt hàng</div>
+            </div>
+            <div class="timeline-step">
+              <div class="timeline-dot active">⟳</div>
+              <div class="timeline-label active">Đang xử lý</div>
+            </div>
+            <div class="timeline-step">
+              <div class="timeline-dot pending">↗</div>
+              <div class="timeline-label">Đang giao</div>
+            </div>
+            <div class="timeline-step">
+              <div class="timeline-dot pending">⌂</div>
+              <div class="timeline-label">Đã nhận</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product -->
+        <div class="product-section">
+          <div class="section-title">Sản phẩm</div>
+          <div class="product-item">
+            <div class="product-item-inner">
+              <div class="product-details">
+                <div class="product-name">{{product_name}}</div>
+                <div class="product-meta">
+                  <span>SL: {{quantity}}</span>
+                  <span>{{shipping_method}}</span>
+                  <span>Giao: {{estimate_delivery}}</span>
+                </div>
+              </div>
+              <div class="product-price-col">
+                <div class="price-unit">{{unit_price}} / sp</div>
+                <div class="price-subtotal">{{item_subtotal}}</div>
+                <div class="price-discount">Giảm {{discount_percent}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-section">
+          <div class="section-title">Tổng thanh toán</div>
+          <table class="summary-table">
+            <tr class="summary-row">
+              <td>Tạm tính</td>
+              <td>{{before_total}}</td>
+            </tr>
+            <tr class="summary-row discount">
+              <td>Giảm giá</td>
+              <td>-{{discount_total}}</td>
+            </tr>
+            <tr class="summary-row">
+              <td>Phí vận chuyển</td>
+              <td>{{total_shipping_fee}}</td>
+            </tr>
+            <tr class="summary-row total">
+              <td>Tổng cộng</td>
+              <td>{{total_amount}}</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Info grid -->
+        <div class="info-section">
+          <div class="section-title">Thông tin giao hàng & thanh toán</div>
+          <div class="info-grid">
+            <div class="info-col">
+              <div class="info-col-title">Địa chỉ giao hàng</div>
+              <div class="info-col-value">
+                {{customer_name}}<br />
+                {{customer_phone}}<br />
+                {{address_detail}}, {{ward}}, {{province}}
+              </div>
+              <div class="shipping-badge">{{shipping_method_label}}</div>
+            </div>
+            <div class="info-col">
+              <div class="info-col-title">Thanh toán</div>
+              <div class="info-col-value">
+                Phương thức:<br />
+                <strong>{{payment_method}}</strong><br /><br />
+                Trạng thái:<br />
+                <strong>{{payment_status}}</strong>
+              </div>
+              <div class="payment-badge">{{payment_status_label}}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Note -->
+        {{#if note}}
+        <div class="note-section">
+          <strong>📝 Ghi chú của bạn:</strong> {{note}}
+        </div>
+        {{/if}}
+
+        <!-- CTA -->
+        <div class="cta-section">
+          <a href="{{order_detail_url}}" class="cta-btn"
+            >Xem chi tiết đơn hàng</a
+          >
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-logo">HomeBase</div>
+        <div class="footer-links">
+          <a href="#">Chính sách đổi trả</a>
+          <a href="#">Hỗ trợ</a>
+          <a href="#">Liên hệ</a>
+        </div>
+        <div class="footer-divider"></div>
+        <div class="footer-copy">
+          123 Đường Nguyễn Văn Linh, Quận 7, TP. Hồ Chí Minh<br />
+          © 2025 HomeBase Interior Living. Bảo lưu mọi quyền.<br />
+          <span style="color: rgba(255, 255, 255, 0.2); font-size: 10px">
+            Bạn nhận được email này vì đã đặt hàng tại HomeBase.
+          </span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

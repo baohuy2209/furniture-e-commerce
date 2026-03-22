@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const slug = require("mongoose-slug-generator");
-mongoose.plugin(slug);
 const blogTagSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
