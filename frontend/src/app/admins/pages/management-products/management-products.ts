@@ -167,7 +167,10 @@ export class ManagementProducts implements OnInit, OnDestroy {
   private rooms$ = new BehaviorSubject<Room[]>([]);
 
   mode: PageMode = 'list';
-  selectedProductId: ProductId | null = null;
+  selectedProductId$ = new BehaviorSubject<ProductId | null>(null);
+  get selectedProductId() { return this.selectedProductId$.value; }
+  set selectedProductId(v: ProductId | null) { this.selectedProductId$.next(v); }
+
   detailTab: 'overview' | 'variants' | 'comments' = 'overview';
 
   editForm: EditForm | null = null;
@@ -203,7 +206,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
     minPrice: null,
     maxPrice: null,
     sortKey: 'id',
-    sortDir: 'asc',
+    sortDir: 'desc',
     page: 1,
     pageSize: 10,
   });
@@ -316,12 +319,13 @@ export class ManagementProducts implements OnInit, OnDestroy {
     }),
   );
 
-  detail$ = combineLatest([this.products$, this.variants$, this.images$]).pipe(
-    map(([products, variants, images]): ProductDetailVM | null => {
-      if (!this.selectedProductId || this.selectedProductId === 'new') return null;
+  detail$ = combineLatest([this.products$, this.variants$, this.images$, this.selectedProductId$]).pipe(
+    map(([products, variants, images, currentId]): ProductDetailVM | null => {
+      if (!currentId || currentId === 'new') return null;
 
-      const p = products.find((x) => x.product_id === this.selectedProductId) ?? null;
+      const p = products.find((x) => x.product_id === currentId) ?? null;
       if (!p) return null;
+
 
       const pv = variants.filter((v) => v.product_id === p.product_id);
       const pvIds = new Set(pv.map((x) => x.product_varant_id));

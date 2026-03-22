@@ -20,16 +20,6 @@
 }
 
 :host {
-  --hb-primary: #151821;
-  --hb-accent: #ff911f;
-  --hb-card-bg: #151821;
-  --hb-radius: 16px;
-  --hb-radius-sm: 10px;
-  --hb-radius-lg: 20px;
-  --hb-border: rgba(255, 255, 255, 0.04);
-  --hb-text: #F3F4F6;
-  --hb-muted: #9CA3AF;
-  font-family: var(--font-body, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif);
   display: block;
   height: 100%;
   min-height: 0;
@@ -43,21 +33,7 @@
   flex-direction: column;
 }
 
-.hb-page-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: transparent;
-
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-
-  padding: 4px 0 10px 0;
-  border-bottom: 1px solid var(--hb-border);
-}
-
+/* Headers & Actions are now managed globally in admin-dark.css */
 .hb-header-left {
   min-width: 0;
 }
@@ -78,22 +54,7 @@
   padding-top: 14px;
 }
 
-.hb-title {
-  font-size: 40px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: 0.5px;
-  color: var(--hb-text);
-  text-transform: uppercase;
-}
-
-.hb-sub {
-  margin-top: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--hb-muted);
-}
-
+/* Visual Styles for Titles and Buttons are now managed globally */
 .hb-detail-title {
   font-size: 28px;
   font-weight: 800;
@@ -104,9 +65,10 @@
 /* ===== CARDS ===== */
 .hb-card {
   border-radius: var(--hb-radius);
-  border: 1px solid var(--hb-border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  background: var(--hb-card-bg);
+  border: 1px solid var(--hb-border) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+  background: rgba(17, 24, 39, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
 }
 
 .hb-card-pad {
@@ -122,78 +84,20 @@
 }
 
 /* ===== BUTTONS ===== */
-.btn-hb {
-  background: var(--hb-primary);
-  border-color: var(--hb-text);
-  color: #fff;
-  font-weight: 800;
-  border-radius: var(--hb-radius-sm);
-}
+/* Buttons are now managed globally in admin-dark.css */
 
-.btn-hb:hover {
-  filter: brightness(0.95);
-  color: #fff;
-}
+/* Button managed globally */
 
-.btn-hb-outline {
-  border: 1px solid rgba(61, 82, 157, 0.32);
-  color: var(--hb-text);
-  font-weight: 800;
-  background: var(--hb-card-bg);
-  border-radius: var(--hb-radius-sm);
-}
+/* Global Sync */
 
-.btn-hb-outline:hover {
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--hb-text);
-}
+/* Global Sync */
 
-.btn-hb-accent {
-  background: var(--hb-accent);
-  border-color: var(--hb-accent);
-  color: #1f1f1f;
-  font-weight: 800;
-  border-radius: var(--hb-radius-sm);
-  font-size: 14px;
-}
-
-.btn-hb-accent:hover {
-  filter: brightness(0.96);
-  color: #1f1f1f;
-}
-
-.btn-hb-outline-danger {
-  border: 1px solid rgba(220, 53, 69, 0.32);
-  color: rgba(220, 53, 69, 1);
-  font-weight: 900;
-  background: var(--hb-card-bg);
-  border-radius: var(--hb-radius-sm);
-}
-
-.btn-hb-outline-danger:hover {
-  background: rgba(220, 53, 69, 0.06);
-}
+/* Global Sync */
 
 /* ===== SUMMARY CARDS ===== */
-.hb-summary-row {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 14px;
-  margin-bottom: 8px;
-}
+/* Global Sync */
 
-.hb-summary-card {
-  border-radius: var(--hb-radius);
-  border: 1px solid var(--hb-border);
-  background: var(--hb-card-bg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: all 0.2s ease;
-}
+/* Global Sync */
 
 .hb-summary-card:hover {
   border-color: rgba(61, 82, 157, 0.25);
@@ -201,46 +105,17 @@
   transform: translateY(-1px);
 }
 
-.hb-sc-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  background: rgba(61, 82, 157, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--hb-text);
-  font-size: 18px;
-}
+/* Global Sync */
 
-.hb-sc-icon.warn {
-  background: rgba(255, 145, 31, 0.16);
-  color: rgba(122, 59, 0, 1);
-}
+/* Global Sync */
 
-.hb-sc-icon.ok {
-  background: rgba(25, 135, 84, 0.14);
-  color: rgba(25, 135, 84, 1);
-}
+/* Global Sync */
 
-.hb-sc-icon.danger {
-  background: rgba(220, 53, 69, 0.14);
-  color: rgba(220, 53, 69, 1);
-}
+/* Global Sync */
 
-.hb-sc-label {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--hb-muted);
-  margin-bottom: 2px;
-  text-transform: uppercase;
-}
+/* Global Sync */
 
-.hb-sc-value {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--hb-text);
-}
+/* Global Sync */
 
 /* ===== FILTERBAR ===== */
 .hb-filterbar {
@@ -250,9 +125,10 @@
   align-items: center;
 
   padding: 12px;
-  border: 1px solid var(--hb-border);
+  border: 1px solid var(--hb-border) !important;
   border-radius: var(--hb-radius);
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(17, 24, 39, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
 }
 
 .hb-filter-reset {
@@ -330,8 +206,8 @@
 /* ROW */
 .hb-table-row {
   padding: 0;
-  border-bottom: 1px solid var(--hb-border);
-  background: var(--hb-card-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  background: transparent !important;
   cursor: pointer;
 }
 
@@ -598,13 +474,13 @@
 /* ===== INPUT ===== */
 .form-control,
 .form-select {
-  border-radius: var(--hb-radius-sm);
+  border-radius: 10px !important;
 }
 
 .form-control:focus,
 .form-select:focus {
-  border-color: var(--hb-text);
-  box-shadow: 0 0 0 0.2rem rgba(61, 82, 157, 0.12);
+  border-color: var(--hb-primary) !important;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15) !important;
 }
 
 .input-group-text {
@@ -773,3 +649,4 @@
 .fw-black {
   font-weight: 900 !important;
 }
+

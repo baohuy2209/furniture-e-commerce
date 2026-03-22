@@ -39,7 +39,7 @@
       <ng-container *ngIf="vm$ | async as vm">
 
         <!-- KPI CARDS -->
-        <div class="hb-summary-row mb-4">
+        <div class="hb-summary-row">
           <div class="hb-summary-card">
             <div class="hb-sc-icon"><i class="bi bi-box-seam"></i></div>
             <div>
@@ -66,7 +66,7 @@
         <!-- FILTER BAR - single row -->
         <div class="card hb-card hb-card-pad mb-3">
           <div class="hb-filterbar">
-            <div class="hb-search-input-wrapper" style="flex: 2; min-width: 180px;">
+            <div class="hb-search-input-wrapper">
               <i class="bi bi-search hb-search-icon"></i>
               <input class="form-control hb-search-input" placeholder="Tên, mã, thương hiệu, tag..."
                 [(ngModel)]="localSearchTerm" (ngModelChange)="onSearchChange($event)" />
@@ -89,7 +89,7 @@
               <option value="low">Sắp hết</option>
             </select>
 
-            <select class="form-select" style="max-width: 110px;" [(ngModel)]="vm.query.pageSize"
+            <select class="form-select" [(ngModel)]="vm.query.pageSize"
               (ngModelChange)="patchQuery({ pageSize: $event })">
               <option [ngValue]="10">10 / trang</option>
               <option [ngValue]="20">20 / trang</option>
@@ -97,7 +97,7 @@
             </select>
 
             <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
-              Đặt lại
+              <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
             </button>
           </div>
         </div>
@@ -957,32 +957,40 @@
                     <div class="hb-form-section-title">
                       <i class="bi bi-clipboard-check me-2"></i>Kiểm tra thông tin sản phẩm
                     </div>
-                    <div class="text-muted small mb-4">Vui lòng rà soát lại thông tin trước khi khởi tạo sản phẩm mới.</div>
-                    
+                    <div class="text-muted small mb-4">Vui lòng rà soát lại thông tin trước khi khởi tạo sản phẩm mới.
+                    </div>
+
                     <div class="row g-3 mb-4">
                       <div class="col-12">
-                        <div class="hb-detail-kv"><span class="k">Tên sản phẩm</span><span class="v text-white fw-bold">{{ editForm.product_name || '(Chưa nhập)' }}</span></div>
+                        <div class="hb-detail-kv"><span class="k">Tên sản phẩm</span><span
+                            class="v text-white fw-bold">{{ editForm.product_name || '(Chưa nhập)' }}</span></div>
                       </div>
                       <div class="col-6">
-                        <div class="hb-detail-kv"><span class="k">Thương hiệu</span><span class="v">{{ editForm.brand_name || '(Chưa nhập)' }}</span></div>
+                        <div class="hb-detail-kv"><span class="k">Thương hiệu</span><span class="v">{{
+                            editForm.brand_name || '(Chưa nhập)' }}</span></div>
                       </div>
                       <div class="col-6">
-                        <div class="hb-detail-kv"><span class="k">Bảo hành</span><span class="v">{{ editForm.warranty ? editForm.warranty + ' tháng' : '(Chưa nhập)' }}</span></div>
+                        <div class="hb-detail-kv"><span class="k">Bảo hành</span><span class="v">{{ editForm.warranty ?
+                            editForm.warranty + ' tháng' : '(Chưa nhập)' }}</span></div>
                       </div>
                       <div class="col-6">
-                        <div class="hb-detail-kv"><span class="k">Cần lắp ráp</span><span class="v">{{ editForm.is_assembly ? 'Có' : 'Không' }}</span></div>
+                        <div class="hb-detail-kv"><span class="k">Cần lắp ráp</span><span class="v">{{
+                            editForm.is_assembly ? 'Có' : 'Không' }}</span></div>
                       </div>
                       <div class="col-12">
-                        <div class="hb-detail-kv align-items-start"><span class="k">Tags</span><span class="v">{{ editForm.tagsText || '(Không có tags)' }}</span></div>
+                        <div class="hb-detail-kv align-items-start"><span class="k">Tags</span><span class="v">{{
+                            editForm.tagsText || '(Không có tags)' }}</span></div>
                       </div>
                     </div>
-                    
+
                     <div class="hb-form-section-title">
                       <i class="bi bi-grid-3x3-gap me-2"></i>Cấu hình biến thể
                     </div>
                     <div class="row g-3 mb-4">
                       <div class="col-12">
-                         <div class="hb-detail-kv"><span class="k">Số biến thể</span><span class="v" style="color: #818cf8; font-weight: bold;">{{ editVariants.length }} biến thể đã cấu hình</span></div>
+                        <div class="hb-detail-kv"><span class="k">Số biến thể</span><span class="v"
+                            style="color: #818cf8; font-weight: bold;">{{ editVariants.length }} biến thể đã cấu
+                            hình</span></div>
                       </div>
                     </div>
 

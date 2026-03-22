@@ -104,6 +104,11 @@ interface ListVM {
     ongoingCount: number;
     upcomingCount: number;
   };
+  createStep: number;
+  mode: Mode;
+  selectedId: string | null;
+  detail: EventEntity | null;
+  editModel: Partial<EventEntity> | null;
 }
 
 @Component({
@@ -125,6 +130,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
   selectedId: string | null = null;
   detail: EventEntity | null = null;
   editModel: Partial<EventEntity> | null = null;
+  createStep$ = new BehaviorSubject<number>(1);
 
   // ===== image upload states =====
   bannerFile: File | null = null;
@@ -161,8 +167,8 @@ export class ManagementEvents implements OnInit, OnDestroy {
   private _events$ = new BehaviorSubject<EventEntity[]>(seedEvents());
   private _tick$ = new BehaviorSubject(0);
 
-  vm$ = combineLatest([this._events$, this._tick$]).pipe(
-    map(([events]) => {
+  vm$ = combineLatest([this._events$, this._tick$, this.createStep$]).pipe(
+    map(([events, _tick, createStep]) => {
       const q = this.q.trim().toLowerCase();
       const fromISO = this.f_from ? dateOnlyToISO(this.f_from) : '';
       const toISO = this.f_to ? dateOnlyToISO(this.f_to, true) : '';
@@ -221,7 +227,9 @@ export class ManagementEvents implements OnInit, OnDestroy {
           .length,
       };
 
-      const vm: ListVM = { rows, total, page, pageSize: this.pageSize, totalPages, summary };
+      const vm: ListVM = { rows, total, page, pageSize: this.pageSize, totalPages, summary,
+        createStep, mode: this.mode, selectedId: this.selectedId, detail: this.detail, editModel: this.editModel
+      };
       return vm;
     }),
   );
@@ -248,9 +256,22 @@ export class ManagementEvents implements OnInit, OnDestroy {
         this.selectedId = null;
         this.detail = null;
         this.editModel = null;
-        this.resetUploadsState();
         this.isDirty = false;
         this.originalSnapshot = '';
+        this.createStep$.next(1);
+        this.pendingNewEvent = null;
+        return;
+      }
+
+      if (incomingId === 'NEW') {
+        this.selectedId = 'NEW';
+        if (!this.pendingNewEvent) {
+          this.pendingNewEvent = this.buildFreshDraft();
+        }
+        this.detail = this.pendingNewEvent;
+        this.mode = 'edit';
+        this.initEditModel(this.pendingNewEvent);
+        this.refreshList();
         return;
       }
 
@@ -273,6 +294,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
         this.isDirty = false;
         this.originalSnapshot = '';
       }
+      this.refreshList();
     });
   }
 
@@ -449,10 +471,12 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   openDetail(id: string) {
+    this.createStep$.next(2);
     this.syncRoute(id, 'detail', true);
   }
 
   openEdit(id: string) {
+    this.createStep$.next(1);
     this.syncRoute(id, 'edit', true);
   }
 
@@ -465,13 +489,19 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   backToList() {
+    this.createStep$.next(1);
     this.attemptLeave(() => {
       this.syncRoute(null, 'list', true);
     });
   }
 
+  goList() {
+    this.backToList();
+  }
+
   enterEdit() {
     if (!this.detail) return;
+    this.createStep$.next(1);
     this.syncRoute(this.detail.event_id, 'edit', true);
   }
 
@@ -514,7 +544,9 @@ export class ManagementEvents implements OnInit, OnDestroy {
     this.pendingDiscardAction = null;
   }
 
-  createNewEvent() {
+  private pendingNewEvent: EventEntity | null = null;
+
+  private buildFreshDraft(): EventEntity {
     const now = Date.now();
     const id = `EVT_${cryptoId().slice(0, 6).toUpperCase()}`;
     const code = `NEW_${new Date().toISOString().slice(0, 10).replaceAll('-', '')}`;
@@ -522,7 +554,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     const startISO = new Date(now + 1000 * 60 * 60 * 24).toISOString();
     const endISO = new Date(now + 1000 * 60 * 60 * 24 * 2).toISOString();
 
-    const draft: EventEntity = {
+    return {
       event_id: id,
       event_code: code,
       event_name: 'Sự kiện mới',
@@ -553,10 +585,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
         coverImageId: null,
       },
     };
+  }
 
-    this._events$.next([draft, ...this._events$.value]);
-    this.refreshList();
-    this.openEdit(draft.event_id);
+  createNewEvent() {
+    this.pendingNewEvent = this.buildFreshDraft();
+    this.syncRoute('NEW', 'edit', true);
   }
 
   deleteEvent(id: string) {
@@ -575,6 +608,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     this.deleteTargetId = null;
     if (!id) return;
 
+    this.createStep$.next(1);
     const next = this._events$.value.filter((x) => x.event_id !== id);
     this._events$.next(next);
     this.refreshList();
@@ -733,7 +767,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
 
   saveEdit() {
     if (!this.detail || !this.editModel) return;
-    this.saveModalOpen = true;
+    this.executeSave(); // Không hỏi confirm, chuyển thẳng sang bước 2
   }
 
   onCancelSave() {
@@ -780,16 +814,36 @@ export class ManagementEvents implements OnInit, OnDestroy {
       patched.capacity = patched.registered_count;
     }
 
-    const all = this._events$.value.map((x) => (x.event_id === patched.event_id ? patched : x));
-    this._events$.next(all);
+    if (this._events$.value.find((x) => x.event_id === patched.event_id)) {
+      const all = this._events$.value.map((x) => (x.event_id === patched.event_id ? patched : x));
+      this._events$.next(all);
+    } else {
+      this._events$.next([patched, ...this._events$.value]);
+    }
 
     this.detail = patched;
     this.editModel = null;
     this.saveModalOpen = false;
+    this.pendingNewEvent = null; // Clear if it was new
 
     this.resetUploadsState();
     this.refreshList();
+    this.createStep$.next(2);
     this.syncRoute(patched.event_id, 'detail', true);
+  }
+
+  publishEvent() {
+    if (!this.detail) return;
+    const patched = {
+      ...this.detail,
+      status: 'published' as EventStatus,
+      updated_at: new Date().toISOString()
+    };
+    const all = this._events$.value.map(x => x.event_id === patched.event_id ? patched : x);
+    this._events$.next(all);
+    this.detail = patched;
+    this.createStep$.next(3);
+    this.refreshList();
   }
 
   stopEvent(e: MouseEvent) {

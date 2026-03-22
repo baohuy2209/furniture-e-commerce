@@ -11,7 +11,9 @@
         </div>
 
         <div class="hb-header-actions">
-          <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
+          <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
+            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+          </button>
           <button class="btn btn-hb" type="button" (click)="exportCustomersCsv(vm)">
             <i class="bi bi-download me-1"></i> Xuất CSV
           </button>
@@ -77,7 +79,7 @@
               type="button"
               (click)="resetFilters()"
             >
-              Reset
+              <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
             </button>
           </div>
         </div>

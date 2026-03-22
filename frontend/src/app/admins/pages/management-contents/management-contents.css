@@ -1,31 +1,10 @@
-:host {
-  --hb-primary: #151821;
-  --hb-accent: #ff911f;
-  --hb-card-bg: #151821;
-  --hb-radius: 16px;
-  --hb-radius-sm: 10px;
-  --hb-radius-lg: 20px;
-  --hb-border: rgba(255, 255, 255, 0.04);
-  --hb-text: #F3F4F6;
-  --hb-muted: #9CA3AF;
-  font-family: var(--font-body, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif);
-  display: block;
-  height: 100%;
-  min-height: 0;
-}
+:host { display: block; height: 100%; min-height: 0; }
 
 .hb-wrap {
   width: 100%;
 }
 
-.hb-title {
-  font-size: 40px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: 0.5px;
-  color: var(--hb-text);
-  text-transform: uppercase;
-}
+/* Global Sync */
 
 .hb-th, table thead th {
   font-size: 13px;
@@ -43,9 +22,11 @@ table tbody td {
 }
 
 .hb-card {
-  background: var(--hb-card-bg);
+  background: rgba(17, 24, 39, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
   border-radius: 14px;
-  box-shadow: 0 10px 26px rgba(22, 30, 50, 0.08);
+  border: 1px solid var(--hb-border) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
 }
 
 .hb-card-body {
@@ -69,4 +50,7 @@ table thead {
 table tbody tr {
   height: 70px;
   vertical-align: middle;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
+
+

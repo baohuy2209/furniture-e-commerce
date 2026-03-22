@@ -10,7 +10,9 @@
     <div class="hb-header-actions">
       <!-- LIST ACTIONS -->
       <ng-container *ngIf="mode === 'list'">
-        <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
+        <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
+          <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+        </button>
         <button class="btn btn-hb" type="button" (click)="exportCsvSnapshot()">
           <i class="bi bi-download me-1"></i> Xuất CSV
         </button>
@@ -108,7 +110,7 @@
           </select>
 
           <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
-            Đặt lại bộ lọc
+            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại bộ lọc
           </button>
         </div>
       </div>

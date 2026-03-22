@@ -169,8 +169,11 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'reports',
-        loadComponent: () => import('./admins/pages/reports/reports').then((m) => m.Reports),
+        path: 'manage-customer-service',
+        loadComponent: () =>
+          import('./admins/pages/manage-customer-service/manage-customer-service').then(
+            (m) => m.ManageCustomerService,
+          ),
       },
       {
         path: 'management-warehouse',

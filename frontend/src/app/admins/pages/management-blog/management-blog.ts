@@ -87,6 +87,7 @@ interface VM {
   selectedId: string | null;
   detail: BlogDetailVM | null;
   editModel: Partial<BlogEntity> | null;
+  createStep: number;
 
   // list
   rows: BlogRowVM[];
@@ -143,6 +144,8 @@ export class ManagementBlog implements OnInit {
     id: null,
   });
 
+  private createStep$ = new BehaviorSubject<number>(1);
+
   // ====== detail/edit ======
   private detail$ = new BehaviorSubject<BlogDetailVM | null>(null);
   private editModel$ = new BehaviorSubject<Partial<BlogEntity> | null>(null);
@@ -188,6 +191,7 @@ export class ManagementBlog implements OnInit {
     this.routeState$,
     this.detail$,
     this.editModel$,
+    this.createStep$,
 
     this.q$,
     this.status$,
@@ -208,6 +212,7 @@ export class ManagementBlog implements OnInit {
         routeState,
         detail,
         editModel,
+        createStep,
 
         q,
         fStatus,
@@ -353,6 +358,7 @@ export class ManagementBlog implements OnInit {
           kpiDetailViewsText,
           kpiDetailReadingText,
           kpiDetailPublishedText,
+          createStep,
         };
 
         return vm;
@@ -371,6 +377,7 @@ export class ManagementBlog implements OnInit {
       if (mode === 'list') {
         this.detail$.next(null);
         this.editModel$.next(null);
+        this.createStep$.next(1);
         this.coverUploadName = '';
         this.coverUploadError = '';
         return;
@@ -408,6 +415,14 @@ export class ManagementBlog implements OnInit {
         }
       } else {
         this.editModel$.next(null);
+      }
+
+      // If opening an existing published blog, maybe set step to 2 or skip wizard
+      if (blog.status === 'published') {
+        this.createStep$.next(2);
+      } else {
+        // For drafts, if mode is edit, step 1. if mode is detail, step 2.
+        this.createStep$.next(mode === 'edit' ? 1 : 2);
       }
     });
   }
@@ -540,17 +555,16 @@ export class ManagementBlog implements OnInit {
   }
 
   createNew() {
-    const id = `b_${id16()}`;
+    const id = `b_${Date.now()}`; // Use a simple timestamp for unique ID in mock
     const now = new Date().toISOString();
     const draft: BlogEntity = {
       blog_id: id,
-      title: 'Bài viết mới',
+      title: '', // Empty title
       slug: '',
       status: 'draft',
-      cover_url:
-        'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
+      cover_url: '', // Empty cover
       excerpt: '',
-      content_html: '<p>Nhập nội dung...</p>',
+      content_html: '', // Empty content
       category: '',
       tags: [],
       author_name: 'Admin',
@@ -562,9 +576,17 @@ export class ManagementBlog implements OnInit {
       updated_at: now,
     };
 
+    // Update state
     this.blogs$.next([draft, ...this.blogs$.value]);
-    this.openDetail(id);
-    this.enterEdit();
+    
+    this.createStep$.next(1);
+
+    // Navigate directly to edit mode
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { mode: 'edit', id },
+      queryParamsHandling: 'merge',
+    });
   }
 
   // ===== content editor (NO CAST IN TEMPLATE) =====
@@ -738,7 +760,36 @@ export class ManagementBlog implements OnInit {
 
     this.blogs$.next(next);
     this.clearCoverUpload();
-    this.cancelEdit();
+    
+    // Transition to Step 2: Preview
+    this.createStep$.next(2);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { mode: 'detail', id },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  publishBlog() {
+    const id = this.routeState$.value.id;
+    if (!id) return;
+
+    const now = new Date().toISOString();
+    const next = this.blogs$.value.map(b => {
+      if (b.blog_id !== id) return b;
+      return {
+        ...b,
+        status: 'published' as BlogStatus,
+        published_at: now,
+        updated_at: now,
+      };
+    });
+
+    this.blogs$.next(next);
+    this.createStep$.next(3);
+    
+    // After a delay or user action, go back to list?
+    // For now stay on step 3
   }
 
   // ===== export csv

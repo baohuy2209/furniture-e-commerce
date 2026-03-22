@@ -279,5 +279,501 @@
         </div>
       </div>
     </div>
+
+    <!-- REPORTS DIVIDER -->
+    <div class="hb-reports-divider mt-5 mb-4">
+      <div class="divider-line"></div>
+      <div class="divider-label"><i class="bi bi-bar-chart-line me-2"></i>BÁO CÁO CHI TIẾT</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- ===== REPORT 1: DOANH THU & LỢI NHUẬN ===== -->
+    <div class="hb-report-section mb-4">
+      <div class="hb-report-header" (click)="toggleReport('revenue')">
+        <div class="report-header-left">
+          <div class="report-icon" style="background:rgba(129,140,248,0.15);color:#818cf8;"><i class="bi bi-currency-dollar"></i></div>
+          <div>
+            <div class="report-title">BÁO CÁO DOANH THU &amp; LỢI NHUẬN</div>
+            <div class="report-sub">Tổng doanh thu, lợi nhuận gộp, lợi nhuận ròng và phân bổ theo danh mục sản phẩm</div>
+          </div>
+        </div>
+        <i class="bi" [ngClass]="openReports['revenue'] ? 'bi-chevron-up' : 'bi-chevron-down'" style="color:var(--hb-muted);font-size:18px;"></i>
+      </div>
+      <div class="hb-report-body" *ngIf="openReports['revenue']">
+        <div class="hb-report-kpi-row mb-4">
+          <div class="hb-rpt-kpi" style="--kpi-color:#818cf8;">
+            <div class="rk-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="rk-val">{{ fmtVND(vm.revenue) }}</div>
+            <div class="rk-label">Tổng doanh thu</div>
+            <div class="rk-growth" [class.up]="vm.revGrowth >= 0" [class.down]="vm.revGrowth < 0">{{ vm.revGrowth >= 0 ? '+' : '' }}{{ vm.revGrowth | number:'1.1-1' }}% so với kỳ trước</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#22c55e;">
+            <div class="rk-icon"><i class="bi bi-cash-stack"></i></div>
+            <div class="rk-val">{{ fmtVND(vm.revenue * 0.62) }}</div>
+            <div class="rk-label">Lợi nhuận gộp</div>
+            <div class="rk-growth up">Biên GP: ~62%</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#34d399;">
+            <div class="rk-icon"><i class="bi bi-piggy-bank"></i></div>
+            <div class="rk-val">{{ fmtVND(vm.revenue * 0.38) }}</div>
+            <div class="rk-label">Lợi nhuận ròng</div>
+            <div class="rk-growth up">Biên NP: ~38%</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#fbbf24;">
+            <div class="rk-icon"><i class="bi bi-receipt-cutoff"></i></div>
+            <div class="rk-val">{{ fmtVND(vm.revenue * 0.24) }}</div>
+            <div class="rk-label">Chi phí vận hành</div>
+            <div class="rk-growth down">-5.2% vs kỳ trước</div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-lg-7">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-bar-chart me-2"></i>DOANH THU THEO DANH MỤC SẢN PHẨM</div>
+              <div class="hb-bar-chart">
+                <div class="bar-row" *ngFor="let cat of reportData.categoryRevenue">
+                  <div class="bar-label">{{ cat.name }}</div>
+                  <div class="bar-track"><div class="bar-fill" [style.width]="cat.pct+'%'" [style.background]="cat.color"></div></div>
+                  <div class="bar-val">{{ fmtVND(cat.value) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-pie-chart me-2"></i>PHÂN BỔ CHI PHÍ</div>
+              <div class="hb-cost-list">
+                <div class="cost-item" *ngFor="let cost of reportData.costs">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="cost-dot" [style.background]="cost.color"></span>
+                    <span class="cost-name">{{ cost.name }}</span>
+                  </div>
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="cost-bar-mini"><div class="cost-bar-fill" [style.width]="cost.pct+'%'" [style.background]="cost.color"></div></div>
+                    <span class="cost-val">{{ fmtVND(cost.value) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REPORT 2: TỒN KHO ===== -->
+    <div class="hb-report-section mb-4">
+      <div class="hb-report-header" (click)="toggleReport('inventory')">
+        <div class="report-header-left">
+          <div class="report-icon" style="background:rgba(251,191,36,0.15);color:#fbbf24;"><i class="bi bi-boxes"></i></div>
+          <div>
+            <div class="report-title">BÁO CÁO TỒN KHO</div>
+            <div class="report-sub">Tình trạng hàng tồn, sản phẩm hết hàng, sắp hết và dự báo nhu cầu bổ sung</div>
+          </div>
+        </div>
+        <i class="bi" [ngClass]="openReports['inventory'] ? 'bi-chevron-up' : 'bi-chevron-down'" style="color:var(--hb-muted);font-size:18px;"></i>
+      </div>
+      <div class="hb-report-body" *ngIf="openReports['inventory']">
+        <div class="hb-report-kpi-row mb-4">
+          <div class="hb-rpt-kpi" style="--kpi-color:#fbbf24;">
+            <div class="rk-icon"><i class="bi bi-archive"></i></div>
+            <div class="rk-val">1,284</div>
+            <div class="rk-label">Tổng tồn kho (SKU)</div>
+            <div class="rk-growth up">+48 trong kỳ</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#ef4444;">
+            <div class="rk-icon"><i class="bi bi-exclamation-diamond"></i></div>
+            <div class="rk-val">12</div>
+            <div class="rk-label">Sản phẩm hết hàng</div>
+            <div class="rk-growth down">Cần nhập bổ sung</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#f97316;">
+            <div class="rk-icon"><i class="bi bi-exclamation-triangle"></i></div>
+            <div class="rk-val">28</div>
+            <div class="rk-label">Sắp hết hàng (&lt;10)</div>
+            <div class="rk-growth down">Cảnh báo tồn thấp</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#22c55e;">
+            <div class="rk-icon"><i class="bi bi-fire"></i></div>
+            <div class="rk-val">{{ vm.topProducts[0]?.qty ?? 0 }}</div>
+            <div class="rk-label">SP bán chạy nhất</div>
+            <div class="rk-growth up">Dẫn đầu trong kỳ</div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-lg-8">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-list-ul me-2"></i>SẢN PHẨM BÁN CHẠY &amp; TỒN KHO</div>
+              <div class="hb-report-table">
+                <div class="rt-head"><div>Sản phẩm</div><div>Đã bán</div><div>Tồn kho</div><div>Tình trạng</div></div>
+                <div class="rt-row" *ngFor="let p of reportData.inventoryItems">
+                  <div class="rt-name">{{ p.name }}</div>
+                  <div class="rt-num">{{ p.sold }}</div>
+                  <div class="rt-num">{{ p.stock }}</div>
+                  <div><span class="hb-rpt-pill" [style.background]="p.stock===0?'rgba(239,68,68,.15)':p.stock<10?'rgba(249,115,22,.15)':'rgba(34,197,94,.1)'" [style.color]="p.stock===0?'#ef4444':p.stock<10?'#f97316':'#22c55e'">{{ p.stock===0?'Hết hàng':p.stock<10?'Sắp hết':'Còn hàng' }}</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-graph-up me-2"></i>DỰ BÁO NHU CẦU BỔ SUNG</div>
+              <div class="hb-forecast-list">
+                <div class="forecast-item" *ngFor="let f of reportData.forecasts">
+                  <div class="f-name">{{ f.name }}</div>
+                  <div class="f-bar"><div class="f-fill" [style.width]="f.pct+'%'" style="background:linear-gradient(90deg,#818cf8,#a78bfa);"></div></div>
+                  <div class="f-val">+{{ f.needed }} cần bổ sung</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REPORT 3: ĐƠN HÀNG ===== -->
+    <div class="hb-report-section mb-4">
+      <div class="hb-report-header" (click)="toggleReport('orders')">
+        <div class="report-header-left">
+          <div class="report-icon" style="background:rgba(56,189,248,0.15);color:#38bdf8;"><i class="bi bi-bag-check"></i></div>
+          <div>
+            <div class="report-title">BÁO CÁO ĐƠN HÀNG</div>
+            <div class="report-sub">Tổng đơn hàng, tình trạng xử lý, phân tích theo khu vực và thời gian giao hàng</div>
+          </div>
+        </div>
+        <i class="bi" [ngClass]="openReports['orders'] ? 'bi-chevron-up' : 'bi-chevron-down'" style="color:var(--hb-muted);font-size:18px;"></i>
+      </div>
+      <div class="hb-report-body" *ngIf="openReports['orders']">
+        <div class="hb-report-kpi-row mb-4">
+          <div class="hb-rpt-kpi" style="--kpi-color:#38bdf8;">
+            <div class="rk-icon"><i class="bi bi-receipt"></i></div>
+            <div class="rk-val">{{ vm.totalOrders }}</div>
+            <div class="rk-label">Tổng đơn hàng</div>
+            <div class="rk-growth" [class.up]="vm.ordGrowth>=0" [class.down]="vm.ordGrowth<0">{{ vm.ordGrowth>=0?'+':'' }}{{ vm.ordGrowth | number:'1.1-1' }}%</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#fbbf24;">
+            <div class="rk-icon"><i class="bi bi-hourglass-split"></i></div>
+            <div class="rk-val">{{ vm.activeOrders }}</div>
+            <div class="rk-label">Đang xử lý</div>
+            <div class="rk-growth stable">Chờ hoàn tất</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#22c55e;">
+            <div class="rk-icon"><i class="bi bi-check-circle"></i></div>
+            <div class="rk-val">{{ vm.totalOrders - vm.activeOrders }}</div>
+            <div class="rk-label">Đã hoàn tất / Huỷ</div>
+            <div class="rk-growth up">Xử lý xong</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#a78bfa;">
+            <div class="rk-icon"><i class="bi bi-clock-history"></i></div>
+            <div class="rk-val">2.4 ngày</div>
+            <div class="rk-label">TG xử lý trung bình</div>
+            <div class="rk-growth up">-0.3 ngày</div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-pie-chart me-2"></i>TÌNH TRẠNG ĐƠN HÀNG</div>
+              <div class="hb-status-bars">
+                <div class="sb-item" *ngFor="let s of reportData.orderStatuses">
+                  <div class="sb-top"><span class="sb-label">{{ s.label }}</span><span class="sb-val">{{ s.count }}</span></div>
+                  <div class="sb-track"><div class="sb-fill" [style.width]="s.pct+'%'" [style.background]="s.color"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-geo-alt me-2"></i>ĐƠN HÀNG THEO KHU VỰC</div>
+              <div class="hb-bar-chart">
+                <div class="bar-row" *ngFor="let region of reportData.regions">
+                  <div class="bar-label">{{ region.name }}</div>
+                  <div class="bar-track"><div class="bar-fill" [style.width]="region.pct+'%'" style="background:linear-gradient(90deg,#38bdf8,#818cf8);"></div></div>
+                  <div class="bar-val">{{ region.count }} đơn</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REPORT 4: NGƯỜI DÙNG ===== -->
+    <div class="hb-report-section mb-4">
+      <div class="hb-report-header" (click)="toggleReport('users')">
+        <div class="report-header-left">
+          <div class="report-icon" style="background:rgba(167,139,250,0.15);color:#a78bfa;"><i class="bi bi-people"></i></div>
+          <div>
+            <div class="report-title">BÁO CÁO NGƯỜI DÙNG &amp; HÀNH VI KHÁCH HÀNG</div>
+            <div class="report-sub">Tổng người dùng, tăng trưởng, tỷ lệ chuyển đổi và hành vi giỏ hàng</div>
+          </div>
+        </div>
+        <i class="bi" [ngClass]="openReports['users'] ? 'bi-chevron-up' : 'bi-chevron-down'" style="color:var(--hb-muted);font-size:18px;"></i>
+      </div>
+      <div class="hb-report-body" *ngIf="openReports['users']">
+        <div class="hb-report-kpi-row mb-4">
+          <div class="hb-rpt-kpi" style="--kpi-color:#a78bfa;">
+            <div class="rk-icon"><i class="bi bi-person-check"></i></div>
+            <div class="rk-val">{{ vm.customers }}</div>
+            <div class="rk-label">Khách hàng trong kỳ</div>
+            <div class="rk-growth up">+2% vs kỳ trước</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#f9a8d4;">
+            <div class="rk-icon"><i class="bi bi-arrow-up-right-circle"></i></div>
+            <div class="rk-val">3.7%</div>
+            <div class="rk-label">Tỷ lệ chuyển đổi</div>
+            <div class="rk-growth up">+0.4%</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#fb923c;">
+            <div class="rk-icon"><i class="bi bi-cart-x"></i></div>
+            <div class="rk-val">{{ reportData.abandonedCarts }}</div>
+            <div class="rk-label">Giỏ hàng bị bỏ</div>
+            <div class="rk-growth down">Cần remarketing</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#34d399;">
+            <div class="rk-icon"><i class="bi bi-star"></i></div>
+            <div class="rk-val">4.2 / 5</div>
+            <div class="rk-label">Điểm hài lòng TB</div>
+            <div class="rk-growth up">Từ {{ vm.recentReviews.length }} đánh giá</div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-lg-7">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-graph-up me-2"></i>TĂNG TRƯỞNG NGƯỜI DÙNG THEO THÁNG</div>
+              <div class="hb-bar-chart">
+                <div class="bar-row" *ngFor="let ug of reportData.userGrowth">
+                  <div class="bar-label">{{ ug.month }}</div>
+                  <div class="bar-track"><div class="bar-fill" [style.width]="ug.pct+'%'" style="background:linear-gradient(90deg,#a78bfa,#818cf8);"></div></div>
+                  <div class="bar-val">{{ ug.users }} KH</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-search me-2"></i>SỞ THÍCH SP KHÁCH HÀNG</div>
+              <div class="hb-preference-list">
+                <div class="pref-item" *ngFor="let pref of reportData.preferences; let i = index">
+                  <div class="pref-rank">{{ i+1 }}</div>
+                  <div class="pref-name">{{ pref.name }}</div>
+                  <div class="pref-bar"><div class="pref-fill" [style.width]="pref.pct+'%'" [style.background]="pref.color"></div></div>
+                  <div class="pref-count">{{ pref.count }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REPORT 5: TIẾP THỊ ===== -->
+    <div class="hb-report-section mb-4">
+      <div class="hb-report-header" (click)="toggleReport('marketing')">
+        <div class="report-header-left">
+          <div class="report-icon" style="background:rgba(249,115,22,0.15);color:#f97316;"><i class="bi bi-megaphone"></i></div>
+          <div>
+            <div class="report-title">BÁO CÁO TIẾP THỊ</div>
+            <div class="report-sub">Chi phí chiến dịch, hiệu quả quảng cáo (CPM/CPC/CTR), nguồn traffic và mã giảm giá</div>
+          </div>
+        </div>
+        <i class="bi" [ngClass]="openReports['marketing'] ? 'bi-chevron-up' : 'bi-chevron-down'" style="color:var(--hb-muted);font-size:18px;"></i>
+      </div>
+      <div class="hb-report-body" *ngIf="openReports['marketing']">
+        <div class="hb-report-kpi-row mb-4">
+          <div class="hb-rpt-kpi" style="--kpi-color:#f97316;">
+            <div class="rk-icon"><i class="bi bi-cash"></i></div>
+            <div class="rk-val">{{ fmtVND(reportData.mktBudget) }}</div>
+            <div class="rk-label">Chi phí tiếp thị</div>
+            <div class="rk-growth down">+8% vs kỳ trước</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#22c55e;">
+            <div class="rk-icon"><i class="bi bi-arrow-up-right-circle"></i></div>
+            <div class="rk-val">{{ reportData.roas }}x</div>
+            <div class="rk-label">ROAS</div>
+            <div class="rk-growth up">Hiệu quả cao</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#38bdf8;">
+            <div class="rk-icon"><i class="bi bi-mouse2"></i></div>
+            <div class="rk-val">{{ reportData.ctr }}%</div>
+            <div class="rk-label">CTR trung bình</div>
+            <div class="rk-growth up">+0.5%</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#a78bfa;">
+            <div class="rk-icon"><i class="bi bi-tag"></i></div>
+            <div class="rk-val">{{ reportData.voucherUsed }}</div>
+            <div class="rk-label">Mã giảm giá dùng</div>
+            <div class="rk-growth up">{{ reportData.voucherRate }}% tỷ lệ dùng</div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-diagram-3 me-2"></i>TRAFFIC THEO NGUỒN</div>
+              <div class="hb-bar-chart">
+                <div class="bar-row" *ngFor="let src of reportData.trafficSources">
+                  <div class="bar-label">{{ src.name }}</div>
+                  <div class="bar-track"><div class="bar-fill" [style.width]="src.pct+'%'" [style.background]="src.color"></div></div>
+                  <div class="bar-val">{{ src.visits | number }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-bullseye me-2"></i>CHIẾN DỊCH QUẢNG CÁO</div>
+              <div class="hb-report-table">
+                <div class="rt-head"><div>Chiến dịch</div><div>CPM</div><div>CPC</div><div>CTR</div></div>
+                <div class="rt-row" *ngFor="let camp of reportData.adCampaigns">
+                  <div class="rt-name">{{ camp.name }}</div>
+                  <div class="rt-num">{{ fmtVND(camp.cpm) }}</div>
+                  <div class="rt-num">{{ fmtVND(camp.cpc) }}</div>
+                  <div class="rt-num">{{ camp.ctr }}%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REPORT 6: HỖ TRỢ KH ===== -->
+    <div class="hb-report-section mb-4">
+      <div class="hb-report-header" (click)="toggleReport('support')">
+        <div class="report-header-left">
+          <div class="report-icon" style="background:rgba(34,197,94,0.15);color:#22c55e;"><i class="bi bi-headset"></i></div>
+          <div>
+            <div class="report-title">BÁO CÁO HỖ TRỢ KHÁCH HÀNG</div>
+            <div class="report-sub">Số yêu cầu hỗ trợ, thời gian giải quyết và mức độ hài lòng</div>
+          </div>
+        </div>
+        <i class="bi" [ngClass]="openReports['support'] ? 'bi-chevron-up' : 'bi-chevron-down'" style="color:var(--hb-muted);font-size:18px;"></i>
+      </div>
+      <div class="hb-report-body" *ngIf="openReports['support']">
+        <div class="hb-report-kpi-row mb-4">
+          <div class="hb-rpt-kpi" style="--kpi-color:#22c55e;">
+            <div class="rk-icon"><i class="bi bi-chat-dots"></i></div>
+            <div class="rk-val">{{ reportData.supportTotal }}</div>
+            <div class="rk-label">Tổng yêu cầu hỗ trợ</div>
+            <div class="rk-growth up">+12% hoạt động</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#fbbf24;">
+            <div class="rk-icon"><i class="bi bi-clock"></i></div>
+            <div class="rk-val">{{ reportData.avgResolutionHours }}h</div>
+            <div class="rk-label">TG giải quyết TB</div>
+            <div class="rk-growth up">-1.2h vs kỳ</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#34d399;">
+            <div class="rk-icon"><i class="bi bi-emoji-smile"></i></div>
+            <div class="rk-val">{{ reportData.satisfactionRate }}%</div>
+            <div class="rk-label">Mức độ hài lòng</div>
+            <div class="rk-growth up">+2.1%</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#ef4444;">
+            <div class="rk-icon"><i class="bi bi-x-circle"></i></div>
+            <div class="rk-val">{{ reportData.unresolvedSupport }}</div>
+            <div class="rk-label">Chưa giải quyết</div>
+            <div class="rk-growth down">Cần xử lý</div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-lg-5">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-bar-chart-steps me-2"></i>YÊU CẦU THEO KÊNH</div>
+              <div class="hb-bar-chart">
+                <div class="bar-row" *ngFor="let ch of reportData.supportChannels">
+                  <div class="bar-label">{{ ch.name }}</div>
+                  <div class="bar-track"><div class="bar-fill" [style.width]="ch.pct+'%'" [style.background]="ch.color"></div></div>
+                  <div class="bar-val">{{ ch.count }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-7">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-star-half me-2"></i>ĐÁNH GIÁ MỨC ĐỘ HÀI LÒNG</div>
+              <div class="hb-satisfaction-chart">
+                <div class="sat-row" *ngFor="let sat of reportData.satisfactionBreakdown">
+                  <div class="sat-label">{{ sat.stars }} ★</div>
+                  <div class="sat-track"><div class="sat-fill" [style.width]="sat.pct+'%'" [style.background]="sat.stars>=4?'#22c55e':sat.stars===3?'#fbbf24':'#ef4444'"></div></div>
+                  <div class="sat-val">{{ sat.count }} ({{ sat.pct }}%)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REPORT 7: VẬN CHUYỂN ===== -->
+    <div class="hb-report-section mb-5">
+      <div class="hb-report-header" (click)="toggleReport('shipping')">
+        <div class="report-header-left">
+          <div class="report-icon" style="background:rgba(56,189,248,0.15);color:#38bdf8;"><i class="bi bi-truck"></i></div>
+          <div>
+            <div class="report-title">BÁO CÁO VẬN CHUYỂN &amp; GIAO HÀNG</div>
+            <div class="report-sub">Chi phí vận chuyển, thời gian giao hàng và các vấn đề phát sinh</div>
+          </div>
+        </div>
+        <i class="bi" [ngClass]="openReports['shipping'] ? 'bi-chevron-up' : 'bi-chevron-down'" style="color:var(--hb-muted);font-size:18px;"></i>
+      </div>
+      <div class="hb-report-body" *ngIf="openReports['shipping']">
+        <div class="hb-report-kpi-row mb-4">
+          <div class="hb-rpt-kpi" style="--kpi-color:#38bdf8;">
+            <div class="rk-icon"><i class="bi bi-box-seam"></i></div>
+            <div class="rk-val">{{ fmtVND(reportData.shippingCost) }}</div>
+            <div class="rk-label">Chi phí vận chuyển</div>
+            <div class="rk-growth down">+4.2%</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#22c55e;">
+            <div class="rk-icon"><i class="bi bi-clock-history"></i></div>
+            <div class="rk-val">{{ reportData.avgDeliveryDays }} ngày</div>
+            <div class="rk-label">TG giao TB</div>
+            <div class="rk-growth up">-0.5 ngày</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#ef4444;">
+            <div class="rk-icon"><i class="bi bi-exclamation-circle"></i></div>
+            <div class="rk-val">{{ reportData.shippingIssues }}</div>
+            <div class="rk-label">Sự cố vận chuyển</div>
+            <div class="rk-growth down">Trễ, mất, hỏng</div>
+          </div>
+          <div class="hb-rpt-kpi" style="--kpi-color:#fbbf24;">
+            <div class="rk-icon"><i class="bi bi-check-circle"></i></div>
+            <div class="rk-val">{{ reportData.onTimeRate }}%</div>
+            <div class="rk-label">Giao đúng hạn</div>
+            <div class="rk-growth up">+1.8%</div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-truck me-2"></i>ĐƠN VỊ VẬN CHUYỂN &amp; HIỆU SUẤT</div>
+              <div class="hb-bar-chart">
+                <div class="bar-row" *ngFor="let carrier of reportData.carriers">
+                  <div class="bar-label">{{ carrier.name }}</div>
+                  <div class="bar-track"><div class="bar-fill" [style.width]="carrier.pct+'%'" style="background:linear-gradient(90deg,#38bdf8,#0ea5e9);"></div></div>
+                  <div class="bar-val">{{ carrier.onTime }}% đúng hạn</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="hb-report-card">
+              <div class="rc-title"><i class="bi bi-exclamation-diamond me-2"></i>VẤN ĐỀ VẬN CHUYỂN NỔI BẬT</div>
+              <div class="hb-issue-list">
+                <div class="issue-item" *ngFor="let iss of reportData.shippingIssuesList">
+                  <div class="issue-icon" [style.color]="iss.color"><i class="bi" [ngClass]="iss.icon"></i></div>
+                  <div class="issue-info">
+                    <div class="issue-name">{{ iss.type }}</div>
+                    <div class="issue-sub">{{ iss.desc }}</div>
+                  </div>
+                  <div class="issue-count" [style.color]="iss.color">{{ iss.count }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

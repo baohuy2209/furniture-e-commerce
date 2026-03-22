@@ -10,7 +10,9 @@
 
     <!-- LIST ACTIONS -->
     <div class="hb-header-actions" *ngIf="vm.mode === 'list'">
-      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
+      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
+        <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+      </button>
       <button class="btn btn-hb" type="button" (click)="exportCsv()">
         <i class="bi bi-download me-1"></i> Xuất CSV
       </button>
@@ -19,20 +21,31 @@
       </button>
     </div>
 
-    <!-- DETAIL ACTIONS -->
-    <ng-container *ngIf="vm.mode === 'detail'">
+    <!-- DETAIL/EDIT ACTIONS -->
+    <ng-container *ngIf="vm.mode === 'detail' || vm.mode === 'edit'">
       <div class="hb-header-actions">
-        <button class="btn btn-hb-outline" type="button" (click)="goList()">
-          <i class="bi bi-arrow-left me-1"></i> Quay lại Danh sách
-        </button>
-      </div>
-    </ng-container>
+        <!-- Step 1 Actions -->
+        <ng-container *ngIf="vm.createStep === 1">
+          <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">
+            <i class="bi bi-x-lg me-1"></i> Hủy soạn thảo
+          </button>
+        </ng-container>
 
-    <!-- EDIT ACTIONS -->
-    <ng-container *ngIf="vm.mode === 'edit'">
-      <div class="hb-header-actions">
-        <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">
-          <i class="bi bi-arrow-left me-1"></i> Quay lại Chi tiết
+        <!-- Step 2 Actions -->
+        <ng-container *ngIf="vm.createStep === 2">
+          <!-- Removed from header per user request, keep in sidebar -->
+        </ng-container>
+
+        <!-- Step 3 Actions -->
+        <ng-container *ngIf="vm.createStep === 3">
+          <button class="btn btn-hb" type="button" (click)="goList()">
+            <i class="bi bi-list-task me-1"></i> Về danh sách
+          </button>
+        </ng-container>
+
+        <div class="hb-divider-v mx-2" *ngIf="vm.createStep !== 3"></div>
+        <button class="btn btn-hb-outline" type="button" (click)="goList()" *ngIf="vm.createStep !== 3">
+          <i class="bi bi-house me-1"></i> Thoát
         </button>
       </div>
     </ng-container>
@@ -131,7 +144,7 @@
           />
 
           <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
-            Reset
+            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
           </button>
         </div>
       </div>
@@ -262,27 +275,81 @@
       </div>
     </ng-container>
 
-    <!-- DETAIL MODE -->
-    <ng-container *ngIf="vm.mode === 'detail' && vm.detail as d">
+    <!-- WIZARD STEPPER -->
+    <div class="card hb-card mb-4" *ngIf="vm.mode !== 'list'">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <h4 style="font-weight: 800; color: #fff; margin: 0;">SOẠN THẢO BÀI VIẾT MỚI</h4>
+          <span class="hb-pill" style="font-size: 11px;">Mã: Tự sinh khi hoàn tất</span>
+          <span class="hb-pill pill-warn" style="font-size: 11px;">Bản nháp</span>
+        </div>
+
+        <div class="hb-wizard-steps">
+          <div class="hb-step" [class.active]="vm.createStep === 1" [class.done]="vm.createStep > 1" (click)="vm.createStep > 1 && enterEdit()" style="cursor: pointer;">
+            <div class="step-circle">1</div>
+            <div class="step-label">Soạn thảo nội dung</div>
+          </div>
+          <div class="step-connector" [class.filled]="vm.createStep > 1"></div>
+          <div class="hb-step" [class.active]="vm.createStep === 2" [class.done]="vm.createStep > 2" (click)="vm.createStep > 2 && openDetail(vm.selectedId!)" style="cursor: pointer;">
+            <div class="step-circle">2</div>
+            <div class="step-label">Rà soát & Xem trước</div>
+          </div>
+          <div class="step-connector" [class.filled]="vm.createStep > 2"></div>
+          <div class="hb-step" [class.active]="vm.createStep === 3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Xuất bản bài viết</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: SUCCESS UI -->
+    <ng-container *ngIf="vm.mode !== 'list' && vm.createStep === 3">
+      <div class="card hb-card hb-card-pad text-center py-5">
+        <div class="mb-4">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 80px;"></i>
+        </div>
+        <h2 class="hb-h1 mb-3">BÀI VIẾT ĐÃ ĐƯỢC XUẤT BẢN!</h2>
+        <p class="text-muted mb-5">Bài viết của bạn đã có mặt trên trang blog chính thức.</p>
+        <div class="d-flex justify-content-center gap-3">
+          <button class="btn btn-hb-outline px-4" (click)="openDetail(vm.selectedId!)">
+            Xem lại bài viết
+          </button>
+          <button class="btn btn-hb px-5" (click)="goList()">
+            Về danh sách quản lý
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- DETAIL MODE (Step 2) -->
+    <ng-container *ngIf="vm.mode === 'detail' && vm.createStep !== 3 && vm.detail as d">
       <div class="row g-3">
         <!-- Main Content (Left) -->
         <div class="col-12 col-xl-8">
           <div class="card hb-card hb-card-pad mb-3">
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
               <div class="d-flex align-items-center gap-3">
-                <div class="hb-title text-primary" style="font-size: 24px">{{ d.blog.title }}</div>
+                <div class="hb-title" style="font-size: 24px; color: var(--hb-text)">
+                  {{ d.blog.title || 'Bài viết mới' }}
+                </div>
                 <span class="hb-pill" [ngClass]="d.statusClass">{{ d.statusLabel }}</span>
               </div>
             </div>
           </div>
 
           <div class="card hb-card hb-card-pad">
-            <img class="hb-detail-hero-cover" [src]="d.blog.cover_url" alt="Hero Cover" />
-            <div class="hb-section-title mt-3">Nội dung chi tiết (Xem trước)</div>
-            <div class="hb-divider"></div>
+            <div class="hb-detail-hero-cover-placeholder" *ngIf="!d.blog.cover_url">
+              <i class="bi bi-image fs-1 text-muted"></i>
+              <div class="mt-2 text-muted">Chưa có ảnh bìa</div>
+            </div>
+            <img class="hb-detail-hero-cover" *ngIf="d.blog.cover_url" [src]="d.blog.cover_url" alt="Hero Cover" />
+            
+            <div class="hb-section-title mt-3">Nội dung bài viết</div>
+            <div class="hb-divider mb-4"></div>
             <div
-              class="hb-content-preview border rounded p-4 bg-light mt-3"
-              [innerHTML]="d.blog.content_html"
+              class="hb-content-preview mt-3"
+              [innerHTML]="d.blog.content_html || '<p class=\'text-muted italic\'>Nội dung đang trống...</p>'"
             ></div>
           </div>
         </div>
@@ -295,35 +362,36 @@
             <div class="hb-divider"></div>
 
             <div class="d-grid gap-2">
-              <button class="btn btn-hb-accent" type="button" (click)="enterEdit()">
-                <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa bài viết
+              <button class="btn btn-hb-accent" type="button" (click)="enterEdit()" [disabled]="vm.createStep === 3">
+                <i class="bi bi-pencil-square me-1" style="color: #fbbf24"></i> Chỉnh sửa bài viết
+              </button>
+              
+              <button class="btn btn-hb-publish py-2 my-2" type="button" (click)="publishBlog()" *ngIf="vm.createStep === 2">
+                <i class="bi bi-send-check me-2 fs-5"></i> XÁC NHẬN ĐĂNG BÀI
               </button>
 
               <div class="hb-divider my-2"></div>
 
               <button
-                class="btn btn-hb-outline-danger"
+                class="btn btn-hb-danger-outline"
                 type="button"
                 (click)="hardDelete(d.blog.blog_id)"
               >
-                <i class="bi bi-trash3 me-1"></i> Xóa bài viết
+                <i class="bi bi-trash3 me-1"></i> Xóa bài viết vĩnh viễn
               </button>
             </div>
           </div>
 
           <!-- Insight Card -->
-          <div
-            class="card hb-card border-0 mb-4"
-            style="background: #fdfdfd; border: 1px solid rgba(0, 0, 0, 0.05) !important"
-          >
+          <div class="card hb-card mb-4 overflow-hidden">
             <div class="p-4">
-              <div class="text-muted small fw-bold mb-3">THÔNG TIN BÀI VIẾT</div>
+              <div class="hb-sc-label mb-3 opacity-50">THÔNG TIN BÀI VIẾT</div>
               
               <div class="mb-4">
-                <div class="text-primary fw-bold" style="font-size: 24px; line-height: 1.2">
-                  {{ d.blog.title }}
+                <div class="fw-bold" style="font-size: 24px; line-height: 1.2; color: var(--hb-text)">
+                  {{ d.blog.title || 'Chưa có tiêu đề' }}
                 </div>
-                <div class="text-muted small mt-1">Slug: /{{ d.blog.slug }}</div>
+                <div class="text-muted small mt-1">Slug: /{{ d.blog.slug || '...' }}</div>
               </div>
 
               <div class="hb-divider"></div>
@@ -340,14 +408,14 @@
                 <div
                   class="p-3 rounded"
                   style="
-                    background: rgba(255, 145, 31, 0.06);
-                    border: 1px dashed var(--hb-accent);
+                    background: rgba(255, 145, 31, 0.08);
+                    border: 1px dashed rgba(255, 145, 31, 0.3);
                   "
                 >
                   <div class="text-accent small fw-bold">LƯỢT XEM</div>
                   <div class="d-flex align-items-center gap-2">
                     <span class="fs-2 fw-bold text-accent">{{ d.viewsText }}</span>
-                    <span class="text-accent small fw-bold">lượt</span>
+                    <span class="text-white small fw-bold" style="opacity: 0.8">lượt</span>
                   </div>
                 </div>
 
@@ -379,10 +447,11 @@
           </div>
         </div>
       </div>
+
     </ng-container>
 
-    <!-- EDIT MODE -->
-    <ng-container *ngIf="vm.mode === 'edit' && vm.editModel as em">
+    <!-- EDIT MODE (Step 1) -->
+    <ng-container *ngIf="vm.mode === 'edit' && vm.createStep !== 3 && vm.editModel as em">
       <div class="row g-3">
         <div class="col-12 col-xl-8">
           <div class="card hb-card hb-card-pad">
@@ -400,7 +469,7 @@
               <div class="col-md-6">
                 <label class="form-label">Slug URL</label>
                 <div class="input-group">
-                  <span class="input-group-text">/blog/</span>
+                  <span class="input-group-text hb-input-group-text">/blog/</span>
                   <input
                     class="form-control"
                     [(ngModel)]="$any(em).slug"
@@ -429,7 +498,7 @@
                 <input
                   class="form-control form-control-sm w-auto"
                   type="file"
-                  (change)="onCoverFileSelected(em, $event)"
+                  (change)="onCoverFileSelected($any(em), $event)"
                 />
                 <span class="text-muted small align-self-center" *ngIf="coverUploadName">
                   Đang chọn: {{ coverUploadName }}
@@ -508,7 +577,7 @@
                 Hủy bỏ
               </button>
               <button class="btn btn-hb px-5 py-2" type="button" (click)="saveEdit()">
-                <i class="bi bi-check2-circle me-1"></i> XÁC NHẬN CẬP NHẬT
+                <i class="bi bi-arrow-right-circle me-1"></i> TIẾP THEO: XEM TRƯỚC
               </button>
             </div>
           </div>
@@ -549,8 +618,8 @@
                 <label class="form-label">Tags (cách nhau dấu phẩy)</label>
                 <input
                   class="form-control"
-                  [ngModel]="getTagsText(em)"
-                  (ngModelChange)="onTagsInput(em, $event)"
+                  [ngModel]="getTagsText($any(em))"
+                  (ngModelChange)="onTagsInput($any(em), $event)"
                   placeholder="tag1, tag2..."
                 />
               </div>

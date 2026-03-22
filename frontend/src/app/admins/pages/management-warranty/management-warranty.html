@@ -2,12 +2,14 @@
   <div class="hb-page-header">
     <div class="hb-header-left">
       <div class="hb-title" routerLink="/admin/management-warranty" style="cursor: pointer">
-        BẢO HÀNH / ĐỔI TRẢ
+        BẢO HÀNH - ĐỔI TRẢ
       </div>
     </div>
 
     <div class="hb-header-actions" *ngIf="mode === 'list'">
-      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">Đặt lại</button>
+      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
+        <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+      </button>
       <button class="btn btn-hb" type="button" (click)="exportCsv(exportRows)">
         <i class="bi bi-download me-1"></i> Xuất CSV
       </button>
@@ -58,58 +60,35 @@
 
       <div class="card hb-card hb-card-pad mb-3">
         <div class="hb-filterbar">
-          <input
-            class="form-control"
-            placeholder="ID / Mã đơn / Khách / SĐT..."
-            [(ngModel)]="vm.query.q"
-            (ngModelChange)="patchQuery({ q: $event })"
-          />
+          <input class="form-control" placeholder="ID / Mã đơn / Khách / SĐT..." [(ngModel)]="vm.query.q"
+            (ngModelChange)="patchQuery({ q: $event })" />
 
-          <select
-            class="form-select"
-            [(ngModel)]="vm.query.type"
-            (ngModelChange)="patchQuery({ type: $event })"
-          >
+          <select class="form-select" [(ngModel)]="vm.query.type" (ngModelChange)="patchQuery({ type: $event })">
             <option value="all">-- Loại --</option>
             <option value="warranty">Bảo hành</option>
             <option value="return">Đổi trả</option>
           </select>
 
-          <select
-            class="form-select"
-            [(ngModel)]="vm.query.status"
-            (ngModelChange)="patchQuery({ status: $event })"
-          >
+          <select class="form-select" [(ngModel)]="vm.query.status" (ngModelChange)="patchQuery({ status: $event })">
             <option value="all">-- Trạng thái --</option>
             <option *ngFor="let s of vm.statusOptions" [value]="s.value">{{ s.label }}</option>
           </select>
 
-          <input
-            class="form-control"
-            type="date"
-            [ngModel]="vm.query.dateFrom"
-            (ngModelChange)="patchQuery({ dateFrom: $event })"
-          />
+          <input class="form-control" type="date" [ngModel]="vm.query.dateFrom"
+            (ngModelChange)="patchQuery({ dateFrom: $event })" />
 
-          <input
-            class="form-control"
-            type="date"
-            [ngModel]="vm.query.dateTo"
-            (ngModelChange)="patchQuery({ dateTo: $event })"
-          />
+          <input class="form-control" type="date" [ngModel]="vm.query.dateTo"
+            (ngModelChange)="patchQuery({ dateTo: $event })" />
 
-          <select
-            class="form-select"
-            [(ngModel)]="vm.query.pageSize"
-            (ngModelChange)="patchQuery({ pageSize: $event })"
-          >
+          <select class="form-select" [(ngModel)]="vm.query.pageSize"
+            (ngModelChange)="patchQuery({ pageSize: $event })">
             <option [ngValue]="10">10</option>
             <option [ngValue]="20">20</option>
             <option [ngValue]="50">50</option>
           </select>
 
           <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
-            Reset
+            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
           </button>
         </div>
       </div>
@@ -165,11 +144,7 @@
               <div class="hb-th"><span>XÓA</span></div>
             </div>
 
-            <div
-              class="hb-table-row hb-grid-warranty"
-              *ngFor="let r of vm.rows"
-              (click)="openDetail(r.id)"
-            >
+            <div class="hb-table-row hb-grid-warranty" *ngFor="let r of vm.rows" (click)="openDetail(r.id)">
               <div class="hb-td hb-td-center text-muted">{{ r.stt }}</div>
 
               <div class="hb-td hb-td-center">
@@ -194,11 +169,8 @@
               </div>
 
               <div class="hb-td hb-td-center">
-                <span
-                  class="hb-pill"
-                  [class.hb-st-warranty]="r.type === 'warranty'"
-                  [class.hb-st-return]="r.type === 'return'"
-                >
+                <span class="hb-pill" [class.hb-st-warranty]="r.type === 'warranty'"
+                  [class.hb-st-return]="r.type === 'return'">
                   {{ r.type === 'warranty' ? 'Bảo hành' : 'Đổi trả' }}
                 </span>
               </div>
@@ -206,7 +178,7 @@
               <div class="hb-td hb-td-center">
                 <span class="hb-pill" [ngClass]="statusBadgeClass(r.status)">{{
                   r.statusLabel
-                }}</span>
+                  }}</span>
               </div>
 
               <div class="hb-td hb-td-center text-muted">
@@ -214,10 +186,7 @@
               </div>
 
               <div class="hb-td hb-td-center">
-                <span
-                  class="hb-pill"
-                  [ngClass]="r.slaLabel.includes('Quá hạn') ? 'hb-st-danger' : 'hb-st-done'"
-                >
+                <span class="hb-pill" [ngClass]="r.slaLabel.includes('Quá hạn') ? 'hb-st-danger' : 'hb-st-done'">
                   {{ r.slaLabel }}
                 </span>
               </div>
@@ -229,11 +198,7 @@
               </div>
 
               <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
-                <button
-                  class="hb-icon-btn danger"
-                  type="button"
-                  (click)="deleteFromList($event, r.id)"
-                >
+                <button class="hb-icon-btn danger" type="button" (click)="deleteFromList($event, r.id)">
                   <i class="bi bi-trash3"></i>
                 </button>
               </div>
@@ -246,11 +211,7 @@
         </div>
 
         <div class="hb-pagination">
-          <button
-            class="hb-page-btn"
-            [disabled]="vm.query.page <= 1"
-            (click)="goPage(vm.query.page - 1)"
-          >
+          <button class="hb-page-btn" [disabled]="vm.query.page <= 1" (click)="goPage(vm.query.page - 1)">
             ‹
           </button>
           <div class="hb-page-info">
@@ -259,11 +220,7 @@
             <span>/</span>
             <span>{{ vm.totalPages }}</span>
           </div>
-          <button
-            class="hb-page-btn"
-            [disabled]="vm.query.page >= vm.totalPages"
-            (click)="goPage(vm.query.page + 1)"
-          >
+          <button class="hb-page-btn" [disabled]="vm.query.page >= vm.totalPages" (click)="goPage(vm.query.page + 1)">
             ›
           </button>
         </div>
@@ -362,7 +319,7 @@
                 <span class="label">Trạng thái:</span>
                 <span class="hb-pill" [ngClass]="statusBadgeClass(d.status)">{{
                   d.statusLabel
-                }}</span>
+                  }}</span>
               </div>
               <div class="step-line">
                 <span class="label">SLA Hẹn:</span>
@@ -370,12 +327,8 @@
               </div>
             </div>
 
-            <button
-              class="btn btn-hb w-100 mb-2"
-              type="button"
-              [disabled]="!canAdvance(d.status)"
-              (click)="advanceWithConfirm(d.id)"
-            >
+            <button class="btn btn-hb w-100 mb-2" type="button" [disabled]="!canAdvance(d.status)"
+              (click)="advanceWithConfirm(d.id)">
               <i class="bi bi-arrow-right-circle me-1"></i> Chuyển bước kế tiếp
             </button>
 
@@ -413,62 +366,36 @@
 
               <div class="col-md-6">
                 <label class="form-label">Nhân viên phụ trách</label>
-                <input
-                  class="form-control"
-                  [(ngModel)]="f.assignee"
-                  (ngModelChange)="markDirty()"
-                  placeholder="Tên nhân viên..."
-                />
+                <input class="form-control" [(ngModel)]="f.assignee" (ngModelChange)="markDirty()"
+                  placeholder="Tên nhân viên..." />
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Nhà cung cấp xử lý</label>
-                <input
-                  class="form-control"
-                  [(ngModel)]="f.supplier"
-                  (ngModelChange)="markDirty()"
-                  placeholder="NCC A, NCC B..."
-                />
+                <input class="form-control" [(ngModel)]="f.supplier" (ngModelChange)="markDirty()"
+                  placeholder="NCC A, NCC B..." />
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Ngày hẹn hoàn tất (SLA)</label>
-                <input
-                  class="form-control"
-                  type="date"
-                  [(ngModel)]="f.expectedDoneDate"
-                  (ngModelChange)="markDirty()"
-                />
+                <input class="form-control" type="date" [(ngModel)]="f.expectedDoneDate"
+                  (ngModelChange)="markDirty()" />
               </div>
 
               <div class="col-12">
                 <label class="form-label">Ghi chú nội bộ / Kết luận</label>
-                <textarea
-                  class="form-control"
-                  rows="5"
-                  [(ngModel)]="f.internalNote"
-                  (ngModelChange)="markDirty()"
-                  placeholder="Mô tả chi tiết quá trình kiểm tra và xử lý..."
-                ></textarea>
+                <textarea class="form-control" rows="5" [(ngModel)]="f.internalNote" (ngModelChange)="markDirty()"
+                  placeholder="Mô tả chi tiết quá trình kiểm tra và xử lý..."></textarea>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Chi phí ước tính (VNĐ)</label>
-                <input
-                  class="form-control"
-                  type="number"
-                  [(ngModel)]="f.estimatedCost"
-                  (ngModelChange)="markDirty()"
-                />
+                <input class="form-control" type="number" [(ngModel)]="f.estimatedCost" (ngModelChange)="markDirty()" />
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Kênh phản hồi khách</label>
-                <select
-                  class="form-select"
-                  [(ngModel)]="f.customerOutcome"
-                  (ngModelChange)="markDirty()"
-                >
+                <select class="form-select" [(ngModel)]="f.customerOutcome" (ngModelChange)="markDirty()">
                   <option value="">-- Chọn kênh --</option>
                   <option value="call">Điện thoại trực tiếp</option>
                   <option value="email">Gửi Email chính thức</option>
@@ -487,11 +414,7 @@
               <b>Xử lý</b> → <b>Hoàn tất</b>.
             </div>
 
-            <button
-              class="btn btn-hb w-100 mb-2"
-              (click)="saveEdit()"
-              [disabled]="saving || !isDirty"
-            >
+            <button class="btn btn-hb w-100 mb-2" (click)="saveEdit()" [disabled]="saving || !isDirty">
               <i class="bi bi-save2 me-1"></i> Lưu thông tin
             </button>
 
@@ -504,47 +427,21 @@
     </ng-container>
   </div>
 
-  <hb-confirm-modal
-    [isOpen]="saveModalOpen"
-    title="Xác nhận lưu thay đổi"
-    message="Thông tin xử lý bảo hành / đổi trả sẽ được cập nhật. Bạn có chắc chắn muốn lưu?"
-    type="info"
-    confirmLabel="Lưu thay đổi"
-    cancelLabel="Ở lại"
-    (confirm)="executeSave()"
-    (cancel)="onCancelSave()"
-  ></hb-confirm-modal>
+  <hb-confirm-modal [isOpen]="saveModalOpen" title="Xác nhận lưu thay đổi"
+    message="Thông tin xử lý bảo hành / đổi trả sẽ được cập nhật. Bạn có chắc chắn muốn lưu?" type="info"
+    confirmLabel="Lưu thay đổi" cancelLabel="Ở lại" (confirm)="executeSave()"
+    (cancel)="onCancelSave()"></hb-confirm-modal>
 
-  <hb-confirm-modal
-    [isOpen]="discardModalOpen"
-    title="Thay đổi chưa được lưu"
-    message="Bạn đang có thay đổi chưa lưu. Nếu quay lại bây giờ, dữ liệu vừa chỉnh sẽ bị mất."
-    type="warning"
-    confirmLabel="Bỏ thay đổi"
-    cancelLabel="Ở lại"
-    (confirm)="onConfirmDiscard()"
-    (cancel)="onCancelDiscard()"
-  ></hb-confirm-modal>
+  <hb-confirm-modal [isOpen]="discardModalOpen" title="Thay đổi chưa được lưu"
+    message="Bạn đang có thay đổi chưa lưu. Nếu quay lại bây giờ, dữ liệu vừa chỉnh sẽ bị mất." type="warning"
+    confirmLabel="Bỏ thay đổi" cancelLabel="Ở lại" (confirm)="onConfirmDiscard()"
+    (cancel)="onCancelDiscard()"></hb-confirm-modal>
 
-  <hb-confirm-modal
-    [isOpen]="deleteModalOpen"
-    title="Xác nhận xóa yêu cầu"
-    message="Yêu cầu bảo hành / đổi trả này sẽ bị xóa khỏi danh sách quản lý."
-    type="danger"
-    confirmLabel="Xóa yêu cầu"
-    cancelLabel="Đóng"
-    (confirm)="onConfirmDelete()"
-    (cancel)="onCancelDelete()"
-  ></hb-confirm-modal>
+  <hb-confirm-modal [isOpen]="deleteModalOpen" title="Xác nhận xóa yêu cầu"
+    message="Yêu cầu bảo hành / đổi trả này sẽ bị xóa khỏi danh sách quản lý." type="danger" confirmLabel="Xóa yêu cầu"
+    cancelLabel="Đóng" (confirm)="onConfirmDelete()" (cancel)="onCancelDelete()"></hb-confirm-modal>
 
-  <hb-confirm-modal
-    [isOpen]="advanceModalOpen"
-    title="Xác nhận chuyển bước"
-    message="Yêu cầu sẽ được chuyển sang bước xử lý kế tiếp theo quy trình."
-    type="info"
-    confirmLabel="Chuyển bước"
-    cancelLabel="Ở lại"
-    (confirm)="onConfirmAdvance()"
-    (cancel)="onCancelAdvance()"
-  ></hb-confirm-modal>
+  <hb-confirm-modal [isOpen]="advanceModalOpen" title="Xác nhận chuyển bước"
+    message="Yêu cầu sẽ được chuyển sang bước xử lý kế tiếp theo quy trình." type="info" confirmLabel="Chuyển bước"
+    cancelLabel="Ở lại" (confirm)="onConfirmAdvance()" (cancel)="onCancelAdvance()"></hb-confirm-modal>
 </div>
