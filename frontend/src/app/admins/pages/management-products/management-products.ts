@@ -105,6 +105,12 @@ interface EditForm {
   description: string;
 }
 
+interface KVEntry {
+  key: string;
+  value: string;
+  image_url?: string;
+}
+
 interface VariantEditVM {
   product_varant_id: VariantId;
   is_default: boolean;
@@ -113,6 +119,15 @@ interface VariantEditVM {
   num_selled: number;
   rating: number;
   expected_delivery: string;
+  weight: number;
+  designed_by: string;
+  // dynamic key-value fields
+  componentEntries: KVEntry[];   // from component_variants
+  measurementEntries: KVEntry[]; // from measurement
+  // Variant specific images
+  images: { url: string; isNew?: boolean }[];
+  // UI state
+  expanded: boolean;
 }
 
 interface ProductDetailVM {
@@ -340,7 +355,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadSeedData();
@@ -493,8 +508,8 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   sortIcon(key: ListQuery['sortKey']): string {
     const q = this.query$.value;
-    if (q.sortKey !== key) return '▲▼';
-    return q.sortDir === 'asc' ? '▲' : '▼';
+    if (q.sortKey !== key) return 'fa-sort';
+    return q.sortDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
   openDetailById(productId: string): void {
@@ -601,7 +616,13 @@ export class ManagementProducts implements OnInit, OnDestroy {
           num_inventory: 0,
           num_selled: 0,
           rating: 0,
+          weight: 0,
+          designed_by: '',
           expected_delivery: '3-5 days',
+          componentEntries: [],
+          measurementEntries: [],
+          images: [],
+          expanded: true,
         },
       ];
       this.isDirty = false;
@@ -631,7 +652,16 @@ export class ManagementProducts implements OnInit, OnDestroy {
       num_inventory: Number(v.num_inventory ?? 0),
       num_selled: Number(v.num_selled ?? 0),
       rating: Number(v.rating ?? 0),
+      weight: Number(v.weight ?? 0),
+      designed_by: v.designed_by ?? '',
       expected_delivery: v.expected_delivery ?? '',
+      componentEntries: Object.entries(v.component_variants ?? {}).map(([key, value]) => ({ key, value: String(value) })),
+      measurementEntries: Object.entries(v.measurement ?? {}).map(([key, value]) => ({ key, value: String(value) })),
+      images: this.images$.value
+        .filter((im) => im.product_varant_id === v.product_varant_id)
+        .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
+        .map((im) => ({ url: im.url })),
+      expanded: false,
     }));
 
     const imgsFromProduct = Array.isArray(p.image_url) ? p.image_url : [];
@@ -646,7 +676,98 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.isDirty = true;
   }
 
+  expandedVariants = new Set<string>();
+
+  toggleVariantExpand(id: string): void {
+    if (this.expandedVariants.has(id)) {
+      this.expandedVariants.delete(id);
+    } else {
+      this.expandedVariants.add(id);
+    }
+  }
+
+  isVariantExpanded(id: string): boolean {
+    return this.expandedVariants.has(id);
+  }
+
+  variantPreviewLabel(v: VariantEditVM): string {
+    if (!v.componentEntries?.length) return v.product_varant_id;
+    return v.componentEntries.map(e => e.value).filter(Boolean).join(' · ');
+  }
+
+  addComponentEntry(v: VariantEditVM): void {
+    v.componentEntries.push({ key: '', value: '' });
+    this.onVariantChange();
+  }
+
+  removeComponentEntry(v: VariantEditVM, idx: number): void {
+    v.componentEntries.splice(idx, 1);
+    this.onVariantChange();
+  }
+
+  addMeasurementEntry(v: VariantEditVM): void {
+    v.measurementEntries.push({ key: '', value: '' });
+    this.onVariantChange();
+  }
+
+  removeMeasurementEntry(v: VariantEditVM, idx: number): void {
+    v.measurementEntries.splice(idx, 1);
+    this.onVariantChange();
+  }
+
+  setDefaultVariant(v: VariantEditVM): void {
+    this.editVariants.forEach(ev => ev.is_default = false);
+    v.is_default = true;
+    this.onVariantChange();
+  }
+
   onVariantChange(): void {
+    this.isDirty = true;
+  }
+
+  onUploadVariantImages(ev: Event, v: VariantEditVM): void {
+    const input = ev.target as HTMLInputElement;
+    const files = input.files ? Array.from(input.files) : [];
+    if (!files || files.length === 0) return;
+
+    for (const f of files) {
+      const url = URL.createObjectURL(f);
+      v.images.push({ url, isNew: true });
+    }
+
+    this.isDirty = true;
+    input.value = '';
+  }
+
+  removeVariantImage(v: VariantEditVM, idx: number): void {
+    const it = v.images[idx];
+    if (!it) return;
+    if (it.isNew) URL.revokeObjectURL(it.url);
+    v.images.splice(idx, 1);
+    this.isDirty = true;
+  }
+
+  onUploadEntryImage(ev: Event, entry: KVEntry): void {
+    const input = ev.target as HTMLInputElement;
+    const files = input.files ? Array.from(input.files) : [];
+    if (!files || files.length === 0) return;
+
+    const f = files[0];
+    if (f) {
+      if (entry.image_url && entry.image_url.startsWith('blob:')) {
+        URL.revokeObjectURL(entry.image_url);
+      }
+      entry.image_url = URL.createObjectURL(f);
+      this.isDirty = true;
+    }
+    input.value = '';
+  }
+
+  removeEntryImage(entry: KVEntry): void {
+    if (entry.image_url && entry.image_url.startsWith('blob:')) {
+      URL.revokeObjectURL(entry.image_url);
+    }
+    delete entry.image_url;
     this.isDirty = true;
   }
 
@@ -705,44 +826,45 @@ export class ManagementProducts implements OnInit, OnDestroy {
       this.products$.next(products);
 
       const variants = this.variants$.value.slice();
-      const baseVariantId = `${newId}-v1`;
-
-      const v0 = this.editVariants[0] ?? {
-        product_varant_id: 'new-v1',
-        is_default: true,
-        price: 0,
-        num_inventory: 0,
-        num_selled: 0,
-        rating: 0,
-        expected_delivery: '3-5 days',
-      };
-
-      variants.push({
-        product_id: String(newId),
-        product_varant_id: baseVariantId,
-        price: Number(v0.price ?? 0),
-        weight: 0,
-        num_inventory: Number(v0.num_inventory ?? 0),
-        num_selled: Number(v0.num_selled ?? 0),
-        designed_by: '',
-        rating: Number(v0.rating ?? 0),
-        expected_delivery: v0.expected_delivery ?? '',
-        component_variants: {},
-        is_default: true,
-        measurement: {},
-      });
-      this.variants$.next(variants);
-
       const imgs = this.images$.value.slice();
-      let pos = 1;
-      for (const im of this.editImages) {
-        imgs.push({
-          product_varant_id: baseVariantId,
-          url: im.url,
-          is_main: pos === 1,
-          position: pos++,
+
+      this.editVariants.forEach((vDraft, idx) => {
+        const vId = this.isCreateMode ? `${newId}-v${idx + 1}` : vDraft.product_varant_id;
+
+        // Map entries to JSON
+        const comp: Record<string, string> = {};
+        vDraft.componentEntries.forEach(e => { if (e.key) comp[e.key] = e.value; });
+
+        const meas: Record<string, number> = {};
+        vDraft.measurementEntries.forEach(e => { if (e.key) meas[e.key] = Number(e.value) || 0; });
+
+        variants.push({
+          product_id: String(newId),
+          product_varant_id: vId,
+          price: Number(vDraft.price ?? 0),
+          weight: Number(vDraft.weight ?? 0),
+          num_inventory: Number(vDraft.num_inventory ?? 0),
+          num_selled: Number(vDraft.num_selled ?? 0),
+          designed_by: vDraft.designed_by ?? '',
+          rating: Number(vDraft.rating ?? 0),
+          expected_delivery: vDraft.expected_delivery ?? '',
+          component_variants: comp,
+          is_default: !!vDraft.is_default,
+          measurement: meas,
         });
-      }
+
+        // Add variant images
+        vDraft.images.forEach((vIm, vImIdx) => {
+          imgs.push({
+            product_varant_id: vId,
+            url: vIm.url,
+            is_main: vImIdx === 0,
+            position: vImIdx + 1
+          });
+        });
+      });
+
+      this.variants$.next(variants);
       this.images$.next(imgs);
 
       this.saving = false;
@@ -775,40 +897,51 @@ export class ManagementProducts implements OnInit, OnDestroy {
     }
 
     const variants = this.variants$.value.slice();
+    const imgs = this.images$.value.slice().filter(im => {
+      // Keep images that don't belong to the variants of this product 
+      // AND also remove currently existing images of these variants to overwrite
+      return !this.editVariants.some(ev => ev.product_varant_id === im.product_varant_id);
+    });
+
     const vSet = new Map(this.editVariants.map((v) => [v.product_varant_id, v]));
+
     for (let i = 0; i < variants.length; i++) {
       const v = variants[i];
       if (v.product_id !== this.selectedProductId) continue;
       const draft = vSet.get(v.product_varant_id);
       if (!draft) continue;
+
+      // Map entries back
+      const comp: Record<string, string> = {};
+      draft.componentEntries.forEach(e => { if (e.key) comp[e.key] = e.value; });
+
+      const meas: Record<string, number> = {};
+      draft.measurementEntries.forEach(e => { if (e.key) meas[e.key] = Number(e.value) || 0; });
+
       variants[i] = {
         ...v,
         price: Number(draft.price ?? v.price),
+        weight: Number(draft.weight ?? v.weight),
         num_inventory: Number(draft.num_inventory ?? v.num_inventory),
         expected_delivery: draft.expected_delivery ?? v.expected_delivery,
         is_default: !!draft.is_default,
+        designed_by: draft.designed_by ?? v.designed_by,
+        component_variants: comp,
+        measurement: meas
       };
+
+      // Overwrite images for this variant
+      draft.images.forEach((vIm, vImIdx) => {
+        imgs.push({
+          product_varant_id: v.product_varant_id,
+          url: vIm.url,
+          is_main: vImIdx === 0,
+          position: vImIdx + 1
+        });
+      });
     }
     this.variants$.next(variants);
-
-    const pv = variants.filter((x) => x.product_id === this.selectedProductId);
-    const def = pv.find((x) => x.is_default) ?? pv[0];
-    if (def) {
-      const imgs = this.images$.value
-        .slice()
-        .filter((im) => im.product_varant_id !== def.product_varant_id);
-
-      let pos = 1;
-      for (const im of this.editImages) {
-        imgs.push({
-          product_varant_id: def.product_varant_id,
-          url: im.url,
-          is_main: pos === 1,
-          position: pos++,
-        });
-      }
-      this.images$.next(imgs);
-    }
+    this.images$.next(imgs);
 
     this.isDirty = false;
     this.saving = false;

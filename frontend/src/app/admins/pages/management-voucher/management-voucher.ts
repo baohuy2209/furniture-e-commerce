@@ -52,7 +52,7 @@ type VoucherRowVM = Voucher & {
   appliedToText: string;
 };
 
-type PageMode = 'list' | 'detail' | 'edit';
+type PageMode = 'list' | 'detail' | 'edit' | 'create';
 
 type UIState = {
   q: string;
@@ -87,6 +87,7 @@ interface VoucherRepository {
   getSnapshot(): Voucher[];
 
   update(id: string, patch: VoucherUpdate): void;
+  create(item: Voucher): void;
   deleteHard(id: string): void;
 }
 
@@ -163,6 +164,11 @@ class InMemoryVoucherRepository implements VoucherRepository {
     this.store$.next(next);
   }
 
+  create(item: Voucher): void {
+    const next = [item, ...this.store$.value];
+    this.store$.next(next);
+  }
+
   deleteHard(id: string): void {
     this.store$.next(this.store$.value.filter((v) => v.voucher_id !== id));
   }
@@ -181,7 +187,7 @@ export class ManagementVoucher implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   // ====== MODE / SELECTION ======
   mode: PageMode = 'list';
@@ -198,6 +204,25 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     appliedTo: 'all' | 'specific';
     applied_products_text: string;
   } | null = null;
+
+  // ====== CREATE MODEL ======
+  createModel: {
+    code: string;
+    voucher_name: string;
+    type: VoucherType;
+    value: number;
+    min_order_value: number;
+    usage_limit: number;
+    start_date: string;
+    end_date: string;
+    description: string;
+    appliedTo: 'all' | 'specific';
+    applied_products_text: string;
+  } | null = null;
+
+  // ====== CREATE STEP ======
+  createStep: 1 | 2 = 1;
+
   saveModalOpen = false;
   discardModalOpen = false;
 
@@ -206,6 +231,11 @@ export class ManagementVoucher implements OnInit, OnDestroy {
   deleteVoucherId: string | null = null;
   deleteModalTitle = '';
   deleteModalMessage = '';
+
+  // Alert modal state
+  alertModalOpen = false;
+  alertModalTitle = '';
+  alertModalMessage = '';
 
   // ====== TODAY ISO for min date + expiration compare ======
   todayISO = this.toISODateTime(new Date());
@@ -332,12 +362,27 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((qm) => {
       const id = qm.get('id');
       const isEdit = qm.get('edit') === 'true';
+      const isCreate = qm.get('create') === 'true';
+
+      if (isCreate) {
+        this.mode = 'create';
+        this.selectedId = null;
+        this.detail = null;
+        this.editModel = null;
+        if (!this.createModel) {
+          this.initCreateModel();
+          this.createStep = 1;
+        }
+        return;
+      }
 
       if (!id) {
         this.mode = 'list';
         this.selectedId = null;
         this.detail = null;
         this.editModel = null;
+        this.createModel = null;
+        this.createStep = 1;
         return;
       }
 
@@ -377,6 +422,22 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     };
   }
 
+  private initCreateModel() {
+    this.createModel = {
+      code: '',
+      voucher_name: '',
+      type: 'percent',
+      value: 0,
+      min_order_value: 0,
+      usage_limit: 0,
+      start_date: this.todayISO,
+      end_date: this.todayISO,
+      description: '',
+      appliedTo: 'all',
+      applied_products_text: '',
+    };
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -403,16 +464,24 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     });
   }
 
+  openCreate() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { create: 'true', id: null, edit: null },
+      queryParamsHandling: 'merge',
+    });
+  }
+
   backToList() {
     // If in edit mode and has changes, ask before going back
-    if (this.mode === 'edit' && this.isDirty()) {
+    if ((this.mode === 'edit' || this.mode === 'create') && this.isDirty()) {
       this.discardModalOpen = true;
       return;
     }
 
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { id: null, edit: null },
+      queryParams: { id: null, edit: null, create: null },
       queryParamsHandling: 'merge',
     });
   }
@@ -425,12 +494,21 @@ export class ManagementVoucher implements OnInit, OnDestroy {
 
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { edit: null },
+      queryParams: { edit: null, create: null },
       queryParamsHandling: 'merge',
     });
   }
 
   isDirty(): boolean {
+    if (this.mode === 'create') {
+      if (!this.createModel) return false;
+      return (
+        this.createModel.code !== '' ||
+        this.createModel.voucher_name !== '' ||
+        this.createModel.value !== 0
+      );
+    }
+
     if (!this.editModel || !this.detail) return false;
     const currentText = (this.detail.applied_products || []).join(', ');
     return (
@@ -516,10 +594,10 @@ export class ManagementVoucher implements OnInit, OnDestroy {
 
   onConfirmDiscard() {
     this.discardModalOpen = false;
-    // Actually navigate away from edit
+    // Actually navigate away from edit/create
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { edit: null },
+      queryParams: { edit: null, create: null },
       queryParamsHandling: 'merge',
     });
   }
@@ -532,11 +610,21 @@ export class ManagementVoucher implements OnInit, OnDestroy {
     if (!this.detail || !this.editModel) return;
 
     if (this.editModel.end_date < this.editModel.start_date) {
-      alert('Ngày hết hạn phải lớn hơn hoặc bằng ngày bắt đầu.');
+      this.showAlert('Lỗi thời gian', 'Ngày hết hạn phải lớn hơn hoặc bằng ngày bắt đầu.');
       return;
     }
 
     this.saveModalOpen = true;
+  }
+
+  showAlert(title: string, message: string) {
+    this.alertModalTitle = title;
+    this.alertModalMessage = message;
+    this.alertModalOpen = true;
+  }
+
+  closeAlert() {
+    this.alertModalOpen = false;
   }
 
   onCancelSave() {
@@ -544,6 +632,39 @@ export class ManagementVoucher implements OnInit, OnDestroy {
   }
 
   executeSave() {
+    if (this.mode === 'create') {
+      if (!this.createModel) return;
+      const newId = 'V' + Math.floor(Math.random() * 10000).toString();
+
+      this.repo.create({
+        voucher_id: newId,
+        code: this.createModel.code.toUpperCase(),
+        voucher_name: this.createModel.voucher_name,
+        type: this.createModel.type,
+        value: Number(this.createModel.value) || 0,
+        min_order_value: Number(this.createModel.min_order_value) || 0,
+        usage_limit: Number(this.createModel.usage_limit) || 0,
+        used_count: 0,
+        start_date: this.createModel.start_date,
+        end_date: this.createModel.end_date,
+        status: 'active',
+        created_at: new Date().toISOString().split('T')[0],
+        description: this.createModel.description,
+        appliedTo: this.createModel.appliedTo,
+        applied_products: this.createModel.applied_products_text
+          ? this.createModel.applied_products_text.split(',').map((s) => s.trim()).filter(Boolean)
+          : [],
+      });
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { create: null, id: newId },
+        queryParamsHandling: 'merge',
+      });
+      this.saveModalOpen = false;
+      return;
+    }
+
     if (!this.detail || !this.editModel) return;
 
     const id = this.detail.voucher_id;
@@ -556,9 +677,9 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       appliedTo: this.editModel.appliedTo,
       applied_products: this.editModel.applied_products_text
         ? this.editModel.applied_products_text
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean)
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
         : [],
     });
 
@@ -572,6 +693,39 @@ export class ManagementVoucher implements OnInit, OnDestroy {
       queryParamsHandling: 'merge',
     });
     this.saveModalOpen = false;
+  }
+
+  executeCreateAction() {
+    if (!this.createModel) return;
+
+    if (!this.createModel.code || !this.createModel.voucher_name) {
+      this.showAlert('Thông tin bắt buộc', 'Vui lòng nhập Mã Voucher và Tên Chương trình!');
+      return;
+    }
+
+    if (this.createModel.end_date < this.createModel.start_date) {
+      this.showAlert('Lỗi thời gian', 'Ngày hết hạn phải lớn hơn hoặc bằng ngày bắt đầu.');
+      return;
+    }
+
+    this.saveModalOpen = true;
+  }
+
+  nextCreateStep() {
+    if (!this.createModel) return;
+    if (!this.createModel.code || !this.createModel.voucher_name) {
+      this.showAlert('Thông tin bắt buộc', 'Vui lòng nhập Mã Voucher và Tên Chương trình trước khi tiếp tục!');
+      return;
+    }
+    if (this.createModel.end_date < this.createModel.start_date) {
+      this.showAlert('Lỗi thời gian', 'Ngày hết hạn phải lớn hơn hoặc bằng ngày bắt đầu.');
+      return;
+    }
+    this.createStep = 2;
+  }
+
+  prevCreateStep() {
+    this.createStep = 1;
   }
 
   // ====== ACTIONS ======

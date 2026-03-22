@@ -1,1 +1,164 @@
-<p>reports works!</p>
+<div class="hb-page-shell">
+  <!-- HEADER -->
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title" routerLink="/admin/reports" style="cursor: pointer">BÁO CÁO HỆ THỐNG</div>
+      <div class="hb-sub">Theo dõi hiệu suất kinh doanh và dữ liệu sản phẩm</div>
+    </div>
+    <div class="hb-header-actions">
+      <button class="btn btn-hb-outline" type="button">
+        <i class="bi bi-file-earmark-pdf me-1"></i> Xuất PDF
+      </button>
+      <button class="btn btn-hb-accent" type="button">
+        <i class="bi bi-file-earmark-excel me-1"></i> Xuất Excel
+      </button>
+    </div>
+  </div>
+
+  <div class="hb-page-body">
+    <!-- FILTERS -->
+    <div class="hb-panel-v2 mb-4">
+      <div class="panel-body">
+        <div class="hb-filterbar">
+          <div class="filter-group">
+            <div class="btn-group-hb">
+              <button class="btn-preset" [class.active]="activeRange === 'day'" (click)="onRangeChange('day')">Ngày</button>
+              <button class="btn-preset" [class.active]="activeRange === 'week'" (click)="onRangeChange('week')">Tuần</button>
+              <button class="btn-preset" [class.active]="activeRange === 'month'" (click)="onRangeChange('month')">Tháng</button>
+              <button class="btn-preset" [class.active]="activeRange === 'year'" (click)="onRangeChange('year')">Năm</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Từ ngày</span>
+            <input type="date" class="form-control-hb" [(ngModel)]="g_from_date">
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Đến ngày</span>
+            <input type="date" class="form-control-hb" [(ngModel)]="g_to_date">
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-hb-accent w-100">
+              <i class="bi bi-funnel me-1"></i> Lọc dữ liệu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-3" *ngFor="let kpi of kpis">
+        <div class="hb-kpi-card">
+          <div class="kpi-icon">
+            <i class="bi" [class]="kpi.icon"></i>
+          </div>
+          <div class="kpi-info">
+            <div class="kpi-label">{{kpi.label}}</div>
+            <div class="kpi-value">{{kpi.value}}</div>
+            <div class="kpi-stat" [class.up]="kpi.trend_up" [class.down]="!kpi.trend_up">
+              <i class="bi" [class]="kpi.trend_up ? 'bi-arrow-up-short' : 'bi-arrow-down-short'"></i>
+              {{kpi.trend}}% so với kỳ trước
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CHART -->
+    <div class="hb-panel-v2 mb-4">
+      <div class="panel-header d-flex justify-content-between align-items-center">
+        <div class="header-title">Biểu đồ doanh thu</div>
+        <div class="header-actions">
+          <span class="badge-dot blue">Doanh thu (VND)</span>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="chart-container-hb">
+          <svg [attr.viewBox]="'0 0 ' + chartSeries.width + ' ' + chartSeries.height" preserveAspectRatio="none">
+            <!-- Grid Lines -->
+            <line x1="40" y1="40" [attr.x2]="chartSeries.width - 40" y2="40" stroke="rgba(255,255,255,0.05)" />
+            <line x1="40" y1="130" [attr.x2]="chartSeries.width - 40" y2="130" stroke="rgba(255,255,255,0.05)" />
+            <line x1="40" y1="220" [attr.x2]="chartSeries.width - 40" y2="220" stroke="rgba(255,255,255,0.05)" />
+            <line x1="40" y1="260" [attr.x2]="chartSeries.width - 40" y2="260" stroke="rgba(255,255,255,0.1)" />
+
+            <!-- Area Gradient -->
+            <defs>
+              <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#818cf8" stop-opacity="0.2" />
+                <stop offset="100%" stop-color="#818cf8" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+
+            <!-- Line Path -->
+            <polyline [attr.points]="chartSeries.points" fill="transparent" stroke="#818cf8" stroke-width="3" stroke-linejoin="round" />
+            
+            <!-- X Labels -->
+            <text *ngFor="let b of chartSeries.buckets; let i = index" 
+                  [attr.x]="40 + i * ((chartSeries.width - 80) / (chartSeries.buckets.length - 1))" 
+                  y="285" text-anchor="middle" fill="#9CA3AF" font-size="11">
+              {{b.label}}
+            </text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLES SECTION -->
+    <div class="row g-4">
+      <div class="col-md-8">
+        <div class="hb-panel-v2">
+          <div class="panel-header">
+            <div class="header-title">Sản phẩm mới nhất</div>
+          </div>
+          <div class="panel-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hb mb-0">
+                <thead>
+                  <tr>
+                    <th>Sản phẩm</th>
+                    <th>Thương hiệu</th>
+                    <th>Bảo hành</th>
+                    <th>Giảm giá</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let p of topSoldProducts">
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="product-thumb-sm me-2"></div>
+                        <span class="fw-bold">{{p.name}}</span>
+                      </div>
+                    </td>
+                    <td>{{p.brand}}</td>
+                    <td>{{p.warranty}} </td>
+                    <td><span class="text-accent">{{p.discount}}</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="hb-panel-v2">
+          <div class="panel-header">
+            <div class="header-title">Phân bổ doanh mục</div>
+          </div>
+          <div class="panel-body">
+            <div class="category-stats">
+              <div class="cat-item mb-3" *ngFor="let c of ['Phòng khách', 'Phòng ăn', 'Phòng ngủ']; let i = index">
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="cat-name">{{c}}</span>
+                  <span class="cat-val">{{ [45, 30, 25][i] }}%</span>
+                </div>
+                <div class="progress-hb">
+                  <div class="progress-bar-hb" [style.width.%]="[45, 30, 25][i]"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

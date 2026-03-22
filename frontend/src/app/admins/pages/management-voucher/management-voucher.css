@@ -1,11 +1,11 @@
-
-
 .fw-black {
   font-weight: 900 !important;
 }
+
 .fs-2 {
   font-size: 2rem !important;
 }
+
 .fs-3 {
   font-size: 1.5rem !important;
 }
@@ -14,6 +14,7 @@
 .item-stat {
   transition: all 0.2s ease;
 }
+
 .item-stat:hover {
   transform: scale(1.02);
 }
@@ -282,21 +283,13 @@
 .hb-grid-vouchers {
   display: grid;
   grid-template-columns:
-    55px
-    175px
-    minmax(180px, 1.6fr)
-    100px
-    115px
-    115px
-    100px
-    125px
-    65px
-    65px;
+    55px 175px minmax(180px, 1.6fr) 100px 115px 115px 100px 125px 65px 65px;
   align-items: center;
 }
 
 .hb-table-head {
-  background: transparent; /* Solid background for sticky */
+  background: transparent;
+  /* Solid background for sticky */
   border-bottom: 2px solid var(--hb-border);
   padding: 0;
   font-weight: 900;
@@ -644,7 +637,139 @@
   .hb-filterbar {
     grid-template-columns: 1fr 1fr;
   }
+
   .hb-form-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ===== PILLS ===== */
+.hb-pill {
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-weight: 700;
+  font-size: 12px;
+  border: 1px solid var(--hb-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--hb-text);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ===== 2-STEP WIZARD ===== */
+.hb-wizard-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.hb-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  color: #64748b;
+  transition: all 0.25s ease;
+}
+
+.hb-step.active .step-circle {
+  background: rgba(129, 140, 248, 0.2);
+  border-color: #818cf8;
+  color: #818cf8;
+  box-shadow: 0 0 14px rgba(129, 140, 248, 0.3);
+}
+
+.hb-step.done .step-circle {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.step-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.hb-step.active .step-label {
+  color: #818cf8;
+}
+
+.hb-step.done .step-label {
+  color: #22c55e;
+}
+
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0 16px;
+  margin-bottom: 22px;
+  transition: background 0.3s ease;
+}
+
+.step-connector.filled {
+  background: #22c55e;
+}
+
+/* ===== STEP GUIDE SIDEBAR ===== */
+.guide-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px;
+  border-radius: 10px;
+  transition: background 0.2s;
+  border: 1px solid transparent;
+}
+
+.guide-item.guide-active {
+  background: rgba(129, 140, 248, 0.08);
+  border-color: rgba(129, 140, 248, 0.2);
+}
+
+.guide-num {
+  font-size: 18px;
+  font-weight: 900;
+  color: #475569;
+  min-width: 28px;
+  text-align: center;
+}
+
+.guide-item.guide-active .guide-num {
+  color: #818cf8;
+}
+
+.guide-title {
+  font-weight: 700;
+  color: #e2e8f0;
+  font-size: 13px;
+}
+
+.guide-desc {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 3px;
+  line-height: 1.5;
+}
+
+/* fw-black for key values */
+.fw-black {
+  font-weight: 900 !important;
 }

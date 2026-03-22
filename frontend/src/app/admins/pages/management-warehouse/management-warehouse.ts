@@ -8,7 +8,8 @@ import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 type SortDir = 'asc' | 'desc';
 type ReferenceType = 'purchase_order' | 'order' | 'manual' | 'audit';
-type AdjustType = 'IN' | 'ADJUST';
+type AdjustType = 'IN' | 'OUT' | 'ADJUST';
+type POStatus = 'pending' | 'confirmed' | 'receiving' | 'completed' | 'cancelled';
 
 type StockSortKey =
   | 'product_variant_id'
@@ -35,6 +36,40 @@ interface ProductVariantMin {
   price?: number;
   created_at?: string;
   updated_at?: string;
+}
+
+interface BrandEntity {
+  _id: string;
+  brand_name: string;
+}
+
+const MOCK_BRANDS: BrandEntity[] = [
+  { _id: 'br_001', brand_name: 'Nhà cung cấp Hòa Phát' },
+  { _id: 'br_002', brand_name: 'Xưởng Mộc Ý Tưởng' },
+  { _id: 'br_003', brand_name: 'Nhập khẩu Q-Home' }
+];
+
+interface POEntity {
+  po_id: string;
+  po_number: string;
+  brand_id: string;
+  brand_name: string;
+  note: string;
+  status: POStatus;
+  item_count: number;
+  total_cost: number;
+  created_at: string;
+}
+
+interface POListItemVM {
+  po_id: string;
+  po_number: string;
+  brand_name: string;
+  note: string;
+  status: POStatus;
+  itemCount: number;
+  totalCostText: string;
+  createdAtText: string;
 }
 
 interface StockItemEntity {
@@ -106,12 +141,32 @@ interface StockDetailVM {
 }
 
 interface StockAdjustDraft {
-  adjustType: AdjustType;
+  targetWarehouseId: string;
   qtyAbs: number;
   reason: string;
 }
 
-type Mode = 'list' | 'detail' | 'edit';
+interface PurchaseOrderItemDraft {
+  id: string;
+  product_variant_id: string;
+  warehouse_id: string;
+  quantity: number;
+  unit_cost: number;
+}
+
+interface PurchaseOrderDraft {
+  brand_id: string;
+  note: string;
+  tempItem: {
+    product_variant_id: string;
+    warehouse_id: string;
+    quantity: number;
+    unit_cost: number;
+  };
+  items: PurchaseOrderItemDraft[];
+}
+
+type Mode = 'list' | 'detail' | 'edit' | 'create_po';
 
 interface VM {
   mode: Mode;
@@ -129,7 +184,23 @@ interface VM {
   selectedId: string | null;
   detail: StockDetailVM | null;
   editModel: StockAdjustDraft | null;
-  currentPanel: 'detail' | 'adjust' | null;
+  importDraft: PurchaseOrderDraft | null;
+  importStep: 1 | 2;
+  importPreviewList: {
+    id: string;
+    sku: string;
+    warehouseName: string;
+    currentStock: number;
+    expectedStock: number;
+    quantity: number;
+    unit_cost: number;
+    subtotal: number;
+  }[];
+  importTotalCost: number;
+  brands: BrandEntity[];
+  currentPanel: 'detail' | 'adjust' | 'import' | null;
+  poList: POListItemVM[];
+  transferList: MovementRowVM[];
 }
 
 @Component({
@@ -149,13 +220,17 @@ export class ManagementWarehouse implements OnInit {
   private variants$ = new BehaviorSubject<ProductVariantMin[]>(MOCK_VARIANTS);
   private stockItems$ = new BehaviorSubject<StockItemEntity[]>(MOCK_STOCK_ITEMS);
   private movements$ = new BehaviorSubject<StockMovementEntity[]>(MOCK_MOVEMENTS);
+  private poItems$ = new BehaviorSubject<POEntity[]>(MOCK_PO_LIST);
 
-  private routeState$ = new BehaviorSubject<{ id: string | null; edit: boolean }>({
+  private routeState$ = new BehaviorSubject<{ id: string | null; edit: boolean; createPO: boolean }>({
     id: null,
     edit: false,
+    createPO: false,
   });
 
   private editModel$ = new BehaviorSubject<StockAdjustDraft | null>(null);
+  private importDraft$ = new BehaviorSubject<PurchaseOrderDraft | null>(null);
+  private importStep$ = new BehaviorSubject<1 | 2>(1);
   private originalEditSnapshot: string | null = null;
   private pendingDiscardAction: (() => void) | null = null;
 
@@ -184,18 +259,32 @@ export class ManagementWarehouse implements OnInit {
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((pm) => {
       const id = pm.get('id');
       const edit = pm.get('edit') === 'true';
+      const createPO = pm.get('action') === 'create_po';
 
       const prev = this.routeState$.value;
-      const next = { id, edit };
+      const next = { id, edit, createPO };
 
-      if (prev.id === next.id && prev.edit === next.edit) return;
+      if (prev.id === next.id && prev.edit === next.edit && prev.createPO === next.createPO) return;
 
       this.routeState$.next(next);
 
-      if (id && edit) {
+      if (createPO) {
+        this.clearEditState();
+        if (!this.importDraft$.value) {
+          this.importDraft$.next({
+             brand_id: '',
+             note: '',
+             tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 },
+             items: []
+          });
+          this.importStep$.next(1);
+        }
+      } else if (id && edit) {
         this.seedAdjustDraft();
+        this.importDraft$.next(null);
       } else {
         this.clearEditState();
+        this.importDraft$.next(null);
       }
     });
   }
@@ -203,6 +292,8 @@ export class ManagementWarehouse implements OnInit {
   vm$ = combineLatest([
     this.routeState$,
     this.editModel$,
+    this.importDraft$,
+    this.importStep$,
     this.warehouses$,
     this.variants$,
     this.stockItems$,
@@ -214,11 +305,14 @@ export class ManagementWarehouse implements OnInit {
     this.pageSize$,
     this.sortKeyStock$,
     this.sortDirStock$,
+    this.poItems$,
   ]).pipe(
     map(
       ([
         routeState,
         editModel,
+        importDraft,
+        importStep,
         warehouses,
         variants,
         stockItems,
@@ -230,9 +324,10 @@ export class ManagementWarehouse implements OnInit {
         pageSize,
         sortKeyStock,
         sortDirStock,
+        poItems,
       ]) => {
-        const { id: selectedId, edit } = routeState;
-        const mode: Mode = !selectedId ? 'list' : edit ? 'edit' : 'detail';
+        const { id: selectedId, edit, createPO } = routeState;
+        const mode: Mode = createPO ? 'create_po' : !selectedId ? 'list' : edit ? 'edit' : 'detail';
 
         const variantMap = new Map<string, ProductVariantMin>(
           variants.map((v) => [v.product_variant_id, v]),
@@ -352,6 +447,42 @@ export class ManagementWarehouse implements OnInit {
           }
         }
 
+        let importPreviewList = [];
+        let importTotalCost = 0;
+        if (createPO && importDraft) {
+          for (const item of importDraft.items) {
+            const w = whMap.get(item.warehouse_id);
+            const v = variantMap.get(item.product_variant_id);
+            const currentStock = stockItems.find(s => s.warehouse_id === item.warehouse_id && s.product_variant_id === item.product_variant_id)?.quantity_on_hand || 0;
+            const cost = item.quantity * item.unit_cost;
+            importTotalCost += cost;
+            importPreviewList.push({
+              id: item.id,
+              sku: v ? v.sku || item.product_variant_id : item.product_variant_id,
+              warehouseName: w ? w.name : item.warehouse_id,
+              currentStock: currentStock,
+              expectedStock: currentStock + item.quantity,
+              quantity: item.quantity,
+              unit_cost: item.unit_cost,
+              subtotal: cost
+            });
+          }
+        }
+
+        // Build PO list VM
+        const poList: POListItemVM[] = poItems
+          .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
+          .map(po => ({
+            po_id: po.po_id,
+            po_number: po.po_number,
+            brand_name: po.brand_name,
+            note: po.note,
+            status: po.status,
+            itemCount: po.item_count,
+            totalCostText: money(po.total_cost),
+            createdAtText: fmtDate(po.created_at),
+          }));
+
         const vm: VM = {
           mode,
           summary,
@@ -368,7 +499,17 @@ export class ManagementWarehouse implements OnInit {
           selectedId,
           detail: detailVM,
           editModel,
-          currentPanel: !selectedId ? null : edit ? 'adjust' : 'detail',
+          importDraft,
+          importStep,
+          importPreviewList,
+          importTotalCost,
+          brands: MOCK_BRANDS,
+          currentPanel: createPO ? 'import' : !selectedId ? null : edit ? 'adjust' : 'detail',
+          poList,
+          transferList: movements
+            .filter(m => m.reference_type === 'manual')
+            .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
+            .map(m => movementToVM(m)),
         };
 
         return vm;
@@ -442,6 +583,27 @@ export class ManagementWarehouse implements OnInit {
     this.syncRoute(stockItemId, 'edit');
   }
 
+  openCreatePO() {
+    this.importStep$.next(1);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { action: 'create_po' },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  nextImportStep() {
+    this.importStep$.next(2);
+  }
+
+  prevImportStep() {
+    this.importStep$.next(1);
+  }
+
+  cancelCreatePO() {
+    this.goList();
+  }
+
   goList() {
     this.attemptLeave(() => {
       this.syncRoute(null, 'list');
@@ -475,10 +637,10 @@ export class ManagementWarehouse implements OnInit {
     });
   }
 
-  updateAdjustType(v: AdjustType) {
+  updateAdjustTarget(warehouseId: string) {
     const cur = this.editModel$.value;
     if (!cur) return;
-    const next = { ...cur, adjustType: v };
+    const next = { ...cur, targetWarehouseId: warehouseId };
     this.editModel$.next(next);
   }
 
@@ -544,44 +706,173 @@ export class ManagementWarehouse implements OnInit {
     }
 
     const qtyAbs = Math.max(0, Number(em.qtyAbs ?? 0));
-    if (!qtyAbs && em.adjustType !== 'ADJUST') {
+    if (!qtyAbs || !em.targetWarehouseId) {
       this.saveModalOpen = false;
       return;
     }
 
-    let delta = 0;
-    if (em.adjustType === 'IN') delta = qtyAbs;
-    else delta = Number(em.qtyAbs);
-
-    const updatedStock: StockItemEntity = {
+    const updatedSourceStock: StockItemEntity = {
       ...stock,
-      quantity_on_hand: Math.max(0, stock.quantity_on_hand + delta),
+      quantity_on_hand: Math.max(0, stock.quantity_on_hand - qtyAbs),
       updated_at: new Date().toISOString(),
     };
 
-    this.stockItems$.next(
-      this.stockItems$.value.map((s) =>
-        s.stock_item_id === updatedStock.stock_item_id ? updatedStock : s,
-      ),
+    // Find or create target stock
+    let allStocks = [...this.stockItems$.value];
+    let targetStock = allStocks.find(
+      (x) => x.product_variant_id === stock.product_variant_id && x.warehouse_id === em.targetWarehouseId
     );
 
-    const mv: StockMovementEntity = {
+    if (targetStock) {
+      const updatedTargetStock: StockItemEntity = {
+        ...targetStock,
+        quantity_on_hand: targetStock.quantity_on_hand + qtyAbs,
+        updated_at: new Date().toISOString(),
+      };
+      allStocks = allStocks.map(s => s.stock_item_id === updatedTargetStock.stock_item_id ? updatedTargetStock : s);
+    } else {
+      const newTargetStock: StockItemEntity = {
+        stock_item_id: `si_${id16()}`,
+        product_variant_id: stock.product_variant_id,
+        warehouse_id: em.targetWarehouseId,
+        quantity_on_hand: qtyAbs,
+        quantity_reserved: 0,
+        reorder_point: 10,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      allStocks.push(newTargetStock);
+    }
+
+    // Update source
+    allStocks = allStocks.map(s => s.stock_item_id === updatedSourceStock.stock_item_id ? updatedSourceStock : s);
+
+    this.stockItems$.next(allStocks);
+
+    const refId = `TRF-${id16().slice(0, 6)}`;
+    
+    // Log OUT for source
+    const mvOut: StockMovementEntity = {
       movement_id: `mv_${id16()}`,
       warehouse_id: stock.warehouse_id,
       product_variant_id: stock.product_variant_id,
       reference_type: 'manual',
-      reference_id: `ADJ-${id16().slice(0, 6)}`,
-      quantity_changed: delta,
+      reference_id: refId,
+      quantity_changed: -qtyAbs,
       reason: String(em.reason ?? ''),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
 
-    this.movements$.next([mv, ...this.movements$.value]);
+    // Log IN for target
+    const mvIn: StockMovementEntity = {
+      movement_id: `mv_${id16()}`,
+      warehouse_id: em.targetWarehouseId,
+      product_variant_id: stock.product_variant_id,
+      reference_type: 'manual',
+      reference_id: refId,
+      quantity_changed: qtyAbs,
+      reason: String(em.reason ?? ''),
+      created_at: new Date(new Date().getTime() + 100).toISOString(),
+      updated_at: new Date(new Date().getTime() + 100).toISOString(),
+    };
+
+    this.movements$.next([mvIn, mvOut, ...this.movements$.value]);
 
     this.saveModalOpen = false;
     this.clearEditState();
     this.syncRoute(selected, 'detail');
+  }
+
+  executePO() {
+    const draft = this.importDraft$.value;
+    if (!draft || draft.items.length === 0) {
+      return;
+    }
+
+    let stockItems = [...this.stockItems$.value];
+    let newMovements: StockMovementEntity[] = [];
+    const poRefId = `PO-${id16().slice(0, 6).toUpperCase()}`;
+
+    // 1. Process items
+    for (const item of draft.items) {
+      let stock = stockItems.find(s => s.warehouse_id === item.warehouse_id && s.product_variant_id === item.product_variant_id);
+      
+      let targetStockId = '';
+      if (!stock) {
+        targetStockId = `si_${id16()}`;
+        stock = {
+          stock_item_id: targetStockId,
+          product_variant_id: item.product_variant_id,
+          warehouse_id: item.warehouse_id,
+          quantity_on_hand: item.quantity,
+          quantity_reserved: 0,
+          reorder_point: DEFAULT_REORDER_POINT,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        stockItems.unshift(stock);
+      } else {
+        targetStockId = stock.stock_item_id;
+        const updatedStock: StockItemEntity = {
+          ...stock,
+          quantity_on_hand: stock.quantity_on_hand + item.quantity,
+          updated_at: new Date().toISOString()
+        };
+        stockItems = stockItems.map(s => s.stock_item_id === targetStockId ? updatedStock : s);
+      }
+
+      // 2. Add Stock Movement per item
+      const mv: StockMovementEntity = {
+        movement_id: `mv_${id16()}`,
+        warehouse_id: item.warehouse_id,
+        product_variant_id: item.product_variant_id,
+        reference_type: 'purchase_order',
+        reference_id: poRefId,
+        quantity_changed: item.quantity,
+        reason: draft.note || `Nhập hàng theo cấu trúc Đơn PO (Brand: ${draft.brand_id || 'N/A'})`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      newMovements.push(mv);
+    }
+
+    this.stockItems$.next(stockItems);
+    this.movements$.next([...newMovements, ...this.movements$.value]);
+
+    // 3. Clear draft and return to list
+    this.importDraft$.next(null);
+    this.goList();
+  }
+
+  addImportItem() {
+    const draft = this.importDraft$.value;
+    if (!draft) return;
+    const { warehouse_id, product_variant_id, quantity, unit_cost } = draft.tempItem;
+    if (!warehouse_id || !product_variant_id || quantity <= 0) return;
+    
+    const newItem: PurchaseOrderItemDraft = {
+      id: `it_${id16()}`,
+      product_variant_id,
+      warehouse_id,
+      quantity,
+      unit_cost
+    };
+    
+    this.importDraft$.next({
+      ...draft,
+      items: [newItem, ...draft.items],
+      tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 }
+    });
+  }
+
+  removeImportItem(id: string) {
+     const draft = this.importDraft$.value;
+     if (!draft) return;
+     this.importDraft$.next({
+       ...draft,
+       items: draft.items.filter(x => x.id !== id)
+     });
   }
 
   exportCsvStock() {
@@ -666,12 +957,58 @@ export class ManagementWarehouse implements OnInit {
     e.stopPropagation();
   }
 
+  // ===== PO HELPER METHODS =====
+  getPOIconClass(status: POStatus): string {
+    switch (status) {
+      case 'completed': return 'icon-ok';
+      case 'confirmed':
+      case 'receiving': return 'icon-blue';
+      case 'pending':   return 'icon-purple';
+      case 'cancelled': return 'icon-muted';
+      default: return 'icon-muted';
+    }
+  }
+
+  getPOIcon(status: POStatus): string {
+    switch (status) {
+      case 'completed': return 'bi-check-circle-fill';
+      case 'confirmed': return 'bi-clipboard-check';
+      case 'receiving': return 'bi-truck';
+      case 'pending':   return 'bi-hourglass-split';
+      case 'cancelled': return 'bi-x-circle';
+      default: return 'bi-clipboard';
+    }
+  }
+
+  getPOPillClass(status: POStatus): string {
+    switch (status) {
+      case 'completed': return 'pill-ok';
+      case 'confirmed':
+      case 'receiving': return 'pill-blue';
+      case 'pending':   return 'pill-purple';
+      case 'cancelled': return 'pill-cancelled';
+      default: return '';
+    }
+  }
+
+  getPOStatusLabel(status: POStatus): string {
+    switch (status) {
+      case 'completed': return 'Hoàn tất';
+      case 'confirmed': return 'Đã xác nhận';
+      case 'receiving': return 'Đang nhận';
+      case 'pending':   return 'Chờ duyệt';
+      case 'cancelled': return 'Đã hủy';
+      default: return status;
+    }
+  }
+
   private syncRoute(id: string | null, mode: Mode) {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
         id: id ?? null,
         edit: id && mode === 'edit' ? 'true' : null,
+        action: mode === 'create_po' ? 'create_po' : null,
       },
       queryParamsHandling: 'merge',
     });
@@ -689,7 +1026,7 @@ export class ManagementWarehouse implements OnInit {
 
   private seedAdjustDraft() {
     const draft: StockAdjustDraft = {
-      adjustType: 'IN',
+      targetWarehouseId: '',
       qtyAbs: 1,
       reason: '',
     };
@@ -857,5 +1194,63 @@ const MOCK_MOVEMENTS: StockMovementEntity[] = [
     reason: 'Xuất theo đơn',
     created_at: new Date(now - 1000 * 60 * 60 * 12).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 60 * 12).toISOString(),
+  },
+];
+
+const MOCK_PO_LIST: POEntity[] = [
+  {
+    po_id: 'po_001',
+    po_number: '#PO-0012',
+    brand_id: 'br_001',
+    brand_name: 'Nhà cung cấp Hòa Phát',
+    note: 'Lô nhập quý 1/2026',
+    status: 'completed',
+    item_count: 5,
+    total_cost: 48_000_000,
+    created_at: new Date(now - 1000 * 60 * 60 * 24 * 15).toISOString(),
+  },
+  {
+    po_id: 'po_002',
+    po_number: '#PO-0018',
+    brand_id: 'br_002',
+    brand_name: 'Xưởng Mộc Ý Tưởng',
+    note: 'Sofa bọc da cao cấp series',
+    status: 'receiving',
+    item_count: 3,
+    total_cost: 27_500_000,
+    created_at: new Date(now - 1000 * 60 * 60 * 24 * 7).toISOString(),
+  },
+  {
+    po_id: 'po_003',
+    po_number: '#PO-0021',
+    brand_id: 'br_003',
+    brand_name: 'Nhập khẩu Q-Home',
+    note: 'PO cấp bù Low-stock SKU-002, SKU-004',
+    status: 'confirmed',
+    item_count: 2,
+    total_cost: 15_600_000,
+    created_at: new Date(now - 1000 * 60 * 60 * 24 * 3).toISOString(),
+  },
+  {
+    po_id: 'po_004',
+    po_number: '#PO-0023',
+    brand_id: 'br_001',
+    brand_name: 'Nhà cung cấp Hòa Phát',
+    note: 'Bàn ăn gỗ sồi mẫu mới',
+    status: 'pending',
+    item_count: 4,
+    total_cost: 32_200_000,
+    created_at: new Date(now - 1000 * 60 * 60 * 8).toISOString(),
+  },
+  {
+    po_id: 'po_005',
+    po_number: '#PO-0009',
+    brand_id: 'br_002',
+    brand_name: 'Xưởng Mộc Ý Tưởng',
+    note: 'Đã hủy do nhà cung cấp không đủ hàng',
+    status: 'cancelled',
+    item_count: 1,
+    total_cost: 8_800_000,
+    created_at: new Date(now - 1000 * 60 * 60 * 24 * 20).toISOString(),
   },
 ];

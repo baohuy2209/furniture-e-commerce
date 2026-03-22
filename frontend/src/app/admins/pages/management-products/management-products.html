@@ -63,147 +63,179 @@
           </div>
         </div>
 
-        <!-- FILTER BAR -->
-        <div class="hb-panel-v2 mb-4">
-          <div class="panel-header">
-            <h5 class="m-0">BỘ LỌC TÌM KIẾM</h5>
-          </div>
-          <div class="panel-body">
-            <div class="row g-3">
-              <div class="col-12 col-md-4">
-                <label class="hb-filter-label">Từ khóa / Mã sản phẩm</label>
-                <div class="hb-search-input-wrapper">
-                  <i class="bi bi-search hb-search-icon"></i>
-                  <input
-                    class="form-control hb-search-input"
-                    placeholder="Tên, mã, thương hiệu, tag..."
-                    [(ngModel)]="localSearchTerm"
-                    (ngModelChange)="onSearchChange($event)"
-                  />
-                </div>
-              </div>
-              <div class="col-6 col-md-2">
-                <label class="hb-filter-label">Khu vực</label>
-                <select class="form-select hb-filter-select" [(ngModel)]="vm.query.room" (ngModelChange)="patchQuery({ room: $event })">
-                  <option value="">Tất cả khu vực</option>
-                  <option *ngFor="let r of vm.roomOptions" [value]="r">{{ r }}</option>
-                </select>
-              </div>
-              <div class="col-6 col-md-2">
-                <label class="hb-filter-label">Thương hiệu</label>
-                <select class="form-select hb-filter-select" [(ngModel)]="vm.query.brand" (ngModelChange)="patchQuery({ brand: $event })">
-                  <option value="">Tất cả thương hiệu</option>
-                  <option *ngFor="let b of vm.brandOptions" [value]="b">{{ b }}</option>
-                </select>
-              </div>
-              <div class="col-6 col-md-2">
-                <label class="hb-filter-label">Tình trạng kho</label>
-                <select class="form-select hb-filter-select" [(ngModel)]="vm.query.stock" (ngModelChange)="patchQuery({ stock: $event })">
-                  <option value="all">Tất cả</option>
-                  <option value="in">Còn hàng</option>
-                  <option value="out">Hết hàng</option>
-                  <option value="low">Sắp hết</option>
-                </select>
-              </div>
-              <div class="col-6 col-md-2">
-                <label class="hb-filter-label">Số lượng / trang</label>
-                <select class="form-select hb-filter-select" [(ngModel)]="vm.query.pageSize" (ngModelChange)="patchQuery({ pageSize: $event })">
-                  <option [ngValue]="10">10</option>
-                  <option [ngValue]="20">20</option>
-                  <option [ngValue]="50">50</option>
-                </select>
-              </div>
-              <div class="col-6 col-md-2">
-                <label class="hb-filter-label">Giá từ (₫)</label>
-                <input class="form-control hb-filter-select" type="number" placeholder="0"
-                  [ngModel]="vm.query.minPrice"
-                  (ngModelChange)="patchQuery({ minPrice: $event === '' ? null : $event })" />
-              </div>
-              <div class="col-6 col-md-2">
-                <label class="hb-filter-label">Giá đến (₫)</label>
-                <input class="form-control hb-filter-select" type="number" placeholder="∞"
-                  [ngModel]="vm.query.maxPrice"
-                  (ngModelChange)="patchQuery({ maxPrice: $event === '' ? null : $event })" />
-              </div>
-              <div class="col-12 col-md-2 d-flex align-items-end">
-                <button class="btn btn-hb-outline w-100" type="button" (click)="resetFilters()">
-                  <i class="bi bi-arrow-counterclockwise me-1"></i> Đặt lại
-                </button>
-              </div>
-              <div class="col-12 col-md-4" *ngIf="vm.query.stock === 'low'">
-                <label class="hb-filter-label">Ngưỡng thấp (số lượng)</label>
-                <input class="form-control hb-filter-select" type="number"
-                  [ngModel]="vm.query.lowStockThreshold"
-                  (ngModelChange)="patchQuery({ lowStockThreshold: $event })" />
-              </div>
+        <!-- FILTER BAR - single row -->
+        <div class="card hb-card hb-card-pad mb-3">
+          <div class="hb-filterbar">
+            <div class="hb-search-input-wrapper" style="flex: 2; min-width: 180px;">
+              <i class="bi bi-search hb-search-icon"></i>
+              <input class="form-control hb-search-input" placeholder="Tên, mã, thương hiệu, tag..."
+                [(ngModel)]="localSearchTerm" (ngModelChange)="onSearchChange($event)" />
             </div>
+
+            <select class="form-select" [(ngModel)]="vm.query.room" (ngModelChange)="patchQuery({ room: $event })">
+              <option value="">Tất cả khu vực</option>
+              <option *ngFor="let r of vm.roomOptions" [value]="r">{{ r }}</option>
+            </select>
+
+            <select class="form-select" [(ngModel)]="vm.query.brand" (ngModelChange)="patchQuery({ brand: $event })">
+              <option value="">Tất cả thương hiệu</option>
+              <option *ngFor="let b of vm.brandOptions" [value]="b">{{ b }}</option>
+            </select>
+
+            <select class="form-select" [(ngModel)]="vm.query.stock" (ngModelChange)="patchQuery({ stock: $event })">
+              <option value="all">Tình trạng kho</option>
+              <option value="in">Còn hàng</option>
+              <option value="out">Hết hàng</option>
+              <option value="low">Sắp hết</option>
+            </select>
+
+            <select class="form-select" style="max-width: 110px;" [(ngModel)]="vm.query.pageSize"
+              (ngModelChange)="patchQuery({ pageSize: $event })">
+              <option [ngValue]="10">10 / trang</option>
+              <option [ngValue]="20">20 / trang</option>
+              <option [ngValue]="50">50 / trang</option>
+            </select>
+
+            <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
+              Đặt lại
+            </button>
           </div>
         </div>
 
-        <!-- PRODUCT LIST -->
-        <div class="hb-panel-v2">
-          <div class="panel-header">
-            <h5 class="m-0">DANH SÁCH SẢN PHẨM</h5>
-            <span class="hb-badge-count">{{ vm.total }} sản phẩm</span>
-          </div>
-          <div class="panel-body p-0">
-            <div class="hb-list-item-v2" *ngFor="let r of vm.rows" (click)="openDetail(r)" style="cursor:pointer;">
-              <!-- Product thumbnail -->
-              <div class="item-img" *ngIf="r.imageCover">
-                <img [src]="r.imageCover" alt="cover" />
+        <!-- PRODUCT TABLE -->
+        <div class="card hb-card hb-table-card">
+          <div class="hb-table-wrap">
+            <div class="hb-table">
+              <!-- Table Header -->
+              <div class="hb-table-head hb-grid-products">
+                <div class="hb-th"><span>STT</span></div>
+                <div class="hb-th"><span>Ảnh</span></div>
+
+                <div class="hb-th" (click)="toggleSort('name')">
+                  <div class="th-content">
+                    <span>Tên sản phẩm</span>
+                    <i class="fas" [ngClass]="sortIcon('name')"></i>
+                  </div>
+                </div>
+
+                <div class="hb-th" (click)="toggleSort('brand')">
+                  <div class="th-content">
+                    <span>Thương hiệu</span>
+                    <i class="fas" [ngClass]="sortIcon('brand')"></i>
+                  </div>
+                </div>
+
+                <div class="hb-th"><span>Phòng</span></div>
+
+                <div class="hb-th text-end" (click)="toggleSort('priceMin')">
+                  <div class="th-content justify-content-end">
+                    <span>Giá thấp nhất</span>
+                    <i class="fas" [ngClass]="sortIcon('priceMin')"></i>
+                  </div>
+                </div>
+
+                <div class="hb-th text-center" (click)="toggleSort('inventoryTotal')">
+                  <div class="th-content justify-content-center">
+                    <span>Kho</span>
+                    <i class="fas" [ngClass]="sortIcon('inventoryTotal')"></i>
+                  </div>
+                </div>
+
+                <div class="hb-th text-center" (click)="toggleSort('ratingAvg')">
+                  <div class="th-content justify-content-center">
+                    <span>Rating</span>
+                    <i class="fas" [ngClass]="sortIcon('ratingAvg')"></i>
+                  </div>
+                </div>
+
+                <div class="hb-th text-center"><span>Sửa</span></div>
+                <div class="hb-th text-center"><span>Xóa</span></div>
               </div>
-              <div class="item-img" *ngIf="!r.imageCover"
-                   style="display:flex;align-items:center;justify-content:center;background:rgba(129,140,248,0.08);border:1.5px solid rgba(129,140,248,0.2);border-radius:12px;">
-                <i class="bi bi-box-seam" style="font-size:20px;color:#818cf8;"></i>
-              </div>
-              <!-- Name & Meta -->
-              <div class="item-info">
-                <span class="name">{{ r.name }}</span>
-                <span class="sub" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:2px;">
+
+
+              <!-- Table Rows -->
+              <div class="hb-table-row hb-grid-products" *ngFor="let r of vm.rows; let i = index"
+                (click)="openDetail(r)" style="cursor: pointer;" title="Xem chi tiết">
+                <div class="hb-td hb-td-stt text-center">{{ (vm.page - 1) * vm.query.pageSize + i + 1 }}</div>
+
+                <div class="hb-td">
+                  <div *ngIf="r.imageCover"
+                    style="width:44px;height:44px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);">
+                    <img [src]="r.imageCover" alt="cover" style="width:100%;height:100%;object-fit:cover;" />
+                  </div>
+                  <div *ngIf="!r.imageCover"
+                    style="width:44px;height:44px;border-radius:8px;background:rgba(129,140,248,0.08);display:flex;align-items:center;justify-content:center;">
+                    <i class="bi bi-box-seam" style="color:#818cf8;font-size:18px;"></i>
+                  </div>
+                </div>
+
+                <div class="hb-td">
+                  <div class="hb-text-truncate" style="max-width: 220px;">
+                    <div style="font-weight:600;color:#e2e8f0;">{{ r.name }}</div>
+                    <div style="font-size:11px;color:#64748b;">ID: {{ r.id }}</div>
+                  </div>
+                </div>
+
+                <div class="hb-td">
                   <span class="hb-brand-pill">{{ r.brand }}</span>
-                  <span style="color:#64748b;">{{ r.roomLabel }}</span>
-                  <span style="color:#475569;font-size:10px;">ID: {{ r.id }}</span>
-                </span>
-              </div>
-              <!-- Stats -->
-              <div class="d-flex flex-column align-items-end gap-1" style="min-width:160px;">
-                <span style="font-size:15px;font-weight:800;color:#818cf8;">
+                </div>
+
+                <div class="hb-td" style="color:#94a3b8;font-size:13px;">{{ r.roomLabel }}</div>
+
+                <div class="hb-td text-end" style="font-weight:800;color:#818cf8;font-size:14px;">
                   {{ r.priceMin != null ? (r.priceMin | number) + ' ₫' : '—' }}
-                </span>
-                <div class="d-flex gap-2 align-items-center">
-                  <span class="hb-stock-badge"
-                    [class.stock-ok]="r.inventoryTotal > vm.query.lowStockThreshold"
+                </div>
+
+                <div class="hb-td hb-td-center">
+                  <span class="hb-stock-badge" [class.stock-ok]="r.inventoryTotal > vm.query.lowStockThreshold"
                     [class.stock-low]="r.inventoryTotal > 0 && r.inventoryTotal <= vm.query.lowStockThreshold"
                     [class.stock-out]="r.inventoryTotal <= 0">
-                    Kho: {{ r.inventoryTotal }}
-                  </span>
-                  <span style="font-size:12px;color:#64748b;">
-                    <i class="bi bi-star-fill" style="color:#fbbf24;font-size:10px;"></i>
-                    {{ r.ratingAvg ?? '—' }}
+                    {{ r.inventoryTotal }}
                   </span>
                 </div>
+
+                <div class="hb-td hb-td-center" style="color:#94a3b8;font-size:13px;">
+                  <i class="bi bi-star-fill" style="color:#fbbf24;font-size:10px;margin-right:3px;"></i>{{ r.ratingAvg
+                  ?? '—' }}
+                </div>
+
+                <div class="hb-td hb-td-center">
+                  <button class="hb-icon-btn" type="button" (click)="stopEvent($event); openEdit(r.id)"
+                    title="Chỉnh sửa">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </div>
+
+                <div class="hb-td hb-td-center">
+                  <button class="hb-icon-btn danger" type="button" (click)="softDelete(r.id); stopEvent($event)"
+                    title="Xóa">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
               </div>
-              <!-- Actions -->
-              <div class="d-flex gap-2" (click)="stopEvent($event)">
-                <button class="hb-icon-btn" type="button" (click)="stopEvent($event); openEdit(r.id)" title="Chỉnh sửa">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-                <button class="hb-icon-btn danger" type="button" (click)="softDelete(r.id); stopEvent($event)" title="Xóa">
-                  <i class="bi bi-trash3"></i>
-                </button>
+
+              <!-- Empty state -->
+              <div class="hb-empty" *ngIf="vm.rows.length === 0">
+                <i class="bi bi-box-seam fs-1 d-block mb-3 opacity-25"></i>
+                Không tìm thấy sản phẩm nào phù hợp.
               </div>
             </div>
           </div>
+
           <!-- Pagination -->
           <div class="hb-pagination">
-            <button class="hb-page-btn" type="button" [disabled]="vm.page <= 1" (click)="patchQuery({ page: vm.page - 1 })">‹</button>
-            <div class="hb-page-info">Trang <b>{{ vm.page }}</b> / <span>{{ vm.totalPages }}</span></div>
-            <button class="hb-page-btn" type="button" [disabled]="vm.page >= vm.totalPages" (click)="patchQuery({ page: vm.page + 1 })">›</button>
+            <button class="hb-page-btn" type="button" [disabled]="vm.page <= 1"
+              (click)="patchQuery({ page: vm.page - 1 })">‹</button>
+            <div class="hb-page-info">Trang <b>{{ vm.page }}</b> / <b>{{ vm.totalPages }}</b></div>
+            <button class="hb-page-btn" type="button" [disabled]="vm.page >= vm.totalPages"
+              (click)="patchQuery({ page: vm.page + 1 })">›</button>
           </div>
         </div>
 
       </ng-container>
     </ng-container>
+
+
 
     <!-- ===================== DETAIL / EDIT ===================== -->
     <ng-container *ngIf="mode !== 'list'">
@@ -219,7 +251,8 @@
                   <div class="d-flex align-items-center gap-3 flex-wrap">
                     <h4 style="font-weight: 800; color: #ffffff; margin: 0;">{{ d.product.product_name }}</h4>
                     <span class="hb-pill" style="font-size: 11px;">ID: {{ d.product.product_id }}</span>
-                    <span class="hb-pill" [ngClass]="headerStatusClass(d.inventoryTotal)">{{ headerStatusLabel(d.inventoryTotal) }}</span>
+                    <span class="hb-pill" [ngClass]="headerStatusClass(d.inventoryTotal)">{{
+                      headerStatusLabel(d.inventoryTotal) }}</span>
                     <span class="hb-pill" *ngIf="d.product.is_assembly">🔧 Lắp ráp</span>
                   </div>
                   <div class="d-flex gap-2" *ngIf="mode === 'detail'">
@@ -252,17 +285,22 @@
                     <div class="col-12 col-lg-6">
                       <ng-container *ngIf="mode === 'detail'">
                         <div class="hb-form-section-title">Thông tin cơ bản</div>
-                        <div class="hb-detail-kv"><span class="k">Thương hiệu</span><span class="v">{{ d.product.brand_name }}</span></div>
-                        <div class="hb-detail-kv"><span class="k">Giảm giá</span><span class="v text-success">{{ d.product.discount_percent }}%</span></div>
-                        <div class="hb-detail-kv"><span class="k">Bảo hành</span><span class="v">{{ d.product.warranty }} tháng</span></div>
-                        <div class="hb-detail-kv"><span class="k">Lắp ráp</span><span class="v">{{ d.product.is_assembly ? 'Có' : 'Không' }}</span></div>
+                        <div class="hb-detail-kv"><span class="k">Thương hiệu</span><span class="v">{{
+                            d.product.brand_name }}</span></div>
+                        <div class="hb-detail-kv"><span class="k">Giảm giá</span><span class="v text-success">{{
+                            d.product.discount_percent }}%</span></div>
+                        <div class="hb-detail-kv"><span class="k">Bảo hành</span><span class="v">{{ d.product.warranty
+                            }} tháng</span></div>
+                        <div class="hb-detail-kv"><span class="k">Lắp ráp</span><span class="v">{{ d.product.is_assembly
+                            ? 'Có' : 'Không' }}</span></div>
                         <div class="hb-detail-kv align-items-start"><span class="k">Tags</span>
                           <span class="v d-flex flex-wrap gap-1">
                             <span class="hb-tag" *ngFor="let t of d.product.tags">{{ t }}</span>
                           </span>
                         </div>
                         <div class="hb-form-section-title mt-4">Mô tả sản phẩm</div>
-                        <p style="color: #94a3b8; line-height: 1.7;" *ngIf="d.product.description">{{ d.product.description }}</p>
+                        <p style="color: #94a3b8; line-height: 1.7;" *ngIf="d.product.description">{{
+                          d.product.description }}</p>
                         <p style="color: #475569;" *ngIf="!d.product.description">Chưa có mô tả.</p>
                       </ng-container>
 
@@ -270,35 +308,42 @@
                         <div class="hb-form-section-title">Thông tin cơ bản</div>
                         <div class="mb-3">
                           <label class="hb-form-label">Tên sản phẩm</label>
-                          <input class="form-control hb-form-input" [(ngModel)]="editForm.product_name" (ngModelChange)="onEditChange()" />
+                          <input class="form-control hb-form-input" [(ngModel)]="editForm.product_name"
+                            (ngModelChange)="onEditChange()" />
                         </div>
                         <div class="row g-3">
                           <div class="col-6">
                             <label class="hb-form-label">Thương hiệu</label>
-                            <input class="form-control hb-form-input" [(ngModel)]="editForm.brand_name" (ngModelChange)="onEditChange()" />
+                            <input class="form-control hb-form-input" [(ngModel)]="editForm.brand_name"
+                              (ngModelChange)="onEditChange()" />
                           </div>
                           <div class="col-6">
                             <label class="hb-form-label">Bảo hành (tháng)</label>
-                            <input class="form-control hb-form-input" type="number" [(ngModel)]="editForm.warranty" (ngModelChange)="onEditChange()" />
+                            <input class="form-control hb-form-input" type="number" [(ngModel)]="editForm.warranty"
+                              (ngModelChange)="onEditChange()" />
                           </div>
                           <div class="col-6">
                             <label class="hb-form-label">Giảm giá (%)</label>
-                            <input class="form-control hb-form-input" type="number" [(ngModel)]="editForm.discount_percent" (ngModelChange)="onEditChange()" />
+                            <input class="form-control hb-form-input" type="number"
+                              [(ngModel)]="editForm.discount_percent" (ngModelChange)="onEditChange()" />
                           </div>
                           <div class="col-6 d-flex align-items-end pb-2">
                             <div class="form-check">
-                              <input class="form-check-input" type="checkbox" [(ngModel)]="editForm.is_assembly" (ngModelChange)="onEditChange()" id="assemblyCheck" />
+                              <input class="form-check-input" type="checkbox" [(ngModel)]="editForm.is_assembly"
+                                (ngModelChange)="onEditChange()" id="assemblyCheck" />
                               <label class="form-check-label hb-form-label" for="assemblyCheck">Cần lắp ráp</label>
                             </div>
                           </div>
                         </div>
                         <div class="mt-3">
                           <label class="hb-form-label">Tags (phân cách bằng dấu phẩy)</label>
-                          <input class="form-control hb-form-input" [(ngModel)]="editForm.tagsText" (ngModelChange)="onEditChange()" placeholder="sofa, phòng khách, modern..." />
+                          <input class="form-control hb-form-input" [(ngModel)]="editForm.tagsText"
+                            (ngModelChange)="onEditChange()" placeholder="sofa, phòng khách, modern..." />
                         </div>
                         <div class="mt-3">
                           <label class="hb-form-label">Mô tả</label>
-                          <textarea class="form-control hb-form-input" rows="5" [(ngModel)]="editForm.description" (ngModelChange)="onEditChange()"></textarea>
+                          <textarea class="form-control hb-form-input" rows="5" [(ngModel)]="editForm.description"
+                            (ngModelChange)="onEditChange()"></textarea>
                         </div>
                         <div class="hb-unsaved-hint mt-2" *ngIf="isDirty">
                           <i class="bi bi-exclamation-circle me-1"></i> Bạn có thay đổi chưa lưu
@@ -312,7 +357,8 @@
                         <div class="hb-form-section-title mb-0">Hình ảnh</div>
                         <label class="btn btn-sm btn-hb-outline mb-0" *ngIf="mode === 'edit'">
                           <i class="bi bi-upload me-1"></i> Upload
-                          <input type="file" class="d-none" multiple accept="image/*" (change)="onUploadImages($event)" />
+                          <input type="file" class="d-none" multiple accept="image/*"
+                            (change)="onUploadImages($event)" />
                         </label>
                       </div>
                       <div class="hb-gallery">
@@ -329,7 +375,8 @@
                             </button>
                           </div>
                         </ng-container>
-                        <div class="hb-gitem hb-gitem-empty" *ngIf="(mode === 'detail' && d.images.length === 0) || (mode === 'edit' && editImages.length === 0)">
+                        <div class="hb-gitem hb-gitem-empty"
+                          *ngIf="(mode === 'detail' && d.images.length === 0) || (mode === 'edit' && editImages.length === 0)">
                           <i class="bi bi-image" style="font-size: 24px; color: #475569;"></i>
                           <span style="font-size: 11px; color: #475569; margin-top: 6px;">Chưa có ảnh</span>
                         </div>
@@ -340,48 +387,217 @@
 
                 <!-- VARIANTS TAB -->
                 <div *ngIf="detailTab === 'variants'">
-                  <div class="hb-form-section-title">Giá & Tồn kho theo Biến thể</div>
-                  <div class="table-responsive mt-3">
-                    <table class="table hb-table-v2 mb-0">
-                      <thead>
-                        <tr>
-                          <th>Biến thể ID</th>
-                          <th class="text-end">Giá (₫)</th>
-                          <th class="text-end">Tồn kho</th>
-                          <th class="text-end">Đã bán</th>
-                          <th class="text-end">Rating</th>
-                          <th>Giao hàng</th>
-                        </tr>
-                      </thead>
-                      <tbody *ngIf="mode === 'detail'">
-                        <tr *ngFor="let v of d.variants">
-                          <td class="text-muted" style="font-size: 12px;">{{ v.product_varant_id }}</td>
-                          <td class="text-end fw-bold" style="color: #818cf8;">{{ v.price | number }}</td>
-                          <td class="text-end">{{ v.num_inventory }}</td>
-                          <td class="text-end text-muted">{{ v.num_selled }}</td>
-                          <td class="text-end"><i class="bi bi-star-fill text-warning me-1" style="font-size:11px;"></i>{{ v.rating }}</td>
-                          <td style="color: #94a3b8;">{{ v.expected_delivery }}</td>
-                        </tr>
-                      </tbody>
-                      <tbody *ngIf="mode === 'edit'">
-                        <tr *ngFor="let v of editVariants">
-                          <td class="text-muted" style="font-size: 12px;">{{ v.product_varant_id }}</td>
-                          <td class="text-end">
-                            <input class="form-control form-control-sm hb-form-input text-end" type="number" [(ngModel)]="v.price" (ngModelChange)="onVariantChange()" />
-                          </td>
-                          <td class="text-end">
-                            <input class="form-control form-control-sm hb-form-input text-end" type="number" [(ngModel)]="v.num_inventory" (ngModelChange)="onVariantChange()" />
-                          </td>
-                          <td class="text-end text-muted">{{ v.num_selled }}</td>
-                          <td class="text-end text-muted">{{ v.rating }}</td>
-                          <td>
-                            <input class="form-control form-control-sm hb-form-input" [(ngModel)]="v.expected_delivery" (ngModelChange)="onVariantChange()" />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                  <!-- DETAIL MODE: read-only table -->
+                  <ng-container *ngIf="mode === 'detail'">
+                    <div class="hb-form-section-title">Giá &amp; Tồn kho theo Biến thể</div>
+                    <div class="table-responsive mt-3">
+                      <table class="table hb-table-v2 mb-0">
+                        <thead>
+                          <tr>
+                            <th>Biến thể ID</th>
+                            <th class="text-end">Giá (₫)</th>
+                            <th class="text-end">Tồn kho</th>
+                            <th class="text-end">Đã bán</th>
+                            <th class="text-end">Rating</th>
+                            <th>Giao hàng</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let v of d.variants">
+                            <td class="text-muted" style="font-size: 12px;">{{ v.product_varant_id }}</td>
+                            <td class="text-end fw-bold" style="color: #818cf8;">{{ v.price | number }}</td>
+                            <td class="text-end">{{ v.num_inventory }}</td>
+                            <td class="text-end text-muted">{{ v.num_selled }}</td>
+                            <td class="text-end"><i class="bi bi-star-fill text-warning me-1"
+                                style="font-size:11px;"></i>{{ v.rating }}</td>
+                            <td style="color: #94a3b8;">{{ v.expected_delivery }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-container>
+
+                  <!-- EDIT MODE: accordion cards -->
+                  <ng-container *ngIf="mode === 'edit'">
+                    <div class="hb-form-section-title">
+                      <i class="bi bi-grid-3x3-gap me-2"></i>Chỉnh sửa Biến thể sản phẩm
+                      <span class="ms-2" style="font-weight:400;color:#64748b;font-size:12px;">({{ editVariants.length
+                        }} biến thể)</span>
+                    </div>
+
+                    <div class="hb-variant-list mt-3">
+                      <div class="hb-variant-card" *ngFor="let v of editVariants; let i = index"
+                        [class.is-default]="v.is_default" [class.is-open]="isVariantExpanded(v.product_varant_id)">
+                        <!-- ACCORDION HEADER (always visible) -->
+                        <div class="hb-variant-header" (click)="toggleVariantExpand(v.product_varant_id)">
+                          <div class="hb-variant-chevron">
+                            <i class="bi" [class.bi-chevron-right]="!isVariantExpanded(v.product_varant_id)"
+                              [class.bi-chevron-down]="isVariantExpanded(v.product_varant_id)"></i>
+                          </div>
+                          <div class="hb-variant-header-info">
+                            <span class="hb-variant-label">{{ variantPreviewLabel(v) }}</span>
+                            <span class="hb-variant-id">{{ v.product_varant_id }}</span>
+                          </div>
+                          <div class="hb-variant-header-stats">
+                            <span style="color:#818cf8;font-weight:700;font-size:13px;">{{ v.price | number }}₫</span>
+                            <span class="hb-stock-badge" [class.stock-ok]="v.num_inventory > 5"
+                              [class.stock-low]="v.num_inventory > 0 && v.num_inventory <= 5"
+                              [class.stock-out]="v.num_inventory <= 0" style="font-size:11px;">
+                              Kho: {{ v.num_inventory }}
+                            </span>
+                            <span class="hb-default-badge" *ngIf="v.is_default"><i class="bi bi-star-fill me-1"></i>Mặc
+                              định</span>
+                          </div>
+                        </div>
+
+                        <!-- ACCORDION BODY (expanded) -->
+                        <div class="hb-variant-body" *ngIf="isVariantExpanded(v.product_varant_id)">
+
+                          <!-- ROW 1: Base info -->
+                          <div class="hb-variant-section">
+                            <div class="hb-variant-section-title">
+                              <i class="bi bi-info-circle me-1"></i> Thông tin cơ bản
+                            </div>
+                            <div class="row g-3">
+                              <div class="col-6 col-md-3">
+                                <label class="hb-form-label">GIÁ (₫) *</label>
+                                <input class="form-control hb-form-input" type="number" [(ngModel)]="v.price"
+                                  (ngModelChange)="onVariantChange()" />
+                              </div>
+                              <div class="col-6 col-md-3">
+                                <label class="hb-form-label">TỒN KHO *</label>
+                                <input class="form-control hb-form-input" type="number" [(ngModel)]="v.num_inventory"
+                                  (ngModelChange)="onVariantChange()" />
+                              </div>
+                              <div class="col-6 col-md-3">
+                                <label class="hb-form-label">TRỌNG LƯỢNG (g)</label>
+                                <input class="form-control hb-form-input" type="number" [(ngModel)]="v.weight"
+                                  (ngModelChange)="onVariantChange()" />
+                              </div>
+                              <div class="col-6 col-md-3">
+                                <label class="hb-form-label">GIAO HÀNG DỰ KIẾN</label>
+                                <input class="form-control hb-form-input" [(ngModel)]="v.expected_delivery"
+                                  (ngModelChange)="onVariantChange()" placeholder="VD: 6-7 weeks" />
+                              </div>
+                              <div class="col-12 col-md-6">
+                                <label class="hb-form-label">NHÀ THIẾT KẾ</label>
+                                <input class="form-control hb-form-input" [(ngModel)]="v.designed_by"
+                                  (ngModelChange)="onVariantChange()" placeholder="VD: Henrik Pedersen" />
+                              </div>
+                              <div class="col-12 col-md-6 d-flex align-items-end">
+                                <div>
+                                  <label class="hb-form-label d-block">MẶC ĐỊNH</label>
+                                  <button class="btn btn-sm" [class.btn-hb-accent]="!v.is_default"
+                                    [class.btn-hb-outline]="v.is_default" style="font-size:12px;" type="button"
+                                    (click)="setDefaultVariant(v)" [disabled]="v.is_default">
+                                    <i class="bi bi-star{{ v.is_default ? '-fill' : '' }} me-1"></i>
+                                    {{ v.is_default ? 'Đang là mặc định' : 'Đặt làm mặc định' }}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- ROW 2: Variant Images -->
+                          <div class="hb-variant-section">
+                            <div class="hb-variant-section-title d-flex align-items-center justify-content-between">
+                              <span><i class="bi bi-images me-1"></i> Hình ảnh cho biến thể</span>
+                              <label class="btn btn-sm btn-hb-outline mb-0" style="cursor: pointer;">
+                                <i class="bi bi-upload me-1"></i> Upload
+                                <input type="file" class="d-none" multiple accept="image/*"
+                                  (change)="onUploadVariantImages($event, v)" />
+                              </label>
+                            </div>
+                            <div class="hb-gallery mt-2">
+                              <div class="hb-gitem hb-gitem-variant" *ngFor="let im of v.images; let vi = index">
+                                <img [src]="im.url" alt="img" />
+                                <button class="hb-img-remove" type="button" (click)="removeVariantImage(v, vi)"><i
+                                    class="bi bi-x-lg"></i></button>
+                              </div>
+                              <div class="hb-gitem hb-gitem-empty" *ngIf="v.images.length === 0" style="height: 80px;">
+                                <span style="font-size: 11px; color: #475569;">Chưa có ảnh biến thể</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- ROW 3: Component Variants (customize) -->
+                          <div class="hb-variant-section">
+                            <div class="hb-variant-section-title d-flex align-items-center justify-content-between">
+                              <span><i class="bi bi-palette me-1"></i> Tùy chọn Customize</span>
+                              <button class="btn btn-sm btn-hb-outline" type="button"
+                                (click)="addComponentEntry(v); $event.stopPropagation()">
+                                <i class="bi bi-plus me-1"></i>Thêm tùy chọn
+                              </button>
+                            </div>
+                            <p class="hb-variant-hint" *ngIf="v.componentEntries.length === 0">
+                              Chưa có tùy chọn nào. Ấn "+ Thêm tùy chọn" để thêm (VD: Màu sắc, Chất liệu, Hướng...).
+                            </p>
+                            <div class="hb-kv-row" *ngFor="let entry of v.componentEntries; let ei = index">
+                              <div class="hb-kv-image-box" (click)="entryFileInput.click()">
+                                <img *ngIf="entry.image_url" [src]="entry.image_url" alt="kv" />
+                                <i *ngIf="!entry.image_url" class="bi bi-camera"></i>
+                                <input type="file" #entryFileInput class="d-none" accept="image/*"
+                                  (change)="onUploadEntryImage($event, entry)" />
+                                <button *ngIf="entry.image_url" class="hb-kv-image-del" type="button"
+                                  (click)="removeEntryImage(entry); $event.stopPropagation()"><i
+                                    class="bi bi-x"></i></button>
+                              </div>
+                              <input class="form-control form-control-sm hb-form-input hb-kv-key"
+                                [(ngModel)]="entry.key" (ngModelChange)="onVariantChange()"
+                                placeholder="Tên (VD: Màu vải)" />
+                              <span class="hb-kv-sep">:</span>
+                              <input class="form-control form-control-sm hb-form-input hb-kv-val"
+                                [(ngModel)]="entry.value" (ngModelChange)="onVariantChange()"
+                                placeholder="Giá trị (VD: Beige Arezzo 3331)" />
+                              <button class="hb-icon-btn danger btn-sm" type="button"
+                                (click)="removeComponentEntry(v, ei); $event.stopPropagation()">
+                                <i class="bi bi-x-lg"></i>
+                              </button>
+                            </div>
+                          </div>
+
+                          <!-- ROW 3: Measurements -->
+                          <div class="hb-variant-section">
+                            <div class="hb-variant-section-title d-flex align-items-center justify-content-between">
+                              <span><i class="bi bi-rulers me-1"></i> Kích thước (cm / kg)</span>
+                              <button class="btn btn-sm btn-hb-outline" type="button"
+                                (click)="addMeasurementEntry(v); $event.stopPropagation()">
+                                <i class="bi bi-plus me-1"></i>Thêm số đo
+                              </button>
+                            </div>
+                            <p class="hb-variant-hint" *ngIf="v.measurementEntries.length === 0">
+                              Chưa có số đo. Ấn "+ Thêm số đo" để thêm (VD: width, height, depth...).
+                            </p>
+                            <div class="hb-kv-row" *ngFor="let entry of v.measurementEntries; let mi = index">
+                              <input class="form-control form-control-sm hb-form-input hb-kv-key"
+                                [(ngModel)]="entry.key" (ngModelChange)="onVariantChange()"
+                                placeholder="Thuộc tính (VD: width)" />
+                              <span class="hb-kv-sep">:</span>
+                              <input class="form-control form-control-sm hb-form-input hb-kv-val"
+                                [(ngModel)]="entry.value" (ngModelChange)="onVariantChange()"
+                                placeholder="Số (VD: 298)" />
+                              <button class="hb-icon-btn danger btn-sm" type="button"
+                                (click)="removeMeasurementEntry(v, mi); $event.stopPropagation()">
+                                <i class="bi bi-x-lg"></i>
+                              </button>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div class="hb-empty" *ngIf="editVariants.length === 0">
+                      <i class="bi bi-grid-3x3-gap fs-1 d-block mb-2 opacity-25"></i>
+                      Sản phẩm này chưa có biến thể nào.
+                    </div>
+                  </ng-container>
                 </div>
+
+
+
+
 
                 <!-- REVIEWS TAB -->
                 <div *ngIf="detailTab === 'comments'">
@@ -426,7 +642,9 @@
           <!-- RIGHT: SIDEBAR -->
           <div class="col-12 col-xl-4">
             <div class="hb-panel-v2 mb-4">
-              <div class="panel-header"><h5 class="m-0">THAO TÁC</h5></div>
+              <div class="panel-header">
+                <h5 class="m-0">THAO TÁC</h5>
+              </div>
               <div class="panel-body d-grid gap-2">
                 <ng-container *ngIf="mode === 'detail'">
                   <button class="btn btn-hb-accent" type="button" (click)="goEdit()">
@@ -459,7 +677,9 @@
             </div>
 
             <div class="hb-panel-v2">
-              <div class="panel-header"><h5 class="m-0">TỔNG QUAN SẢN PHẨM</h5></div>
+              <div class="panel-header">
+                <h5 class="m-0">TỔNG QUAN SẢN PHẨM</h5>
+              </div>
               <div class="panel-body">
                 <div class="hb-side-stat-grid">
                   <div class="hb-stat-tile">
@@ -481,7 +701,8 @@
                 </div>
                 <div class="mt-3 pt-3" style="border-top: 1px solid rgba(255,255,255,0.08);">
                   <div class="d-flex justify-content-between align-items-center">
-                    <span class="hb-pill" [ngClass]="headerStatusClass(d.inventoryTotal)">{{ headerStatusLabel(d.inventoryTotal) }}</span>
+                    <span class="hb-pill" [ngClass]="headerStatusClass(d.inventoryTotal)">{{
+                      headerStatusLabel(d.inventoryTotal) }}</span>
                     <span style="font-size: 12px; color: #64748b; text-align: right;">
                       Từ: <b style="color: #818cf8">{{ d.priceMin | number }}₫</b><br>
                       Đến: <b style="color: #818cf8">{{ d.priceMax | number }}₫</b>
@@ -508,19 +729,21 @@
               </div>
               <!-- 3-STEP WIZARD INDICATOR -->
               <div class="hb-wizard-steps mt-4">
-                <div class="hb-step" [class.active]="detailTab === 'overview'" [class.done]="detailTab === 'variants' || detailTab === 'comments'" (click)="detailTab = 'overview'">
+                <div class="hb-step" [class.active]="detailTab === 'overview'"
+                  [class.done]="detailTab === 'variants' || detailTab === 'comments'" (click)="detailTab = 'overview'">
                   <div class="step-circle">1</div>
                   <div class="step-label">Thông tin SP</div>
                 </div>
                 <div class="step-connector" [class.filled]="detailTab === 'variants' || detailTab === 'comments'"></div>
-                <div class="hb-step" [class.active]="detailTab === 'variants'" [class.done]="detailTab === 'comments'" (click)="detailTab = 'variants'">
+                <div class="hb-step" [class.active]="detailTab === 'variants'" [class.done]="detailTab === 'comments'"
+                  (click)="detailTab = 'variants'">
                   <div class="step-circle">2</div>
                   <div class="step-label">Biến thể</div>
                 </div>
                 <div class="step-connector" [class.filled]="detailTab === 'comments'"></div>
                 <div class="hb-step" [class.active]="detailTab === 'comments'" (click)="detailTab = 'comments'">
                   <div class="step-circle">3</div>
-                  <div class="step-label">Giá & Kho & Tags</div>
+                  <div class="step-label">Kiểm tra & Hoàn tất</div>
                 </div>
               </div>
             </div>
@@ -537,49 +760,36 @@
                       <i class="bi bi-info-circle me-2"></i>Thông tin sản phẩm
                     </div>
                     <div class="row g-3 mt-1">
-                      <div class="col-12 col-lg-6">
+                      <div class="col-12">
                         <div class="mb-3">
                           <label class="hb-form-label">Tên sản phẩm <span class="text-danger">*</span></label>
-                          <input class="form-control hb-form-input" placeholder="Nhập tên sản phẩm..." [(ngModel)]="editForm.product_name" (ngModelChange)="onEditChange()" />
+                          <input class="form-control hb-form-input" placeholder="Nhập tên sản phẩm..."
+                            [(ngModel)]="editForm.product_name" (ngModelChange)="onEditChange()" />
                         </div>
                         <div class="row g-3">
                           <div class="col-6">
                             <label class="hb-form-label">Thương hiệu</label>
-                            <input class="form-control hb-form-input" placeholder="Vd: IKEA, Hammpton..." [(ngModel)]="editForm.brand_name" (ngModelChange)="onEditChange()" />
+                            <input class="form-control hb-form-input" placeholder="Vd: IKEA, Hammpton..."
+                              [(ngModel)]="editForm.brand_name" (ngModelChange)="onEditChange()" />
                           </div>
                           <div class="col-6">
                             <label class="hb-form-label">Bảo hành (tháng)</label>
-                            <input class="form-control hb-form-input" type="number" [(ngModel)]="editForm.warranty" (ngModelChange)="onEditChange()" />
+                            <input class="form-control hb-form-input" type="number" [(ngModel)]="editForm.warranty"
+                              (ngModelChange)="onEditChange()" />
                           </div>
                           <div class="col-12">
                             <div class="form-check mt-1">
-                              <input class="form-check-input" type="checkbox" [(ngModel)]="editForm.is_assembly" (ngModelChange)="onEditChange()" id="newAssemblyCheck" />
-                              <label class="form-check-label hb-form-label" for="newAssemblyCheck">Sản phẩm cần lắp ráp</label>
+                              <input class="form-check-input" type="checkbox" [(ngModel)]="editForm.is_assembly"
+                                (ngModelChange)="onEditChange()" id="newAssemblyCheck" />
+                              <label class="form-check-label hb-form-label" for="newAssemblyCheck">Sản phẩm cần lắp
+                                ráp</label>
                             </div>
                           </div>
                         </div>
                         <div class="mt-3">
                           <label class="hb-form-label">Mô tả</label>
-                          <textarea class="form-control hb-form-input" rows="5" placeholder="Mô tả chi tiết sản phẩm..." [(ngModel)]="editForm.description" (ngModelChange)="onEditChange()"></textarea>
-                        </div>
-                      </div>
-                      <div class="col-12 col-lg-6">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                          <div class="hb-form-section-title mb-0">Hình ảnh</div>
-                          <label class="btn btn-sm btn-hb-outline mb-0">
-                            <i class="bi bi-upload me-1"></i> Upload
-                            <input type="file" class="d-none" multiple accept="image/*" (change)="onUploadImages($event)" />
-                          </label>
-                        </div>
-                        <div class="hb-gallery">
-                          <div class="hb-gitem hb-gitem-edit" *ngFor="let im of editImages; let i = index">
-                            <img [src]="im.url" alt="img" />
-                            <button class="hb-img-remove" type="button" (click)="removeEditImage(i)"><i class="bi bi-x-lg"></i></button>
-                          </div>
-                          <div class="hb-gitem hb-gitem-empty" *ngIf="editImages.length === 0">
-                            <i class="bi bi-image" style="font-size: 24px; color: #475569;"></i>
-                            <span style="font-size: 11px; color: #475569; margin-top: 6px;">Kéo thả hoặc Upload</span>
-                          </div>
+                          <textarea class="form-control hb-form-input" rows="5" placeholder="Mô tả chi tiết sản phẩm..."
+                            [(ngModel)]="editForm.description" (ngModelChange)="onEditChange()"></textarea>
                         </div>
                       </div>
                     </div>
@@ -595,69 +805,193 @@
                     <div class="hb-form-section-title">
                       <i class="bi bi-grid-3x3-gap me-2"></i>Biến thể sản phẩm
                     </div>
-                    <p style="color: #64748b; font-size: 13px; margin-bottom: 20px;">Thêm các biến thể như màu sắc, kích thước, hoặc tùy chọn khác.</p>
-                    <div class="table-responsive">
-                      <table class="table hb-table-v2 mb-0">
-                        <thead>
-                          <tr>
-                            <th>Biến thể ID</th>
-                            <th class="text-end">Giá (₫)</th>
-                            <th class="text-end">Tồn kho</th>
-                            <th>Giao hàng dự kiến</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let v of editVariants">
-                            <td class="text-muted" style="font-size: 12px;">{{ v.product_varant_id }}</td>
-                            <td class="text-end">
-                              <input class="form-control form-control-sm hb-form-input text-end" type="number" [(ngModel)]="v.price" (ngModelChange)="onVariantChange()" />
-                            </td>
-                            <td class="text-end">
-                              <input class="form-control form-control-sm hb-form-input text-end" type="number" [(ngModel)]="v.num_inventory" (ngModelChange)="onVariantChange()" />
-                            </td>
-                            <td>
-                              <input class="form-control form-control-sm hb-form-input" [(ngModel)]="v.expected_delivery" (ngModelChange)="onVariantChange()" />
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <p style="color: #64748b; font-size: 13px; margin-bottom: 20px;">Thêm các biến thể như màu sắc, kích
+                      thước, hoặc tùy chọn khác.</p>
+
+                    <div class="hb-variant-list mt-3">
+                      <div class="hb-variant-card" *ngFor="let v of editVariants; let i = index"
+                        [class.is-default]="v.is_default" [class.is-open]="isVariantExpanded(v.product_varant_id)">
+                        <!-- ACCORDION HEADER -->
+                        <div class="hb-variant-header" (click)="toggleVariantExpand(v.product_varant_id)">
+                          <div class="hb-variant-chevron">
+                            <i class="bi" [class.bi-chevron-right]="!isVariantExpanded(v.product_varant_id)"
+                              [class.bi-chevron-down]="isVariantExpanded(v.product_varant_id)"></i>
+                          </div>
+                          <div class="hb-variant-header-info">
+                            <span class="hb-variant-label">{{ variantPreviewLabel(v) }}</span>
+                            <span class="hb-variant-id">{{ v.product_varant_id }}</span>
+                          </div>
+                          <div class="hb-variant-header-stats">
+                            <span style="color:#818cf8;font-weight:700;font-size:13px;">{{ v.price | number }}₫</span>
+                            <span class="hb-stock-badge stock-ok" style="font-size:11px;">
+                              Kho: {{ v.num_inventory }}
+                            </span>
+                            <span class="hb-default-badge" *ngIf="v.is_default"><i class="bi bi-star-fill me-1"></i>Mặc
+                              định</span>
+                          </div>
+                        </div>
+
+                        <!-- ACCORDION BODY -->
+                        <div class="hb-variant-body" *ngIf="isVariantExpanded(v.product_varant_id)">
+                          <!-- Basic Info -->
+                          <div class="hb-variant-section">
+                            <div class="hb-variant-section-title"><i class="bi bi-info-circle me-1"></i> Thông tin cơ
+                              bản</div>
+                            <div class="row g-3">
+                              <div class="col-6 col-md-3">
+                                <label class="hb-form-label">GIÁ (₫) *</label>
+                                <input class="form-control hb-form-input" type="number" [(ngModel)]="v.price"
+                                  (ngModelChange)="onVariantChange()" />
+                              </div>
+                              <div class="col-6 col-md-3">
+                                <label class="hb-form-label">TỒN KHO *</label>
+                                <input class="form-control hb-form-input" type="number" [(ngModel)]="v.num_inventory"
+                                  (ngModelChange)="onVariantChange()" />
+                              </div>
+                              <div class="col-6 col-md-3">
+                                <label class="hb-form-label">TRỌNG LƯỢNG (g)</label>
+                                <input class="form-control hb-form-input" type="number" [(ngModel)]="v.weight"
+                                  (ngModelChange)="onVariantChange()" />
+                              </div>
+                              <div class="col-6 col-md-3">
+                                <label class="hb-form-label">GIAO HÀNG DỰ KIẾN</label>
+                                <input class="form-control hb-form-input" [(ngModel)]="v.expected_delivery"
+                                  (ngModelChange)="onVariantChange()" />
+                              </div>
+                              <div class="col-12">
+                                <label class="hb-form-label">TAGS (PHÂN CÁCH BẰNG DẤU PHẨY)</label>
+                                <input class="form-control hb-form-input" placeholder="sofa, phòng khách, gỗ..."
+                                  [(ngModel)]="editForm.tagsText" (ngModelChange)="onEditChange()" />
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Variant Images -->
+                          <div class="hb-variant-section">
+                            <div class="hb-variant-section-title d-flex align-items-center justify-content-between">
+                              <span><i class="bi bi-images me-1"></i> Hình ảnh cho biến thể</span>
+                              <label class="btn btn-sm btn-hb-outline mb-0" style="cursor: pointer;">
+                                <i class="bi bi-upload me-1"></i> Upload
+                                <input type="file" class="d-none" multiple accept="image/*"
+                                  (change)="onUploadVariantImages($event, v)" />
+                              </label>
+                            </div>
+                            <div class="hb-gallery mt-2">
+                              <div class="hb-gitem hb-gitem-variant" *ngFor="let im of v.images; let vi = index">
+                                <img [src]="im.url" alt="img" />
+                                <button class="hb-img-remove" type="button" (click)="removeVariantImage(v, vi)"><i
+                                    class="bi bi-x-lg"></i></button>
+                              </div>
+                              <div class="hb-gitem hb-gitem-empty" *ngIf="v.images.length === 0" style="height: 80px;">
+                                <span style="font-size: 11px; color: #475569;">Chưa có ảnh biến thể</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Customize -->
+                          <div class="hb-variant-section">
+                            <div class="hb-variant-section-title d-flex align-items-center justify-content-between">
+                              <span><i class="bi bi-palette me-1"></i> Tùy chọn Customize</span>
+                              <button class="btn btn-sm btn-hb-outline" type="button"
+                                (click)="addComponentEntry(v); $event.stopPropagation()">
+                                <i class="bi bi-plus me-1"></i>Thêm
+                              </button>
+                            </div>
+                            <div class="hb-kv-row" *ngFor="let entry of v.componentEntries; let ei = index">
+                              <div class="hb-kv-image-box" (click)="entryFileInput.click()">
+                                <img *ngIf="entry.image_url" [src]="entry.image_url" alt="kv" />
+                                <i *ngIf="!entry.image_url" class="bi bi-camera"></i>
+                                <input type="file" #entryFileInput class="d-none" accept="image/*"
+                                  (change)="onUploadEntryImage($event, entry)" />
+                                <button *ngIf="entry.image_url" class="hb-kv-image-del" type="button"
+                                  (click)="removeEntryImage(entry); $event.stopPropagation()"><i
+                                    class="bi bi-x"></i></button>
+                              </div>
+                              <input class="form-control form-control-sm hb-form-input hb-kv-key"
+                                [(ngModel)]="entry.key" placeholder="Tên" />
+                              <span class="hb-kv-sep">:</span>
+                              <input class="form-control form-control-sm hb-form-input hb-kv-val"
+                                [(ngModel)]="entry.value" placeholder="Giá trị" />
+                              <button class="hb-icon-btn danger btn-sm" type="button"
+                                (click)="removeComponentEntry(v, ei); $event.stopPropagation()"><i
+                                  class="bi bi-x-lg"></i></button>
+                            </div>
+                          </div>
+
+                          <!-- Measurements -->
+                          <div class="hb-variant-section">
+                            <div class="hb-variant-section-title d-flex align-items-center justify-content-between">
+                              <span><i class="bi bi-rulers me-1"></i> Kích thước</span>
+                              <button class="btn btn-sm btn-hb-outline" type="button"
+                                (click)="addMeasurementEntry(v); $event.stopPropagation()">
+                                <i class="bi bi-plus me-1"></i>Thêm
+                              </button>
+                            </div>
+                            <div class="hb-kv-row" *ngFor="let entry of v.measurementEntries; let mi = index">
+                              <input class="form-control form-control-sm hb-form-input hb-kv-key"
+                                [(ngModel)]="entry.key" placeholder="Thuộc tính" />
+                              <span class="hb-kv-sep">:</span>
+                              <input class="form-control form-control-sm hb-form-input hb-kv-val"
+                                [(ngModel)]="entry.value" placeholder="Số" />
+                              <button class="hb-icon-btn danger btn-sm" type="button"
+                                (click)="removeMeasurementEntry(v, mi); $event.stopPropagation()"><i
+                                  class="bi bi-x-lg"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+
                     <div class="d-flex justify-content-between mt-4">
                       <button class="btn btn-hb-outline" type="button" (click)="detailTab = 'overview'">
                         <i class="bi bi-arrow-left me-1"></i> Quay lại
                       </button>
                       <button class="btn btn-hb-accent" type="button" (click)="detailTab = 'comments'">
-                        Tiếp theo: Giá & Kho <i class="bi bi-arrow-right ms-1"></i>
+                        Tiếp theo: Kiểm tra & Hoàn tất <i class="bi bi-arrow-right ms-1"></i>
                       </button>
                     </div>
                   </div>
 
-                  <!-- STEP 3: PRICE, STOCK & TAGS -->
+                  <!-- STEP 3: REVIEW & SUBMIT -->
                   <div *ngIf="detailTab === 'comments'">
                     <div class="hb-form-section-title">
-                      <i class="bi bi-tag me-2"></i>Giá cả, Tags & Hoàn tất
+                      <i class="bi bi-clipboard-check me-2"></i>Kiểm tra thông tin sản phẩm
                     </div>
-                    <div class="row g-3 mt-1">
-                      <div class="col-12 col-md-6">
-                        <label class="hb-form-label">Giảm giá (%)</label>
-                        <input class="form-control hb-form-input" type="number" min="0" max="100"
-                          [(ngModel)]="editForm.discount_percent" (ngModelChange)="onEditChange()" placeholder="0" />
+                    <div class="text-muted small mb-4">Vui lòng rà soát lại thông tin trước khi khởi tạo sản phẩm mới.</div>
+                    
+                    <div class="row g-3 mb-4">
+                      <div class="col-12">
+                        <div class="hb-detail-kv"><span class="k">Tên sản phẩm</span><span class="v text-white fw-bold">{{ editForm.product_name || '(Chưa nhập)' }}</span></div>
                       </div>
-                      <div class="col-12 col-md-6">
-                        <label class="hb-form-label">Tags (phân cách bằng dấu phẩy)</label>
-                        <input class="form-control hb-form-input" placeholder="sofa, phòng khách, gỗ..."
-                          [(ngModel)]="editForm.tagsText" (ngModelChange)="onEditChange()" />
+                      <div class="col-6">
+                        <div class="hb-detail-kv"><span class="k">Thương hiệu</span><span class="v">{{ editForm.brand_name || '(Chưa nhập)' }}</span></div>
+                      </div>
+                      <div class="col-6">
+                        <div class="hb-detail-kv"><span class="k">Bảo hành</span><span class="v">{{ editForm.warranty ? editForm.warranty + ' tháng' : '(Chưa nhập)' }}</span></div>
+                      </div>
+                      <div class="col-6">
+                        <div class="hb-detail-kv"><span class="k">Cần lắp ráp</span><span class="v">{{ editForm.is_assembly ? 'Có' : 'Không' }}</span></div>
+                      </div>
+                      <div class="col-12">
+                        <div class="hb-detail-kv align-items-start"><span class="k">Tags</span><span class="v">{{ editForm.tagsText || '(Không có tags)' }}</span></div>
                       </div>
                     </div>
-                    <div class="hb-unsaved-hint mt-3" *ngIf="isDirty">
-                      <i class="bi bi-exclamation-circle me-1"></i> Bạn có thay đổi chưa lưu
+                    
+                    <div class="hb-form-section-title">
+                      <i class="bi bi-grid-3x3-gap me-2"></i>Cấu hình biến thể
                     </div>
+                    <div class="row g-3 mb-4">
+                      <div class="col-12">
+                         <div class="hb-detail-kv"><span class="k">Số biến thể</span><span class="v" style="color: #818cf8; font-weight: bold;">{{ editVariants.length }} biến thể đã cấu hình</span></div>
+                      </div>
+                    </div>
+
                     <div class="d-flex justify-content-between mt-4">
                       <button class="btn btn-hb-outline" type="button" (click)="detailTab = 'variants'">
                         <i class="bi bi-arrow-left me-1"></i> Quay lại
                       </button>
-                      <button class="btn btn-hb-accent" type="button" [disabled]="saving" (click)="saveEdit()">
-                        <i class="bi bi-check2-circle me-1"></i> Tạo sản phẩm
+                      <button class="btn btn-hb-accent px-5" type="button" [disabled]="saving" (click)="saveEdit()">
+                        <i class="bi bi-check2-circle me-1"></i> Tạo sản phẩm ngay
                       </button>
                     </div>
                   </div>
@@ -668,28 +1002,30 @@
             <!-- RIGHT SIDEBAR FOR NEW -->
             <div class="col-12 col-xl-4">
               <div class="hb-panel-v2">
-                <div class="panel-header"><h5 class="m-0">HƯỚNG DẪN</h5></div>
+                <div class="panel-header">
+                  <h5 class="m-0">HƯỚNG DẪN</h5>
+                </div>
                 <div class="panel-body">
                   <div class="hb-step-guide">
                     <div class="guide-item" [class.guide-active]="detailTab === 'overview'">
                       <div class="guide-num">01</div>
                       <div>
                         <div class="guide-title">Thông tin sản phẩm</div>
-                        <div class="guide-desc">Tên, thương hiệu, mô tả, bảo hành, hình ảnh</div>
+                        <div class="guide-desc">Tên, thương hiệu, mô tả, bảo hành</div>
                       </div>
                     </div>
                     <div class="guide-item" [class.guide-active]="detailTab === 'variants'">
                       <div class="guide-num">02</div>
                       <div>
-                        <div class="guide-title">Biến thể sản phẩm</div>
-                        <div class="guide-desc">Màu sắc, kích thước, các tùy chọn khác</div>
+                        <div class="guide-title">Biến thể & Tags</div>
+                        <div class="guide-desc">Cấu hình biến thể, hình ảnh, mã giảm giá và tags</div>
                       </div>
                     </div>
                     <div class="guide-item" [class.guide-active]="detailTab === 'comments'">
                       <div class="guide-num">03</div>
                       <div>
-                        <div class="guide-title">Giá, Kho & Tags</div>
-                        <div class="guide-desc">Chiết khấu, gắn nhãn và hoàn tất</div>
+                        <div class="guide-title">Kiểm tra & Hoàn tất</div>
+                        <div class="guide-desc">Rà soát thông tin lần cuối trước khi khởi tạo</div>
                       </div>
                     </div>
                   </div>
@@ -709,7 +1045,13 @@
   </div>
 
   <!-- MODALS -->
-  <hb-confirm-modal [isOpen]="deleteModalOpen" [title]="deleteModalTitle" [message]="deleteModalMessage" [type]="'danger'" (confirm)="onConfirmDelete()" (cancel)="onCancelDelete()"></hb-confirm-modal>
-  <hb-confirm-modal [isOpen]="discardModalOpen" title="Xác nhận hủy thay đổi" message="Bạn đang có thay đổi chưa lưu. Nếu rời trang bây giờ, toàn bộ dữ liệu vừa chỉnh sẽ bị mất." type="warning" confirmLabel="Rời trang" cancelLabel="Ở lại" (confirm)="onConfirmDiscard()" (cancel)="onCancelDiscard()"></hb-confirm-modal>
-  <hb-confirm-modal [isOpen]="saveModalOpen" title="Xác nhận lưu" message="Bạn có chắc chắn muốn lưu các thay đổi này không?" type="info" confirmLabel="Lưu ngay" (confirm)="executeSave()" (cancel)="saveModalOpen = false"></hb-confirm-modal>
+  <hb-confirm-modal [isOpen]="deleteModalOpen" [title]="deleteModalTitle" [message]="deleteModalMessage"
+    [type]="'danger'" (confirm)="onConfirmDelete()" (cancel)="onCancelDelete()"></hb-confirm-modal>
+  <hb-confirm-modal [isOpen]="discardModalOpen" title="Xác nhận hủy thay đổi"
+    message="Bạn đang có thay đổi chưa lưu. Nếu rời trang bây giờ, toàn bộ dữ liệu vừa chỉnh sẽ bị mất." type="warning"
+    confirmLabel="Rời trang" cancelLabel="Ở lại" (confirm)="onConfirmDiscard()"
+    (cancel)="onCancelDiscard()"></hb-confirm-modal>
+  <hb-confirm-modal [isOpen]="saveModalOpen" title="Xác nhận lưu"
+    message="Bạn có chắc chắn muốn lưu các thay đổi này không?" type="info" confirmLabel="Lưu ngay"
+    (confirm)="executeSave()" (cancel)="saveModalOpen = false"></hb-confirm-modal>
 </div>
