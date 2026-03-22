@@ -522,7 +522,7 @@
                   <label class="form-label small text-muted">NHÀ CUNG CẤP (BRAND) *</label>
                   <select class="form-select form-control-lg bg-dark text-white border-secondary" [(ngModel)]="em.brand_id">
                     <option value="" disabled>-- Chọn Nhà cung cấp --</option>
-                    <option *ngFor="let b of vm.brands" [value]="b._id">{{b.brand_name}}</option>
+                    <option *ngFor="let b of vm.brands" [value]="b._id">{{b.name}}</option>
                   </select>
                 </div>
 
@@ -552,11 +552,10 @@
                     <label class="form-label small text-muted">SẢN PHẨM *</label>
                     <select class="form-select form-control-sm bg-dark text-white border-secondary" [(ngModel)]="em.tempItem.product_variant_id">
                       <option value="" disabled>-- Chọn SP --</option>
-                      <option value="pv_001">SKU-001 (Bàn ăn gỗ)</option>
-                      <option value="pv_002">SKU-002 (Kệ Tivi)</option>
-                      <option value="pv_003">SKU-003 (Sofa Ý)</option>
-                      <option value="pv_004">SKU-004 (Giường gỗ Sồi)</option>
-                    </select>
+                    <option *ngFor="let v of vm.variants" [value]="v.product_variant_id">
+                      {{ v.sku }} - {{ v.product_name }}
+                    </option>
+                  </select>
                   </div>
 
                   <!-- Quantity -->
@@ -637,7 +636,7 @@
                    <div class="row w-100 g-3">
                       <div class="col-md-6">
                         <div class="text-muted small mb-1">ĐỐI TÁC CUNG CẤP</div>
-                        <div class="fw-bold fs-5 text-primary">{{ em.brand_id }}</div>
+                        <div class="fw-bold fs-5 text-primary">{{ getBrandName(em.brand_id, vm.brands) }}</div>
                       </div>
                       <div class="col-md-6">
                         <div class="text-muted small mb-1">GHI CHÚ HỆ THỐNG</div>

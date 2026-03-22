@@ -4,6 +4,7 @@ const PurchaseOrder = require("../models/purchaseOrder.model");
 const PurchaseOrderItem = require("../models/purchaseOrderItem.model");
 const ProductVariant = require("../models/productVariant.model");
 const Warehouse = require("../models/warehouse.model");
+
 class WarehouseController {
   // [GET] /api/warehouse
   async getAllWarehouse(req, res) {
@@ -18,13 +19,14 @@ class WarehouseController {
       return res.status(500).json({ message: "Lỗi hệ thống " + e, data: null });
     }
   }
+
   // [GET] /api/warehouse/:id
   async getDetailWarehouse(req, res) {
     try {
       const warehouseId = req.params.id;
       const warehouseDetail = await Warehouse.findById(warehouseId);
       return res.status(200).json({
-        messsage: "Load dữ liệu thành công",
+        message: "Load dữ liệu thành công",
         data: warehouseDetail,
       });
     } catch (e) {
@@ -32,13 +34,14 @@ class WarehouseController {
       return res.status(500).json({ message: "Lỗi hệ thống" + e, data: null });
     }
   }
+
   // [POST] /api/warehouse
   async createNewWarehouse(req, res) {
     try {
       const newWarehouse = new Warehouse({ ...req.body });
       await newWarehouse.save();
       return res.status(200).json({
-        message: "Tạo ra nhà máy mới thành công thành công",
+        message: "Tạo ra nhà kho mới thành công",
         data: newWarehouse,
       });
     } catch (e) {
@@ -46,6 +49,7 @@ class WarehouseController {
       return res.status(500).json({ message: "Lỗi hệ thống" + e, data: null });
     }
   }
+
   // [UPDATE] /api/warehouse/:id
   async updateInfoWarehouse(req, res) {
     try {
@@ -53,15 +57,16 @@ class WarehouseController {
       const updatedWarehouse = await Warehouse.findByIdAndUpdate(
         warehouseId,
         req.body,
+        { new: true }
       );
       if (!updatedWarehouse) {
         return res.status(404).json({
-          message: "Không tìm thấy thông tin nhà máy nào",
+          message: "Không tìm thấy thông tin nhà kho nào",
           data: null,
         });
       }
       return res.status(200).json({
-        message: "Đã cập nhật thành công loại sản phẩm",
+        message: "Đã cập nhật thành công nhà kho",
         data: updatedWarehouse,
       });
     } catch (e) {
@@ -69,7 +74,8 @@ class WarehouseController {
       return res.status(500).json({ message: "Lỗi hệ thống" + e, data: null });
     }
   }
-  // [DELETE] /api/warehosue/:id
+
+  // [DELETE] /api/warehouse/:id
   async deleteWarehouse(req, res) {
     try {
       const warehouseId = req.params.id;
@@ -84,8 +90,9 @@ class WarehouseController {
     }
   }
 
-  // ======== ADMIN WAREHOUSE OPERATIONS (inlined) ========
-async getWarehouses() {
+  // ======== ADMIN WAREHOUSE OPERATIONS (inlined logic) ========
+
+  async getWarehousesInternal() {
     const list = await Warehouse.find({});
     return list.map((w) => ({
       warehouse_id: w._id,
@@ -98,7 +105,7 @@ async getWarehouses() {
     }));
   }
 
-  async getStockItems(options = {}) {
+  async getStockItemsInternal(options = {}) {
     const { condition = {} } = options;
     const items = await StockItem.find(condition).populate({
       path: "product_variant_id",
@@ -114,21 +121,20 @@ async getWarehouses() {
       warehouse_id: s.warehouse_id,
       quantity_on_hand: s.quantity_on_hand,
       quantity_reserved: s.quantity_reserved,
-      reorder_point: 10, // Default or add to schema if missing
+      reorder_point: 10,
       created_at: s.createdAt,
       updated_at: s.updatedAt,
-      // Helper fields for FE
       sku: s.product_variant_id?.sku || "N/A",
       warehouse_name: whMap.get(String(s.warehouse_id)) || "Unknown",
     }));
   }
 
-  async getMovements(query = {}) {
+  async getMovementsInternal(query = {}) {
     const list = await StockMovement.find(query).sort({ createdAt: -1 });
     return list.map((m) => ({
       movement_id: m._id,
       warehouse_id: m.warehouse_id,
-      product_variant_id: m.product_id, // backend uses product_id as VariantRef
+      product_variant_id: m.product_id,
       reference_id: m.reference_id,
       reference_type: m.reference_type,
       quantity_changed: m.quantity_change,
@@ -138,7 +144,7 @@ async getWarehouses() {
     }));
   }
 
-  async getPurchaseOrders() {
+  async getPurchaseOrdersInternal() {
     const list = await PurchaseOrder.find({}).populate("brand_id").sort({ createdAt: -1 });
     return list.map((p) => ({
       po_id: p._id,
@@ -147,16 +153,15 @@ async getWarehouses() {
       brand_name: p.brand_id?.name || "N/A",
       note: p.note || "",
       status: this.mapPOStatus(p.po_status),
-      item_count: 0, // In detail only or aggregate
+      item_count: 0,
       total_cost: p.total_amount,
       created_at: p.createdAt,
     }));
   }
 
-  async adjustStock(payload) {
-    const { stock_item_id, warehouse_id, product_variant_id, quantity_changed, reason, reference_type } = payload;
+  async adjustStockInternal(payload) {
+    const { stock_item_id, warehouse_id, product_variant_id, quantity_changed, reason, reference_type, reference_id } = payload;
 
-    // Use StockItem _id or (WhID + VarID)
     let stock;
     if (stock_item_id) {
       stock = await StockItem.findById(stock_item_id);
@@ -165,7 +170,6 @@ async getWarehouses() {
     }
 
     if (!stock) {
-      // Create if not exists
       stock = new StockItem({
         warehouse_id,
         product_variant_id,
@@ -180,7 +184,7 @@ async getWarehouses() {
     const movement = new StockMovement({
       warehouse_id: stock.warehouse_id,
       product_id: stock.product_variant_id,
-      reference_id: "MANUAL-" + Date.now(),
+      reference_id: reference_id || "MANUAL-" + Date.now(),
       reference_type: reference_type || "adjustment",
       quantity_change: quantity_changed,
       reason: reason || "Manual Adjustment",
@@ -190,7 +194,7 @@ async getWarehouses() {
     return stock;
   }
 
-  async createPurchaseOrder(payload) {
+  async createPurchaseOrderInternal(payload) {
     const { brand_id, note, items } = payload;
     
     let total_amount = 0;
@@ -201,28 +205,31 @@ async getWarehouses() {
     const po = new PurchaseOrder({
       brand_id,
       note,
-      po_status: "received", // Assume instant completion for this simplified logic or "draft"
+      po_status: "received",
       total_amount,
     });
     await po.save();
 
-    // Map items + Update stock
     for (const item of items) {
       const poi = new PurchaseOrderItem({
-        purchase_order: po._id,
-        product_variant: item.product_variant_id,
-        quantity: item.quantity,
+        po_id: po._id,
+        product_id: item.product_variant_id, 
+        warehouse_id: item.warehouse_id,
+        product_name: item.product_name || "N/A",
+        sku: item.sku || "N/A",
+        quantity_ordered: item.quantity,
         unit_cost: item.unit_cost,
+        subtotal: item.quantity * item.unit_cost,
       });
       await poi.save();
 
-      // update stock
-      await this.adjustStock({
-         warehouse_id: item.warehouse_id,
-         product_variant_id: item.product_variant_id,
-         quantity_changed: item.quantity,
-         reason: "Purchase Order " + po._id,
-         reference_type: "purchase_order"
+      await this.adjustStockInternal({
+        warehouse_id: item.warehouse_id,
+        product_variant_id: item.product_variant_id,
+        quantity_changed: item.quantity,
+        reason: "Purchase Order " + po._id,
+        reference_type: "purchase_order",
+        reference_id: String(po._id)
       });
     }
 
@@ -239,47 +246,61 @@ async getWarehouses() {
     return map[dbStatus] || "pending";
   }
 
+  // ======== API HANDLERS (for routing) ========
 
-
-  // API Wrappers for routing
-  async apiGetStockItems(req, res) {
+  async apiGetStockSummary(req, res) {
     try {
-      const data = await this.getStockItems(req.query);
-      const warehouses = await this.getWarehouses();
-      const movements = await this.getMovements();
-      const pos = await this.getPurchaseOrders();
+      const stockItems = await this.getStockItemsInternal(req.query);
+      const warehouses = await this.getWarehousesInternal();
+      const movements = await this.getMovementsInternal();
+      const purchaseOrders = await this.getPurchaseOrdersInternal();
 
       return res.status(200).json({
         message: "Lấy dữ liệu kho thành công",
         data: {
-          stockItems: data,
-          warehouses: warehouses,
-          movements: movements,
-          purchaseOrders: pos,
+          stockItems,
+          warehouses,
+          movements,
+          purchaseOrders,
         },
       });
     } catch (err) {
+      console.error(err);
       return res.status(500).json({ message: "Lỗi server: " + err.message });
     }
   }
 
   async apiAdjustStock(req, res) {
     try {
-      const data = await this.adjustStock(req.body);
+      const data = await this.adjustStockInternal(req.body);
       return res.status(200).json({ message: "Điều chỉnh kho thành công", data });
     } catch (err) {
+      console.error(err);
       return res.status(500).json({ message: "Lỗi điều chỉnh kho: " + err.message });
     }
   }
 
   async apiCreatePurchaseOrder(req, res) {
     try {
-      const data = await this.createPurchaseOrder(req.body);
+      const data = await this.createPurchaseOrderInternal(req.body);
       return res.status(201).json({ message: "Nhập hàng thành công", data });
     } catch (err) {
+      console.error(err);
       return res.status(500).json({ message: "Lỗi tạo đơn nhập: " + err.message });
     }
   }
 
+  async apiGetPurchaseOrderDetail(req, res) {
+    try {
+      const po = await PurchaseOrder.findById(req.params.id).populate("brand_id").lean();
+      if (!po) return res.status(404).json({ message: "Không tìm thấy PO" });
+      const items = await PurchaseOrderItem.find({ po_id: req.params.id }).lean();
+      return res.status(200).json({ message: "Thành công", data: { ...po, items } });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Lỗi server: " + err.message });
+    }
+  }
 }
+
 module.exports = new WarehouseController();

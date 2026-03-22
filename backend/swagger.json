@@ -562,6 +562,29 @@
           }
         }
       }
+    },
+    "/admin/warehouse/purchase-order/{id}": {
+      "get": {
+        "summary": "Get Purchase Order Detail",
+        "tags": [
+          "Admin Warehouse"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
     }
   },
   "components": {

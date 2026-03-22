@@ -19,6 +19,10 @@ const stockItemSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
+    reorder_point: {
+      type: Number,
+      default: 10,
+    },
   },
   { timestamps: true },
 );

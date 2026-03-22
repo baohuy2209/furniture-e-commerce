@@ -36,20 +36,15 @@ interface ProductVariantMin {
   product_id?: string;
   sku?: string;
   price?: number;
+  product_name?: string;
   created_at?: string;
   updated_at?: string;
 }
 
 interface BrandEntity {
   _id: string;
-  brand_name: string;
+  name: string;
 }
-
-const MOCK_BRANDS: BrandEntity[] = [
-  { _id: 'br_001', brand_name: 'Nhà cung cấp Hòa Phát' },
-  { _id: 'br_002', brand_name: 'Xưởng Mộc Ý Tưởng' },
-  { _id: 'br_003', brand_name: 'Nhập khẩu Q-Home' }
-];
 
 interface POEntity {
   po_id: string;
@@ -200,6 +195,7 @@ interface VM {
   }[];
   importTotalCost: number;
   brands: BrandEntity[];
+  variants: ProductVariantMin[];
   currentPanel: 'detail' | 'adjust' | 'import' | null;
   poList: POListItemVM[];
   transferList: MovementRowVM[];
@@ -226,7 +222,11 @@ export class ManagementWarehouse implements OnInit {
   private poItems$ = new BehaviorSubject<POEntity[]>([]);
   private brands$ = new BehaviorSubject<BrandEntity[]>([]);
 
-  private routeState$ = new BehaviorSubject<{ id: string | null; edit: boolean; createPO: boolean }>({
+  private routeState$ = new BehaviorSubject<{
+    id: string | null;
+    edit: boolean;
+    createPO: boolean;
+  }>({
     id: null,
     edit: false,
     createPO: false,
@@ -277,10 +277,10 @@ export class ManagementWarehouse implements OnInit {
         this.clearEditState();
         if (!this.importDraft$.value) {
           this.importDraft$.next({
-             brand_id: '',
-             note: '',
-             tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 },
-             items: []
+            brand_id: '',
+            note: '',
+            tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 },
+            items: [],
           });
           this.importStep$.next(1);
         }
@@ -295,7 +295,8 @@ export class ManagementWarehouse implements OnInit {
   }
 
   private loadData(): void {
-    this.http.get<any>('http://localhost:3000/api/admin/warehouse/stock-items')
+    this.http
+      .get<any>('http://localhost:3000/api/admin/warehouse/stock-items')
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
@@ -305,10 +306,11 @@ export class ManagementWarehouse implements OnInit {
             this.movements$.next(res.data.movements || []);
             this.poItems$.next(res.data.purchaseOrders || []);
           }
-        }
+        },
       });
 
-    this.http.get<any>('http://localhost:3000/api/admin/products?size=1000')
+    this.http
+      .get<any>('http://localhost:3000/api/admin/products?size=1000')
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
@@ -316,21 +318,29 @@ export class ManagementWarehouse implements OnInit {
             const list: ProductVariantMin[] = [];
             const raw = Array.isArray(res.data) ? res.data : [];
             raw.forEach((p: any) => {
-              if (p.variants) list.push(...p.variants);
+              if (p.variants) {
+                p.variants.forEach((v: any) => {
+                  list.push({
+                    ...v,
+                    product_name: p.product_name,
+                  });
+                });
+              }
             });
             this.variants$.next(list);
           }
-        }
+        },
       });
 
-    this.http.get<any>('http://localhost:3000/api/brands')
+    this.http
+      .get<any>('http://localhost:3000/api/brands')
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           if (res.data) {
-             this.brands$.next(res.data || []);
+            this.brands$.next(res.data || []);
           }
-        }
+        },
       });
   }
 
@@ -500,7 +510,12 @@ export class ManagementWarehouse implements OnInit {
           for (const item of importDraft.items) {
             const w = whMap.get(item.warehouse_id);
             const v = variantMap.get(item.product_variant_id);
-            const currentStock = stockItems.find(s => s.warehouse_id === item.warehouse_id && s.product_variant_id === item.product_variant_id)?.quantity_on_hand || 0;
+            const currentStock =
+              stockItems.find(
+                (s) =>
+                  s.warehouse_id === item.warehouse_id &&
+                  s.product_variant_id === item.product_variant_id,
+              )?.quantity_on_hand || 0;
             const cost = item.quantity * item.unit_cost;
             importTotalCost += cost;
             importPreviewList.push({
@@ -511,7 +526,7 @@ export class ManagementWarehouse implements OnInit {
               expectedStock: currentStock + item.quantity,
               quantity: item.quantity,
               unit_cost: item.unit_cost,
-              subtotal: cost
+              subtotal: cost,
             });
           }
         }
@@ -519,7 +534,7 @@ export class ManagementWarehouse implements OnInit {
         // Build PO list VM
         const poList: POListItemVM[] = poItems
           .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
-          .map(po => ({
+          .map((po) => ({
             po_id: po.po_id,
             po_number: po.po_number,
             brand_name: po.brand_name,
@@ -551,12 +566,13 @@ export class ManagementWarehouse implements OnInit {
           importPreviewList,
           importTotalCost,
           brands,
+          variants,
           currentPanel: createPO ? 'import' : !selectedId ? null : edit ? 'adjust' : 'detail',
           poList,
           transferList: movements
-            .filter(m => m.reference_type === 'manual')
+            .filter((m) => m.reference_type === 'manual')
             .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
-            .map(m => movementToVM(m)),
+            .map((m) => movementToVM(m)),
         };
 
         return vm;
@@ -760,22 +776,26 @@ export class ManagementWarehouse implements OnInit {
 
     try {
       // 1. Log OUT from source
-      await lastValueFrom(this.http.post('http://localhost:3000/api/admin/warehouse/adjust', {
-        warehouse_id: stock.warehouse_id,
-        product_variant_id: stock.product_variant_id,
-        quantity_changed: -qtyAbs,
-        reason: em.reason,
-        reference_type: 'adjustment'
-      }));
+      await lastValueFrom(
+        this.http.post('http://localhost:3000/api/admin/warehouse/adjust', {
+          warehouse_id: stock.warehouse_id,
+          product_variant_id: stock.product_variant_id,
+          quantity_changed: -qtyAbs,
+          reason: em.reason,
+          reference_type: 'adjustment',
+        }),
+      );
 
       // 2. Log IN to target
-      await lastValueFrom(this.http.post('http://localhost:3000/api/admin/warehouse/adjust', {
-        warehouse_id: em.targetWarehouseId,
-        product_variant_id: stock.product_variant_id,
-        quantity_changed: qtyAbs,
-        reason: em.reason,
-        reference_type: 'adjustment'
-      }));
+      await lastValueFrom(
+        this.http.post('http://localhost:3000/api/admin/warehouse/adjust', {
+          warehouse_id: em.targetWarehouseId,
+          product_variant_id: stock.product_variant_id,
+          quantity_changed: qtyAbs,
+          reason: em.reason,
+          reference_type: 'adjustment',
+        }),
+      );
 
       this.loadData();
       this.saveModalOpen = false;
@@ -795,16 +815,18 @@ export class ManagementWarehouse implements OnInit {
     }
 
     try {
-      await lastValueFrom(this.http.post('http://localhost:3000/api/admin/warehouse/purchase-order', {
-        brand_id: draft.brand_id,
-        note: draft.note,
-        items: draft.items.map(it => ({
-          warehouse_id: it.warehouse_id,
-          product_variant_id: it.product_variant_id,
-          quantity: it.quantity,
-          unit_cost: it.unit_cost
-        }))
-      }));
+      await lastValueFrom(
+        this.http.post('http://localhost:3000/api/admin/warehouse/purchase-order', {
+          brand_id: draft.brand_id,
+          note: draft.note,
+          items: draft.items.map((it) => ({
+            warehouse_id: it.warehouse_id,
+            product_variant_id: it.product_variant_id,
+            quantity: it.quantity,
+            unit_cost: it.unit_cost,
+          })),
+        }),
+      );
 
       alert('Đã tạo đơn nhập hàng và cập nhật kho!');
       this.loadData();
@@ -821,29 +843,38 @@ export class ManagementWarehouse implements OnInit {
     if (!draft) return;
     const { warehouse_id, product_variant_id, quantity, unit_cost } = draft.tempItem;
     if (!warehouse_id || !product_variant_id || quantity <= 0) return;
-    
+
     const newItem: PurchaseOrderItemDraft = {
       id: `it_${id16()}`,
       product_variant_id,
       warehouse_id,
       quantity,
-      unit_cost
+      unit_cost,
     };
-    
+
     this.importDraft$.next({
       ...draft,
       items: [newItem, ...draft.items],
-      tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 }
+      tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 },
     });
   }
 
   removeImportItem(id: string) {
-     const draft = this.importDraft$.value;
-     if (!draft) return;
-     this.importDraft$.next({
-       ...draft,
-       items: draft.items.filter(x => x.id !== id)
-     });
+    const draft = this.importDraft$.value;
+    if (!draft) return;
+    this.importDraft$.next({
+      ...draft,
+      items: draft.items.filter((x) => x.id !== id),
+    });
+  }
+
+  getBrandName(id: string, brands: any[]): string {
+    return brands.find((b) => b._id === id)?.name || id;
+  }
+
+  getVariantSku(id: string, variants: any[]): string {
+    const v = variants.find((x) => x.product_variant_id === id);
+    return v ? `${v.sku} - ${v.product_name}` : id;
   }
 
   exportCsvStock() {
@@ -931,45 +962,67 @@ export class ManagementWarehouse implements OnInit {
   // ===== PO HELPER METHODS =====
   getPOIconClass(status: POStatus): string {
     switch (status) {
-      case 'completed': return 'icon-ok';
+      case 'completed':
+        return 'icon-ok';
       case 'confirmed':
-      case 'receiving': return 'icon-blue';
-      case 'pending':   return 'icon-purple';
-      case 'cancelled': return 'icon-muted';
-      default: return 'icon-muted';
+      case 'receiving':
+        return 'icon-blue';
+      case 'pending':
+        return 'icon-purple';
+      case 'cancelled':
+        return 'icon-muted';
+      default:
+        return 'icon-muted';
     }
   }
 
   getPOIcon(status: POStatus): string {
     switch (status) {
-      case 'completed': return 'bi-check-circle-fill';
-      case 'confirmed': return 'bi-clipboard-check';
-      case 'receiving': return 'bi-truck';
-      case 'pending':   return 'bi-hourglass-split';
-      case 'cancelled': return 'bi-x-circle';
-      default: return 'bi-clipboard';
+      case 'completed':
+        return 'bi-check-circle-fill';
+      case 'confirmed':
+        return 'bi-clipboard-check';
+      case 'receiving':
+        return 'bi-truck';
+      case 'pending':
+        return 'bi-hourglass-split';
+      case 'cancelled':
+        return 'bi-x-circle';
+      default:
+        return 'bi-clipboard';
     }
   }
 
   getPOPillClass(status: POStatus): string {
     switch (status) {
-      case 'completed': return 'pill-ok';
+      case 'completed':
+        return 'pill-ok';
       case 'confirmed':
-      case 'receiving': return 'pill-blue';
-      case 'pending':   return 'pill-purple';
-      case 'cancelled': return 'pill-cancelled';
-      default: return '';
+      case 'receiving':
+        return 'pill-blue';
+      case 'pending':
+        return 'pill-purple';
+      case 'cancelled':
+        return 'pill-cancelled';
+      default:
+        return '';
     }
   }
 
   getPOStatusLabel(status: POStatus): string {
     switch (status) {
-      case 'completed': return 'Hoàn tất';
-      case 'confirmed': return 'Đã xác nhận';
-      case 'receiving': return 'Đang nhận';
-      case 'pending':   return 'Chờ duyệt';
-      case 'cancelled': return 'Đã hủy';
-      default: return status;
+      case 'completed':
+        return 'Hoàn tất';
+      case 'confirmed':
+        return 'Đã xác nhận';
+      case 'receiving':
+        return 'Đang nhận';
+      case 'pending':
+        return 'Chờ duyệt';
+      case 'cancelled':
+        return 'Đã hủy';
+      default:
+        return status;
     }
   }
 
@@ -1069,159 +1122,3 @@ function csvEsc(v: any) {
 function id16() {
   return Math.random().toString(16).slice(2) + Date.now().toString(16);
 }
-
-const MOCK_WAREHOUSES: WarehouseEntity[] = [
-  {
-    warehouse_id: 'WH_HCM_Q7',
-    name: 'Kho HCM - Quận 7',
-    address_warehouse: 'Q7, TP.HCM',
-    warehouse_area: 450,
-    warehouse_status: 1,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 80).toISOString(),
-    updated_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-  },
-  {
-    warehouse_id: 'WH_HN_CG',
-    name: 'Kho HN - Cầu Giấy',
-    address_warehouse: 'Cầu Giấy, Hà Nội',
-    warehouse_area: 320,
-    warehouse_status: 1,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 50).toISOString(),
-    updated_at: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-  },
-];
-
-const MOCK_VARIANTS: ProductVariantMin[] = [
-  { product_variant_id: 'pv_001', product_id: 'p_001', sku: 'SKU-001', price: 1200000 },
-  { product_variant_id: 'pv_002', product_id: 'p_002', sku: 'SKU-002', price: 980000 },
-  { product_variant_id: 'pv_003', product_id: 'p_003', sku: 'SKU-003', price: 1500000 },
-  { product_variant_id: 'pv_004', product_id: 'p_004', sku: 'SKU-004', price: 1100000 },
-];
-
-const now = Date.now();
-
-const MOCK_STOCK_ITEMS: StockItemEntity[] = [
-  {
-    stock_item_id: 'si_001',
-    product_variant_id: 'pv_001',
-    warehouse_id: 'WH_HCM_Q7',
-    quantity_on_hand: 13,
-    quantity_reserved: 2,
-    reorder_point: 5,
-    created_at: new Date(now - 1000 * 60 * 60 * 24 * 10).toISOString(),
-    updated_at: new Date(now - 1000 * 60 * 20).toISOString(),
-  },
-  {
-    stock_item_id: 'si_002',
-    product_variant_id: 'pv_002',
-    warehouse_id: 'WH_HCM_Q7',
-    quantity_on_hand: 3,
-    quantity_reserved: 0,
-    reorder_point: 5,
-    created_at: new Date(now - 1000 * 60 * 60 * 24 * 10).toISOString(),
-    updated_at: new Date(now - 1000 * 60 * 20).toISOString(),
-  },
-  {
-    stock_item_id: 'si_003',
-    product_variant_id: 'pv_003',
-    warehouse_id: 'WH_HN_CG',
-    quantity_on_hand: 7,
-    quantity_reserved: 1,
-    reorder_point: 5,
-    created_at: new Date(now - 1000 * 60 * 60 * 24 * 10).toISOString(),
-    updated_at: new Date(now - 1000 * 60 * 60).toISOString(),
-  },
-  {
-    stock_item_id: 'si_004',
-    product_variant_id: 'pv_004',
-    warehouse_id: 'WH_HN_CG',
-    quantity_on_hand: 2,
-    quantity_reserved: 0,
-    reorder_point: 5,
-    created_at: new Date(now - 1000 * 60 * 60 * 24 * 10).toISOString(),
-    updated_at: new Date(now - 1000 * 60 * 90).toISOString(),
-  },
-];
-
-const MOCK_MOVEMENTS: StockMovementEntity[] = [
-  {
-    movement_id: 'mv_001',
-    warehouse_id: 'WH_HCM_Q7',
-    product_variant_id: 'pv_001',
-    reference_type: 'purchase_order',
-    reference_id: 'PO_001',
-    quantity_changed: 20,
-    reason: 'Nhập PO',
-    created_at: new Date(now - 1000 * 60 * 60 * 24 * 2).toISOString(),
-    updated_at: new Date(now - 1000 * 60 * 60 * 24 * 2).toISOString(),
-  },
-  {
-    movement_id: 'mv_002',
-    warehouse_id: 'WH_HCM_Q7',
-    product_variant_id: 'pv_001',
-    reference_type: 'order',
-    reference_id: 'OD_8891',
-    quantity_changed: -8,
-    reason: 'Xuất theo đơn',
-    created_at: new Date(now - 1000 * 60 * 60 * 12).toISOString(),
-    updated_at: new Date(now - 1000 * 60 * 60 * 12).toISOString(),
-  },
-];
-
-const MOCK_PO_LIST: POEntity[] = [
-  {
-    po_id: 'po_001',
-    po_number: '#PO-0012',
-    brand_id: 'br_001',
-    brand_name: 'Nhà cung cấp Hòa Phát',
-    note: 'Lô nhập quý 1/2026',
-    status: 'completed',
-    item_count: 5,
-    total_cost: 48_000_000,
-    created_at: new Date(now - 1000 * 60 * 60 * 24 * 15).toISOString(),
-  },
-  {
-    po_id: 'po_002',
-    po_number: '#PO-0018',
-    brand_id: 'br_002',
-    brand_name: 'Xưởng Mộc Ý Tưởng',
-    note: 'Sofa bọc da cao cấp series',
-    status: 'receiving',
-    item_count: 3,
-    total_cost: 27_500_000,
-    created_at: new Date(now - 1000 * 60 * 60 * 24 * 7).toISOString(),
-  },
-  {
-    po_id: 'po_003',
-    po_number: '#PO-0021',
-    brand_id: 'br_003',
-    brand_name: 'Nhập khẩu Q-Home',
-    note: 'PO cấp bù Low-stock SKU-002, SKU-004',
-    status: 'confirmed',
-    item_count: 2,
-    total_cost: 15_600_000,
-    created_at: new Date(now - 1000 * 60 * 60 * 24 * 3).toISOString(),
-  },
-  {
-    po_id: 'po_004',
-    po_number: '#PO-0023',
-    brand_id: 'br_001',
-    brand_name: 'Nhà cung cấp Hòa Phát',
-    note: 'Bàn ăn gỗ sồi mẫu mới',
-    status: 'pending',
-    item_count: 4,
-    total_cost: 32_200_000,
-    created_at: new Date(now - 1000 * 60 * 60 * 8).toISOString(),
-  },
-  {
-    po_id: 'po_005',
-    po_number: '#PO-0009',
-    brand_id: 'br_002',
-    brand_name: 'Xưởng Mộc Ý Tưởng',
-    note: 'Đã hủy do nhà cung cấp không đủ hàng',
-    status: 'cancelled',
-    item_count: 1,
-    total_cost: 8_800_000,
-    created_at: new Date(now - 1000 * 60 * 60 * 24 * 20).toISOString(),
-  },
-];
