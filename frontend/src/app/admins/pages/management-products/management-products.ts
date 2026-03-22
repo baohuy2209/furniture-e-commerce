@@ -84,6 +84,7 @@ interface ProductRowVM {
 interface ListQuery {
   q: string;
   room: string;
+  brand: string;
   stock: 'all' | 'in' | 'out' | 'low';
   lowStockThreshold: number;
   minPrice: number | null;
@@ -181,6 +182,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
   query$ = new BehaviorSubject<ListQuery>({
     q: '',
     room: '',
+    brand: '',
     stock: 'all',
     lowStockThreshold: 5,
     minPrice: null,
@@ -242,6 +244,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
       }
 
       if (query.room) filtered = filtered.filter((r) => r.roomLabel === query.room);
+      if (query.brand) filtered = filtered.filter((r) => r.brand === query.brand);
       if (query.minPrice != null) {
         filtered = filtered.filter((r) => (r.priceMin ?? 0) >= query.minPrice!);
       }
@@ -261,6 +264,9 @@ export class ManagementProducts implements OnInit, OnDestroy {
       this.exportRows = filtered;
 
       const roomOptions = Array.from(new Set(rowsAll.map((x) => x.roomLabel))).sort((a, b) =>
+        a.localeCompare(b),
+      );
+      const brandOptions = Array.from(new Set(rowsAll.map((x) => x.brand))).filter(b => b).sort((a, b) =>
         a.localeCompare(b),
       );
 
@@ -289,6 +295,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
         totalPages,
         query,
         roomOptions,
+        brandOptions,
         summary,
       };
     }),
@@ -429,6 +436,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
     const changedFilterOrSort =
       patch.q !== undefined ||
       patch.room !== undefined ||
+      patch.brand !== undefined ||
       patch.stock !== undefined ||
       patch.lowStockThreshold !== undefined ||
       patch.minPrice !== undefined ||
@@ -447,6 +455,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.query$.next({
       q: '',
       room: '',
+      brand: '',
       stock: 'all',
       lowStockThreshold: 5,
       minPrice: null,
@@ -456,6 +465,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
       pageSize: 10,
     });
   }
+
 
   onSearchChange(val: string): void {
     this.localSearchTerm = val;

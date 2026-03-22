@@ -1,59 +1,58 @@
-<aside class="hb-sidebar">
-  <!-- BRAND -->
-  <div class="hb-brand">
-    <div class="hb-logo">HOMEBASE</div>
-    <div class="hb-sub">Admin Panel</div>
+<div class="admin-sidebar-container h-100 d-flex flex-column">
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <div class="sidebar-brand-name">HOMEBASE</div>
+    <div class="sidebar-sub-brand">Admin Panel</div>
   </div>
 
   <!-- NAVIGATION -->
   <nav class="hb-nav">
-    <a
-      routerLink="/admin"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="hb-nav-item"
-    >
-      Tổng quan
+    <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="hb-nav-item">
+      <i class="bi bi-grid-fill me-2"></i> Tổng quan
     </a>
 
     <a routerLink="/admin/management-products" routerLinkActive="active" class="hb-nav-item">
-      Quản lý sản phẩm
+      <i class="bi bi-search me-2"></i> Quản lý sản phẩm
     </a>
 
     <a routerLink="/admin/management-warehouse" routerLinkActive="active" class="hb-nav-item">
-      Quản lý kho
+      <i class="bi bi-bullseye me-2"></i> Quản lý kho
     </a>
 
     <a routerLink="/admin/management-voucher" routerLinkActive="active" class="hb-nav-item">
-      Quản lý voucher
+      <i class="bi bi-hash me-2"></i> Quản lý voucher
     </a>
 
     <a routerLink="/admin/management-orders" routerLinkActive="active" class="hb-nav-item">
-      Quản lý đơn hàng
+      <i class="bi bi-layers me-2"></i> Quản lý đơn hàng
     </a>
 
     <a routerLink="/admin/management-customers" routerLinkActive="active" class="hb-nav-item">
-      Quản lý khách hàng
+      <i class="bi bi-people me-2"></i> Quản lý khách hàng
     </a>
 
     <a routerLink="/admin/management-blog" routerLinkActive="active" class="hb-nav-item">
-      Bài viết
+      <i class="bi bi-journal-text me-2"></i> Bài viết
     </a>
 
     <a routerLink="/admin/management-events" routerLinkActive="active" class="hb-nav-item">
-      Sự kiện
+      <i class="bi bi-calendar-event me-2"></i> Sự kiện
     </a>
 
     <a routerLink="/admin/management-warranty" routerLinkActive="active" class="hb-nav-item">
-      Bảo hành / đổi trả
+      <i class="bi bi-shield-check me-2"></i> Bảo hành
     </a>
 
-    <a routerLink="/admin/reports" routerLinkActive="active" class="hb-nav-item"> Reports </a>
+    <a routerLink="/admin/reports" routerLinkActive="active" class="hb-nav-item">
+      <i class="bi bi-bar-chart me-2"></i> Báo cáo
+    </a>
   </nav>
 
-  <!-- USER -->
-  <div class="hb-user">
-    <div class="hb-user-name">Admin HOMEBASE</div>
-    <div class="hb-user-role">Admin</div>
+  <div class="mt-auto">
+    <!-- USER -->
+    <div class="hb-user p-3 border-top" style="border-color: var(--hb-border) !important;">
+      <div class="hb-user-name fw-bold small text-white">Admin HOMEBASE</div>
+      <div class="hb-user-role text-muted" style="font-size: 11px;">System Administrator</div>
+    </div>
   </div>
-</aside>
+</div>

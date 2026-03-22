@@ -1,7 +1,17 @@
 :host {
-  --hb-primary: #3d529d;
+  --hb-primary: #151821;
   --hb-accent: #ff911f;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --hb-card-bg: #151821;
+  --hb-radius: 16px;
+  --hb-radius-sm: 10px;
+  --hb-radius-lg: 20px;
+  --hb-border: rgba(255, 255, 255, 0.04);
+  --hb-text: #F3F4F6;
+  --hb-muted: #9CA3AF;
+  font-family: var(--font-body, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif);
+  display: block;
+  height: 100%;
+  min-height: 0;
 }
 
 .hb-wrap {
@@ -13,14 +23,14 @@
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0.5px;
-  color: var(--hb-primary);
+  color: var(--hb-text);
   text-transform: uppercase;
 }
 
 .hb-th, table thead th {
   font-size: 13px;
   font-weight: 800;
-  color: var(--hb-primary);
+  color: var(--hb-text);
   text-transform: uppercase;
   text-align: center;
 }
@@ -33,7 +43,7 @@ table tbody td {
 }
 
 .hb-card {
-  background: #fff;
+  background: var(--hb-card-bg);
   border-radius: 14px;
   box-shadow: 0 10px 26px rgba(22, 30, 50, 0.08);
 }
@@ -53,7 +63,7 @@ table tbody td {
 table thead {
   position: sticky;
   top: 0;
-  background: #fff;
+  background: var(--hb-card-bg);
 }
 
 table tbody tr {

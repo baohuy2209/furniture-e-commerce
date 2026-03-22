@@ -133,10 +133,62 @@ export class GeneralDashboard implements OnInit {
   products: PRODUCT_MIN[] = [];
   reviews: REVIEW[] = [];
 
+  // Interactive Chart State
+  hoveredBucket: any = null;
+  hoveredX = 0;
+
   ngOnInit(): void {
     this.applyGlobalPreset(30); 
     this.seedMockDomainData();
     void this.tryLoadProducts();
+  }
+
+  onChartMouseMove(e: MouseEvent, svg: any) {
+    const v = this.vm;
+    const series = v.series;
+    if (!series || !series.buckets.length) return;
+
+    const rect = svg.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    
+    // Convert mouse X to SVG coordinate system (width: 820)
+    const svgX = (x / rect.width) * series.svg.width;
+    
+    const padX = 18;
+    const xStep = series.buckets.length > 1 ? (series.svg.width - padX * 2) / (series.buckets.length - 1) : 1;
+    
+    // Smooth X following
+    this.hoveredX = Math.max(padX, Math.min(series.svg.width - padX, svgX));
+
+    // Calculate interpolation index and fraction
+    const rawIdx = (svgX - padX) / xStep;
+    const i1 = Math.floor(rawIdx);
+    const i2 = Math.ceil(rawIdx);
+    
+    if (i1 < 0) {
+      this.hoveredBucket = { ...series.buckets[0], smoothedRev: series.buckets[0].revenue, smoothedOrd: series.buckets[0].orders };
+    } else if (i2 >= series.buckets.length) {
+      const b = series.buckets[series.buckets.length - 1];
+      this.hoveredBucket = { ...b, smoothedRev: b.revenue, smoothedOrd: b.orders };
+    } else if (i1 === i2) {
+      const b = series.buckets[i1];
+      this.hoveredBucket = { ...b, smoothedRev: b.revenue, smoothedOrd: b.orders };
+    } else {
+      const b1 = series.buckets[i1];
+      const b2 = series.buckets[i2];
+      const t = rawIdx - i1; // fraction [0..1]
+      
+      const smoothedRev = b1.revenue + t * (b2.revenue - b1.revenue);
+      const smoothedOrd = b1.orders + t * (b2.orders - b1.orders);
+      
+      // Use the nearest bucket for the label, but smoothed values for display
+      const base = t > 0.5 ? b2 : b1;
+      this.hoveredBucket = { ...base, smoothedRev, smoothedOrd };
+    }
+  }
+
+  onChartMouseLeave() {
+    this.hoveredBucket = null;
   }
 
   private initGlobalDates() {
@@ -212,6 +264,23 @@ export class GeneralDashboard implements OnInit {
 
     const totalOrders = ordersInRange.length;
     
+    // Growth calculation (compare with previous period of same duration)
+    const durationMs = gTo.getTime() - gFrom.getTime();
+    const prevFrom = new Date(gFrom.getTime() - durationMs);
+    const prevTo = new Date(gTo.getTime() - durationMs);
+
+    const prevOrders = this.orders.filter((o) => {
+      const t = new Date(o.created_at).getTime();
+      return t >= prevFrom.getTime() && t < gFrom.getTime();
+    });
+
+    const prevRevenue = prevOrders
+      .filter((o) => o.status !== 'cancelled')
+      .reduce((sum, o) => sum + n(o.total_amount), 0);
+
+    const revGrowth = prevRevenue === 0 ? 100 : ((revenue - prevRevenue) / prevRevenue) * 100;
+    const ordGrowth = prevOrders.length === 0 ? 100 : ((totalOrders - prevOrders.length) / prevOrders.length) * 100;
+
     const activeOrders = ordersInRange.filter((o) =>
       ['pending', 'packed', 'shipping', 'return_requested', 'exchange_requested'].includes(o.status),
     ).length;
@@ -294,7 +363,9 @@ export class GeneralDashboard implements OnInit {
 
     return {
       revenue,
+      revGrowth,
       totalOrders,
+      ordGrowth,
       activeOrders,
       customers: customersCount,
       statusCount,
@@ -631,6 +702,22 @@ export class GeneralDashboard implements OnInit {
         return '';
     }
   }
+
+  statusPillColor(s: OrderStatus | string) {
+    switch (s) {
+      case 'pending':            return '#fbbf24'; // yellow
+      case 'packed':             return '#818cf8'; // indigo
+      case 'shipping':           return '#38bdf8'; // sky blue
+      case 'delivered':          return '#22c55e'; // green
+      case 'cancelled':          return '#ef4444'; // red
+      case 'return_requested':   return '#f97316'; // orange
+      case 'exchange_requested': return '#a78bfa'; // purple
+      case 'returned':           return '#94a3b8'; // slate
+      case 'exchanged':          return '#6ee7b7'; // teal
+      default:                   return '#94a3b8';
+    }
+  }
+
 
   fmtVND(x: number) {
     return `${n(x).toLocaleString('vi-VN')}đ`;

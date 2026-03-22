@@ -1,20 +1,19 @@
-:root {
-  --hb-primary: #3d529d;
-  --hb-accent: #ff911f;
 
-  --hb-radius: 16px;
-  --hb-radius-sm: 12px;
-
-  --hb-border: rgba(0, 0, 0, 0.12);
-  --hb-text: rgba(0, 0, 0, 0.78);
-  --hb-muted: rgba(0, 0, 0, 0.55);
-}
 
 :host {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  --hb-primary: #151821;
+  --hb-accent: #ff911f;
+  --hb-card-bg: #151821;
+  --hb-radius: 16px;
+  --hb-radius-sm: 10px;
+  --hb-radius-lg: 20px;
+  --hb-border: rgba(255, 255, 255, 0.04);
+  --hb-text: #F3F4F6;
+  --hb-muted: #9CA3AF;
+  font-family: var(--font-body, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif);
   display: block;
   height: 100%;
-  overflow: hidden;
+  min-height: 0;
 }
 
 /* ===== PAGE SHELL ===== */
@@ -29,7 +28,7 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: #fff;
+  background: transparent;
 
   display: flex;
   align-items: flex-start;
@@ -37,7 +36,7 @@
   gap: 12px;
 
   padding: 4px 0 10px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--hb-border);
 }
 
 .hb-header-left {
@@ -66,7 +65,7 @@
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0.5px;
-  color: var(--hb-primary);
+  color: var(--hb-text);
   text-transform: uppercase;
 }
 
@@ -112,8 +111,8 @@
 .hb-card {
   border-radius: var(--hb-radius);
   border: 1px solid var(--hb-border);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.04);
-  background: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  background: var(--hb-card-bg);
 }
 
 .hb-card-pad {
@@ -176,9 +175,9 @@
 
 .hb-summary-card {
   border-radius: var(--hb-radius);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--hb-border);
+  background: var(--hb-card-bg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   padding: 14px 16px;
   display: flex;
   align-items: center;
@@ -200,7 +199,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--hb-primary);
+  color: var(--hb-text);
   font-size: 18px;
 }
 
@@ -235,9 +234,9 @@
   gap: 10px;
   align-items: center;
   padding: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--hb-border);
   border-radius: var(--hb-radius);
-  background: rgba(61, 82, 157, 0.03);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .hb-filter-reset {
@@ -275,8 +274,8 @@
 }
 
 .hb-table-head {
-  background: #f8f9fc;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  background: transparent;
+  border-bottom: 2px solid var(--hb-border);
   font-weight: 900;
   position: sticky;
   top: 0;
@@ -287,7 +286,7 @@
   padding: 12px;
   cursor: pointer;
   user-select: none;
-  color: var(--hb-primary);
+  color: var(--hb-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -313,8 +312,8 @@
 
 /* ROW */
 .hb-table-row {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  background: #fff;
+  border-bottom: 1px solid var(--hb-border);
+  background: var(--hb-card-bg);
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -347,7 +346,7 @@
   justify-content: flex-end;
   text-align: right;
   font-weight: 800;
-  color: var(--hb-primary);
+  color: var(--hb-text);
 }
 
 /* Profile Block */
@@ -357,7 +356,7 @@
   border-radius: 12px;
   background: rgba(61, 82, 157, 0.1);
   border: 1px solid rgba(61, 82, 157, 0.2);
-  color: var(--hb-primary);
+  color: var(--hb-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -394,7 +393,7 @@
   border-radius: 999px;
   font-weight: 900 !important;
   font-size: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--hb-border);
   white-space: nowrap;
 }
 
@@ -405,9 +404,9 @@
 }
 
 .hb-pill.is-soft {
-  background: rgba(61, 82, 157, 0.08);
+  background: rgba(255, 255, 255, 0.03);
   border-color: rgba(61, 82, 157, 0.16);
-  color: var(--hb-primary);
+  color: var(--hb-text);
 }
 
 /* Rank-specific colors */
@@ -418,8 +417,8 @@
 
 /* Icon Buttons */
 .hb-icon-btn {
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: #fff;
+  border: 1px solid var(--hb-border);
+  background: var(--hb-card-bg);
   width: 38px;
   height: 38px;
   border-radius: 10px;
@@ -445,18 +444,18 @@
   justify-content: center;
   gap: 10px;
   padding: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  background: #fff;
+  border-top: 1px solid var(--hb-border);
+  background: var(--hb-card-bg);
 }
 
 .hb-page-btn {
   min-width: 38px;
   height: 36px;
   border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: #fff;
+  border: 1px solid var(--hb-border);
+  background: var(--hb-card-bg);
   font-weight: 900;
-  color: rgba(0, 0, 0, 0.7);
+  color: var(--hb-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -471,7 +470,7 @@
   align-items: center;
   gap: 8px;
   padding: 6px 16px;
-  background: rgba(0, 0, 0, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   border-radius: 999px;
   font-size: 13px;
   font-weight: 800;
@@ -503,16 +502,16 @@
 }
 
 .hb-stat {
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--hb-border);
   border-radius: var(--hb-radius-sm);
   padding: 12px;
-  background: rgba(61, 82, 157, 0.03);
+  background: rgba(255, 255, 255, 0.03);
   text-align: center;
 }
 
 .hb-stat-num {
   font-weight: 900;
-  color: var(--hb-primary);
+  color: var(--hb-text);
   font-size: 20px;
 }
 
@@ -553,7 +552,7 @@
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--hb-border);
 }
 
 .hb-tab {
@@ -587,7 +586,7 @@
 }
 
 .hb-mini-card {
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--hb-border);
   border-radius: var(--hb-radius-sm);
   padding: 14px;
 }
@@ -601,7 +600,7 @@
 
 .hb-mini-value {
   font-weight: 900;
-  color: var(--hb-primary);
+  color: var(--hb-text);
   font-size: 18px;
   margin-top: 6px;
 }
@@ -615,24 +614,24 @@
 
 /* Small table in detail */
 .hb-table-wrap-small {
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--hb-border);
   border-radius: var(--hb-radius-sm);
-  background: #fff;
+  background: var(--hb-card-bg);
 }
 
 .hb-table-small-header {
-  background: #f8f9fc;
+  background: transparent;
   padding: 10px 14px;
   font-weight: 900;
   font-size: 12px;
   color: var(--hb-muted);
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--hb-border);
 }
 
 .hb-table-small-row {
   padding: 12px 14px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--hb-border);
   font-size: 13px;
   align-items: center;
 }
