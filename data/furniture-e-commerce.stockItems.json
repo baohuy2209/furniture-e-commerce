@@ -1,1162 +1,1508 @@
-[
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc3"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 91,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc3"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 13,
-    "quantity_reserved": 4
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc3"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 41,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc3"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 27,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc5"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 96,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc5"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 21,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc5"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 64,
-    "quantity_reserved": 0
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc5"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 13,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc7"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 37,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc7"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 74,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc7"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 13,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc7"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 35,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc8"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 99,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc8"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 63,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc8"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 67,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc8"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 45,
-    "quantity_reserved": 0
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc9"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 30,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc9"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 53,
-    "quantity_reserved": 4
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc9"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 29,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc9"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 53,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cca"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 21,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cca"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 22,
-    "quantity_reserved": 5
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cca"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 54,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cca"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 43,
-    "quantity_reserved": 0
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccb"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 68,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccb"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 25,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccb"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 20,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccb"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 47,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccc"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 89,
-    "quantity_reserved": 5
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccc"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 83,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccc"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 100,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccc"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 15,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccd"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 39,
-    "quantity_reserved": 4
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccd"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 20,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccd"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 22,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccd"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 45,
-    "quantity_reserved": 7
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cce"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 91,
-    "quantity_reserved": 5
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cce"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 30,
-    "quantity_reserved": 5
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cce"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 55,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cce"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 95,
-    "quantity_reserved": 4
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccf"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 99,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccf"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 92,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccf"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 87,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8ccf"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 31,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd0"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 41,
-    "quantity_reserved": 2
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd0"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 69,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd0"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 44,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd0"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 98,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc4"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 38,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc4"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 51,
-    "quantity_reserved": 0
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc4"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 39,
-    "quantity_reserved": 0
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc4"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 50,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc6"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 44,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc6"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 37,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc6"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 50,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cc6"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 93,
-    "quantity_reserved": 7
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd3"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 60,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd3"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 68,
-    "quantity_reserved": 2
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd3"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 43,
-    "quantity_reserved": 2
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd3"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 41,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd4"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 78,
-    "quantity_reserved": 4
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd4"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 84,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd4"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 84,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd4"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 56,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd5"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 27,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd5"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 73,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd5"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 16,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd5"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 29,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd6"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 30,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd6"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 64,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd6"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 18,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd6"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 58,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd7"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 69,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd7"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 42,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd7"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 11,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd7"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 24,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd8"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 78,
-    "quantity_reserved": 4
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd8"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 92,
-    "quantity_reserved": 5
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd8"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 24,
-    "quantity_reserved": 4
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd8"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 65,
-    "quantity_reserved": 2
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd9"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 68,
-    "quantity_reserved": 0
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd9"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 43,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd9"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 32,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd9"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 23,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cda"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 48,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cda"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 74,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cda"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 35,
-    "quantity_reserved": 2
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cda"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 57,
-    "quantity_reserved": 2
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdb"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 79,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdb"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 10,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdb"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 51,
-    "quantity_reserved": 7
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdb"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 12,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdc"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 56,
-    "quantity_reserved": 4
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdc"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 40,
-    "quantity_reserved": 0
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdc"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 40,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdc"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 20,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdd"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 72,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdd"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 78,
-    "quantity_reserved": 2
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdd"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 26,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cdd"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 70,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd1"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 31,
-    "quantity_reserved": 4
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd1"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 77,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd1"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 64,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd1"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 79,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd2"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 49,
-    "quantity_reserved": 6
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd2"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 95,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd2"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 57,
-    "quantity_reserved": 7
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dac13f343b12e59fa8cd2"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 76,
-    "quantity_reserved": 7
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dcbec0611fedb90d43351"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 25,
-    "quantity_reserved": 3
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dcbec0611fedb90d43351"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 38,
-    "quantity_reserved": 1
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dcbec0611fedb90d43351"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 53,
-    "quantity_reserved": 0
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dcbec0611fedb90d43351"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 85,
-    "quantity_reserved": 8
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dccea02c4dc45263a0a92"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e68fb90522f5fd9f7e6"
-    },
-    "quantity_on_hand": 39,
-    "quantity_reserved": 9
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dccea02c4dc45263a0a92"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0e8efb90522f5fd9f7ea"
-    },
-    "quantity_on_hand": 38,
-    "quantity_reserved": 0
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dccea02c4dc45263a0a92"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ea9fb90522f5fd9f7ee"
-    },
-    "quantity_on_hand": 19,
-    "quantity_reserved": 10
-  },
-  {
-    "product_variant_id": {
-      "$oid": "699dccea02c4dc45263a0a92"
-    },
-    "warehouse_id": {
-      "$oid": "69bc0ec2fb90522f5fd9f7f2"
-    },
-    "quantity_on_hand": 17,
-    "quantity_reserved": 3
-  }
-]
+[{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d4c"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc3"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 91,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d4d"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc3"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 13,
+  "quantity_reserved": 4
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d4e"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc3"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 41,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d4f"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc3"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 27,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d50"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc5"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 96,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d51"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc5"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 21,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d52"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc5"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 64,
+  "quantity_reserved": 0
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d53"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc5"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 13,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d54"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc7"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 37,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d55"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc7"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 74,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d56"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc7"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 13,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d57"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc7"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 35,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d58"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc8"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 99,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d59"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc8"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 63,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d5a"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc8"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 67,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d5b"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc8"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 45,
+  "quantity_reserved": 0
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d5c"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc9"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 30,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d5d"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc9"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 53,
+  "quantity_reserved": 4
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d5e"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc9"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 29,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d5f"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc9"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 53,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d60"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 21,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d61"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 22,
+  "quantity_reserved": 5
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d62"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 54,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d63"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 43,
+  "quantity_reserved": 0
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d64"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccb"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 68,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d65"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccb"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 25,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d66"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccb"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 20,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d67"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccb"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 47,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d68"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccc"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 89,
+  "quantity_reserved": 5
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d69"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccc"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 83,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d6a"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccc"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 100,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d6b"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccc"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 15,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d6c"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccd"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 39,
+  "quantity_reserved": 4
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d6d"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccd"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 20,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d6e"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccd"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 22,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d6f"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccd"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 45,
+  "quantity_reserved": 7
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d70"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cce"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 91,
+  "quantity_reserved": 5
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d71"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cce"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 30,
+  "quantity_reserved": 5
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d72"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cce"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 55,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d73"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cce"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 95,
+  "quantity_reserved": 4
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d74"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccf"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 99,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d75"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccf"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 92,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d76"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccf"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 87,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d77"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8ccf"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 31,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d78"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd0"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 41,
+  "quantity_reserved": 2
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d79"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd0"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 69,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d7a"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd0"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 44,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d7b"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd0"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 98,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d7c"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc4"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 38,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d7d"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc4"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 51,
+  "quantity_reserved": 0
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d7e"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc4"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 39,
+  "quantity_reserved": 0
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d7f"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc4"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 50,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d80"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc6"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 44,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d81"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc6"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 37,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d82"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc6"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 50,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d83"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cc6"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 93,
+  "quantity_reserved": 7
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d84"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd3"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 60,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d85"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd3"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 68,
+  "quantity_reserved": 2
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d86"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd3"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 43,
+  "quantity_reserved": 2
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d87"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd3"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 41,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d88"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd4"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 78,
+  "quantity_reserved": 4
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d89"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd4"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 84,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d8a"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd4"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 84,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d8b"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd4"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 56,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d8c"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 27,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d8d"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 73,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d8e"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 16,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d8f"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 29,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d90"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd6"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 30,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d91"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd6"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 64,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d92"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd6"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 18,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d93"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd6"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 58,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d94"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 69,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d95"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 42,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d96"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 11,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d97"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 24,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d98"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd8"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 78,
+  "quantity_reserved": 4
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d99"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd8"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 92,
+  "quantity_reserved": 5
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d9a"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd8"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 24,
+  "quantity_reserved": 4
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d9b"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd8"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 65,
+  "quantity_reserved": 2
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d9c"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 68,
+  "quantity_reserved": 0
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d9d"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 43,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d9e"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 32,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882d9f"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 23,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da0"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 48,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da1"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 74,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da2"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 35,
+  "quantity_reserved": 2
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da3"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 57,
+  "quantity_reserved": 2
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da4"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdb"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 79,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da5"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdb"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 10,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da6"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdb"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 51,
+  "quantity_reserved": 7
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da7"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdb"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 12,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da8"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 56,
+  "quantity_reserved": 4
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882da9"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 40,
+  "quantity_reserved": 0
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882daa"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 40,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dab"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 20,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dac"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdd"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 72,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dad"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdd"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 78,
+  "quantity_reserved": 2
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dae"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdd"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 26,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882daf"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdd"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 70,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db0"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd1"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 31,
+  "quantity_reserved": 4
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db1"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd1"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 77,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db2"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd1"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 64,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db3"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd1"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 79,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db4"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd2"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 49,
+  "quantity_reserved": 6
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db5"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd2"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 95,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db6"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd2"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 57,
+  "quantity_reserved": 7
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db7"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd2"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 76,
+  "quantity_reserved": 7
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db8"
+  },
+  "product_variant_id": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 25,
+  "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882db9"
+  },
+  "product_variant_id": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 38,
+  "quantity_reserved": 1
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dba"
+  },
+  "product_variant_id": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 53,
+  "quantity_reserved": 0
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dbb"
+  },
+  "product_variant_id": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 85,
+  "quantity_reserved": 8
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dbc"
+  },
+  "product_variant_id": {
+    "$oid": "699dccea02c4dc45263a0a92"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 39,
+  "quantity_reserved": 9
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dbd"
+  },
+  "product_variant_id": {
+    "$oid": "699dccea02c4dc45263a0a92"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "quantity_on_hand": 38,
+  "quantity_reserved": 0
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dbe"
+  },
+  "product_variant_id": {
+    "$oid": "699dccea02c4dc45263a0a92"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "quantity_on_hand": 19,
+  "quantity_reserved": 10
+},
+{
+  "_id": {
+    "$oid": "69be5cb58c655241eb882dbf"
+  },
+  "product_variant_id": {
+    "$oid": "699dccea02c4dc45263a0a92"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "quantity_on_hand": 17,
+  "quantity_reserved": 3
+}]

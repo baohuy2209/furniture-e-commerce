@@ -29,8 +29,7 @@ export class Cart implements OnInit {
           ...item,
           selected: false,
         }));
-
-        console.log(this.cartItems);
+        this.cdr.detectChanges();
       },
     });
   }
