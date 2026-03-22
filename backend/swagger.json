@@ -585,6 +585,53 @@
           }
         }
       }
+    },
+    "/admin/vouchers": {
+      "get": {
+        "summary": "Get Admin Voucher List",
+        "tags": ["Admin Voucher"],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer" } },
+          { "name": "size", "in": "query", "schema": { "type": "integer" } },
+          { "name": "q", "in": "query", "schema": { "type": "string" } },
+          { "name": "status", "in": "query", "schema": { "type": "string" } },
+          { "name": "type", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "Success" } }
+      },
+      "post": {
+        "summary": "Create Voucher",
+        "tags": ["Admin Voucher"],
+        "responses": { "201": { "description": "Created" } }
+      }
+    },
+    "/admin/vouchers/{id}": {
+      "get": {
+        "summary": "Get Voucher Detail",
+        "tags": ["Admin Voucher"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Success" } }
+      },
+      "put": {
+        "summary": "Update Voucher",
+        "tags": ["Admin Voucher"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Success" } }
+      },
+      "delete": {
+        "summary": "Delete Voucher",
+        "tags": ["Admin Voucher"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Deleted" } }
+      }
+    },
+    "/admin/vouchers/{id}/toggle": {
+      "patch": {
+        "summary": "Toggle Voucher Status",
+        "tags": ["Admin Voucher"],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Success" } }
+      }
     }
   },
   "components": {
