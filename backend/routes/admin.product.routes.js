@@ -1,24 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const adminProductController = require("../app/controllers/admin.product.controller");
+const productController = require("../app/controllers/product.controller");
 const { protectedRoute, isAdmin } = require("../middlewares/auth.jwt");
 
 // Temporarily disabling auth for local development
 // router.use(protectedRoute, isAdmin);
 
 // List, Search, Filter, Pagination
-router.get("/", adminProductController.listProducts);
+router.get("/", productController.apiGetAdminProducts.bind(productController));
 
 // Get Detail (inc variants and images)
-router.get("/:id", adminProductController.getProductDetail);
+router.get("/:id", productController.apiGetProductDetail.bind(productController));
 
 // Create new product (with variants, images)
-router.post("/", adminProductController.createProduct);
+router.post("/", productController.apiCreateProduct.bind(productController));
 
 // Update product
-router.put("/:id", adminProductController.updateProduct);
+router.put("/:id", productController.apiUpdateProduct.bind(productController));
 
-// Soft delete / Hide product (optional)
-router.delete("/:id", adminProductController.deleteProduct);
+// Soft delete / Hide product
+router.delete("/:id", productController.apiDeleteProduct.bind(productController));
 
 module.exports = router;

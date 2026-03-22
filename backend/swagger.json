@@ -14,7 +14,9 @@
     "/auth/signup": {
       "post": {
         "summary": "SignUp",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -50,7 +52,9 @@
       "post": {
         "summary": "SignIn",
         "description": "Log in với username và password. Trả về access token trong res và refresh token trong cookie.",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {
           "200": {
             "description": "User successfully signed in",
@@ -68,14 +72,23 @@
                       "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                     }
                   },
-                  "required": ["message", "accessToken"]
+                  "required": [
+                    "message",
+                    "accessToken"
+                  ]
                 }
               }
             }
           },
-          "400": { "description": "Invalid input" },
-          "401": { "description": "Unauthorized" },
-          "500": { "description": "Internal server error" }
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         },
         "requestBody": {
           "content": {
@@ -91,7 +104,10 @@
                     "format": "color"
                   }
                 },
-                "required": ["username", "password"]
+                "required": [
+                  "username",
+                  "password"
+                ]
               }
             }
           }
@@ -101,31 +117,43 @@
     "/auth/signout": {
       "post": {
         "summary": "SignOut",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {
-          "200": { "description": "Success" },
-          "500": { "description": "Internal server error" }
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
         }
       }
     },
     "/auth/refresh": {
       "post": {
         "summary": "RefreshToken",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {}
       }
     },
     "/users/me": {
       "get": {
         "summary": "AuthMe",
-        "tags": ["Authentication"],
+        "tags": [
+          "Authentication"
+        ],
         "responses": {}
       }
     },
     "/friends/requests": {
       "post": {
         "summary": "SendFriendRequest",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -147,21 +175,27 @@
       },
       "get": {
         "summary": "GetFriendRequests",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {}
       }
     },
     "/friends/requests/68faed19defb37e90657d7d6/accept": {
       "post": {
         "summary": "AcceptFriendRequest",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {}
       }
     },
     "/friends/requests/68fb124874f8418a6bc83ed1/decline": {
       "post": {
         "summary": "DeclineFriendRequest",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -177,14 +211,18 @@
     "/friends/": {
       "get": {
         "summary": "GetAllFriends",
-        "tags": ["Friends"],
+        "tags": [
+          "Friends"
+        ],
         "responses": {}
       }
     },
     "/messages/direct": {
       "post": {
         "summary": "SendDirectMessage",
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -208,7 +246,9 @@
     "/conversations/": {
       "post": {
         "summary": "CreateConversation",
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -236,21 +276,27 @@
       },
       "get": {
         "summary": "GetConversations",
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "responses": {}
       }
     },
     "/conversations/68fb2e6a19c501587577291c/messages": {
       "get": {
         "summary": "GetMessage",
-        "tags": ["Conversations"],
+        "tags": [
+          "Conversations"
+        ],
         "responses": {}
       }
     },
     "/messages/group": {
       "post": {
         "summary": "SendGroupMessage",
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "responses": {},
         "requestBody": {
           "content": {
@@ -273,53 +319,166 @@
     },
     "/admin/products": {
       "get": {
-        "summary": "Get Admin Products",
-        "description": "Lấy danh sách tất cả sản phẩm, kèm variants và images",
-        "tags": ["Admin Products"],
+        "summary": "Lấy danh sách sản phẩm (Admin)",
+        "tags": [
+          "Admin Products"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "room",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "brand",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stock",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDir",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
-          "200": { "description": "Success" }
+          "200": {
+            "description": "Success"
+          }
         }
       },
       "post": {
-        "summary": "Create Admin Product",
-        "description": "Tạo mới sản phẩm, variants và images",
-        "tags": ["Admin Products"],
+        "summary": "Thêm mới sản phẩm",
+        "tags": [
+          "Admin Products"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
-          "201": { "description": "Created" }
+          "201": {
+            "description": "Created"
+          }
         }
       }
     },
     "/admin/products/{id}": {
       "get": {
-        "summary": "Get Admin Product By Id",
-        "tags": ["Admin Products"],
+        "summary": "Lấy chi tiết sản phẩm",
+        "tags": [
+          "Admin Products"
+        ],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
-          "200": { "description": "Success" }
+          "200": {
+            "description": "Success"
+          }
         }
       },
       "put": {
-        "summary": "Update Admin Product",
-        "description": "Cập nhật sản phẩm, variants và images",
-        "tags": ["Admin Products"],
-        "parameters": [
-          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }
+        "summary": "Cập nhật sản phẩm",
+        "tags": [
+          "Admin Products"
         ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
-          "200": { "description": "Success" }
+          "200": {
+            "description": "Updated"
+          }
         }
       },
       "delete": {
-        "summary": "Delete Admin Product",
-        "description": "Xoá sản phẩm, variants và images",
-        "tags": ["Admin Products"],
+        "summary": "Xoá sản phẩm (Soft delete)",
+        "tags": [
+          "Admin Products"
+        ],
         "parameters": [
-          { "in": "path", "name": "id", "required": true, "schema": { "type": "string" } }
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
-          "200": { "description": "Success" }
+          "200": {
+            "description": "Deleted"
+          }
         }
       }
     },
@@ -327,7 +486,9 @@
       "post": {
         "summary": "Upload Image",
         "description": "Upload ảnh lên Cloudinary",
-        "tags": ["Uploads"],
+        "tags": [
+          "Uploads"
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -344,43 +505,61 @@
           }
         },
         "responses": {
-          "200": { "description": "Success" }
+          "200": {
+            "description": "Success"
+          }
         }
       }
     },
     "/admin/warehouse/warehouses": {
       "get": {
         "summary": "Get Admin Warehouses",
-        "tags": ["Admin Warehouse"],
+        "tags": [
+          "Admin Warehouse"
+        ],
         "responses": {
-          "200": { "description": "Success" }
+          "200": {
+            "description": "Success"
+          }
         }
       }
     },
     "/admin/warehouse/stock-items": {
       "get": {
         "summary": "Get Admin Stock High Level",
-        "tags": ["Admin Warehouse"],
+        "tags": [
+          "Admin Warehouse"
+        ],
         "responses": {
-          "200": { "description": "Success" }
+          "200": {
+            "description": "Success"
+          }
         }
       }
     },
     "/admin/warehouse/adjust": {
       "post": {
         "summary": "Adjust Stock",
-        "tags": ["Admin Warehouse"],
+        "tags": [
+          "Admin Warehouse"
+        ],
         "responses": {
-          "200": { "description": "Success" }
+          "200": {
+            "description": "Success"
+          }
         }
       }
     },
     "/admin/warehouse/purchase-order": {
       "post": {
         "summary": "Create Purchase Order",
-        "tags": ["Admin Warehouse"],
+        "tags": [
+          "Admin Warehouse"
+        ],
         "responses": {
-          "201": { "description": "Created" }
+          "201": {
+            "description": "Created"
+          }
         }
       }
     }

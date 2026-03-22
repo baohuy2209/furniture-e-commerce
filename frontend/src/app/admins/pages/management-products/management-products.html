@@ -787,6 +787,11 @@
                           </div>
                         </div>
                         <div class="mt-3">
+                          <label class="hb-form-label">Tags (phân cách bằng dấu phẩy)</label>
+                          <input class="form-control hb-form-input" [(ngModel)]="editForm.tagsText"
+                            (ngModelChange)="onEditChange()" placeholder="sofa, phòng khách, modern..." />
+                        </div>
+                        <div class="mt-3">
                           <label class="hb-form-label">Mô tả</label>
                           <textarea class="form-control hb-form-input" rows="5" placeholder="Mô tả chi tiết sản phẩm..."
                             [(ngModel)]="editForm.description" (ngModelChange)="onEditChange()"></textarea>
