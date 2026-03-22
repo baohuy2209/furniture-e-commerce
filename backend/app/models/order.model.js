@@ -5,9 +5,26 @@ const orderSchema = new mongoose.Schema(
     order_number: { type: String, required: true, unique: true },
     status: {
       type: String,
-      enum: ["uncompleted", "completed"],
-      default: "uncompleted",
+      enum: [
+        "pending",
+        "confirmed",
+        "packed",
+        "shipping",
+        "delivered",
+        "cancelled",
+        "return_requested",
+        "returned",
+        "exchange_requested",
+        "exchanged",
+        "uncompleted",
+        "completed",
+      ],
+      default: "pending",
       required: true,
+    },
+    admin_note: {
+      type: String,
+      default: "",
     },
     total_items: {
       type: Number,

@@ -24,6 +24,9 @@ const registerEventRoute = require("./registerEvent.routes");
 const stockItemRoute = require("./stockItem.routes");
 const stockMovementRoute = require("./stockMovement.routes");
 const warehouseRoute = require("./warehouse.routes");
+const customerAdminRoute = require("./customer.routes");
+const orderAdminRoute = require("./orderAdmin.routes");
+
 function route(app) {
   app.use("/api/auth", authRoute);
   app.use("/api/products", productRoute);
@@ -51,5 +54,7 @@ function route(app) {
   app.use("/api/stock-items", stockItemRoute);
   app.use("/api/stock-movements", stockMovementRoute);
   app.use("/api/warehouse", warehouseRoute);
+  app.use("/api/admins/customers", customerAdminRoute);
+  app.use("/api/admins/orders", orderAdminRoute);
 }
 module.exports = route;

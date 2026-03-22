@@ -3,7 +3,7 @@ const orderItemShippingSchema = new mongoose.Schema(
   {
     order_item_id: { type: mongoose.Schema.Types.ObjectId, ref: "OrderItem" },
     shipping_discount_percent: { type: Number, default: 0 },
-    address_id: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
+    address_id: { type: mongoose.Schema.Types.ObjectId, ref: "UserAddress" },
     shipping_method: {
       type: String,
       enum: [

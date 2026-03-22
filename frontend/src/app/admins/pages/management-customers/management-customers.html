@@ -58,7 +58,7 @@
 
             <select class="form-select" [ngModel]="vm.status" (ngModelChange)="setStatus($event)">
               <option value="all">Tất cả trạng thái</option>
-              <option value="active">Hoạt động</option>
+              <option value="unlocked">Hoạt động</option>
               <option value="locked">Tạm khóa</option>
             </select>
 
@@ -172,7 +172,7 @@
                   <span
                     class="hb-pill"
                     [class.is-locked]="r.user.status === 'locked'"
-                    [class.is-soft]="r.user.status === 'active'"
+                    [class.is-soft]="r.user.status === 'unlocked'"
                   >
                     {{ statusLabel(r.user.status) }}
                   </span>
@@ -187,19 +187,19 @@
                 </div>
 
                 <div class="hb-td hb-td-center text-muted">
-                  {{ r.user.created_at | date: 'dd/MM/yyyy' }}
+                  {{ r.user.createdAt | date: 'dd/MM/yyyy' }}
                 </div>
 
                 <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
                   <button
                     class="hb-icon-btn"
-                    [class.danger]="r.user.status === 'active'"
+                    [class.danger]="r.user.status === 'unlocked'"
                     (click)="toggleLock(r.user.user_id)"
-                    [title]="r.user.status === 'active' ? 'Khóa tài khoản' : 'Mở khóa'"
+                    [title]="r.user.status === 'unlocked' ? 'Khóa tài khoản' : 'Mở khóa'"
                   >
                     <i
                       class="bi"
-                      [ngClass]="r.user.status === 'active' ? 'bi-lock' : 'bi-unlock-fill'"
+                      [ngClass]="r.user.status === 'unlocked' ? 'bi-lock' : 'bi-unlock-fill'"
                     ></i>
                   </button>
                 </div>
@@ -283,7 +283,7 @@
                 <span
                   class="hb-pill"
                   [class.is-locked]="dvm.user.status === 'locked'"
-                  [class.is-soft]="dvm.user.status === 'active'"
+                  [class.is-soft]="dvm.user.status === 'unlocked'"
                 >
                   {{ statusLabel(dvm.user.status) }}
                 </span>
@@ -315,7 +315,7 @@
                 </div>
                 <div class="hb-kv">
                   <div class="k">Ngày tham gia</div>
-                  <div class="v">{{ dvm.user.created_at | date: 'dd/MM/yyyy' }}</div>
+                  <div class="v">{{ dvm.user.createdAt | date: 'dd/MM/yyyy' }}</div>
                 </div>
                 <div class="hb-kv">
                   <div class="k">Đăng nhập lần cuối</div>
@@ -399,7 +399,7 @@
                       *ngFor="let o of dvm.orders.slice(0, 5)"
                     >
                       <span class="hb-mono" style="width: 140px">{{ o.order_number }}</span>
-                      <span style="width: 120px">{{ o.created_at | date: 'dd/MM/yyyy' }}</span>
+                      <span style="width: 120px">{{ o.createdAt | date: 'dd/MM/yyyy' }}</span>
                       <span style="width: 140px"
                         ><span class="hb-pill is-soft">{{
                           payStatusLabel(o.payment_status)
@@ -434,7 +434,7 @@
                       *ngFor="let o of dvm.orders"
                     >
                       <span class="hb-mono" style="width: 140px">{{ o.order_number }}</span>
-                      <span style="width: 120px">{{ o.created_at | date: 'dd/MM/yyyy' }}</span>
+                      <span style="width: 120px">{{ o.createdAt | date: 'dd/MM/yyyy' }}</span>
                       <span style="width: 130px"
                         ><span class="hb-pill is-soft">{{
                           payStatusLabel(o.payment_status)
@@ -465,13 +465,13 @@
                       *ngFor="let t of dvm.point_history"
                     >
                       <span style="width: 150px">{{
-                        t.created_at | date: 'dd/MM/yyyy HH:mm'
+                        t.createdAt | date: 'dd/MM/yyyy HH:mm'
                       }}</span>
                       <span style="width: 100px"
-                        ><span class="hb-pill is-soft">{{ t.type }}</span></span
+                        ><span class="hb-pill is-soft">{{ t.action }}</span></span
                       >
-                      <span class="text-end" style="width: 100px" [class.text-danger]="t.points < 0"
-                        >{{ t.points > 0 ? '+' : '' }}{{ t.points }}</span
+                      <span class="text-end" style="width: 100px" [class.text-danger]="t.amount < 0"
+                        >{{ t.amount > 0 ? '+' : '' }}{{ t.amount }}</span
                       >
                       <span class="ms-4 flex-grow-1 text-muted">{{ t.note }}</span>
                     </div>

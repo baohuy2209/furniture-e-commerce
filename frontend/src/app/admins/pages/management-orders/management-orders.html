@@ -69,7 +69,8 @@
           <select class="form-select" [ngModel]="f_status" (ngModelChange)="onChangeStatus($event)">
             <option value="">Trạng thái đơn</option>
             <option value="pending">Chờ xác nhận</option>
-            <option value="packed">Đã xác nhận</option>
+            <option value="confirmed">Đã xác nhận</option>
+            <option value="packed">Đang đóng gói</option>
             <option value="shipping">Đang giao</option>
             <option value="delivered">Đã giao</option>
             <option value="cancelled">Đã huỷ</option>
@@ -360,14 +361,6 @@
                   Duyệt đổi trả
                 </button>
 
-                <button
-                  class="btn btn-hb-outline w-100"
-                  type="button"
-                  *ngIf="d.canRejectRequest"
-                  (click)="rejectRequest(d.order.order_id)"
-                >
-                  Từ chối yêu cầu
-                </button>
 
                 <button
                   class="btn btn-hb w-100"
