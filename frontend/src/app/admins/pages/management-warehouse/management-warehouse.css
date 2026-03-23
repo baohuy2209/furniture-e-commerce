@@ -138,9 +138,7 @@
 .hb-summary-card:hover {
   background: rgba(17, 24, 39, 0.95) !important;
   border-color: var(--hb-primary-glow) !important;
-  box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.4),
-    var(--shadow-glow) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), var(--shadow-glow) !important;
   transform: translateY(-5px);
 }
 
@@ -655,9 +653,7 @@
   color: var(--hb-text);
   font-size: 13px;
   width: 160px;
-  transition:
-    border-color 0.2s,
-    width 0.2s;
+  transition: border-color 0.2s, width 0.2s;
   outline: none;
 }
 

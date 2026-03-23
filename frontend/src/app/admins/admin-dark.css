@@ -24,8 +24,8 @@
   --shadow-glow: 0 0 20px rgba(129, 140, 248, 0.1);
 }
 
-/*
-   EXTREMELY AGGRESSIVE GLOBAL RESET
+/* 
+   EXTREMELY AGGRESSIVE GLOBAL RESET 
    Targeting everything possible to kill the "White Border"
 */
 
@@ -141,6 +141,9 @@ section {
   filter: drop-shadow(0 0 5px white) !important;
 }
 
+
+
+
 .hb-summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -163,9 +166,7 @@ section {
 .hb-summary-card-v2:hover {
   transform: translateY(-5px);
   border-color: var(--hb-primary-glow);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.3),
-    var(--shadow-glow);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), var(--shadow-glow);
 }
 
 .card-top {
@@ -321,6 +322,7 @@ section {
   color: white;
 }
 
+
 /* Killer for any white background in common UI containers */
 .container,
 .container-fluid,
@@ -340,17 +342,19 @@ section {
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
+
 /* Kill padding on any potential container wrapping the outlet */
-.main-admin-content > div,
-.hb-page-shell > div {
+.main-admin-content>div,
+.hb-page-shell>div {
   padding: 0 !important;
   margin: 0 !important;
 }
 
 .hb-page-body {
-  padding: 24px !important;
+  padding: 10px 24px 24px 24px !important;
   background-color: var(--hb-bg-main) !important;
 }
+
 
 /* Ensure full bleed / no white border */
 .main-admin-content .container,
@@ -360,25 +364,33 @@ section {
   margin: 0 !important;
 }
 
-/* PAGE SHELL & HEADERS */
+/* PAGE SHELL & HEADERS - Unified Global Rule based on Dashboard */
 .hb-page-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
   background-color: transparent !important;
-  border-bottom: none !important;
-  padding-bottom: 40px !important;
-  padding-right: 48px !important; /* Move content slightly left/buttons right */
+  border-bottom: 1px solid var(--hb-border) !important;
+  padding: 12px 48px 12px 24px !important;
+  /* Right padding 48px to accommodate scrollbars/layout spacing */
 }
 
 .hb-header-actions {
-  transform: translateY(-10px); /* Move buttons UP */
-  margin-right: 12px; /* Move buttons RIGHT */
+  /* transform: translateY(-10px); removed because it pushes buttons up unaligned */
+  margin-right: 12px;
 }
 
 .hb-title {
   color: var(--hb-text-strong) !important;
-  font-size: 32px !important;
-  letter-spacing: -0.5px !important;
-  text-transform: none !important;
-  /* Apply a slight gradient to part of the text if possible via class, but globally keep it white */
+  font-size: 40px !important;
+  /* Fully sync with Dashboard 40px */
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
 }
 
 .hb-title {
@@ -388,6 +400,9 @@ section {
   -webkit-text-fill-color: transparent;
   display: inline-block;
   font-weight: 800 !important;
+  line-height: 1.4 !important;
+  padding: 0 !important;
+  /* Sync with tighter header */
 }
 
 .hb-h1,
@@ -423,8 +438,8 @@ section {
   background-color: var(--hb-surface) !important;
   border: 1px solid var(--hb-border) !important;
   box-shadow: none !important;
-  border-radius: 20px !important;
-  padding: 20px !important;
+  border-radius: var(--hb-radius) !important;
+  padding: 14px 16px !important;
   display: flex !important;
   flex-direction: row !important;
   /* Back to horizontal icon + text */
@@ -447,15 +462,19 @@ section {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 24px !important; /* Larger icon */
+  font-size: 24px !important;
+  /* Larger icon */
   background: rgba(255, 255, 255, 0.05) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: #fff !important; /* Force white icon */
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2)); /* Brighten/Glow */
+  color: #fff !important;
+  /* Force white icon */
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+  /* Brighten/Glow */
 }
 
 .hb-sc-label {
-  color: #ffffff !important; /* Force white label */
+  color: #ffffff !important;
+  /* Force white label */
   font-weight: 600 !important;
   opacity: 0.9;
   letter-spacing: 0.5px;
@@ -465,7 +484,8 @@ section {
   font-size: 28px !important;
   font-weight: 800 !important;
   color: #ffffff !important;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4); /* Glow effect */
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  /* Glow effect */
   letter-spacing: -0.5px;
 }
 
@@ -601,10 +621,12 @@ section {
   padding: 6px 14px !important;
 }
 
-/* GLOBAL TEXT OVERRIDE - FORCE WHITE/LIGHT ON DARK */
+/* GLOBAL TEXT OVERRIDE - FORCE WHITE/LIGHT ON DARK & SYNC FONT */
 .main-admin-content,
 .hb-page-shell {
   color: #ffffff !important;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-size: 14px;
 }
 
 .main-admin-content span,
@@ -613,6 +635,7 @@ section {
 .main-admin-content label:not(.hb-date-field label),
 .main-admin-content input,
 .main-admin-content select,
+.main-admin-content textarea,
 .main-admin-content th,
 .main-admin-content td,
 .main-admin-content h1,
@@ -620,8 +643,11 @@ section {
 .main-admin-content h3,
 .main-admin-content h4,
 .main-admin-content h5,
-.main-admin-content h6 {
+.main-admin-content h6,
+.main-admin-content a,
+.main-admin-content button:not(.btn-hb-accent):not(.btn-hb-ghost):not(.btn-hb-outline-danger) {
   color: #ffffff !important;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
 }
 
 .text-muted,
@@ -650,14 +676,14 @@ section {
 
 /* Dashboard V2 Polish */
 .hb-panel-v2 {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .hb-summary-card-v2 {
   cursor: pointer;
 }
+
+
 
 /* CHART & LEGEND TEXT */
 .hb-chart-legend .small,
@@ -687,67 +713,189 @@ svg text {
 }
 
 .chart-interactions line {
-  transition:
-    x1 0.1s ease-out,
-    x2 0.1s ease-out;
+  transition: x1 0.1s ease-out, x2 0.1s ease-out;
 }
 
-/* BUTTONS */
-.btn-hb {
-  background: var(--hb-primary) !important;
+
+
+/* BUTTONS - SUPER SYNCHRONIZED THEME */
+/* Force all header action buttons to be glass-themed by default */
+.hb-header-actions button {
+  background: rgba(255, 255, 255, 0.05) !important;
+  /* Base Glass Dark */
   color: #ffffff !important;
-  border: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 10px !important;
-  box-shadow: 0 4px 14px 0 rgba(129, 140, 248, 0.39) !important;
+  margin-top: 0 !important;
 }
 
-.btn-hb:hover {
-  filter: brightness(1.1) !important;
+/* Explicit Synchronized Accent Style (Matching "Thêm sản phẩm") */
+.hb-header-actions button.btn-hb-accent,
+.hb-header-actions button.btn-primary,
+.hb-header-actions button.btn-warning {
+  background: rgba(129, 140, 248, 0.1) !important;
+  /* Navy/Blue Glow background */
+  color: #818cf8 !important;
+  /* Bright Blue text */
+  border: 1px solid rgba(129, 140, 248, 0.25) !important;
+  box-shadow: 0 4px 15px rgba(129, 140, 248, 0.1) !important;
+}
+
+.hb-header-actions button:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
   transform: translateY(-1px);
 }
 
-.btn-hb-outline {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid var(--hb-border) !important;
-  color: var(--hb-text-strong) !important;
-  border-radius: 10px !important;
-}
-
-.btn-hb-outline:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-}
-
-.btn-hb-accent {
-  background: rgba(129, 140, 248, 0.1) !important;
-  color: var(--hb-primary) !important;
-  border: 1px solid rgba(129, 140, 248, 0.2) !important;
-  border-radius: 10px !important;
-}
-
-.btn-hb-accent:hover {
+.hb-header-actions button.btn-hb-accent:hover {
   background: rgba(129, 140, 248, 0.2) !important;
+  border-color: rgba(129, 140, 248, 0.45) !important;
+  box-shadow: 0 0 20px rgba(129, 140, 248, 0.2) !important;
 }
 
-/* ICONS & SPECIFIC CARD COLORS */
-.hb-sc-icon.revenue {
-  background: rgba(129, 140, 248, 0.1) !important;
+/* Success / Publish / Commit Buttons */
+.btn-hb-success,
+.btn-hb-publish {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-hb-success:hover,
+.btn-hb-publish:hover {
+  background: #059669 !important;
+  /* Emerald 600 */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5), 0 0 15px rgba(16, 185, 129, 0.4) !important;
+}
+
+.btn-hb-success:active,
+.btn-hb-publish:active {
+  transform: translateY(1px);
+}
+
+.btn-hb-success[disabled],
+.btn-hb-publish[disabled] {
+  background: rgba(16, 185, 129, 0.15) !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  border: 1px solid rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Icons within these buttons are already colorful thanks to previous rules */
+
+
+/* ICONS & PREMIUM COLORFUL ACCENTS */
+/* Header Action Icons - Vibrant & Glowing */
+.bi-arrow-clockwise {
+  color: #38bdf8 !important;
+  /* Sky Blue */
+  filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4));
+}
+
+.bi-download {
+  color: #fbbf24 !important;
+  /* Amber/Yellow for Export */
+  filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.4));
+}
+
+.bi-plus-lg,
+.bi-plus-circle {
+  color: #4ade80 !important;
+  /* Emerald Green for New/Add */
+  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.5));
+}
+
+.bi-pencil-square,
+.bi-pencil {
   color: #818cf8 !important;
+  /* Indigo */
+  filter: drop-shadow(0 0 5px rgba(129, 140, 248, 0.4));
+}
+
+.bi-trash3,
+.bi-trash {
+  color: #f87171 !important;
+  /* Rose Red */
+  filter: drop-shadow(0 0 5px rgba(248, 113, 113, 0.4));
+}
+
+/* Base Summary Card Icon - Resetting to Dynamic Style */
+.hb-sc-icon {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.hb-sc-icon i {
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hb-summary-card:hover .hb-sc-icon i {
+  transform: scale(1.2) rotate(5deg);
+}
+
+/* Specific Card Theming with Advanced Gradients */
+.hb-sc-icon.revenue {
+  background: linear-gradient(135deg, rgba(129, 140, 248, 0.15), rgba(129, 140, 248, 0.05)) !important;
+  color: #818cf8 !important;
+  border-color: rgba(129, 140, 248, 0.3) !important;
+  box-shadow: 0 0 15px rgba(129, 140, 248, 0.15);
 }
 
 .hb-sc-icon.orders {
-  background: rgba(239, 68, 68, 0.1) !important;
-  color: #ef4444 !important;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05)) !important;
+  color: #fbbf24 !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.15);
 }
 
-.hb-sc-icon.active {
-  background: rgba(245, 158, 11, 0.1) !important;
-  color: #f59e0b !important;
+/* 1. Default/Sky Blue (Tổng sản phẩm) */
+.hb-sc-icon {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(56, 189, 248, 0.05)) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
 }
 
-.hb-sc-icon.customers {
-  background: rgba(16, 185, 129, 0.1) !important;
-  color: #10b981 !important;
+/* 2. Amber/Orange (Cảnh báo Hết hàng) */
+.hb-sc-icon.warn {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.05)) !important;
+  color: #eab308 !important;
+  border-color: rgba(234, 179, 8, 0.3) !important;
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.15);
 }
+
+/* 3. Emerald Green (Tổng lượt bán / Thành công) */
+.hb-sc-icon.active,
+.hb-sc-icon.ok {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(74, 222, 128, 0.05)) !important;
+  color: #4ade80 !important;
+  border-color: rgba(74, 222, 128, 0.3) !important;
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.15);
+}
+
+.hb-sc-icon.customers,
+.hb-sc-icon.info {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(56, 189, 248, 0.05)) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+}
+
+.hb-sc-icon.danger {
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.15), rgba(248, 113, 113, 0.05)) !important;
+  color: #f87171 !important;
+  border-color: rgba(248, 113, 113, 0.3) !important;
+  box-shadow: 0 0 15px rgba(248, 113, 113, 0.15);
+}
+
 
 /* TABLES */
 .hb-table-head {
@@ -789,14 +937,104 @@ svg text {
   background-color: var(--hb-surface) !important;
   border: 1px solid var(--hb-border) !important;
   border-radius: 12px !important;
+  gap: 12px !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+}
+
+/* Base proportions for filter items - synced with Product Management */
+.hb-filterbar>* {
+  flex: 1 1 auto !important;
+}
+
+/* Search box (input or wrapper) should be wider */
+.hb-filterbar>input.form-control,
+.hb-filterbar .hb-search-input-wrapper {
+  flex: 2.5 !important;
+  min-width: 180px !important;
+}
+
+/* Selects and other small controls */
+.hb-filterbar .form-select,
+.hb-filterbar input[type="date"],
+.hb-filterbar input[type="number"] {
+  flex: 1 !important;
+  min-width: 120px !important;
+}
+
+/* Specifically for small selectors like Page Size */
+.hb-filterbar select.form-select:last-of-type {
+  max-width: 130px !important;
+}
+
+.hb-filter-reset {
+  flex: 0 0 auto !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+/* SEARCH INPUT WRAPPER - GLOBALLY SYNCHRONIZED */
+.hb-search-input-wrapper {
+  position: relative;
+}
+
+.hb-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 14px;
+  z-index: 1;
+}
+
+.hb-search-input {
+  padding-left: 36px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #e2e8f0 !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+}
+
+.hb-search-input:focus {
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15) !important;
 }
 
 .form-control,
 .form-select {
-  background-color: rgba(255, 255, 255, 0.03) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
   border: 1px solid var(--hb-border) !important;
-  color: var(--hb-text-strong) !important;
-  border-radius: 8px !important;
+  color: #e2e8f0 !important;
+  border-radius: 10px !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  color-scheme: dark !important;
+  transition: all 0.2s ease;
+}
+
+.form-select {
+  appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 12px !important;
+  padding-right: 36px !important;
+}
+
+.form-select option {
+  background-color: #111827 !important;
+  color: white !important;
+  padding: 10px !important;
+}
+
+.form-control:hover,
+.form-select:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(129, 140, 248, 0.3) !important;
 }
 
 .form-control:focus,
@@ -858,35 +1096,70 @@ svg text {
 
 /* Tweak pill styles to match the template's soft background style with strong text */
 .hb-st-active,
-.pill-ok {
+.pill-ok,
+.pill-paid,
+.is-soft {
   background: rgba(16, 185, 129, 0.1) !important;
   color: #10b981 !important;
 }
 
 .hb-st-paused,
 .pill-muted,
-.pill-pending {
+.pill-pending,
+.pill-returned,
+.pill-unpaid {
   background: rgba(156, 163, 175, 0.1) !important;
   color: #9ca3af !important;
 }
 
+.rank-bronze {
+  background: rgba(180, 83, 9, 0.1) !important;
+  /* Bronze - Brownish */
+  color: #d97706 !important;
+}
+
+.rank-silver {
+  background: rgba(148, 163, 184, 0.1) !important;
+  /* Silver - Slate Gray */
+  color: #cbd5e1 !important;
+}
+
 .hb-st-frozen,
-.pill-warn {
+.pill-warn,
+.pill-refunded {
   background: rgba(245, 158, 11, 0.1) !important;
   color: #f59e0b !important;
 }
 
+.rank-gold {
+  background: rgba(234, 179, 8, 0.1) !important;
+  /* Gold - Yellow/Amber */
+  color: #eab308 !important;
+}
+
 .hb-st-expired,
 .hb-st-danger,
-.pill-cancelled {
+.pill-cancelled,
+.pill-return-req,
+.pill-exchange-req,
+.is-locked {
   background: rgba(239, 68, 68, 0.1) !important;
   color: #ef4444 !important;
 }
 
 .hb-st-new,
-.pill-delivered {
+.pill-delivered,
+.pill-confirmed,
+.pill-shipping {
   background: rgba(59, 130, 246, 0.1) !important;
   color: #3b82f6 !important;
+}
+
+.rank-diamond {
+  background: rgba(14, 165, 233, 0.1) !important;
+  /* Diamond - Cyan Blue */
+  color: #0ea5e9 !important;
+  text-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
 }
 
 /* DASHBOARD HEADER EXTRAS */
@@ -971,7 +1244,9 @@ svg text {
 .th-content {
   color: #ffffff !important;
   font-weight: 700 !important;
-  background-color: rgba(255, 255, 255, 0.05) !important;
+  background-color: #111827 !important;
+  /* Solid background for stickiness */
+  z-index: 20;
 }
 
 .hb-dashboard-table tbody td,

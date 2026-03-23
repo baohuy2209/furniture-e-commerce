@@ -46,7 +46,7 @@ interface BrandEntity {
 const MOCK_BRANDS: BrandEntity[] = [
   { _id: 'br_001', brand_name: 'Nhà cung cấp Hòa Phát' },
   { _id: 'br_002', brand_name: 'Xưởng Mộc Ý Tưởng' },
-  { _id: 'br_003', brand_name: 'Nhập khẩu Q-Home' },
+  { _id: 'br_003', brand_name: 'Nhập khẩu Q-Home' }
 ];
 
 interface POEntity {
@@ -222,11 +222,7 @@ export class ManagementWarehouse implements OnInit {
   private movements$ = new BehaviorSubject<StockMovementEntity[]>(MOCK_MOVEMENTS);
   private poItems$ = new BehaviorSubject<POEntity[]>(MOCK_PO_LIST);
 
-  private routeState$ = new BehaviorSubject<{
-    id: string | null;
-    edit: boolean;
-    createPO: boolean;
-  }>({
+  private routeState$ = new BehaviorSubject<{ id: string | null; edit: boolean; createPO: boolean }>({
     id: null,
     edit: false,
     createPO: false,
@@ -279,7 +275,7 @@ export class ManagementWarehouse implements OnInit {
             brand_id: '',
             note: '',
             tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 },
-            items: [],
+            items: []
           });
           this.importStep$.next(1);
         }
@@ -457,12 +453,7 @@ export class ManagementWarehouse implements OnInit {
           for (const item of importDraft.items) {
             const w = whMap.get(item.warehouse_id);
             const v = variantMap.get(item.product_variant_id);
-            const currentStock =
-              stockItems.find(
-                (s) =>
-                  s.warehouse_id === item.warehouse_id &&
-                  s.product_variant_id === item.product_variant_id,
-              )?.quantity_on_hand || 0;
+            const currentStock = stockItems.find(s => s.warehouse_id === item.warehouse_id && s.product_variant_id === item.product_variant_id)?.quantity_on_hand || 0;
             const cost = item.quantity * item.unit_cost;
             importTotalCost += cost;
             importPreviewList.push({
@@ -473,7 +464,7 @@ export class ManagementWarehouse implements OnInit {
               expectedStock: currentStock + item.quantity,
               quantity: item.quantity,
               unit_cost: item.unit_cost,
-              subtotal: cost,
+              subtotal: cost
             });
           }
         }
@@ -481,7 +472,7 @@ export class ManagementWarehouse implements OnInit {
         // Build PO list VM
         const poList: POListItemVM[] = poItems
           .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
-          .map((po) => ({
+          .map(po => ({
             po_id: po.po_id,
             po_number: po.po_number,
             brand_name: po.brand_name,
@@ -516,9 +507,9 @@ export class ManagementWarehouse implements OnInit {
           currentPanel: createPO ? 'import' : !selectedId ? null : edit ? 'adjust' : 'detail',
           poList,
           transferList: movements
-            .filter((m) => m.reference_type === 'manual')
+            .filter(m => m.reference_type === 'manual')
             .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
-            .map((m) => movementToVM(m)),
+            .map(m => movementToVM(m)),
         };
 
         return vm;
@@ -729,9 +720,7 @@ export class ManagementWarehouse implements OnInit {
     // Find or create target stock
     let allStocks = [...this.stockItems$.value];
     let targetStock = allStocks.find(
-      (x) =>
-        x.product_variant_id === stock.product_variant_id &&
-        x.warehouse_id === em.targetWarehouseId,
+      (x) => x.product_variant_id === stock.product_variant_id && x.warehouse_id === em.targetWarehouseId
     );
 
     if (targetStock) {
@@ -740,9 +729,7 @@ export class ManagementWarehouse implements OnInit {
         quantity_on_hand: targetStock.quantity_on_hand + qtyAbs,
         updated_at: new Date().toISOString(),
       };
-      allStocks = allStocks.map((s) =>
-        s.stock_item_id === updatedTargetStock.stock_item_id ? updatedTargetStock : s,
-      );
+      allStocks = allStocks.map(s => s.stock_item_id === updatedTargetStock.stock_item_id ? updatedTargetStock : s);
     } else {
       const newTargetStock: StockItemEntity = {
         stock_item_id: `si_${id16()}`,
@@ -758,9 +745,7 @@ export class ManagementWarehouse implements OnInit {
     }
 
     // Update source
-    allStocks = allStocks.map((s) =>
-      s.stock_item_id === updatedSourceStock.stock_item_id ? updatedSourceStock : s,
-    );
+    allStocks = allStocks.map(s => s.stock_item_id === updatedSourceStock.stock_item_id ? updatedSourceStock : s);
 
     this.stockItems$.next(allStocks);
 
@@ -811,10 +796,7 @@ export class ManagementWarehouse implements OnInit {
 
     // 1. Process items
     for (const item of draft.items) {
-      let stock = stockItems.find(
-        (s) =>
-          s.warehouse_id === item.warehouse_id && s.product_variant_id === item.product_variant_id,
-      );
+      let stock = stockItems.find(s => s.warehouse_id === item.warehouse_id && s.product_variant_id === item.product_variant_id);
 
       let targetStockId = '';
       if (!stock) {
@@ -827,7 +809,7 @@ export class ManagementWarehouse implements OnInit {
           quantity_reserved: 0,
           reorder_point: DEFAULT_REORDER_POINT,
           created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         };
         stockItems.unshift(stock);
       } else {
@@ -835,9 +817,9 @@ export class ManagementWarehouse implements OnInit {
         const updatedStock: StockItemEntity = {
           ...stock,
           quantity_on_hand: stock.quantity_on_hand + item.quantity,
-          updated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         };
-        stockItems = stockItems.map((s) => (s.stock_item_id === targetStockId ? updatedStock : s));
+        stockItems = stockItems.map(s => s.stock_item_id === targetStockId ? updatedStock : s);
       }
 
       // 2. Add Stock Movement per item
@@ -874,13 +856,13 @@ export class ManagementWarehouse implements OnInit {
       product_variant_id,
       warehouse_id,
       quantity,
-      unit_cost,
+      unit_cost
     };
 
     this.importDraft$.next({
       ...draft,
       items: [newItem, ...draft.items],
-      tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 },
+      tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 }
     });
   }
 
@@ -889,7 +871,7 @@ export class ManagementWarehouse implements OnInit {
     if (!draft) return;
     this.importDraft$.next({
       ...draft,
-      items: draft.items.filter((x) => x.id !== id),
+      items: draft.items.filter(x => x.id !== id)
     });
   }
 
@@ -978,67 +960,45 @@ export class ManagementWarehouse implements OnInit {
   // ===== PO HELPER METHODS =====
   getPOIconClass(status: POStatus): string {
     switch (status) {
-      case 'completed':
-        return 'icon-ok';
+      case 'completed': return 'icon-ok';
       case 'confirmed':
-      case 'receiving':
-        return 'icon-blue';
-      case 'pending':
-        return 'icon-purple';
-      case 'cancelled':
-        return 'icon-muted';
-      default:
-        return 'icon-muted';
+      case 'receiving': return 'icon-blue';
+      case 'pending': return 'icon-purple';
+      case 'cancelled': return 'icon-muted';
+      default: return 'icon-muted';
     }
   }
 
   getPOIcon(status: POStatus): string {
     switch (status) {
-      case 'completed':
-        return 'bi-check-circle-fill';
-      case 'confirmed':
-        return 'bi-clipboard-check';
-      case 'receiving':
-        return 'bi-truck';
-      case 'pending':
-        return 'bi-hourglass-split';
-      case 'cancelled':
-        return 'bi-x-circle';
-      default:
-        return 'bi-clipboard';
+      case 'completed': return 'bi-check-circle-fill';
+      case 'confirmed': return 'bi-clipboard-check';
+      case 'receiving': return 'bi-truck';
+      case 'pending': return 'bi-hourglass-split';
+      case 'cancelled': return 'bi-x-circle';
+      default: return 'bi-clipboard';
     }
   }
 
   getPOPillClass(status: POStatus): string {
     switch (status) {
-      case 'completed':
-        return 'pill-ok';
+      case 'completed': return 'pill-ok';
       case 'confirmed':
-      case 'receiving':
-        return 'pill-blue';
-      case 'pending':
-        return 'pill-purple';
-      case 'cancelled':
-        return 'pill-cancelled';
-      default:
-        return '';
+      case 'receiving': return 'pill-blue';
+      case 'pending': return 'pill-purple';
+      case 'cancelled': return 'pill-cancelled';
+      default: return '';
     }
   }
 
   getPOStatusLabel(status: POStatus): string {
     switch (status) {
-      case 'completed':
-        return 'Hoàn tất';
-      case 'confirmed':
-        return 'Đã xác nhận';
-      case 'receiving':
-        return 'Đang nhận';
-      case 'pending':
-        return 'Chờ duyệt';
-      case 'cancelled':
-        return 'Đã hủy';
-      default:
-        return status;
+      case 'completed': return 'Hoàn tất';
+      case 'confirmed': return 'Đã xác nhận';
+      case 'receiving': return 'Đang nhận';
+      case 'pending': return 'Chờ duyệt';
+      case 'cancelled': return 'Đã hủy';
+      default: return status;
     }
   }
 

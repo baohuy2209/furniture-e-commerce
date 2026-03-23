@@ -90,7 +90,8 @@
   height: 2px;
   background: rgba(255, 255, 255, 0.08);
   margin: 0 16px;
-  margin-bottom: 24px; /* Align with circles */
+  margin-bottom: 24px;
+  /* Align with circles */
   position: relative;
   z-index: 1;
   transition: background 0.3s ease;
@@ -144,6 +145,7 @@
 .hb-sc-icon.ok {
   color: #10b981;
 }
+
 .hb-sc-icon.warn {
   color: #f59e0b;
 }
