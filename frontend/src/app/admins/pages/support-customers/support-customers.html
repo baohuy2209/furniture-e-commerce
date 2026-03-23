@@ -449,11 +449,11 @@
                                 quyết</b> → <b>Đóng</b>.
                         </div>
 
-                        <button class="btn btn-hb w-100 mb-2" (click)="saveEdit()" [disabled]="saving || !isDirty">
-                            <i class="bi bi-save2 me-1"></i> Lưu thông tin
+                        <button class="btn btn-hb-success w-100 mb-2" (click)="saveEdit()" [disabled]="saving || !isDirty">
+                            <i class="bi bi-check-lg me-1"></i> Lưu thông tin
                         </button>
 
-                        <button class="btn btn-hb-send w-100 mb-2" (click)="sendToCustomer()" [disabled]="saving" style="background-color: #2c3e50; color: white;">
+                        <button class="btn btn-hb-primary w-100 mb-2" (click)="sendToCustomer()" [disabled]="saving">
                             <i class="bi bi-send-fill me-1"></i> Gửi cho khách hàng
                         </button>
 

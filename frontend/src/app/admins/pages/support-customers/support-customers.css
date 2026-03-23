@@ -581,3 +581,45 @@
         top: auto;
     }
 }
+
+/* ACTION BUTTONS & TEXT OVERRIDES */
+.btn-hb-success {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.btn-hb-success:disabled {
+    opacity: 0.5 !important;
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+.btn-hb-primary {
+    background-color: var(--hb-primary) !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.btn-hb-primary:disabled {
+    opacity: 0.5 !important;
+    background-color: var(--hb-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-hb-outline {
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: #ffffff !important;
+    background: transparent !important;
+}
+
+.hb-sticky-side .btn, 
+.hb-sticky-side .btn i,
+.hb-page-shell .form-label,
+.hb-page-shell .hb-section-title {
+    color: #ffffff !important;
+}
+
+.fw-bold, b, strong {
+    color: #ffffff !important;
+}
