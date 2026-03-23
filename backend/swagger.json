@@ -247,28 +247,81 @@
         "responses": {}
       }
     },
-    "/messages/group": {
+    "/admin/vouchers": {
+      "get": {
+        "tags": ["Admin Voucher"],
+        "summary": "Lấy danh sách voucher (Admin)",
+        "parameters": [
+          { "name": "page", "in": "query", "type": "integer" },
+          { "name": "size", "in": "query", "type": "integer" },
+          { "name": "q", "in": "query", "type": "string", "description": "Tìm theo mã hoặc tên" },
+          { "name": "status", "in": "query", "type": "string", "enum": ["active", "paused", "expired", "pending"] },
+          { "name": "type", "in": "query", "type": "string", "enum": ["percent", "fixed", "freeship"] }
+        ],
+        "responses": {
+          "200": { "description": "Thành công" }
+        }
+      },
       "post": {
-        "summary": "SendGroupMessage",
-        "tags": ["Messages"],
-        "responses": {},
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "conversationId": {
-                    "type": "string"
-                  },
-                  "content": {
-                    "type": "string"
-                  }
-                }
+        "tags": ["Admin Voucher"],
+        "summary": "Tạo voucher mới (Admin)",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": ["code", "voucher_name", "value", "start_date", "end_date"],
+              "properties": {
+                "code": { "type": "string" },
+                "voucher_name": { "type": "string" },
+                "type": { "type": "string", "enum": ["percent", "fixed", "freeship"] },
+                "value": { "type": "number" },
+                "min_order_value": { "type": "number" },
+                "usage_limit": { "type": "number" },
+                "start_date": { "type": "string", "format": "date-time" },
+                "end_date": { "type": "string", "format": "date-time" },
+                "description": { "type": "string" },
+                "appliedTo": { "type": "string", "enum": ["all", "specific"] },
+                "applied_products": { "type": "array", "items": { "type": "string" } }
               }
             }
           }
+        ],
+        "responses": {
+          "201": { "description": "Tạo thành công" }
         }
+      }
+    },
+    "/admin/vouchers/{id}": {
+      "get": {
+        "tags": ["Admin Voucher"],
+        "summary": "Chi tiết voucher",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
+        "responses": { "200": { "description": "Thành công" } }
+      },
+      "put": {
+        "tags": ["Admin Voucher"],
+        "summary": "Cập nhật voucher",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string" },
+          { "name": "body", "in": "body", "schema": { "type": "object" } }
+        ],
+        "responses": { "200": { "description": "Cập nhật thành công" } }
+      },
+      "delete": {
+        "tags": ["Admin Voucher"],
+        "summary": "Xóa voucher",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
+        "responses": { "200": { "description": "Xóa thành công" } }
+      }
+    },
+    "/admin/vouchers/{id}/toggle": {
+      "patch": {
+        "tags": ["Admin Voucher"],
+        "summary": "Bật/Tắt voucher",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "type": "string" }],
+        "responses": { "200": { "description": "Thành công" } }
       }
     }
   },

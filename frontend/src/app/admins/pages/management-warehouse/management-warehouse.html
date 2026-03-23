@@ -91,7 +91,7 @@
 
           <select class="form-select" [ngModel]="f_warehouse_id" (ngModelChange)="onChangeWarehouse($event)">
             <option value="">-- Tất cả kho --</option>
-            <option *ngFor="let w of vm.warehouses" [value]="w.warehouse_id">{{ w.name }}</option>
+            <option *ngFor="let w of vm.warehouses" [value]="w._id">{{ w.name }}</option>
           </select>
 
           <select class="form-select" [ngModel]="pageSize" (ngModelChange)="onChangePageSize($event)">
@@ -404,7 +404,7 @@
                       (ngModelChange)="updateAdjustTarget($event)">
                       <option value="" disabled selected>-- Chọn kho nhận --</option>
                       <ng-container *ngFor="let w of vm.warehouses">
-                        <option *ngIf="w.warehouse_id !== d.stock.warehouse_id" [value]="w.warehouse_id">
+                        <option *ngIf="w._id !== d.stock.warehouse_id" [value]="w._id">
                           {{ w.name }}
                         </option>
                       </ng-container>
@@ -550,7 +550,7 @@
                   <select class="form-select form-control-lg bg-dark text-white border-secondary"
                     [(ngModel)]="em.brand_id">
                     <option value="" disabled>-- Chọn Nhà cung cấp --</option>
-                    <option *ngFor="let b of vm.brands" [value]="b._id">{{b.brand_name}}</option>
+                    <option *ngFor="let b of vm.brands" [value]="b._id">{{ b.brand_name || b.name }}</option>
                   </select>
                 </div>
 
@@ -575,7 +575,7 @@
                     <select class="form-select form-control-sm bg-dark text-white border-secondary"
                       [(ngModel)]="em.tempItem.warehouse_id">
                       <option value="" disabled>-- Chọn nhà kho --</option>
-                      <option *ngFor="let w of vm.warehouses" [value]="w.warehouse_id">{{w.name}}</option>
+                      <option *ngFor="let w of vm.warehouses" [value]="w._id">{{ w.name }}</option>
                     </select>
                   </div>
 
@@ -585,10 +585,7 @@
                     <select class="form-select form-control-sm bg-dark text-white border-secondary"
                       [(ngModel)]="em.tempItem.product_variant_id">
                       <option value="" disabled>-- Chọn SP --</option>
-                      <option value="pv_001">SKU-001 (Bàn ăn gỗ)</option>
-                      <option value="pv_002">SKU-002 (Kệ Tivi)</option>
-                      <option value="pv_003">SKU-003 (Sofa Ý)</option>
-                      <option value="pv_004">SKU-004 (Giường gỗ Sồi)</option>
+                      <option *ngFor="let v of vm.variants" [value]="v._id">{{ v.sku }}</option>
                     </select>
                   </div>
 
