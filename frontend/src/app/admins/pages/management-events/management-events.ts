@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { BehaviorSubject, Subject, combineLatest, map, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest, map, take, takeUntil, finalize, debounceTime } from 'rxjs';
 import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { EventService } from '../../../services/event-service';
+import { ToastService } from '../../../services/toast-service';
+import { IEvent } from '../../../../interface';
 
-type EventStatus = 'draft' | 'published' | 'paused' | 'ended' | 'cancelled';
-type EventVisibility = 'public' | 'private';
+type EventStatus = 'DRAFT' | 'PUBLISHED';
 type Phase = 'upcoming' | 'ongoing' | 'past';
 type Mode = 'list' | 'detail' | 'edit';
 
@@ -56,7 +58,6 @@ interface EventEntity {
   banner_url: string;
   cover_url?: string;
 
-  visibility: EventVisibility;
   status: EventStatus;
 
   capacity: number;
@@ -70,9 +71,6 @@ interface EventEntity {
 
   created_at: string;
   updated_at: string;
-
-  // backend-ready
-  images?: EventImages;
 }
 
 interface EventRowVM {
@@ -89,6 +87,7 @@ interface EventRowVM {
 
   phase: Phase;
   status: EventStatus;
+  isFull: boolean;
 
   banner_url: string;
 }
@@ -124,20 +123,30 @@ export class ManagementEvents implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private eventService: EventService,
+    private toastService: ToastService,
+    private zone: NgZone,
   ) {}
+
+  private searchSubject = new Subject<string>();
 
   mode: Mode = 'list';
   selectedId: string | null = null;
   detail: EventEntity | null = null;
   editModel: Partial<EventEntity> | null = null;
   createStep$ = new BehaviorSubject<number>(1);
+  saving = false;
 
   // ===== image upload states =====
-  bannerFile: File | null = null;
   bannerPreviewUrl: string | null = null;
-
-  // local editor gallery state
-  editGallery: EventImageItem[] = [];
+  newHighlight = '';
+  newScheduleItem: EventScheduleItem = {
+    item_id: '',
+    start_time: '09:00',
+    end_time: '10:00',
+    title: '',
+    description: '',
+  };
 
   // dirty tracking
   isDirty = false;
@@ -153,6 +162,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
   q = '';
   f_phase: '' | Phase = '';
   f_status: '' | EventStatus = '';
+  f_capacity: '' | 'available' | 'full' = '';
   f_from = '';
   f_to = '';
 
@@ -164,14 +174,17 @@ export class ManagementEvents implements OnInit, OnDestroy {
   sortBy: SortKey = 'start_at';
   sortDir: SortDir = 'desc';
 
-  private _events$ = new BehaviorSubject<EventEntity[]>(seedEvents());
+  private _events$ = new BehaviorSubject<EventEntity[]>([]);
   private _tick$ = new BehaviorSubject(0);
 
   vm$ = combineLatest([this._events$, this._tick$, this.createStep$]).pipe(
     map(([events, _tick, createStep]) => {
       const q = this.q.trim().toLowerCase();
-      const fromISO = this.f_from ? dateOnlyToISO(this.f_from) : '';
-      const toISO = this.f_to ? dateOnlyToISO(this.f_to, true) : '';
+      // user picks date like "2026-06-01" in Vietnam time. 
+      // Start of day: "2026-06-01T00:00:00+07:00"
+      const fromTime = this.f_from ? new Date(`${this.f_from}T00:00:00+07:00`).getTime() : 0;
+      // End of day: "2026-06-01T23:59:59+07:00"
+      const toTime = this.f_to ? new Date(`${this.f_to}T23:59:59+07:00`).getTime() : Infinity;
 
       let filtered = events.filter((e) => {
         const phase = this.computePhase(e.start_at, e.end_at);
@@ -187,10 +200,18 @@ export class ManagementEvents implements OnInit, OnDestroy {
         const matchPhase = !this.f_phase || phase === this.f_phase;
         const matchStatus = !this.f_status || e.status === this.f_status;
 
-        const matchFrom = !fromISO || new Date(e.start_at).toISOString() >= fromISO;
-        const matchTo = !toISO || new Date(e.end_at).toISOString() <= toISO;
+        const isFull = e.registered_count >= e.capacity;
+        let matchCap = true;
+        if (this.f_capacity === 'available') matchCap = !isFull;
+        if (this.f_capacity === 'full') matchCap = isFull;
 
-        return matchQ && matchPhase && matchStatus && matchFrom && matchTo;
+        const eventStart = new Date(e.start_at).getTime();
+        const eventEnd = new Date(e.end_at).getTime();
+
+        const matchFrom = !this.f_from || eventStart >= fromTime;
+        const matchTo = !this.f_to || eventEnd <= toTime;
+
+        return matchQ && matchPhase && matchStatus && matchCap && matchFrom && matchTo;
       });
 
       filtered = [...filtered].sort((a, b) => this.sortCompare(a, b));
@@ -215,7 +236,8 @@ export class ManagementEvents implements OnInit, OnDestroy {
           capacityText: `${e.registered_count}/${e.capacity}`,
           phase,
           status: e.status,
-          banner_url: this.getBannerUrl(e),
+          isFull: e.registered_count >= e.capacity,
+          banner_url: e.banner_url,
         };
       });
 
@@ -246,6 +268,116 @@ export class ManagementEvents implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.bindRouteState();
+    this.loadEvents();
+    this.initSearchDebounce();
+  }
+
+  private initSearchDebounce(): void {
+    this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe((v) => {
+      this.q = v;
+      this.page = 1;
+      this.refreshList();
+    });
+  }
+
+  private loadEvents(): void {
+    this.eventService
+      .getAllEvents()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          const entities = res.data.map((e) => this.mapToEntity(e));
+          this._events$.next(entities);
+        },
+        error: (err) => {
+          console.error('Failed to load events', err);
+        },
+      });
+  }
+
+  private mapToEntity(e: IEvent): EventEntity {
+    const entity: EventEntity = {
+      event_id: e._id,
+      event_code: e.slug || '',
+      event_name: e.title || '',
+      description: e.description || '',
+      start_at: e.date_range?.startDate ? new Date(e.date_range.startDate).toISOString() : '',
+      end_at: e.date_range?.endDate ? new Date(e.date_range.endDate).toISOString() : '',
+      location_name: e.location?.name || '',
+      address: e.location?.address || '',
+      city: e.location?.city || '',
+      banner_url: e.images?.find((img) => img.is_main)?.url_image || e.images?.[0]?.url_image || '',
+      cover_url: '', // Legacy, not used with new image handling
+      status: this.mapStatusFromBackend(e.status),
+      capacity: e.registration?.maxSlot || 0,
+      registered_count: e.registration?.registeredCount || 0,
+      highlights: e.hightlight_des || [],
+      schedule: (e.timeline_event || []).map((t, idx) => ({
+        item_id: `S${idx}`,
+        start_time: t.start_time,
+        end_time: t.end_time,
+        title: t.title,
+        description: t.description,
+      })),
+      contact_phone: '',
+      contact_email: '',
+      created_at: (e as any).createdAt || '',
+      updated_at: (e as any).updatedAt || '',
+    };
+    return entity;
+  }
+
+  private mapToIEvent(entity: Partial<EventEntity>): IEvent {
+    // For mapping back to backend format
+    const res: any = {
+      title: entity.event_name!,
+      slug: entity.event_code!,
+      description: entity.description || '',
+      images: entity.banner_url ? [{ url_image: entity.banner_url, is_main: true }] : [],
+      category: 'General',
+      hightlight_des: entity.highlights || [],
+      date_range: {
+        startDate: new Date(entity.start_at!),
+        endDate: new Date(entity.end_at!),
+      },
+      location: {
+        name: entity.location_name || '',
+        address: entity.address || '',
+        city: entity.city || '',
+      },
+      timeline_event: (entity.schedule || []).map((s) => ({
+        start_time: s.start_time,
+        end_time: s.end_time,
+        title: s.title,
+        description: s.description || '',
+      })),
+      registration: {
+        requireRegister: true,
+        isFree: true,
+        maxSlot: entity.capacity || 0,
+        registeredCount: entity.registered_count || 0,
+      },
+      status: this.mapStatusToBackend(entity.status!),
+    };
+
+    if (entity.event_id && !entity.event_id.startsWith('EVT_')) {
+      res._id = entity.event_id;
+    }
+
+    return res as IEvent;
+  }
+
+  private mapStatusFromBackend(s: string): EventStatus {
+    const upperS = (s || '').toUpperCase();
+    const valid = ['DRAFT', 'PUBLISHED'];
+    if (valid.includes(upperS)) return upperS as EventStatus;
+    // Fallback for legacy data
+    if (upperS === 'UPCOMING' || upperS === 'ONGOING' || upperS === 'ENDED') return 'PUBLISHED';
+    return 'DRAFT';
+  }
+
+  private mapStatusToBackend(s: EventStatus): string {
+    return s || 'DRAFT';
   }
 
   ngOnDestroy(): void {
@@ -332,18 +464,16 @@ export class ManagementEvents implements OnInit, OnDestroy {
       city: e.city,
       capacity: e.capacity,
       status: e.status,
-      visibility: e.visibility,
       registered_count: e.registered_count,
       highlights: [...(e.highlights || [])],
       schedule: JSON.parse(JSON.stringify(e.schedule || [])),
       contact_phone: e.contact_phone,
       contact_email: e.contact_email,
-      images: deepClone(this.normalizeImages(e)),
+      banner_url: e.banner_url,
     };
 
     this.resetUploadsState();
-    this.bannerPreviewUrl = this.getBannerUrl(e);
-    this.editGallery = deepClone(this.normalizeImages(e).gallery);
+    this.bannerPreviewUrl = e.banner_url;
 
     this.originalSnapshot = JSON.stringify(this.buildDirtyPayload());
     this.isDirty = false;
@@ -357,15 +487,12 @@ export class ManagementEvents implements OnInit, OnDestroy {
     return {
       editModel: this.editModel,
       bannerPreviewUrl: this.bannerPreviewUrl,
-      editGallery: this.editGallery,
     };
   }
 
   // ===== filters =====
   onChangeQ(v: string) {
-    this.q = v;
-    this.page = 1;
-    this.refreshList();
+    this.searchSubject.next(v);
   }
 
   onChangePhase(v: '' | Phase) {
@@ -402,6 +529,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     this.q = '';
     this.f_phase = '';
     this.f_status = '';
+    this.f_capacity = '';
     this.f_from = '';
     this.f_to = '';
     this.page = 1;
@@ -430,7 +558,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     return this.sortDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
-  private refreshList() {
+  refreshList() {
     this._tick$.next(this._tick$.value + 1);
   }
 
@@ -526,7 +654,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
-    this.backToDetail();
+    if (this.selectedId === 'NEW') {
+      this.backToList();
+    } else {
+      this.backToDetail();
+    }
   }
 
   private attemptLeave(action: () => void) {
@@ -571,15 +703,13 @@ export class ManagementEvents implements OnInit, OnDestroy {
       description: '',
       start_at: startISO,
       end_at: endISO,
-      location_name: 'HomeBase',
+      location_name: 'Hà Nội',
       address: '',
-      city: 'TP.HCM',
-      banner_url:
-        'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
+      city: 'Hà Nội',
+      banner_url: '',
       cover_url: '',
-      visibility: 'public',
-      status: 'draft',
-      capacity: 50,
+      status: 'DRAFT',
+      capacity: 100,
       registered_count: 0,
       highlights: [],
       schedule: [],
@@ -587,14 +717,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
       contact_email: '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      images: {
-        banner: {
-          url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
-        },
-        gallery: [],
-        coverImageId: null,
-      },
     };
+  }
+
+  onSelectEvent(id: string) {
+    this.syncRoute(id, 'detail', true);
   }
 
   createNewEvent() {
@@ -619,155 +746,51 @@ export class ManagementEvents implements OnInit, OnDestroy {
     if (!id) return;
 
     this.createStep$.next(1);
-    const next = this._events$.value.filter((x) => x.event_id !== id);
-    this._events$.next(next);
-    this.refreshList();
-
-    if (this.selectedId === id) this.backToList();
+    this.eventService
+      .deleteEvent(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Đã xóa sự kiện');
+          const next = this._events$.value.filter((x) => x.event_id !== id);
+          this._events$.next(next);
+          this.refreshList();
+          if (this.selectedId === id) this.backToList();
+        },
+        error: (err) => {
+          this.toastService.error('Lỗi khi xóa sự kiện: ' + (err.error?.message || err.message));
+          console.error('Failed to delete event', err);
+        },
+      });
   }
 
   // ===== banner =====
-  onBannerPicked(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0] || null;
+  onBannerPicked(e: Event) {
+    const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
-
-    this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
-
-    this.bannerFile = file;
-    this.bannerPreviewUrl = URL.createObjectURL(file);
-
-    if (this.editModel?.images) {
-      this.editModel.images.banner = {
-        url: this.bannerPreviewUrl,
-        file_name: file.name,
-      };
-    }
-
-    this.markDirty();
-    input.value = '';
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.zone.run(() => {
+        this.bannerPreviewUrl = reader.result as string;
+        this.markDirty();
+        this.refreshList();
+      });
+    };
+    reader.readAsDataURL(file);
   }
 
   removeBannerPicked() {
-    this.bannerFile = null;
-    this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
     this.bannerPreviewUrl = null;
-
-    if (this.editModel?.images) {
-      this.editModel.images.banner = null;
-    }
-
     this.markDirty();
-  }
-
-  // ===== gallery =====
-  onGalleryPicked(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    const files = Array.from(input.files || []);
-    if (!files.length) return;
-
-    files.forEach((file) => {
-      const preview = URL.createObjectURL(file);
-      const item: EventImageItem = {
-        image_id: cryptoId(),
-        url: preview,
-        file_name: file.name,
-        is_cover: false,
-      };
-      this.editGallery.push(item);
-    });
-
-    if (this.editModel?.images) {
-      this.editModel.images.gallery = this.editGallery;
-      if (!this.editModel.images.coverImageId && this.editGallery.length > 0) {
-        this.editModel.images.coverImageId = this.editGallery[0].image_id;
-        this.syncCoverFlags();
-      }
-    }
-
-    this.markDirty();
-    input.value = '';
-  }
-
-  removeGalleryImage(i: number) {
-    const img = this.editGallery[i];
-    if (!img) return;
-
-    this.revokePreviewIfObjectUrl(img.url);
-    const removedId = img.image_id;
-
-    this.editGallery.splice(i, 1);
-
-    if (this.editModel?.images) {
-      this.editModel.images.gallery = this.editGallery;
-
-      if (this.editModel.images.coverImageId === removedId) {
-        this.editModel.images.coverImageId = this.editGallery[0]?.image_id ?? null;
-      }
-
-      this.syncCoverFlags();
-    }
-
-    this.markDirty();
-  }
-
-  setCoverImage(imageId: string) {
-    if (!this.editModel?.images) return;
-    this.editModel.images.coverImageId = imageId;
-    this.syncCoverFlags();
-    this.markDirty();
-  }
-
-  private syncCoverFlags() {
-    if (!this.editModel?.images) return;
-    const coverId = this.editModel.images.coverImageId;
-    this.editGallery = this.editGallery.map((img) => ({
-      ...img,
-      is_cover: img.image_id === coverId,
-    }));
-    this.editModel.images.gallery = this.editGallery;
-  }
-
-  private normalizeImages(e: EventEntity): EventImages {
-    if (e.images) {
-      return {
-        banner: e.images.banner ?? (e.banner_url ? { url: e.banner_url } : null),
-        gallery: e.images.gallery ?? [],
-        coverImageId: e.images.coverImageId ?? null,
-      };
-    }
-
-    return {
-      banner: e.banner_url ? { url: e.banner_url } : null,
-      gallery: e.cover_url
-        ? [
-            {
-              image_id: cryptoId(),
-              url: e.cover_url,
-              is_cover: true,
-            },
-          ]
-        : [],
-      coverImageId: null,
-    };
-  }
-
-  getBannerUrl(e: EventEntity): string {
-    return e.images?.banner?.url || e.banner_url || '';
   }
 
   private resetUploadsState() {
-    this.bannerFile = null;
     this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
     this.bannerPreviewUrl = null;
-
-    this.editGallery.forEach((x) => this.revokePreviewIfObjectUrl(x.url));
-    this.editGallery = [];
   }
 
   private revokeAllPreviews() {
     this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
-    this.editGallery.forEach((x) => this.revokePreviewIfObjectUrl(x.url));
   }
 
   private revokePreviewIfObjectUrl(url: string | null) {
@@ -785,21 +808,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   executeSave() {
-    if (!this.detail || !this.editModel) {
+    if (!this.detail || !this.editModel || this.saving) {
       this.saveModalOpen = false;
       return;
     }
-
-    const normalizedImages: EventImages = {
-      banner:
-        this.editModel.images?.banner ??
-        (this.bannerPreviewUrl ? { url: this.bannerPreviewUrl } : null),
-      gallery: this.editGallery,
-      coverImageId: this.editModel.images?.coverImageId ?? null,
-    };
-
-    const coverImg =
-      normalizedImages.gallery.find((x) => x.image_id === normalizedImages.coverImageId) ?? null;
+    this.saving = true;
 
     const patched: EventEntity = {
       ...this.detail,
@@ -813,9 +826,8 @@ export class ManagementEvents implements OnInit, OnDestroy {
         true,
       ),
 
-      banner_url: normalizedImages.banner?.url || this.bannerPreviewUrl || this.detail.banner_url,
-      cover_url: coverImg?.url || '',
-      images: normalizedImages,
+      banner_url: this.bannerPreviewUrl || this.detail.banner_url,
+      cover_url: '', // Not used with new image handling
 
       updated_at: new Date().toISOString(),
     } as EventEntity;
@@ -824,80 +836,123 @@ export class ManagementEvents implements OnInit, OnDestroy {
       patched.capacity = patched.registered_count;
     }
 
-    if (this._events$.value.find((x) => x.event_id === patched.event_id)) {
-      const all = this._events$.value.map((x) => (x.event_id === patched.event_id ? patched : x));
-      this._events$.next(all);
-    } else {
-      this._events$.next([patched, ...this._events$.value]);
-    }
+    const dataToSave = this.mapToIEvent(patched);
 
-    this.detail = patched;
+    if (this.selectedId === 'NEW') {
+      this.eventService.createNewEvent(dataToSave).subscribe({
+        next: (res) => {
+          this.toastService.success('Đã tạo sự kiện mới thành công');
+          const newEntity = this.mapToEntity(res.data);
+          this._events$.next([newEntity, ...this._events$.value]);
+          this.finalizeSave(newEntity);
+        },
+        error: (err) => {
+          this.toastService.error('Không thể tạo sự kiện: ' + (err.error?.message || err.message));
+          console.error('Create failed', err);
+        },
+      }).add(() => this.saving = false);
+    } else {
+      this.eventService.updateEvent(this.selectedId!, dataToSave).subscribe({
+        next: (res) => {
+          this.toastService.success('Đã cập nhật sự kiện thành công');
+          const updatedEntity = this.mapToEntity(res.data);
+          const all = this._events$.value.map((x) =>
+            x.event_id === updatedEntity.event_id ? updatedEntity : x,
+          );
+          this._events$.next(all);
+          this.finalizeSave(updatedEntity);
+        },
+        error: (err) => {
+          this.toastService.error('Cập nhật thất bại: ' + (err.error?.message || err.message));
+          console.error('Update failed', err);
+        },
+      }).add(() => this.saving = false);
+    }
+  }
+
+  private finalizeSave(entity: EventEntity) {
+    this.detail = entity;
     this.editModel = null;
     this.saveModalOpen = false;
-    this.pendingNewEvent = null; // Clear if it was new
+    this.pendingNewEvent = null;
 
     this.resetUploadsState();
     this.refreshList();
-    this.createStep$.next(2);
-    this.syncRoute(patched.event_id, 'detail', true);
+    this.createStep$.next(1);
+    this.syncRoute(entity.event_id, 'detail', true);
   }
 
   publishEvent() {
-    if (!this.detail) return;
+    if (!this.detail || this.saving) return;
+    this.saving = true;
     const patched = {
       ...this.detail,
-      status: 'published' as EventStatus,
+      status: 'PUBLISHED' as EventStatus,
       updated_at: new Date().toISOString(),
     };
-    const all = this._events$.value.map((x) => (x.event_id === patched.event_id ? patched : x));
-    this._events$.next(all);
-    this.detail = patched;
-    this.createStep$.next(3);
-    this.refreshList();
+
+    const dataToSave = this.mapToIEvent(patched);
+    this.eventService.updateEvent(patched.event_id, dataToSave).subscribe({
+      next: (res) => {
+        this.toastService.success('Đã xuất bản sự kiện thành công');
+        const updatedEntity = this.mapToEntity(res.data);
+        const all = this._events$.value.map((x) =>
+          x.event_id === updatedEntity.event_id ? updatedEntity : x,
+        );
+        this._events$.next(all);
+        this.detail = updatedEntity;
+        this.createStep$.next(1);
+        this.refreshList();
+      },
+      error: (err) => {
+        this.toastService.error('Xuất bản thất bại: ' + (err.error?.message || err.message));
+        console.error('Publish failed', err);
+      },
+    }).add(() => (this.saving = false));
   }
 
   stopEvent(e: MouseEvent) {
-    e.preventDefault();
     e.stopPropagation();
   }
 
+  // ===== Edit Actions =====
   addHighlight() {
-    if (!this.editModel) return;
-    const list = (this.editModel.highlights ?? []) as string[];
-    list.push('Highlight mới...');
-    this.editModel.highlights = list;
+    const text = this.newHighlight.trim();
+    if (!text || !this.editModel) return;
+    if (!this.editModel.highlights) this.editModel.highlights = [];
+    this.editModel.highlights.push(text);
+    this.newHighlight = '';
     this.markDirty();
   }
 
-  removeHighlight(i: number) {
-    if (!this.editModel) return;
-    const list = (this.editModel.highlights ?? []) as string[];
-    list.splice(i, 1);
-    this.editModel.highlights = list;
+  removeHighlight(idx: number) {
+    if (!this.editModel?.highlights) return;
+    this.editModel.highlights.splice(idx, 1);
     this.markDirty();
   }
 
   addScheduleItem() {
-    if (!this.editModel) return;
-    const list = (this.editModel.schedule ?? []) as EventScheduleItem[];
-    list.push({
-      item_id: cryptoId(),
+    const item = { ...this.newScheduleItem, item_id: cryptoId() };
+    if (!item.title.trim() || !this.editModel) return;
+    if (!this.editModel.schedule) this.editModel.schedule = [];
+    this.editModel.schedule.push(item);
+    this.newScheduleItem = {
+      item_id: '',
       start_time: '09:00',
       end_time: '10:00',
-      title: 'Mục chương trình...',
+      title: '',
       description: '',
-    });
-    this.editModel.schedule = list;
+    };
     this.markDirty();
   }
 
-  removeScheduleItem(i: number) {
-    if (!this.editModel) return;
-    const list = (this.editModel.schedule ?? []) as EventScheduleItem[];
-    list.splice(i, 1);
-    this.editModel.schedule = list;
+  removeScheduleItem(idx: number) {
+    if (!this.editModel?.schedule) return;
+    this.editModel.schedule.splice(idx, 1);
     this.markDirty();
   }
+
+
 
   phaseLabel(p: Phase) {
     if (p === 'ongoing') return 'Đang diễn ra';
@@ -907,24 +962,37 @@ export class ManagementEvents implements OnInit, OnDestroy {
 
   statusLabel(s: EventStatus) {
     switch (s) {
-      case 'draft':
-        return 'Nháp';
-      case 'published':
-        return 'Đang mở';
-      case 'paused':
-        return 'Tạm dừng';
-      case 'ended':
-        return 'Đã kết thúc';
-      case 'cancelled':
-        return 'Đã hủy';
+      case 'DRAFT':      return 'Bản nháp';
+      case 'PUBLISHED':  return 'Đang mở';
+      default:           return 'Bản nháp';
     }
   }
 
   statusBadgeClass(s: EventStatus) {
-    if (s === 'published') return 'hb-st-active';
-    if (s === 'paused') return 'hb-st-paused';
-    if (s === 'draft') return 'hb-st-frozen';
-    return 'hb-st-expired';
+    if (s === 'PUBLISHED') return 'hb-st-active';
+    return 'hb-st-frozen'; // DRAFT
+  }
+
+  unpublishEvent(id: string) {
+    const entity = this._events$.value.find((e) => e.event_id === id);
+    if (!entity) return;
+    const patched = { ...entity, status: 'DRAFT' as EventStatus };
+    const dataToSave = this.mapToIEvent(patched);
+    this.saving = true;
+    this.eventService.updateEvent(id, dataToSave)
+      .pipe(take(1), finalize(() => (this.saving = false)))
+      .subscribe({
+        next: (res) => {
+          const updated = this.mapToEntity(res.data);
+          this._events$.next(
+            this._events$.value.map((e) => (e.event_id === id ? updated : e))
+          );
+          if (this.detail?.event_id === id) this.detail = updated;
+          this.toastService.success('Đã thu hồi về bản nháp!');
+          this.refreshList();
+        },
+        error: () => this.toastService.error('Không thể thu hồi!'),
+      });
   }
 
   phaseBadgeClass(p: Phase) {
@@ -948,6 +1016,20 @@ export class ManagementEvents implements OnInit, OnDestroy {
 
   fmtDateRange(startISO: string, endISO: string) {
     return `${this.fmtDateOnly(startISO)} → ${this.fmtDateOnly(endISO)}`;
+  }
+
+  get dateError(): string | null {
+    if (!this.editModel?.start_at || !this.editModel?.end_at) return null;
+    const s = new Date(this.editModel.start_at).getTime();
+    const e = new Date(this.editModel.end_at).getTime();
+    if (s > e) return 'Ngày kết thúc không được trước ngày bắt đầu';
+    return null;
+  }
+
+  get isFormValid(): boolean {
+    const em = this.editModel;
+    if (!em) return false;
+    return !!em.event_name?.trim() && !!em.start_at && !!em.end_at && !this.dateError;
   }
 
   fmtTimeRange(it: EventScheduleItem) {
@@ -1031,50 +1113,15 @@ function seedEvents(): EventEntity[] {
     location_name: 'SECC',
     address: 'Quận 7',
     city: 'TP.HCM',
-    banner_url:
-      'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
-    cover_url:
-      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
-    visibility: 'public',
-    status: 'published',
+    banner_url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
+    cover_url: '',
+    status: 'PUBLISHED',
     capacity: 200,
     registered_count: 47,
-    highlights: [
-      'Hơn 100 thương hiệu nội thất cao cấp tham gia',
-      'Triển lãm các bộ sưu tập nội thất độc quyền',
-      'Workshop thiết kế không gian sống hiện đại',
-    ],
-    schedule: [
-      { item_id: 'S1', start_time: '09:00', end_time: '10:00', title: 'Khai mạc', description: '' },
-      {
-        item_id: 'S2',
-        start_time: '10:00',
-        end_time: '12:00',
-        title: 'Tham quan',
-        description: '',
-      },
-    ],
-    contact_phone: '(+84) 901 234 567',
-    contact_email: 'events@homebase.vn',
+    highlights: ['Hơn 100 thương hiệu tham gia', 'Workshop thực tế'],
+    schedule: [],
     created_at: new Date(now - 1000 * 60 * 60 * 24 * 10).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 60 * 2).toISOString(),
-    images: {
-      banner: {
-        url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
-      },
-      gallery: [
-        {
-          image_id: 'IMG_001',
-          url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
-          is_cover: true,
-        },
-        {
-          image_id: 'IMG_002',
-          url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=60',
-        },
-      ],
-      coverImageId: 'IMG_001',
-    },
   };
 
   const e2: EventEntity = {
@@ -1090,8 +1137,7 @@ function seedEvents(): EventEntity[] {
     banner_url:
       'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
     cover_url: '',
-    visibility: 'public',
-    status: 'published',
+    status: 'PUBLISHED',
     capacity: 120,
     registered_count: 88,
     highlights: ['Check-in nhanh', 'Mini workshop', 'Ưu đãi trong ngày'],
@@ -1103,13 +1149,6 @@ function seedEvents(): EventEntity[] {
     contact_email: 'events@homebase.vn',
     created_at: new Date(now - 1000 * 60 * 60 * 24 * 2).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 60 * 1).toISOString(),
-    images: {
-      banner: {
-        url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
-      },
-      gallery: [],
-      coverImageId: null,
-    },
   };
 
   const e3: EventEntity = {
@@ -1125,8 +1164,7 @@ function seedEvents(): EventEntity[] {
     banner_url:
       'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=60',
     cover_url: '',
-    visibility: 'private',
-    status: 'draft',
+    status: 'DRAFT',
     capacity: 60,
     registered_count: 0,
     highlights: ['Welcome drink', 'Private tour', 'Gift set'],
@@ -1137,13 +1175,6 @@ function seedEvents(): EventEntity[] {
     contact_email: 'vip@homebase.vn',
     created_at: new Date(now - 1000 * 60 * 60 * 24 * 1).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 20).toISOString(),
-    images: {
-      banner: {
-        url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=60',
-      },
-      gallery: [],
-      coverImageId: null,
-    },
   };
 
   return [e1, e2, e3];
