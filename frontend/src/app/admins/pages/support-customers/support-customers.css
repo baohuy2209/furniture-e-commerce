@@ -123,6 +123,22 @@
 .hb-filter-reset {
     white-space: nowrap;
     flex-shrink: 0;
+    background-color: var(--hb-primary) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 0 10px var(--hb-primary-glow) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.hb-filter-reset:hover {
+    filter: brightness(1.2) !important;
+    box-shadow: 0 0 20px var(--hb-primary-glow) !important;
+    transform: translateY(-1px) !important;
+    color: white !important;
+}
+
+.hb-filter-reset i {
+    color: white !important;
 }
 
 @media (max-width: 1200px) {
@@ -163,10 +179,6 @@
         /* Người xử lý */
         130px
         /* Trạng thái */
-        110px
-        /* Hạn phản hồi */
-        110px
-        /* Tình trạng SLA */
         50px
         /* Sửa */
         50px;
@@ -320,6 +332,31 @@
     background: rgba(255, 255, 255, 0.03);
     color: var(--hb-text);
     border-color: var(--hb-border);
+}
+
+/* Categories */
+.hb-cat-order {
+    background: rgba(14, 165, 233, 0.1);
+    color: #0ea5e9;
+    border-color: rgba(14, 165, 233, 0.2);
+}
+
+.hb-cat-product {
+    background: rgba(139, 92, 246, 0.1);
+    color: #8b5cf6;
+    border-color: rgba(139, 92, 246, 0.2);
+}
+
+.hb-cat-warranty {
+    background: rgba(236, 72, 153, 0.1);
+    color: #ec4899;
+    border-color: rgba(236, 72, 153, 0.2);
+}
+
+.hb-cat-other {
+    background: rgba(107, 114, 128, 0.1);
+    color: #9ca3af;
+    border-color: rgba(107, 114, 128, 0.2);
 }
 
 /* Priority */
@@ -576,4 +613,46 @@
         position: static;
         top: auto;
     }
+}
+
+/* ACTION BUTTONS & TEXT OVERRIDES */
+.btn-hb-success {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.btn-hb-success:disabled {
+    opacity: 0.5 !important;
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+.btn-hb-primary {
+    background-color: var(--hb-primary) !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.btn-hb-primary:disabled {
+    opacity: 0.5 !important;
+    background-color: var(--hb-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-hb-outline {
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: #ffffff !important;
+    background: transparent !important;
+}
+
+.hb-sticky-side .btn, 
+.hb-sticky-side .btn i,
+.hb-page-shell .form-label,
+.hb-page-shell .hb-section-title {
+    color: #ffffff !important;
+}
+
+.fw-bold, b, strong {
+    color: #ffffff !important;
 }

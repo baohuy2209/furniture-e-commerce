@@ -52,22 +52,14 @@
           <!-- Filter bar -->
           <div class="card hb-card hb-card-pad mb-3">
             <div class="hb-filterbar">
-              <input
-                class="form-control"
-                placeholder="ID / Tên / Email / SĐT / Username..."
-                [ngModel]="q"
-                (ngModelChange)="onSearchChange($event)"
-              />
+              <input class="form-control" placeholder="ID / Tên / Email / SĐT / Username..." [ngModel]="q"
+                (ngModelChange)="onSearchChange($event)" />
               <select class="form-select" [ngModel]="f_status" (ngModelChange)="setStatus($event)">
                 <option value="all">-- Trạng thái --</option>
                 <option value="unlocked">Hoạt động</option>
                 <option value="locked">Tạm khóa</option>
               </select>
-              <select
-                class="form-select"
-                [ngModel]="pageSize"
-                (ngModelChange)="setPageSize($event)"
-              >
+              <select class="form-select" [ngModel]="pageSize" (ngModelChange)="setPageSize($event)">
                 <option [ngValue]="10">10 / trang</option>
                 <option [ngValue]="20">20 / trang</option>
                 <option [ngValue]="50">50 / trang</option>
@@ -76,11 +68,7 @@
               <div class="d-none d-xl-block"></div>
               <div class="d-none d-xl-block"></div>
               <div class="d-none d-xl-block"></div>
-              <button
-                class="btn btn-hb-outline hb-filter-reset"
-                type="button"
-                (click)="resetFilters()"
-              >
+              <button class="btn btn-hb-outline hb-filter-reset" type="button" (click)="resetFilters()">
                 <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
               </button>
             </div>
@@ -135,11 +123,7 @@
                 </div>
 
                 <!-- Rows -->
-                <div
-                  class="hb-table-row hb-grid-customers"
-                  *ngFor="let r of vm.items"
-                  (click)="openDetail(r.user._id)"
-                >
+                <div class="hb-table-row hb-grid-customers" *ngFor="let r of vm.items" (click)="openDetail(r.user._id)">
                   <div class="hb-td hb-td-stt text-muted">{{ r.stt }}</div>
 
                   <div class="hb-td">
@@ -166,11 +150,8 @@
                   </div>
 
                   <div class="hb-td hb-td-center">
-                    <span
-                      class="hb-pill"
-                      [class.is-locked]="r.user.status === 'locked'"
-                      [class.is-soft]="r.user.status !== 'locked'"
-                    >
+                    <span class="hb-pill" [class.is-locked]="r.user.status === 'locked'"
+                      [class.is-soft]="r.user.status !== 'locked'">
                       {{ statusLabel(r.user.status) }}
                     </span>
                   </div>
@@ -185,26 +166,15 @@
 
                   <!-- Lock / Unlock -->
                   <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
-                    <button
-                      class="hb-icon-btn"
-                      [class.danger]="r.user.status !== 'locked'"
-                      [title]="r.user.status === 'locked' ? 'Mở khóa' : 'Tạm khóa'"
-                      (click)="openLockModal(r.user)"
-                    >
-                      <i
-                        class="bi"
-                        [ngClass]="r.user.status === 'locked' ? 'bi-unlock-fill' : 'bi-lock'"
-                      ></i>
+                    <button class="hb-icon-btn" [class.danger]="r.user.status !== 'locked'"
+                      [title]="r.user.status === 'locked' ? 'Mở khóa' : 'Tạm khóa'" (click)="openLockModal(r.user)">
+                      <i class="bi" [ngClass]="r.user.status === 'locked' ? 'bi-unlock-fill' : 'bi-lock'"></i>
                     </button>
                   </div>
 
                   <!-- Detail -->
                   <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
-                    <button
-                      class="hb-icon-btn"
-                      title="Xem chi tiết"
-                      (click)="openDetail(r.user._id)"
-                    >
+                    <button class="hb-icon-btn" title="Xem chi tiết" (click)="openDetail(r.user._id)">
                       <i class="bi bi-eye"></i>
                     </button>
                   </div>
@@ -223,11 +193,7 @@
               <div class="hb-page-info">
                 Trang <b>{{ vm.page }}</b> / <b>{{ vm.pageCount }}</b>
               </div>
-              <button
-                class="hb-page-btn"
-                [disabled]="vm.page >= vm.pageCount"
-                (click)="setPage(vm.page + 1)"
-              >
+              <button class="hb-page-btn" [disabled]="vm.page >= vm.pageCount" (click)="setPage(vm.page + 1)">
                 ›
               </button>
             </div>
@@ -247,19 +213,10 @@
         <button class="btn btn-hb-outline" (click)="backToList()">
           <i class="bi bi-arrow-left me-1"></i> Quay lại
         </button>
-        <button
-          class="btn btn-hb-accent"
-          *ngIf="detail"
-          (click)="openLockModal(detail.user)"
-          [disabled]="lockLoading"
-        >
+        <button class="btn btn-hb-accent" *ngIf="detail" (click)="openLockModal(detail.user)" [disabled]="lockLoading">
           <span *ngIf="lockLoading" class="spinner-border spinner-border-sm me-1"></span>
-          <i
-            class="bi me-1"
-            [class.bi-unlock]="detail.user.status === 'locked'"
-            [class.bi-lock]="detail.user.status !== 'locked'"
-            *ngIf="!lockLoading"
-          ></i>
+          <i class="bi me-1" [class.bi-unlock]="detail.user.status === 'locked'"
+            [class.bi-lock]="detail.user.status !== 'locked'" *ngIf="!lockLoading"></i>
           {{ detail?.user?.status === 'locked' ? 'Mở khóa tài khoản' : 'Tạm khóa tài khoản' }}
         </button>
       </div>
@@ -292,11 +249,8 @@
                   <span>{{ d.initials }}</span>
                 </div>
                 <div class="hb-profile-name">{{ d.displayName }}</div>
-                <span
-                  class="hb-pill"
-                  [class.is-locked]="d.user.status === 'locked'"
-                  [class.is-soft]="d.user.status !== 'locked'"
-                >
+                <span class="hb-pill" [class.is-locked]="d.user.status === 'locked'"
+                  [class.is-soft]="d.user.status !== 'locked'">
                   {{ statusLabel(d.user.status) }}
                 </span>
                 <span class="hb-pill mt-1" [ngClass]="d.rankClass">{{ d.rank }}</span>
@@ -344,20 +298,16 @@
                   <div class="hb-k">Đăng nhập lần cuối</div>
                   <div class="hb-v">
                     {{
-                      d.user.last_login
-                        ? (d.user.last_login | date: 'dd/MM/yyyy HH:mm')
-                        : 'Chưa đăng nhập'
+                    d.user.last_login
+                    ? (d.user.last_login | date: 'dd/MM/yyyy HH:mm')
+                    : 'Chưa đăng nhập'
                     }}
                   </div>
                 </div>
                 <div class="hb-kv">
                   <div class="hb-k">Xác thực email</div>
                   <div class="hb-v">
-                    <span
-                      class="hb-pill"
-                      [class.is-soft]="d.user.is_verified"
-                      [class.is-locked]="!d.user.is_verified"
-                    >
+                    <span class="hb-pill" [class.is-soft]="d.user.is_verified" [class.is-locked]="!d.user.is_verified">
                       {{ d.user.is_verified ? 'Đã xác thực' : 'Chưa xác thực' }}
                     </span>
                   </div>
@@ -370,18 +320,10 @@
           <section class="col-12 col-xl-8">
             <div class="card hb-card hb-card-pad">
               <div class="hb-tabs">
-                <button
-                  class="hb-tab"
-                  [class.is-active]="detailTab === 'overview'"
-                  (click)="setDetailTab('overview')"
-                >
+                <button class="hb-tab" [class.is-active]="detailTab === 'overview'" (click)="setDetailTab('overview')">
                   Tổng quan
                 </button>
-                <button
-                  class="hb-tab"
-                  [class.is-active]="detailTab === 'orders'"
-                  (click)="setDetailTab('orders')"
-                >
+                <button class="hb-tab" [class.is-active]="detailTab === 'orders'" (click)="setDetailTab('orders')">
                   Lịch sử đơn hàng ({{ d.ordersCount }})
                 </button>
               </div>
@@ -414,27 +356,25 @@
                     <span style="width: 130px">Trạng thái</span>
                     <span class="text-end" style="width: 130px">Tổng tiền</span>
                   </div>
-                  <div
-                    class="hb-table-small-row d-flex justify-content-between align-items-center"
-                    *ngFor="let o of d.orders.slice(0, 5)"
-                  >
+                  <div class="hb-table-small-row d-flex justify-content-between align-items-center"
+                    *ngFor="let o of d.orders.slice(0, 5)">
                     <span class="text-primary fw-bold" style="width: 160px; font-size: 13px">{{
                       o.order_number
-                    }}</span>
+                      }}</span>
                     <span style="width: 110px">{{ o.createdAt | date: 'dd/MM/yyyy' }}</span>
                     <span style="width: 130px">
                       <span class="hb-pill" [ngClass]="payStatusPillClass(o.payment_status)">{{
                         payStatusLabel(o.payment_status)
-                      }}</span>
+                        }}</span>
                     </span>
                     <span style="width: 130px">
                       <span class="hb-pill" [ngClass]="orderStatusPillClass(o.status)">{{
                         orderStatusLabel(o.status)
-                      }}</span>
+                        }}</span>
                     </span>
                     <span class="text-end fw-bold" style="width: 130px">{{
                       formatMoney(o.total_amount)
-                    }}</span>
+                      }}</span>
                   </div>
                   <div class="hb-empty" *ngIf="d.orders.length === 0">
                     Khách hàng chưa có đơn hàng.
@@ -453,27 +393,25 @@
                     <span style="width: 130px">Trạng thái</span>
                     <span class="text-end" style="width: 130px">Tổng tiền</span>
                   </div>
-                  <div
-                    class="hb-table-small-row d-flex justify-content-between align-items-center"
-                    *ngFor="let o of d.orders"
-                  >
+                  <div class="hb-table-small-row d-flex justify-content-between align-items-center"
+                    *ngFor="let o of d.orders">
                     <span class="text-primary fw-bold" style="width: 160px; font-size: 13px">{{
                       o.order_number
-                    }}</span>
+                      }}</span>
                     <span style="width: 110px">{{ o.createdAt | date: 'dd/MM/yyyy' }}</span>
                     <span style="width: 130px">
                       <span class="hb-pill" [ngClass]="payStatusPillClass(o.payment_status)">{{
                         payStatusLabel(o.payment_status)
-                      }}</span>
+                        }}</span>
                     </span>
                     <span style="width: 130px">
                       <span class="hb-pill" [ngClass]="orderStatusPillClass(o.status)">{{
                         orderStatusLabel(o.status)
-                      }}</span>
+                        }}</span>
                     </span>
                     <span class="text-end fw-bold" style="width: 130px">{{
                       formatMoney(o.total_amount)
-                    }}</span>
+                      }}</span>
                   </div>
                   <div class="hb-empty" *ngIf="d.orders.length === 0">
                     Khách hàng chưa có đơn hàng.
@@ -488,14 +426,8 @@
   </ng-container>
 
   <!-- ══════════════ MODAL: Lock/Unlock ══════════════ -->
-  <hb-confirm-modal
-    [isOpen]="lockModalOpen"
-    [title]="lockModalTitle"
-    [message]="lockModalMessage"
+  <hb-confirm-modal [isOpen]="lockModalOpen" [title]="lockModalTitle" [message]="lockModalMessage"
     [type]="lockTargetUser?.status === 'locked' ? 'info' : 'danger'"
-    [confirmLabel]="lockTargetUser?.status === 'locked' ? 'Mở khóa' : 'Tạm khóa'"
-    cancelLabel="Đóng"
-    (confirm)="onConfirmLock()"
-    (cancel)="onCancelLock()"
-  ></hb-confirm-modal>
+    [confirmLabel]="lockTargetUser?.status === 'locked' ? 'Mở khóa' : 'Tạm khóa'" cancelLabel="Đóng"
+    (confirm)="onConfirmLock()" (cancel)="onCancelLock()"></hb-confirm-modal>
 </div>

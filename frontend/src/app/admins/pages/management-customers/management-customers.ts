@@ -173,7 +173,7 @@ export class ManagementCustomers implements OnInit, OnDestroy {
     private userService: UserService,
     private orderService: OrderServices,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   // ── Lifecycle ────────────────────────────────────────────────────────────
   ngOnInit(): void {
@@ -386,7 +386,7 @@ export class ManagementCustomers implements OnInit, OnDestroy {
             this.loadDetail(updated._id);
           }
         },
-        error: () => {},
+        error: () => { },
       });
   }
 

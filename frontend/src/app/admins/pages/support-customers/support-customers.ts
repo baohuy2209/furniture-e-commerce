@@ -4,27 +4,23 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, combineLatest, map, takeUntil } from 'rxjs';
 import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { CustomerInquiryService } from '../../../services/customer-inquiry-service';
+import { ICustomerInquiry } from '../../../../interface';
 
 type SortDir = 'asc' | 'desc';
 type PageMode = 'list' | 'detail' | 'edit';
 
 type InquiryChannel = 'chat' | 'email' | 'phone' | 'form';
 type InquiryCategory =
-  | 'product_info'
-  | 'order_status'
-  | 'return_policy'
-  | 'payment'
-  | 'delivery'
-  | 'complaint'
+  | 'order'
+  | 'product'
+  | 'warranty'
   | 'other';
 
 type InquiryStatus =
-  | 'NEW'
-  | 'IN_PROGRESS'
-  | 'WAITING_CUSTOMER'
-  | 'ESCALATED'
-  | 'RESOLVED'
-  | 'CLOSED';
+  | 'open'
+  | 'in_progress'
+  | 'closed';
 
 interface TimelineItem {
   at: string;
@@ -35,6 +31,7 @@ interface TimelineItem {
 
 interface CustomerInquiry {
   id: string;
+  _id?: string;
   channel: InquiryChannel;
   category: InquiryCategory;
   status: InquiryStatus;
@@ -50,6 +47,7 @@ interface CustomerInquiry {
   resolution?: string;
 
   assignee?: string;
+  assigneeId?: string;
   tags: string[];
 
   createdAt: string;
@@ -106,42 +104,12 @@ interface ListQuery {
 }
 
 interface EditForm {
-  status: InquiryStatus;
+  status: string;
   assignee: string;
   priority: string;
   internalNote: string;
   resolution: string;
-  category: InquiryCategory;
-}
-
-class InquiryRepository {
-  private seed: CustomerInquiry[] = buildSeed();
-
-  list(): CustomerInquiry[] { return this.seed.slice(); }
-
-  getById(id: string): CustomerInquiry | null {
-    return this.seed.find((x) => x.id === id) ?? null;
-  }
-
-  update(id: string, patch: Partial<CustomerInquiry>): CustomerInquiry | null {
-    const idx = this.seed.findIndex((x) => x.id === id);
-    if (idx < 0) return null;
-    this.seed[idx] = { ...this.seed[idx], ...patch, updatedAt: new Date().toISOString() };
-    return this.seed[idx];
-  }
-
-  delete(id: string): boolean {
-    const before = this.seed.length;
-    this.seed = this.seed.filter((x) => x.id !== id);
-    return this.seed.length !== before;
-  }
-
-  pushTimeline(id: string, item: TimelineItem): void {
-    const req = this.getById(id);
-    if (!req) return;
-    req.timeline = [{ ...item }, ...req.timeline];
-    req.updatedAt = new Date().toISOString();
-  }
+  category: string;
 }
 
 @Component({
@@ -153,7 +121,6 @@ class InquiryRepository {
 })
 export class SupportCustomers implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  private repo = new InquiryRepository();
 
   mode: PageMode = 'list';
   selectedId: string | null = null;
@@ -179,12 +146,9 @@ export class SupportCustomers implements OnInit, OnDestroy {
   advanceTargetId: string | null = null;
 
   statusOptions: { value: InquiryStatus; label: string }[] = [
-    { value: 'NEW', label: 'Mới' },
-    { value: 'IN_PROGRESS', label: 'Đang xử lý' },
-    { value: 'WAITING_CUSTOMER', label: 'Chờ KH phản hồi' },
-    { value: 'ESCALATED', label: 'Leo thang' },
-    { value: 'RESOLVED', label: 'Đã giải quyết' },
-    { value: 'CLOSED', label: 'Đã đóng' },
+    { value: 'open', label: 'Mới' },
+    { value: 'in_progress', label: 'Đang xử lý' },
+    { value: 'closed', label: 'Đã đóng' },
   ];
 
   priorityOptions = [
@@ -195,13 +159,10 @@ export class SupportCustomers implements OnInit, OnDestroy {
   ];
 
   categoryOptions: { value: InquiryCategory; label: string }[] = [
-    { value: 'product_info', label: 'Thông tin sản phẩm' },
-    { value: 'order_status', label: 'Trạng thái đơn hàng' },
-    { value: 'return_policy', label: 'Chính sách đổi trả' },
-    { value: 'payment', label: 'Thanh toán' },
-    { value: 'delivery', label: 'Giao hàng' },
-    { value: 'complaint', label: 'Khiếu nại' },
-    { value: 'other', label: 'Khác' },
+    { value: 'order', label: 'Vấn đề đơn hàng' },
+    { value: 'product', label: 'Tư vấn sản phẩm' },
+    { value: 'warranty', label: 'Yêu cầu bảo hành' },
+    { value: 'other', label: 'Góp ý khác' },
   ];
 
   query$ = new BehaviorSubject<ListQuery>({
@@ -249,32 +210,95 @@ export class SupportCustomers implements OnInit, OnDestroy {
       const rows = filtered.slice(start, start + query.pageSize).map((r, i) => ({ ...r, stt: start + i + 1 }));
 
       const all = this.inquiries$.value;
-      const kpiNew = all.filter((x) => x.status === 'NEW').length;
-      const kpiInProgress = all.filter((x) => x.status === 'IN_PROGRESS').length;
-      const kpiEscalated = all.filter((x) => x.status === 'ESCALATED').length;
-      const kpiResolved = all.filter((x) => x.status === 'RESOLVED' || x.status === 'CLOSED').length;
-      const kpiBreached = rowsAll.filter((x) => x.isSlaBreached && x.status !== 'RESOLVED' && x.status !== 'CLOSED').length;
+      const kpiNew = all.filter((x) => x.status === 'open').length;
+      const kpiInProgress = all.filter((x) => x.status === 'in_progress').length;
+      const kpiClosed = all.filter((x) => x.status === 'closed').length;
+      const kpiBreached = rowsAll.filter((x) => x.isSlaBreached && x.status !== 'closed').length;
 
       return {
         query: { ...query, page },
         rows, total, totalPages,
-        kpiNew, kpiInProgress, kpiEscalated, kpiResolved, kpiBreached,
+        kpiNew, kpiInProgress, kpiClosed, kpiBreached,
         totalCount: rowsAll.length,
         statusOptions: this.statusOptions,
       };
     }),
   );
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private inquiryService: CustomerInquiryService
+  ) { }
 
   ngOnInit(): void {
-    this.inquiries$.next(this.repo.list());
+    this.loadInquiries();
     this.bindRouteState();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  loadInquiries(): void {
+    this.inquiryService.getAllInquiries().subscribe({
+      next: (res) => {
+        const mappedData = (res.data || []).map(item => this.mapBackendToLocal(item));
+        this.inquiries$.next(mappedData);
+      },
+      error: (err) => {
+        console.error('Failed to load inquiries', err);
+      }
+    });
+  }
+
+  private mapBackendToLocal(item: ICustomerInquiry): CustomerInquiry {
+    const user = (item.user_id && typeof item.user_id === 'object') ? item.user_id : { name: 'Khách vãng lai', email: '—', phone: '—' };
+    const staff = typeof item.resolving_staff_id === 'object' ? item.resolving_staff_id : null;
+    
+    return {
+      id: item._id,
+      _id: item._id,
+      channel: 'form',
+      category: item.category as any,
+      status: (item.status || 'open') as any,
+      priority: this.mapPriorityToLocal(item.priority || 'medium'),
+      customerName: user.name,
+      customerPhone: user.phone,
+      customerEmail: user.email,
+      subject: item.subject,
+      content: item.message,
+      internalNote: item.internal_notes,
+      resolution: item.staff_response,
+      assignee: staff?.name,
+      assigneeId: staff?._id,
+      tags: [],
+      createdAt: (item.createdAt as string) || new Date().toISOString(),
+      updatedAt: (item.updatedAt as string) || new Date().toISOString(),
+      expectedReplyAt: (item.due_date as string) || new Date().toISOString(),
+      timeline: []
+    } as any;
+  }
+
+  private mapPriorityToLocal(p: string): any {
+    switch (p) {
+      case 'low': case 'Thấp': return 'low';
+      case 'medium': case 'Trung bình': return 'medium';
+      case 'high': case 'Cao': return 'high';
+      case 'urgent': case 'Khẩn cấp': return 'urgent';
+      default: return p || 'medium';
+    }
+  }
+
+  private mapLocalPriorityToBackend(p: string): string {
+    switch (p) {
+      case 'low': return 'low';
+      case 'medium': return 'medium';
+      case 'high': return 'high';
+      case 'urgent': return 'urgent';
+      default: return p;
+    }
   }
 
   private bindRouteState(): void {
@@ -292,8 +316,31 @@ export class SupportCustomers implements OnInit, OnDestroy {
         return;
       }
 
-      const item = this.repo.getById(id);
-      if (!item) { this.syncRoute(null, 'list', false); return; }
+      const currentList = this.inquiries$.value;
+      const item = currentList.find(x => x.id === id);
+      
+      if (!item) {
+        this.inquiryService.getAllInquiries().subscribe({
+          next: (res) => {
+            const list = res.data.map(i => this.mapBackendToLocal(i));
+            this.inquiries$.next(list);
+            const found = list.find(x => x.id === id);
+            if (found) {
+              this.selectedId = id;
+              this.detail = enrichDetail(found);
+              if (edit) {
+                this.mode = 'edit';
+                this.initEditForm(found);
+              } else {
+                this.mode = 'detail';
+              }
+            } else {
+              this.syncRoute(null, 'list', false);
+            }
+          }
+        });
+        return;
+      }
 
       this.selectedId = id;
       this.detail = enrichDetail(item);
@@ -421,42 +468,53 @@ export class SupportCustomers implements OnInit, OnDestroy {
 
   onCancelSave(): void { this.saveModalOpen = false; }
 
-  executeSave(): void {
+  executeSave(sendEmail: boolean = false): void {
     if (!this.detail || !this.editForm) { this.saveModalOpen = false; return; }
     this.saving = true;
 
-    const patch: Partial<CustomerInquiry> = {
+    const payload = {
       status: this.editForm.status,
-      assignee: this.editForm.assignee || undefined,
-      priority: this.editForm.priority as CustomerInquiry['priority'],
-      internalNote: this.editForm.internalNote || undefined,
-      resolution: this.editForm.resolution || undefined,
+      priority: this.mapLocalPriorityToBackend(this.editForm.priority),
+      staff_response: this.editForm.resolution,
+      internal_notes: this.editForm.internalNote,
       category: this.editForm.category,
+      send_email: sendEmail
     };
 
-    const updated = this.repo.update(this.detail.id, patch);
+    const mongoId = (this.detail as any)._id;
 
-    if (updated) {
-      if (this.originalSnapshot && this.originalSnapshot.status !== updated.status) {
-        this.repo.pushTimeline(updated.id, {
-          at: new Date().toISOString(),
-          actor: 'Admin',
-          title: `Cập nhật trạng thái: ${statusLabel(updated.status)}`,
-          note: this.editForm.internalNote || undefined,
-        });
+    this.inquiryService.respondToInquiry(mongoId, payload).subscribe({
+      next: (res) => {
+        this.saving = false;
+        this.saveModalOpen = false;
+        this.loadInquiries();
+        this.syncRoute(this.selectedId, 'detail', true);
+        if (sendEmail) {
+          if ((res as any).mailError) {
+            alert('Đã lưu dữ liệu nhưng KHÔNG gửi được email. Lỗi: ' + (res as any).mailError);
+          } else {
+            alert('Đã lưu và gửi phản hồi cho khách hàng thành công!');
+          }
+        }
+      },
+      error: (err) => {
+        this.saving = false;
+        this.saveModalOpen = false;
+        console.error('Save failed', err);
+        alert('Có lỗi xảy ra khi lưu thông tin: ' + (err.error?.message || err.message));
       }
-      if (updated.status === 'RESOLVED' && !updated.resolvedAt) {
-        this.repo.update(updated.id, { resolvedAt: new Date().toISOString() });
-      }
-      this.inquiries$.next(this.repo.list());
-      this.saveModalOpen = false;
-      this.saving = false;
-      this.syncRoute(updated.id, 'detail', true);
+    });
+  }
+
+  sendToCustomer(): void {
+    if (!this.detail || !this.editForm) return;
+    if (!this.editForm.resolution) {
+      alert('Vui lòng nhập hướng giải quyết trước khi gửi!');
       return;
     }
-
-    this.saving = false;
-    this.saveModalOpen = false;
+    if (confirm('Bạn có chắc chắn muốn lưu và GỬI email phản hồi này cho khách hàng?')) {
+      this.executeSave(true);
+    }
   }
 
   canAdvance(status: InquiryStatus): boolean {
@@ -479,26 +537,15 @@ export class SupportCustomers implements OnInit, OnDestroy {
   }
 
   quickNextStatus(id: string): void {
-    const item = this.repo.getById(id);
+    const item = this.inquiries$.value.find(x => x.id === id);
     if (!item) return;
     const next = nextStatus(item.status);
     if (!next) return;
 
-    const updated = this.repo.update(id, { status: next });
-    if (updated) {
-      this.repo.pushTimeline(updated.id, {
-        at: new Date().toISOString(),
-        actor: 'Admin',
-        title: `Chuyển bước: ${statusLabel(next)}`,
-      });
-      if (next === 'RESOLVED' && !updated.resolvedAt) {
-        this.repo.update(updated.id, { resolvedAt: new Date().toISOString() });
-      }
-      this.inquiries$.next(this.repo.list());
-      if (this.selectedId === id) {
-        this.detail = enrichDetail(this.repo.getById(id)!);
-      }
-    }
+    this.inquiryService.respondToInquiry((item as any)._id, { status: next }).subscribe({
+      next: () => this.loadInquiries(),
+      error: (err) => console.error('Advance status failed', err)
+    });
   }
 
   deleteFromList(ev: MouseEvent, id: string): void {
@@ -519,20 +566,34 @@ export class SupportCustomers implements OnInit, OnDestroy {
     this.deleteModalOpen = false;
     this.deleteTargetId = null;
     if (!id) return;
-    const done = this.repo.delete(id);
-    if (!done) return;
-    this.inquiries$.next(this.repo.list());
-    if (this.selectedId === id) this.syncRoute(null, 'list', true);
+    
+    const item = this.inquiries$.value.find(x => x.id === id);
+    if (!item) return;
+
+    this.inquiryService.deleteInquiry((item as any)._id).subscribe({
+      next: () => {
+        this.loadInquiries();
+        if (this.selectedId === id) this.syncRoute(null, 'list', true);
+      },
+      error: (err) => console.error('Delete failed', err)
+    });
+  }
+
+  categoryBadgeClass(category: InquiryCategory): string {
+    switch (category) {
+      case 'order': return 'hb-cat-order';
+      case 'product': return 'hb-cat-product';
+      case 'warranty': return 'hb-cat-warranty';
+      case 'other': return 'hb-cat-other';
+      default: return 'hb-cat-other';
+    }
   }
 
   statusBadgeClass(status: InquiryStatus): string {
     switch (status) {
-      case 'NEW': return 'hb-st-new';
-      case 'IN_PROGRESS': return 'hb-st-checking';
-      case 'WAITING_CUSTOMER': return 'hb-st-approved';
-      case 'ESCALATED': return 'hb-st-rejected';
-      case 'RESOLVED': return 'hb-st-done';
-      case 'CLOSED': return 'hb-st-done';
+      case 'open': return 'hb-st-new';
+      case 'in_progress': return 'hb-st-checking';
+      case 'closed': return 'hb-st-done';
       default: return 'hb-st-new';
     }
   }
@@ -636,25 +697,19 @@ function enrichDetail(x: CustomerInquiry): InquiryDetailVM {
 
 function statusLabel(s: InquiryStatus): string {
   switch (s) {
-    case 'NEW': return 'Mới';
-    case 'IN_PROGRESS': return 'Đang xử lý';
-    case 'WAITING_CUSTOMER': return 'Chờ KH phản hồi';
-    case 'ESCALATED': return 'Leo thang';
-    case 'RESOLVED': return 'Đã giải quyết';
-    case 'CLOSED': return 'Đã đóng';
+    case 'open': return 'Mới';
+    case 'in_progress': return 'Đang xử lý';
+    case 'closed': return 'Đã đóng';
     default: return s;
   }
 }
 
 function categoryLabel(c: InquiryCategory): string {
   switch (c) {
-    case 'product_info': return 'Thông tin sản phẩm';
-    case 'order_status': return 'Trạng thái đơn hàng';
-    case 'return_policy': return 'Chính sách đổi trả';
-    case 'payment': return 'Thanh toán';
-    case 'delivery': return 'Giao hàng';
-    case 'complaint': return 'Khiếu nại';
-    case 'other': return 'Khác';
+    case 'order': return 'Vấn đề đơn hàng';
+    case 'product': return 'Tư vấn sản phẩm';
+    case 'warranty': return 'Yêu cầu bảo hành';
+    case 'other': return 'Góp ý khác';
     default: return c;
   }
 }
@@ -681,12 +736,9 @@ function priorityLabel(p: string): string {
 
 function nextStatus(s: InquiryStatus): InquiryStatus | null {
   switch (s) {
-    case 'NEW': return 'IN_PROGRESS';
-    case 'IN_PROGRESS': return 'WAITING_CUSTOMER';
-    case 'WAITING_CUSTOMER': return 'RESOLVED';
-    case 'ESCALATED': return 'IN_PROGRESS';
-    case 'RESOLVED': return 'CLOSED';
-    case 'CLOSED': return null;
+    case 'open': return 'in_progress';
+    case 'in_progress': return 'closed';
+    case 'closed': return null;
     default: return null;
   }
 }
@@ -706,132 +758,4 @@ function compareRow(a: ListRowVM, b: ListRowVM, key: keyof ListRowVM, dir: SortD
 
 function clamp(v: number, min: number, max: number): number {
   return Math.min(Math.max(v, min), max);
-}
-
-function buildSeed(): CustomerInquiry[] {
-  const now = Date.now();
-
-  function makeTimeline(statusList: InquiryStatus[]): TimelineItem[] {
-    return statusList.reverse().map((s, i) => ({
-      at: new Date(now - i * 3600000 * 2).toISOString(),
-      actor: 'Admin',
-      title: `Cập nhật: ${statusLabel(s)}`,
-    }));
-  }
-
-  return [
-    {
-      id: 'CSQ_001',
-      channel: 'chat',
-      category: 'order_status',
-      status: 'IN_PROGRESS',
-      priority: 'high',
-      customerName: 'Nguyễn Văn An',
-      customerPhone: '0901234567',
-      customerEmail: 'an.nguyen@email.com',
-      subject: 'Đơn hàng #DH00234 chưa nhận được sau 7 ngày',
-      content: 'Tôi đặt đơn hàng #DH00234 từ 7 ngày trước nhưng vẫn chưa nhận được hàng. Hệ thống hiển thị "Đang giao hàng" nhưng không có cập nhật mới.',
-      internalNote: 'Đã liên hệ bộ phận vận chuyển, đang chờ phản hồi.',
-      assignee: 'Trần Thị Bảo',
-      tags: ['đơn hàng', 'giao hàng chậm'],
-      createdAt: new Date(now - 86400000 * 2).toISOString(),
-      updatedAt: new Date(now - 3600000 * 3).toISOString(),
-      expectedReplyAt: new Date(now + 3600000 * 2).toISOString(),
-      timeline: makeTimeline(['NEW', 'IN_PROGRESS']),
-    },
-    {
-      id: 'CSQ_002',
-      channel: 'email',
-      category: 'return_policy',
-      status: 'NEW',
-      priority: 'medium',
-      customerName: 'Lê Thị Hoa',
-      customerPhone: '0912345678',
-      customerEmail: 'hoa.le@gmail.com',
-      subject: 'Hỏi về chính sách đổi trả ghế sofa',
-      content: 'Tôi muốn hỏi về chính sách đổi trả trong vòng 30 ngày cho sản phẩm sofa. Sản phẩm tôi mua bị lỗi vải ở góc phải.',
-      assignee: undefined,
-      tags: ['đổi trả', 'sofa'],
-      createdAt: new Date(now - 3600000 * 5).toISOString(),
-      updatedAt: new Date(now - 3600000 * 5).toISOString(),
-      expectedReplyAt: new Date(now + 3600000 * 8).toISOString(),
-      timeline: [{ at: new Date(now - 3600000 * 5).toISOString(), actor: 'Hệ thống', title: 'Yêu cầu được tạo tự động từ Email' }],
-    },
-    {
-      id: 'CSQ_003',
-      channel: 'phone',
-      category: 'complaint',
-      status: 'ESCALATED',
-      priority: 'urgent',
-      customerName: 'Phạm Quốc Bình',
-      customerPhone: '0987654321',
-      customerEmail: 'binh.pham@company.vn',
-      subject: 'Khiếu nại nhân viên tư vấn thái độ không tốt',
-      content: 'Nhân viên tư vấn tại showroom đã có thái độ thiếu chuyên nghiệp khi tôi hỏi về sản phẩm. Tôi yêu cầu được xử lý nghiêm túc.',
-      internalNote: 'Leo thang lên quản lý cấp cao. Cần phỏng vấn nhân viên liên quan.',
-      assignee: 'Nguyễn Minh Trưởng',
-      tags: ['khiếu nại', 'nhân viên', 'khẩn cấp'],
-      createdAt: new Date(now - 86400000).toISOString(),
-      updatedAt: new Date(now - 3600000).toISOString(),
-      expectedReplyAt: new Date(now - 3600000 * 2).toISOString(),
-      timeline: makeTimeline(['NEW', 'IN_PROGRESS', 'ESCALATED']),
-    },
-    {
-      id: 'CSQ_004',
-      channel: 'form',
-      category: 'product_info',
-      status: 'WAITING_CUSTOMER',
-      priority: 'low',
-      customerName: 'Đặng Thị Mai',
-      customerPhone: '0933111222',
-      customerEmail: 'mai.dang@email.com',
-      subject: 'Hỏi kích thước bàn ăn BA-2024-OAK',
-      content: 'Cho tôi hỏi kích thước chính xác của bộ bàn ăn mã BA-2024-OAK, cụ thể chiều cao và chiều rộng khi gập lại.',
-      resolution: 'Đã gửi brochure kỹ thuật qua email. Chờ khách hàng xác nhận kích thước phù hợp.',
-      assignee: 'Lý Hoàng Nam',
-      tags: ['thông tin sản phẩm', 'bàn ăn'],
-      createdAt: new Date(now - 86400000 * 3).toISOString(),
-      updatedAt: new Date(now - 86400000).toISOString(),
-      expectedReplyAt: new Date(now + 86400000).toISOString(),
-      timeline: makeTimeline(['NEW', 'IN_PROGRESS', 'WAITING_CUSTOMER']),
-    },
-    {
-      id: 'CSQ_005',
-      channel: 'chat',
-      category: 'payment',
-      status: 'RESOLVED',
-      priority: 'high',
-      customerName: 'Võ Thanh Tùng',
-      customerPhone: '0944333444',
-      customerEmail: 'tung.vo@hotmail.com',
-      subject: 'Bị trừ tiền hai lần cho một đơn hàng',
-      content: 'Tôi thanh toán đơn hàng #DH00189 nhưng ngân hàng báo bị trừ tiền 2 lần. Vui lòng kiểm tra và hoàn tiền.',
-      resolution: 'Đã xác minh lỗi cổng thanh toán. Đã liên hệ bộ phận kế toán hoàn tiền trong 3-5 ngày làm việc.',
-      assignee: 'Trần Thị Bảo',
-      tags: ['thanh toán', 'hoàn tiền'],
-      createdAt: new Date(now - 86400000 * 5).toISOString(),
-      updatedAt: new Date(now - 86400000 * 2).toISOString(),
-      resolvedAt: new Date(now - 86400000 * 2).toISOString(),
-      expectedReplyAt: new Date(now - 86400000 * 3).toISOString(),
-      timeline: makeTimeline(['NEW', 'IN_PROGRESS', 'RESOLVED']),
-    },
-    {
-      id: 'CSQ_006',
-      channel: 'email',
-      category: 'delivery',
-      status: 'NEW',
-      priority: 'medium',
-      customerName: 'Hoàng Thị Lan',
-      customerPhone: '0966555666',
-      customerEmail: 'lan.hoang@yahoo.com',
-      subject: 'Yêu cầu đổi địa chỉ giao hàng đơn #DH00312',
-      content: 'Tôi muốn thay đổi địa chỉ giao hàng cho đơn #DH00312. Địa chỉ mới: 123 Nguyễn Huệ, Q1, TP.HCM.',
-      assignee: undefined,
-      tags: ['giao hàng', 'đổi địa chỉ'],
-      createdAt: new Date(now - 3600000 * 2).toISOString(),
-      updatedAt: new Date(now - 3600000 * 2).toISOString(),
-      expectedReplyAt: new Date(now + 3600000 * 20).toISOString(),
-      timeline: [{ at: new Date(now - 3600000 * 2).toISOString(), actor: 'Hệ thống', title: 'Yêu cầu được tạo tự động từ Email' }],
-    },
-  ];
 }
