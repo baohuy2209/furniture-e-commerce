@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, NgZone } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, combineLatest, map, take, takeUntil, finalize, debounceTime } from 'rxjs';
@@ -8,7 +8,7 @@ import { EventService } from '../../../services/event-service';
 import { ToastService } from '../../../services/toast-service';
 import { IEvent } from '../../../../interface';
 
-type EventStatus = 'draft' | 'published' | 'paused' | 'ended' | 'cancelled';
+type EventStatus = 'DRAFT' | 'PUBLISHED';
 type Phase = 'upcoming' | 'ongoing' | 'past';
 type Mode = 'list' | 'detail' | 'edit';
 
@@ -87,6 +87,7 @@ interface EventRowVM {
 
   phase: Phase;
   status: EventStatus;
+  isFull: boolean;
 
   banner_url: string;
 }
@@ -124,6 +125,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     private router: Router,
     private eventService: EventService,
     private toastService: ToastService,
+    private zone: NgZone,
   ) {}
 
   private searchSubject = new Subject<string>();
@@ -160,6 +162,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
   q = '';
   f_phase: '' | Phase = '';
   f_status: '' | EventStatus = '';
+  f_capacity: '' | 'available' | 'full' = '';
   f_from = '';
   f_to = '';
 
@@ -177,8 +180,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
   vm$ = combineLatest([this._events$, this._tick$, this.createStep$]).pipe(
     map(([events, _tick, createStep]) => {
       const q = this.q.trim().toLowerCase();
-      const fromISO = this.f_from ? dateOnlyToISO(this.f_from) : '';
-      const toISO = this.f_to ? dateOnlyToISO(this.f_to, true) : '';
+      // user picks date like "2026-06-01" in Vietnam time. 
+      // Start of day: "2026-06-01T00:00:00+07:00"
+      const fromTime = this.f_from ? new Date(`${this.f_from}T00:00:00+07:00`).getTime() : 0;
+      // End of day: "2026-06-01T23:59:59+07:00"
+      const toTime = this.f_to ? new Date(`${this.f_to}T23:59:59+07:00`).getTime() : Infinity;
 
       let filtered = events.filter((e) => {
         const phase = this.computePhase(e.start_at, e.end_at);
@@ -194,10 +200,18 @@ export class ManagementEvents implements OnInit, OnDestroy {
         const matchPhase = !this.f_phase || phase === this.f_phase;
         const matchStatus = !this.f_status || e.status === this.f_status;
 
-        const matchFrom = !fromISO || new Date(e.start_at).toISOString() >= fromISO;
-        const matchTo = !toISO || new Date(e.end_at).toISOString() <= toISO;
+        const isFull = e.registered_count >= e.capacity;
+        let matchCap = true;
+        if (this.f_capacity === 'available') matchCap = !isFull;
+        if (this.f_capacity === 'full') matchCap = isFull;
 
-        return matchQ && matchPhase && matchStatus && matchFrom && matchTo;
+        const eventStart = new Date(e.start_at).getTime();
+        const eventEnd = new Date(e.end_at).getTime();
+
+        const matchFrom = !this.f_from || eventStart >= fromTime;
+        const matchTo = !this.f_to || eventEnd <= toTime;
+
+        return matchQ && matchPhase && matchStatus && matchCap && matchFrom && matchTo;
       });
 
       filtered = [...filtered].sort((a, b) => this.sortCompare(a, b));
@@ -222,6 +236,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
           capacityText: `${e.registered_count}/${e.capacity}`,
           phase,
           status: e.status,
+          isFull: e.registered_count >= e.capacity,
           banner_url: e.banner_url,
         };
       });
@@ -353,31 +368,16 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   private mapStatusFromBackend(s: string): EventStatus {
-    switch (s) {
-      case 'UPCOMING':
-        return 'published';
-      case 'ONGOING':
-        return 'published';
-      case 'ENDED':
-        return 'ended';
-      default:
-        return 'draft';
-    }
+    const upperS = (s || '').toUpperCase();
+    const valid = ['DRAFT', 'PUBLISHED'];
+    if (valid.includes(upperS)) return upperS as EventStatus;
+    // Fallback for legacy data
+    if (upperS === 'UPCOMING' || upperS === 'ONGOING' || upperS === 'ENDED') return 'PUBLISHED';
+    return 'DRAFT';
   }
 
   private mapStatusToBackend(s: EventStatus): string {
-    switch (s) {
-      case 'draft':
-        return 'UPCOMING';
-      case 'published':
-        return 'UPCOMING'; // Will be refined by dates usually, but UPCOMING is safe for new/pub
-      case 'ended':
-        return 'ENDED';
-      case 'cancelled':
-        return 'ENDED';
-      default:
-        return 'UPCOMING';
-    }
+    return s || 'DRAFT';
   }
 
   ngOnDestroy(): void {
@@ -529,6 +529,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     this.q = '';
     this.f_phase = '';
     this.f_status = '';
+    this.f_capacity = '';
     this.f_from = '';
     this.f_to = '';
     this.page = 1;
@@ -557,7 +558,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     return this.sortDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
-  private refreshList() {
+  refreshList() {
     this._tick$.next(this._tick$.value + 1);
   }
 
@@ -653,7 +654,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   cancelEdit() {
-    this.backToDetail();
+    if (this.selectedId === 'NEW') {
+      this.backToList();
+    } else {
+      this.backToDetail();
+    }
   }
 
   private attemptLeave(action: () => void) {
@@ -703,7 +708,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
       city: 'Hà Nội',
       banner_url: '',
       cover_url: '',
-      status: 'draft',
+      status: 'DRAFT',
       capacity: 100,
       registered_count: 0,
       highlights: [],
@@ -765,8 +770,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      this.bannerPreviewUrl = reader.result as string;
-      this.markDirty();
+      this.zone.run(() => {
+        this.bannerPreviewUrl = reader.result as string;
+        this.markDirty();
+        this.refreshList();
+      });
     };
     reader.readAsDataURL(file);
   }
@@ -879,7 +887,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
     this.saving = true;
     const patched = {
       ...this.detail,
-      status: 'published' as EventStatus,
+      status: 'PUBLISHED' as EventStatus,
       updated_at: new Date().toISOString(),
     };
 
@@ -954,24 +962,37 @@ export class ManagementEvents implements OnInit, OnDestroy {
 
   statusLabel(s: EventStatus) {
     switch (s) {
-      case 'draft':
-        return 'Nháp';
-      case 'published':
-        return 'Đang mở';
-      case 'paused':
-        return 'Tạm dừng';
-      case 'ended':
-        return 'Đã kết thúc';
-      case 'cancelled':
-        return 'Đã hủy';
+      case 'DRAFT':      return 'Bản nháp';
+      case 'PUBLISHED':  return 'Đang mở';
+      default:           return 'Bản nháp';
     }
   }
 
   statusBadgeClass(s: EventStatus) {
-    if (s === 'published') return 'hb-st-active';
-    if (s === 'paused') return 'hb-st-paused';
-    if (s === 'draft') return 'hb-st-frozen';
-    return 'hb-st-expired';
+    if (s === 'PUBLISHED') return 'hb-st-active';
+    return 'hb-st-frozen'; // DRAFT
+  }
+
+  unpublishEvent(id: string) {
+    const entity = this._events$.value.find((e) => e.event_id === id);
+    if (!entity) return;
+    const patched = { ...entity, status: 'DRAFT' as EventStatus };
+    const dataToSave = this.mapToIEvent(patched);
+    this.saving = true;
+    this.eventService.updateEvent(id, dataToSave)
+      .pipe(take(1), finalize(() => (this.saving = false)))
+      .subscribe({
+        next: (res) => {
+          const updated = this.mapToEntity(res.data);
+          this._events$.next(
+            this._events$.value.map((e) => (e.event_id === id ? updated : e))
+          );
+          if (this.detail?.event_id === id) this.detail = updated;
+          this.toastService.success('Đã thu hồi về bản nháp!');
+          this.refreshList();
+        },
+        error: () => this.toastService.error('Không thể thu hồi!'),
+      });
   }
 
   phaseBadgeClass(p: Phase) {
@@ -1094,7 +1115,7 @@ function seedEvents(): EventEntity[] {
     city: 'TP.HCM',
     banner_url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
     cover_url: '',
-    status: 'published',
+    status: 'PUBLISHED',
     capacity: 200,
     registered_count: 47,
     highlights: ['Hơn 100 thương hiệu tham gia', 'Workshop thực tế'],
@@ -1116,7 +1137,7 @@ function seedEvents(): EventEntity[] {
     banner_url:
       'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
     cover_url: '',
-    status: 'published',
+    status: 'PUBLISHED',
     capacity: 120,
     registered_count: 88,
     highlights: ['Check-in nhanh', 'Mini workshop', 'Ưu đãi trong ngày'],
@@ -1143,7 +1164,7 @@ function seedEvents(): EventEntity[] {
     banner_url:
       'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=60',
     cover_url: '',
-    status: 'draft',
+    status: 'DRAFT',
     capacity: 60,
     registered_count: 0,
     highlights: ['Welcome drink', 'Private tour', 'Gift set'],

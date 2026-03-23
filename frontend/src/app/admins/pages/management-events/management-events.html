@@ -9,9 +9,6 @@
 
     <!-- LIST ACTIONS -->
     <div class="hb-header-actions" *ngIf="vm.mode === 'list'">
-      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
-        <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
-      </button>
       <button class="btn btn-hb" type="button" (click)="exportCsvSnapshot()">
         <i class="bi bi-download me-1"></i> Xuất CSV
       </button>
@@ -23,7 +20,7 @@
     <!-- DETAIL/EDIT ACTIONS -->
     <ng-container *ngIf="vm.mode === 'detail' || vm.mode === 'edit'">
       <div class="hb-header-actions">
-        <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()" *ngIf="vm.mode === 'edit'">
+        <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()" *ngIf="vm.mode === 'edit'" [disabled]="saving">
           <i class="bi bi-x-lg me-1"></i> Hủy soạn thảo
         </button>
 
@@ -80,11 +77,8 @@
           </select>
           <select class="form-select" [ngModel]="f_status" (ngModelChange)="onChangeStatus($event)">
             <option value="">-- Trạng thái --</option>
-            <option value="published">Đang mở</option>
-            <option value="draft">Bản nháp</option>
-            <option value="paused">Tạm dừng</option>
-            <option value="ended">Đã kết thúc</option>
-            <option value="cancelled">Đã hủy</option>
+            <option value="PUBLISHED">Đang mở</option>
+            <option value="DRAFT">Bản nháp</option>
           </select>
           <input
             class="form-control"
@@ -100,8 +94,11 @@
           />
 
           <!-- Empty placeholders (2) to align Reset to column 8 -->
-          <div class="d-none d-xl-block"></div>
-          <div class="d-none d-xl-block"></div>
+          <select class="form-select hb-filter-select" [(ngModel)]="f_capacity" (change)="refreshList()">
+            <option value="">Sức chứa: Tất cả</option>
+            <option value="available">Còn chỗ</option>
+            <option value="full">Hết chỗ</option>
+          </select>
 
           <button class="btn btn-hb-outline hb-filter-reset" (click)="resetFilters()">
             <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
@@ -141,7 +138,12 @@
               </div>
               <div class="hb-td hb-td-center text-muted">{{ r.startText }}</div>
               <div class="hb-td hb-td-center text-muted">{{ r.endText }}</div>
-              <div class="hb-td hb-td-center">{{ r.capacityText }}</div>
+              <div class="hb-td hb-td-center">
+                {{ r.capacityText }}
+                <div *ngIf="r.isFull" class="mt-1">
+                  <span class="badge bg-danger p-1" style="font-size: 10px">HẾT CHỖ</span>
+                </div>
+              </div>
               <div class="hb-td hb-td-center">
                 <span class="hb-pill" [ngClass]="phaseBadgeClass(r.phase)">{{
                   phaseLabel(r.phase)
@@ -163,6 +165,29 @@
                 </button>
               </div>
             </div>
+          </div>
+          
+          <!-- Pagination -->
+          <div class="hb-pagination" *ngIf="vm.totalPages > 1">
+            <button
+              class="hb-page-btn"
+              type="button"
+              [disabled]="vm.page <= 1"
+              (click)="setPage(vm.page - 1)"
+            >
+              ‹
+            </button>
+            <div class="hb-page-info">
+              Trang <b>{{ vm.page }}</b> / <b>{{ vm.totalPages }}</b>
+            </div>
+            <button
+              class="hb-page-btn"
+              type="button"
+              [disabled]="vm.page >= vm.totalPages"
+              (click)="setPage(vm.page + 1)"
+            >
+              ›
+            </button>
           </div>
         </div>
       </div>
@@ -229,6 +254,22 @@
             <div class="d-grid gap-2">
               <button class="btn btn-hb-accent" (click)="enterEdit()">
                 <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa thông tin
+              </button>
+              <button
+                class="btn btn-hb-primary"
+                *ngIf="eventDetail.status === 'DRAFT'"
+                (click)="publishEvent()"
+                [disabled]="saving"
+              >
+                <i class="bi bi-send me-1"></i> Xuất bản sự kiện
+              </button>
+              <button
+                class="btn btn-hb-outline"
+                *ngIf="eventDetail.status === 'PUBLISHED'"
+                (click)="unpublishEvent(eventDetail.event_id)"
+                [disabled]="saving"
+              >
+                <i class="bi bi-arrow-counterclockwise me-1"></i> Thu hồi về bản nháp
               </button>
               <div class="hb-divider my-2"></div>
               <button class="btn btn-hb-danger-outline" (click)="deleteEvent(eventDetail.event_id)">
@@ -301,11 +342,8 @@
               <div class="col-md-6">
                 <label class="form-label">Trạng thái</label>
                 <select class="form-select" [(ngModel)]="em.status" (ngModelChange)="markDirty()">
-                  <option value="draft">Bản nháp</option>
-                  <option value="published">Xuất bản</option>
-                  <option value="paused">Tạm dừng</option>
-                  <option value="ended">Đã kết thúc</option>
-                  <option value="cancelled">Đã hủy</option>
+                  <option value="DRAFT">Bản nháp</option>
+                  <option value="PUBLISHED">Đã xuất bản</option>
                 </select>
               </div>
             </div>

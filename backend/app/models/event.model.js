@@ -68,8 +68,8 @@ const eventSchema = new Schema(
 
     status: {
       type: String,
-      enum: ["UPCOMING", "ONGOING", "ENDED"],
-      default: "UPCOMING",
+      enum: ["DRAFT", "PUBLISHED"],
+      default: "DRAFT",
     },
     timeline_event: [
       {
