@@ -1,5 +1,15 @@
 const ProductVariant = require("../models/productVariant.model");
 class ProductVariantController {
+  // [GET] /api/product-variant
+  async getAllVariants(req, res) {
+    try {
+      const variants = await ProductVariant.find().populate("product", "product_name brand image_url");
+      return res.status(200).json({ message: "Lấy dữ liệu thành công", data: variants });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({ message: "Lỗi hệ thống " + e, data: null });
+    }
+  }
   // [GET] /api/product-variant/products/:id
   async getAllVariantByProductId(req, res) {
     try {

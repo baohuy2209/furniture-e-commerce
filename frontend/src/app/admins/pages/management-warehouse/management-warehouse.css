@@ -123,15 +123,23 @@
   border-radius: 0 var(--hb-radius-sm) var(--hb-radius-sm) 0;
 }
 
-/* ===== SUMMARY ROW ===== */
-/* Global Sync */
-
-/* Global Sync */
+.hb-summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+}
 
 .hb-summary-card {
   background: rgba(17, 24, 39, 0.8) !important;
   border: 1px solid var(--hb-border) !important;
   backdrop-filter: blur(10px) !important;
+  border-radius: var(--hb-radius);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -693,6 +701,7 @@
 .hb-wh-panel-body {
   flex: 1 1 auto;
   min-height: 0;
+  max-height: 600px; /* Force scrollbar if content exceeds this height */
   overflow-y: auto;
 }
 

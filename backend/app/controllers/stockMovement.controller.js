@@ -26,7 +26,7 @@ class StockMovementController {
     try {
       const {
         warehouse_id,
-        product_variant_id,
+        product_id,
         reference_id,
         reference_type,
         quantity_change,
@@ -45,7 +45,6 @@ class StockMovementController {
       const movement = new StockMovement({
         warehouse_id,
         product_variant_id,
-        reference_id,
         reference_type,
         quantity_change,
         reason,
@@ -54,7 +53,7 @@ class StockMovementController {
       // 2. Update StockItem (Automatic deduction/addition)
       let stockItem = await StockItem.findOne({
         warehouse_id,
-        product_variant_id,
+        product_variant_id: product_variant_id,
       });
 
       if (!stockItem) {
@@ -65,7 +64,7 @@ class StockMovementController {
         // Otherwise create one
         stockItem = new StockItem({
           warehouse_id,
-          product_variant_id,
+          product_variant_id: product_variant_id,
           quantity_on_hand: 0,
         });
       }

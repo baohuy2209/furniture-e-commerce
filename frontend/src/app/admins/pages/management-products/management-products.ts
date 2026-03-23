@@ -1,42 +1,55 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { BehaviorSubject, Subject, combineLatest, forkJoin, map, takeUntil, finalize } from 'rxjs';
-import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { environment } from '../../../../environments/environment';
 import {
-  IListProducts,
-  Iproduct,
-  Iproduct_variants,
-  Iproduct_variants_image,
-} from '../../../../interface';
-import { Product as ProductService } from '../../../services/product';
-import { ProductVariantService } from '../../../services/product-variant-service';
-import { ProductVariantImageService } from '../../../services/product-variant-image-service';
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+  BehaviorSubject,
+  Subject,
+  combineLatest,
+  map,
+  takeUntil,
+  lastValueFrom,
+} from 'rxjs';
+import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 
 type SortDir = 'asc' | 'desc';
 type ProductId = string;
 type VariantId = string;
 type PageMode = 'list' | 'detail' | 'edit';
 
-/**
- * Gộp IListProducts (từ getAllProducts) và Iproduct (từ getProductDetail).
- * - Load danh sách: có main_image, price, rating (số), num_selled, tags (string)
- * - Load detail:    có image_url[], product_component, brand, warranty, ...
- */
-type ProductData = IListProducts & Partial<Iproduct>;
+interface Product {
+  product_id: ProductId;
+  product_name: string;
+  brand_name: string;
+  description: string;
+  discount_percent: number;
+  is_assembly: boolean;
+  warranty: number;
+  tags: string[];
+  image_url: string[];
+  inventoryTotal: number;
+  priceMin: number;
+  ratingAvg: number;
+}
 
-interface ProductComment {
-  id: string;
-  productId: ProductId;
-  userName: string;
+interface ProductVariant {
+  product_variant_id: VariantId;
+  product_id: ProductId;
+  sku: string;
+  price: number;
+  weight: number;
+  num_inventory: number;
+  num_selled: number;
+  designed_by: string;
   rating: number;
-  content: string;
-  createdAt: string;
-  hidden?: boolean;
+  expected_delivery: string;
+  is_default: boolean;
+}
+
+interface Room {
+  name: string;
 }
 
 interface ProductRowVM {
@@ -48,9 +61,7 @@ interface ProductRowVM {
   tags: string[];
   isAssembly: boolean;
   priceMin: number | null;
-  priceMax: number | null;
   inventoryTotal: number;
-  soldTotal: number;
   ratingAvg: number | null;
   roomLabel: string;
   imageCover: string | null;
@@ -81,14 +92,16 @@ interface EditForm {
   description: string;
 }
 
-interface KVEntry {
+interface KeyValueEntry {
   key: string;
   value: string;
   image_url?: string;
 }
 
 interface VariantEditVM {
-  product_varant_id: VariantId;
+  sku: string;
+  product_variant_id?: VariantId;
+  product_varant_id?: VariantId; // Match HTML typo
   is_default: boolean;
   price: number;
   num_inventory: number;
@@ -97,73 +110,69 @@ interface VariantEditVM {
   expected_delivery: string;
   weight: number;
   designed_by: string;
-  componentEntries: KVEntry[];
-  measurementEntries: KVEntry[];
-  images: { url: string; isNew?: boolean }[];
-  expanded: boolean;
+  images: { url: string }[];
+  componentEntries: KeyValueEntry[];
+  measurementEntries: KeyValueEntry[];
 }
 
 interface ProductDetailVM {
-  product: ProductData;
-  variants: Iproduct_variants[];
-  images: Iproduct_variants_image[];
-  comments: ProductComment[];
+  product: any;
+  variants: any[];
+  images: { url: string }[];
+  comments: any[];
   inventoryTotal: number;
-  priceMin: number | null;
-  priceMax: number | null;
   soldTotal: number;
-  ratingAvg: number | null;
+  ratingAvg: number;
+  priceMin: number;
+  priceMax: number;
 }
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 @Component({
   selector: 'app-management-products',
   standalone: true,
-  imports: [ConfirmModal, CommonModule, FormsModule, RouterModule, DatePipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+
+    NgIf,
+    NgFor,
+    DatePipe,
+    ConfirmModal,
+  ],
   templateUrl: './management-products.html',
   styleUrls: ['./management-products.css'],
 })
 export class ManagementProducts implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  // ── State streams ────────────────────────────────────────────────────────
-  private products$ = new BehaviorSubject<ProductData[]>([]);
-  private variants$ = new BehaviorSubject<Iproduct_variants[]>([]);
-  private images$ = new BehaviorSubject<Iproduct_variants_image[]>([]);
+  private products$ = new BehaviorSubject<Product[]>([]);
+  private rooms$ = new BehaviorSubject<Room[]>([]);
+  private detailSubject$ = new BehaviorSubject<ProductDetailVM | null>(null);
 
-  // ── UI state ─────────────────────────────────────────────────────────────
   mode: PageMode = 'list';
   selectedProductId: ProductId | null = null;
   detailTab: 'overview' | 'variants' | 'comments' = 'overview';
 
   editForm: EditForm | null = null;
-  private originalProductSnapshot: ProductData | null = null;
-  private pendingDiscardAction: (() => void) | null = null;
-
   isDirty = false;
   saving = false;
-  loading = false;
   localSearchTerm = '';
   isCreateMode = false;
 
   exportRows: ProductRowVM[] = [];
   editVariants: VariantEditVM[] = [];
   editImages: { url: string; isNew?: boolean }[] = [];
-  expandedVariants = new Set<string>();
 
-  private commentsByProduct = new Map<ProductId, ProductComment[]>();
-
-  // ── Modal state ──────────────────────────────────────────────────────────
   deleteModalOpen = false;
   deleteItemId: string | null = null;
   deleteItemType: 'product' | 'comment' = 'product';
   deleteModalTitle = '';
   deleteModalMessage = '';
+
   saveModalOpen = false;
   discardModalOpen = false;
 
-  // ── Query stream ─────────────────────────────────────────────────────────
   query$ = new BehaviorSubject<ListQuery>({
     q: '',
     room: '',
@@ -178,73 +187,49 @@ export class ManagementProducts implements OnInit, OnDestroy {
     pageSize: 10,
   });
 
-  // ── Derived: tất cả rows (chưa filter) ──────────────────────────────────
-  private rowsAll$ = combineLatest([this.products$, this.variants$, this.images$]).pipe(
-    map(([products, variants, images]) =>
-      products.map((p) => {
-        const pv = variants.filter((v) => v.product === p._id);
-
-        // price: IListProducts có sẵn 1 giá, variant có thể nhiều giá
-        const listPrice = typeof p.price === 'number' ? p.price : null;
-        const priceMin = listPrice ?? (pv.length ? Math.min(...pv.map((x) => x.price)) : null);
-        const priceMax = listPrice ?? (pv.length ? Math.max(...pv.map((x) => x.price)) : null);
-
-        const inventoryTotal = pv.reduce((s, x) => s + (x.num_inventory ?? 0), 0);
-
-        // num_selled: ưu tiên field từ IListProducts
-        const soldTotal =
-          typeof p.num_selled === 'number'
-            ? p.num_selled
-            : pv.reduce((s, x) => s + (x.num_selled ?? 0), 0);
-
-        // rating: IListProducts là số thẳng, Iproduct_variants là { average, count }
-        const ratingAvg =
-          typeof p.rating === 'number'
-            ? p.rating
-            : pv.length
-              ? round2(pv.reduce((s, x) => s + (x.rating?.average ?? 0), 0) / pv.length)
-              : null;
-
+  private rowsAll$ = this.products$.pipe(
+    map((products) => {
+      return products.map((p) => {
         return {
-          id: p._id,
+          id: p.product_id,
           name: p.product_name,
-          brand: p.brand ?? '',
-          discountPercent: p.discount_percent ?? 0,
-          warranty: p.warranty ?? 0,
-          tags: normalizeTags(p.tags),
+          brand: p.brand_name,
+          discountPercent: p.discount_percent,
+          warranty: p.warranty,
+          tags: Array.isArray(p.tags) ? p.tags : [],
           isAssembly: !!p.is_assembly,
-          priceMin,
-          priceMax,
-          inventoryTotal,
-          soldTotal,
-          ratingAvg,
+          priceMin: p.priceMin || 0,
+          inventoryTotal: p.inventoryTotal || 0,
+          ratingAvg: p.ratingAvg || 0,
           roomLabel: inferRoomFromProduct(p),
-          // Ảnh bìa: main_image → variant default is_main → image_url[0]
-          imageCover: resolveMainImage(p, pv, images),
+          imageCover: p.image_url && p.image_url.length ? p.image_url[0] : null,
           stt: 0,
         } as ProductRowVM;
-      }),
-    ),
+      });
+    }),
   );
 
-  // ── Derived: filtered + paginated VM ────────────────────────────────────
   vm$ = combineLatest([this.rowsAll$, this.query$]).pipe(
     map(([rowsAll, query]) => {
       let filtered = rowsAll.slice();
 
       const q = (query.q || '').trim().toLowerCase();
       if (q) {
-        filtered = filtered.filter((r) =>
-          `${r.id} ${r.name} ${r.brand} ${r.tags.join(' ')}`.toLowerCase().includes(q),
-        );
+        filtered = filtered.filter((r) => {
+          const hay = `${r.id} ${r.name} ${r.brand} ${r.tags.join(' ')}`.toLowerCase();
+          return hay.includes(q);
+        });
       }
 
       if (query.room) filtered = filtered.filter((r) => r.roomLabel === query.room);
       if (query.brand) filtered = filtered.filter((r) => r.brand === query.brand);
-      if (query.minPrice != null)
+      if (query.minPrice != null) {
         filtered = filtered.filter((r) => (r.priceMin ?? 0) >= query.minPrice!);
-      if (query.maxPrice != null)
-        filtered = filtered.filter((r) => (r.priceMax ?? 0) <= query.maxPrice!);
+      }
+      if (query.maxPrice != null) {
+        filtered = filtered.filter((r) => (r.priceMin ?? 0) <= query.maxPrice!);
+      }
+
       if (query.stock === 'in') filtered = filtered.filter((r) => r.inventoryTotal > 0);
       if (query.stock === 'out') filtered = filtered.filter((r) => r.inventoryTotal <= 0);
       if (query.stock === 'low') {
@@ -260,15 +245,15 @@ export class ManagementProducts implements OnInit, OnDestroy {
         a.localeCompare(b),
       );
       const brandOptions = Array.from(new Set(rowsAll.map((x) => x.brand)))
-        .filter(Boolean)
+        .filter((b) => b)
         .sort((a, b) => a.localeCompare(b));
 
       const total = filtered.length;
       const pageSize = Math.max(1, query.pageSize);
       const totalPages = Math.max(1, Math.ceil(total / pageSize));
       const page = clamp(query.page, 1, totalPages);
-      const start = (page - 1) * pageSize;
 
+      const start = (page - 1) * pageSize;
       const rows = filtered.slice(start, start + pageSize).map((r, i) => ({
         ...r,
         stt: start + i + 1,
@@ -277,76 +262,34 @@ export class ManagementProducts implements OnInit, OnDestroy {
       const summary = {
         totalProducts: rowsAll.length,
         lowStockProducts: rowsAll.filter((r) => r.inventoryTotal <= query.lowStockThreshold).length,
-        totalSold: rowsAll.reduce((s, r) => s + r.soldTotal, 0),
+        totalSold: rowsAll.reduce((s, r) => s + (r as any).soldTotal || 0, 0),
       };
-
-      return { rows, total, page, pageSize, totalPages, query, roomOptions, brandOptions, summary };
-    }),
-  );
-
-  // ── Derived: detail VM ───────────────────────────────────────────────────
-  detail$ = combineLatest([this.products$, this.variants$, this.images$]).pipe(
-    map(([products, variants, images]): ProductDetailVM | null => {
-      if (!this.selectedProductId || this.selectedProductId === 'new') return null;
-
-      const p = products.find((x) => x._id === this.selectedProductId) ?? null;
-      if (!p) return null;
-
-      const pv = variants.filter((v) => v.product === p._id);
-      const pvIds = new Set(pv.map((x) => x._id));
-      const imgs = images
-        .filter((im) => pvIds.has(im.product_varant))
-        .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
-
-      const comments = this.getComments(p._id);
-      const inventoryTotal = pv.reduce((s, x) => s + (x.num_inventory ?? 0), 0);
-      const soldTotal =
-        typeof p.num_selled === 'number'
-          ? p.num_selled
-          : pv.reduce((s, x) => s + (x.num_selled ?? 0), 0);
-      const ratingAvg =
-        typeof p.rating === 'number'
-          ? p.rating
-          : pv.length
-            ? round2(pv.reduce((s, x) => s + (x.rating?.average ?? 0), 0) / pv.length)
-            : null;
 
       return {
-        product: p,
-        variants: pv,
-        images: imgs,
-        comments,
-        inventoryTotal,
-        priceMin:
-          typeof p.price === 'number'
-            ? p.price
-            : pv.length
-              ? Math.min(...pv.map((x) => x.price))
-              : null,
-        priceMax:
-          typeof p.price === 'number'
-            ? p.price
-            : pv.length
-              ? Math.max(...pv.map((x) => x.price))
-              : null,
-        soldTotal,
-        ratingAvg,
+        rows,
+        total,
+        page,
+        pageSize,
+        totalPages,
+        query,
+        roomOptions,
+        brandOptions,
+        summary,
       };
     }),
   );
 
-  // ── Constructor ──────────────────────────────────────────────────────────
+  detail$ = this.detailSubject$.asObservable();
+
+  private expandedVariantIds = new Set<string>();
+
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private productService: ProductService,
-    private productVariantService: ProductVariantService,
-    private productVariantImageService: ProductVariantImageService,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
-  // ── Lifecycle ────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.loadData();
     this.bindRouteState();
@@ -368,126 +311,6 @@ export class ManagementProducts implements OnInit, OnDestroy {
     }
   }
 
-  // ── Load data ────────────────────────────────────────────────────────────
-  /**
-   * Bước 1: getAllProducts() → IListProducts[] (có main_image, price, rating)
-   * Bước 2: forkJoin lấy variants của từng sản phẩm
-   * Bước 3: forkJoin lấy images của từng variant
-   */
-  private loadData(): void {
-    this.loading = true;
-
-    this.productService
-      .getAllProducts({})
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res) => {
-          const raw: IListProducts[] = Array.isArray(res.data) ? (res.data as any) : [];
-          const products: ProductData[] = raw.map((item) => ({ ...item }));
-          this.products$.next(products);
-
-          if (!products.length) {
-            this.loading = false;
-            return;
-          }
-
-          forkJoin(products.map((p) => this.productVariantService.getAllVariantByProductId(p._id)))
-            .pipe(takeUntil(this.destroy$))
-            .subscribe({
-              next: (variantResponses) => {
-                const allVariants = variantResponses.flatMap((r) => r.data ?? []);
-                this.variants$.next(allVariants);
-
-                if (!allVariants.length) {
-                  this.loading = false;
-                  this.cdr.detectChanges();
-                  return;
-                }
-
-                forkJoin(
-                  allVariants.map((v) =>
-                    this.productVariantImageService.getAllImageByProductVariantId(v._id),
-                  ),
-                )
-                  .pipe(
-                    takeUntil(this.destroy$),
-                    finalize(() => {
-                      this.loading = false;
-                      this.cdr.detectChanges();
-                    }),
-                  )
-                  .subscribe({
-                    next: (imageResponses) => {
-                      this.images$.next(imageResponses.flatMap((r) => r.data ?? []));
-                    },
-                    error: () => this.images$.next([]),
-                  });
-              },
-              error: () => {
-                this.variants$.next([]);
-                this.loading = false;
-                this.cdr.detectChanges();
-              },
-            });
-        },
-        error: () => {
-          this.products$.next([]);
-          this.loading = false;
-          this.cdr.detectChanges();
-        },
-      });
-  }
-
-  /**
-   * Merge dữ liệu Iproduct (từ getProductDetail) vào ProductData.
-   * Giữ lại main_image, price, rating từ IListProducts.
-   * Bổ sung image_url[], product_component, description, ... từ Iproduct.
-   */
-  private loadProductDetail(productId: string): void {
-    this.productService
-      .getProductDetail(productId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (res) => {
-          const { productInfo, defaultProductVariant, listMainImageDefaultProduct } = res.data;
-
-          const products = this.products$.value.slice();
-          const idx = products.findIndex((p) => p._id === productId);
-          const existing = idx >= 0 ? products[idx] : ({} as ProductData);
-          // Merge: IListProducts fields (existing) + Iproduct fields (productInfo)
-          // existing được đặt sau để giữ main_image, price, rating từ danh sách
-          const merged: ProductData = { ...productInfo, ...existing } as ProductData;
-
-          if (idx >= 0) {
-            products[idx] = merged;
-          } else {
-            products.push(merged);
-          }
-          this.products$.next(products);
-
-          // Upsert variant mặc định
-          const variants = this.variants$.value.slice();
-          const vIdx = variants.findIndex((v) => v._id === defaultProductVariant._id);
-          if (vIdx >= 0) {
-            variants[vIdx] = defaultProductVariant;
-          } else {
-            variants.push(defaultProductVariant);
-          }
-          this.variants$.next(variants);
-
-          // Replace images của variant mặc định
-          const images = this.images$.value
-            .filter((im) => im.product_varant !== defaultProductVariant._id)
-            .concat(listMainImageDefaultProduct);
-          this.images$.next(images);
-
-          this.cdr.detectChanges();
-        },
-        error: () => {},
-      });
-  }
-
-  // ── Route binding ────────────────────────────────────────────────────────
   private bindRouteState(): void {
     this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((qp) => {
       const id = qp.get('id');
@@ -501,14 +324,10 @@ export class ManagementProducts implements OnInit, OnDestroy {
       this.selectedProductId = incomingId;
       this.mode = incomingMode;
 
-      if (this.mode === 'edit') {
+      if (this.mode === 'edit' || this.mode === 'detail') {
         this.initEditForm(incomingId);
       } else {
         this.clearEditState();
-      }
-
-      if (incomingId && incomingId !== 'new') {
-        this.loadProductDetail(incomingId);
       }
 
       if (this.mode === 'list') this.detailTab = 'overview';
@@ -524,6 +343,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
       queryParams.id = null;
       queryParams.edit = null;
     }
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
@@ -532,10 +352,25 @@ export class ManagementProducts implements OnInit, OnDestroy {
     });
   }
 
-  // ── Query / Filter ───────────────────────────────────────────────────────
+  loadData(): void {
+    this.http
+      .get<any>(`${environment.backend_url}/admin/products?size=1000`, { withCredentials: true })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.products$.next(res.data?.products || []);
+          this.rooms$.next([{ name: 'Phòng khách' }, { name: 'Phòng ngủ' }, { name: 'Khác' }]);
+        },
+        error: (err) => {
+          console.error('API Load Error:', err);
+          this.products$.next([]);
+        },
+      });
+  }
+
   patchQuery(patch: Partial<ListQuery>): void {
     const next = { ...this.query$.value, ...patch };
-    const isFilterChange =
+    const changedFilterOrSort =
       patch.q !== undefined ||
       patch.room !== undefined ||
       patch.brand !== undefined ||
@@ -547,13 +382,13 @@ export class ManagementProducts implements OnInit, OnDestroy {
       patch.sortDir !== undefined ||
       patch.pageSize !== undefined;
 
-    if (isFilterChange && patch.page === undefined) next.page = 1;
+    if (changedFilterOrSort && patch.page === undefined) next.page = 1;
     this.query$.next(next);
   }
 
   resetFilters(): void {
     this.localSearchTerm = '';
-    const keepSort = { sortKey: this.query$.value.sortKey, sortDir: this.query$.value.sortDir };
+    const keepSort = { sortKey: 'id' as any, sortDir: 'asc' as any };
     this.query$.next({
       q: '',
       room: '',
@@ -570,16 +405,18 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   onSearchChange(val: string): void {
     this.localSearchTerm = val;
-    if (val.length === 0 || val.length >= 3) this.patchQuery({ q: val });
+    if (val.length === 0 || val.length >= 3) {
+      this.patchQuery({ q: val });
+    }
   }
 
   toggleSort(key: ListQuery['sortKey']): void {
     const q = this.query$.value;
     if (q.sortKey === key) {
       this.patchQuery({ sortDir: q.sortDir === 'asc' ? 'desc' : 'asc' });
-    } else {
-      this.patchQuery({ sortKey: key, sortDir: 'asc' });
+      return;
     }
+    this.patchQuery({ sortKey: key, sortDir: 'asc' });
   }
 
   isSortKey(key: ListQuery['sortKey']): boolean {
@@ -596,16 +433,18 @@ export class ManagementProducts implements OnInit, OnDestroy {
     return q.sortDir === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
   }
 
-  // ── Navigation ───────────────────────────────────────────────────────────
   openDetailById(productId: string): void {
     this.syncRoute(productId, 'detail', true);
   }
+
   openEdit(productId: string): void {
     this.syncRoute(productId, 'edit', true);
   }
+
   openDetail(row: ProductRowVM): void {
     this.openDetailById(row.id);
   }
+
   createNewProduct(): void {
     this.syncRoute('new', 'edit', true);
   }
@@ -654,33 +493,32 @@ export class ManagementProducts implements OnInit, OnDestroy {
       action();
       return;
     }
-    this.pendingDiscardAction = action;
     this.discardModalOpen = true;
+    (this as any).pendingDiscardAction = action;
   }
 
   onConfirmDiscard(): void {
     this.discardModalOpen = false;
-    const action = this.pendingDiscardAction;
-    this.pendingDiscardAction = null;
+    const action = (this as any).pendingDiscardAction;
     this.clearEditState();
     action?.();
   }
 
   onCancelDiscard(): void {
     this.discardModalOpen = false;
-    this.pendingDiscardAction = null;
   }
 
-  // ── Edit form ────────────────────────────────────────────────────────────
-  private initEditForm(productId: string | null): void {
+  private async initEditForm(productId: string | null): Promise<void> {
     this.editVariants = [];
     this.editImages = [];
     this.isCreateMode = productId === 'new';
 
-    if (!productId) return;
+    if (!productId) {
+      this.detailSubject$.next(null);
+      return;
+    }
 
     if (productId === 'new') {
-      this.originalProductSnapshot = null;
       this.editForm = {
         product_name: '',
         brand_name: '',
@@ -690,636 +528,378 @@ export class ManagementProducts implements OnInit, OnDestroy {
         tagsText: '',
         description: '',
       };
-      this.editVariants = [
-        {
-          product_varant_id: 'new-v1',
-          is_default: true,
-          price: 0,
-          num_inventory: 0,
-          num_selled: 0,
-          rating: 0,
-          weight: 0,
-          designed_by: '',
-          expected_delivery: '3-5 days',
-          componentEntries: [],
-          measurementEntries: [],
-          images: [],
-          expanded: true,
-        },
-      ];
+      const v0: VariantEditVM = {
+        sku: 'SKU-' + Math.random().toString(16).slice(2, 8).toUpperCase(),
+        product_variant_id: 'new-v-1',
+        product_varant_id: 'new-v-1',
+        is_default: true,
+        price: 0,
+        num_inventory: 0,
+        num_selled: 0,
+        rating: 0,
+        weight: 0,
+        designed_by: '',
+        expected_delivery: '3-5 days',
+        images: [],
+        componentEntries: [],
+        measurementEntries: [],
+      };
+      this.editVariants = [v0];
+      this.expandedVariantIds.clear();
+      this.expandedVariantIds.add(v0.product_varant_id!);
       this.isDirty = false;
-      this.detailTab = 'overview';
+      this.detailSubject$.next(null);
       return;
     }
 
-    const p = this.products$.value.find((x) => x._id === productId) ?? null;
-    if (!p) return;
+    try {
+      const res = await lastValueFrom(
+        this.http.get<any>(`${environment.backend_url}/admin/products/${productId}`, { withCredentials: true })
+      );
+      const data = res.data;
+      const p = data.product;
 
-    this.originalProductSnapshot = deepClone(p);
-    this.editForm = {
-      product_name: p.product_name ?? '',
-      brand_name: p.brand ?? '',
-      discount_percent: Number(p.discount_percent ?? 0),
-      warranty: Number(p.warranty ?? 0),
-      is_assembly: !!p.is_assembly,
-      tagsText: normalizeTags(p.tags).join(', '),
-      description: p.description ?? '',
-    };
+      this.editForm = {
+        product_name: p.product_name,
+        brand_name: p.brand_name || p.brand || '',
+        discount_percent: p.discount_percent || 0,
+        warranty: p.warranty || 0,
+        is_assembly: !!p.is_assembly,
+        tagsText: Array.isArray(p.tags) ? p.tags.join(', ') : '',
+        description: p.description || '',
+      };
 
-    const pv = this.variants$.value.filter((v) => v.product === productId);
-    this.editVariants = pv.map((v) => ({
-      product_varant_id: v._id,
-      is_default: !!v.is_default,
-      price: Number(v.price ?? 0),
-      num_inventory: Number(v.num_inventory ?? 0),
-      num_selled: Number(v.num_selled ?? 0),
-      rating: Number(v.rating?.average ?? 0),
-      weight: Number(v.weight ?? 0),
-      designed_by: v.designed_by ?? '',
-      expected_delivery: v.expected_delivery ?? '',
-      componentEntries: Object.entries(v.measurement ?? {}).map(([key, value]) => ({
-        key,
-        value: String(value),
-      })),
-      measurementEntries: Object.entries(v.measurement ?? {}).map(([key, value]) => ({
-        key,
-        value: String(value),
-      })),
-      images: this.images$.value
-        .filter((im) => im.product_varant === v._id)
-        .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
-        .map((im) => ({ url: im.url })),
-      expanded: false,
-    }));
+      this.editVariants = data.variants.map((v: any) => {
+        const vImages = data.images
+          .filter((img: any) => img.product_variant === v._id)
+          .map((img: any) => ({ url: img.url }));
 
-    // Ảnh edit: ưu tiên image_url[] (Iproduct), fallback main_image (IListProducts)
-    const imageUrlArr: string[] = Array.isArray(p.image_url)
-      ? p.image_url
-      : p.main_image
-        ? [p.main_image]
-        : [];
-    this.editImages = imageUrlArr.map((url) => ({ url }));
+        const compEntries: KeyValueEntry[] = [];
+        if (v.product_variant_components) {
+          Object.entries(v.product_variant_components).forEach(([k, val]: any) => {
+            compEntries.push({ key: k, value: val.name || val, image_url: val.image_url });
+          });
+        }
 
-    this.isDirty = false;
-    this.detailTab = this.detailTab || 'overview';
+        const measEntries: KeyValueEntry[] = [];
+        if (v.product_variant_measurements) {
+          Object.entries(v.product_variant_measurements).forEach(([k, val]: any) => {
+            measEntries.push({ key: k, value: String(val) });
+          });
+        }
+
+        return {
+          product_variant_id: v._id,
+          product_varant_id: v._id,
+          sku: v.sku,
+          is_default: !!v.is_default,
+          price: v.price || 0,
+          num_inventory: v.num_inventory || 0,
+          num_selled: v.num_selled || 0,
+          rating: v.rating?.average || 0,
+          weight: v.weight || 0,
+          designed_by: v.designed_by || '',
+          expected_delivery: v.expected_delivery || '',
+          images: vImages,
+          componentEntries: compEntries,
+          measurementEntries: measEntries,
+        } as VariantEditVM;
+      });
+
+      this.editImages = (p.image_url || []).map((url: string) => ({ url }));
+
+      // Detail mapping for template
+      const detailVM: ProductDetailVM = {
+        product: p,
+        variants: data.variants,
+        images: (p.image_url || []).map((u: string) => ({ url: u })),
+        comments: data.comments || [],
+        inventoryTotal: data.variants.reduce((s: number, v: any) => s + (v.num_inventory || 0), 0),
+        soldTotal: data.variants.reduce((s: number, v: any) => s + (v.num_selled || 0), 0),
+        ratingAvg: data.variants.reduce((s: number, v: any) => s + (v.rating?.average || 0), 0) / (data.variants.length || 1),
+        priceMin: Math.min(...data.variants.map((v: any) => v.price || 999999999)),
+        priceMax: Math.max(...data.variants.map((v: any) => v.price || 0)),
+      };
+      this.detailSubject$.next(detailVM);
+
+      this.isDirty = false;
+      this.cdr.detectChanges();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   onEditChange(): void {
-    if (this.editForm) this.isDirty = true;
+    this.isDirty = true;
   }
 
-  // ── Variant helpers ──────────────────────────────────────────────────────
-  toggleVariantExpand(id: string): void {
-    if (this.expandedVariants.has(id)) this.expandedVariants.delete(id);
-    else this.expandedVariants.add(id);
+  isVariantExpanded(id: string | undefined): boolean {
+    return !!id && this.expandedVariantIds.has(id);
   }
 
-  isVariantExpanded(id: string): boolean {
-    return this.expandedVariants.has(id);
+  toggleVariantExpand(id: string | undefined): void {
+    if (!id) return;
+    if (this.expandedVariantIds.has(id)) {
+      this.expandedVariantIds.delete(id);
+    } else {
+      this.expandedVariantIds.add(id);
+    }
   }
 
   variantPreviewLabel(v: VariantEditVM): string {
-    if (!v.componentEntries?.length) return v.product_varant_id;
-    return v.componentEntries
-      .map((e) => e.value)
-      .filter(Boolean)
-      .join(' · ');
-  }
-
-  addComponentEntry(v: VariantEditVM): void {
-    v.componentEntries.push({ key: '', value: '' });
-    this.onVariantChange();
-  }
-
-  removeComponentEntry(v: VariantEditVM, idx: number): void {
-    v.componentEntries.splice(idx, 1);
-    this.onVariantChange();
-  }
-
-  addMeasurementEntry(v: VariantEditVM): void {
-    v.measurementEntries.push({ key: '', value: '' });
-    this.onVariantChange();
-  }
-
-  removeMeasurementEntry(v: VariantEditVM, idx: number): void {
-    v.measurementEntries.splice(idx, 1);
-    this.onVariantChange();
-  }
-
-  setDefaultVariant(v: VariantEditVM): void {
-    this.editVariants.forEach((ev) => (ev.is_default = false));
-    v.is_default = true;
-    this.onVariantChange();
+    if (v.componentEntries.length > 0) {
+      return v.componentEntries.map(e => `${e.key}: ${e.value}`).join(', ');
+    }
+    return v.sku || 'Biến thể mới';
   }
 
   onVariantChange(): void {
     this.isDirty = true;
   }
 
-  onUploadVariantImages(ev: Event, v: VariantEditVM): void {
-    const input = ev.target as HTMLInputElement;
-    const files = input.files ? Array.from(input.files) : [];
-    if (!files.length) return;
-    for (const f of files) v.images.push({ url: URL.createObjectURL(f), isNew: true });
-    this.isDirty = true;
-    input.value = '';
+  addComponentEntry(v: VariantEditVM): void {
+    v.componentEntries.push({ key: '', value: '' });
+    this.onEditChange();
   }
 
-  removeVariantImage(v: VariantEditVM, idx: number): void {
-    const it = v.images[idx];
-    if (!it) return;
-    if (it.isNew) URL.revokeObjectURL(it.url);
-    v.images.splice(idx, 1);
-    this.isDirty = true;
+  removeComponentEntry(v: VariantEditVM, idx: number): void {
+    v.componentEntries.splice(idx, 1);
+    this.onEditChange();
   }
 
-  onUploadEntryImage(ev: Event, entry: KVEntry): void {
-    const input = ev.target as HTMLInputElement;
-    const files = input.files ? Array.from(input.files) : [];
-    if (!files.length) return;
-    const f = files[0];
-    if (f) {
-      if (entry.image_url?.startsWith('blob:')) URL.revokeObjectURL(entry.image_url);
-      entry.image_url = URL.createObjectURL(f);
-      this.isDirty = true;
-    }
-    input.value = '';
+  addMeasurementEntry(v: VariantEditVM): void {
+    v.measurementEntries.push({ key: '', value: '' });
+    this.onEditChange();
   }
 
-  removeEntryImage(entry: KVEntry): void {
-    if (entry.image_url?.startsWith('blob:')) URL.revokeObjectURL(entry.image_url);
-    delete entry.image_url;
-    this.isDirty = true;
+  removeMeasurementEntry(v: VariantEditVM, idx: number): void {
+    v.measurementEntries.splice(idx, 1);
+    this.onEditChange();
+  }
+
+  async onUploadEntryImage(ev: any, entry: KeyValueEntry): Promise<void> {
+    const file = ev.target.files[0];
+    if (!file) return;
+    const blobUrl = URL.createObjectURL(file);
+    entry.image_url = await this.uploadBlob(blobUrl);
+    this.onEditChange();
+  }
+
+  removeEntryImage(entry: KeyValueEntry): void {
+    entry.image_url = undefined;
+    this.onEditChange();
+  }
+
+  setDefaultVariant(v: VariantEditVM): void {
+    this.editVariants.forEach((ev) => (ev.is_default = false));
+    v.is_default = true;
+    this.onEditChange();
   }
 
   onUploadImages(ev: Event): void {
     const input = ev.target as HTMLInputElement;
     const files = input.files ? Array.from(input.files) : [];
-    if (!files.length) return;
-    for (const f of files) this.editImages.push({ url: URL.createObjectURL(f), isNew: true });
+    for (const f of files) {
+      const url = URL.createObjectURL(f);
+      this.editImages.push({ url, isNew: true });
+    }
     this.isDirty = true;
     input.value = '';
   }
 
   removeEditImage(idx: number): void {
     const it = this.editImages[idx];
-    if (!it) return;
     if (it.isNew) URL.revokeObjectURL(it.url);
     this.editImages.splice(idx, 1);
     this.isDirty = true;
   }
 
-  // ── Save ─────────────────────────────────────────────────────────────────
+  onUploadVariantImages(ev: Event, v: VariantEditVM): void {
+    const input = ev.target as HTMLInputElement;
+    const files = input.files ? Array.from(input.files) : [];
+    for (const f of files) {
+      const url = URL.createObjectURL(f);
+      v.images.push({ url });
+    }
+    this.isDirty = true;
+    input.value = '';
+  }
+
+  removeVariantImage(v: VariantEditVM, idx: number): void {
+    v.images.splice(idx, 1);
+    this.isDirty = true;
+  }
+
+  toggleCommentHidden(commentId: string): void {
+    const d = this.detailSubject$.value;
+    if (!d) return;
+    const c = d.comments.find(x => x.id === commentId);
+    if (c) c.hidden = !c.hidden;
+    this.isDirty = true;
+  }
+
+  deleteComment(commentId: string): void {
+     this.deleteItemId = commentId;
+     this.deleteItemType = 'comment';
+     this.deleteModalTitle = 'Xác nhận xóa đánh giá';
+     this.deleteModalMessage = 'Bạn có chắc chắn muốn xóa đánh giá này không?';
+     this.deleteModalOpen = true;
+  }
+
   saveEdit(): void {
-    if (!this.editForm) return;
     this.saveModalOpen = true;
   }
 
-  executeSave(): void {
+  async executeSave(): Promise<void> {
     if (!this.editForm) return;
     this.saveModalOpen = false;
     this.saving = true;
-    if (this.isCreateMode) this._executeCreate();
-    else this._executeUpdate();
-  }
 
-  private _executeCreate(): void {
-    const newId = this.nextNumericProductId();
-    const tags = parseTags(this.editForm!.tagsText);
+    try {
+      for (const img of this.editImages) {
+        if (img.isNew) {
+           img.url = await this.uploadBlob(img.url);
+           img.isNew = false;
+        }
+      }
 
-    const newProduct = {
-      _id: String(newId),
-      product_name: this.editForm!.product_name.trim() || `New product ${newId}`,
-      description: this.editForm!.description || '',
-      discount_percent: clampNumber(this.editForm!.discount_percent, 0, 100),
-      tags: tags.join(','), // string cho IListProducts
-      price: 0,
-      num_selled: 0,
-      rating: 0,
-      main_image: this.editImages[0]?.url ?? '',
-      categories: [] as string[],
-      // Iproduct fields
-      brand: this.editForm!.brand_name.trim() || 'Unknown',
-      is_assembly: !!this.editForm!.is_assembly,
-      warranty: Math.max(0, Number(this.editForm!.warranty || 0)),
-      important_functions: [] as string[],
-      product_component: {} as Record<string, any>,
-      image_url: this.editImages.map((x) => x.url),
-      search_text: '',
-    } as unknown as ProductData;
+      // NEW: Upload images for each variant
+      for (const v of this.editVariants) {
+        for (const vImg of v.images) {
+          if (vImg.url.startsWith('blob:')) {
+            vImg.url = await this.uploadBlob(vImg.url);
+          }
+        }
+      }
 
-    const products = this.products$.value.slice();
-    products.push(newProduct);
-    this.products$.next(products);
-
-    const variants = this.variants$.value.slice();
-    const imgs = this.images$.value.slice();
-
-    this.editVariants.forEach((vDraft, i) => {
-      const vId = `${newId}-v${i + 1}`;
-      const meas: Record<string, number> = {};
-      vDraft.measurementEntries.forEach((e) => {
-        if (e.key) meas[e.key] = Number(e.value) || 0;
-      });
-
-      variants.push({
-        _id: vId,
-        product: String(newId),
-        sku: '',
-        price: Number(vDraft.price ?? 0),
-        weight: Number(vDraft.weight ?? 0),
-        num_inventory: Number(vDraft.num_inventory ?? 0),
-        num_selled: Number(vDraft.num_selled ?? 0),
-        designed_by: vDraft.designed_by ?? '',
-        rating: { average: Number(vDraft.rating ?? 0), count: 0 },
-        expected_delivery: vDraft.expected_delivery ?? '',
-        is_default: !!vDraft.is_default,
-        measurement: meas,
-      });
-
-      vDraft.images.forEach((vIm, vImIdx) => {
-        imgs.push({
-          _id: `${vId}-img${vImIdx + 1}`,
-          product_varant: vId,
-          url: vIm.url,
-          is_main: vImIdx === 0,
-          position: vImIdx + 1,
-        });
-      });
-    });
-
-    this.variants$.next(variants);
-    this.images$.next(imgs);
-    this.saving = false;
-    this.clearEditState();
-    this.syncRoute(String(newId), 'detail', true);
-  }
-
-  private _executeUpdate(): void {
-    if (!this.selectedProductId || this.selectedProductId === 'new') {
-      this.saving = false;
-      return;
-    }
-
-    const products = this.products$.value.slice();
-    const idx = products.findIndex((x) => x._id === this.selectedProductId);
-    if (idx >= 0) {
-      const prev = products[idx];
-      const tags = parseTags(this.editForm!.tagsText);
-      products[idx] = {
-        ...prev,
-        product_name: this.editForm!.product_name.trim(),
-        brand: this.editForm!.brand_name.trim(),
-        discount_percent: clampNumber(this.editForm!.discount_percent, 0, 100),
-        warranty: Math.max(0, Number(this.editForm!.warranty || 0)),
-        is_assembly: !!this.editForm!.is_assembly,
-        tags: tags,
-        description: this.editForm!.description,
-        image_url: this.editImages.map((x) => x.url),
-        main_image: this.editImages[0]?.url ?? prev.main_image,
-      } as ProductData;
-      this.products$.next(products);
-    }
-
-    const variants = this.variants$.value.slice();
-    const imgs = this.images$.value
-      .slice()
-      .filter((im) => !this.editVariants.some((ev) => ev.product_varant_id === im.product_varant));
-
-    const vSet = new Map(this.editVariants.map((v) => [v.product_varant_id, v]));
-
-    for (let i = 0; i < variants.length; i++) {
-      const v = variants[i];
-      if (v.product !== this.selectedProductId) continue;
-      const draft = vSet.get(v._id);
-      if (!draft) continue;
-
-      const meas: Record<string, number> = {};
-      draft.measurementEntries.forEach((e) => {
-        if (e.key) meas[e.key] = Number(e.value) || 0;
-      });
-
-      variants[i] = {
-        ...v,
-        price: Number(draft.price ?? v.price),
-        weight: Number(draft.weight ?? v.weight),
-        num_inventory: Number(draft.num_inventory ?? v.num_inventory),
-        expected_delivery: draft.expected_delivery ?? v.expected_delivery,
-        is_default: !!draft.is_default,
-        designed_by: draft.designed_by ?? v.designed_by,
-        measurement: meas,
+      const payload = {
+        editForm: {
+          ...this.editForm,
+          product_main_image: this.editImages[0]?.url || ''
+        },
+        editVariants: this.editVariants,
       };
 
-      draft.images.forEach((vIm, vImIdx) => {
-        imgs.push({
-          _id: `${v._id}-img${vImIdx + 1}`,
-          product_varant: v._id,
-          url: vIm.url,
-          is_main: vImIdx === 0,
-          position: vImIdx + 1,
-        });
-      });
+      if (this.isCreateMode) {
+        await lastValueFrom(this.http.post(`${environment.backend_url}/admin/products`, payload, { withCredentials: true }));
+      } else {
+        await lastValueFrom(
+          this.http.put(
+            `${environment.backend_url}/admin/products/${this.selectedProductId}`,
+            payload,
+            { withCredentials: true }
+          ),
+        );
+      }
+
+      this.isDirty = false;
+      this.saving = false;
+      this.loadData();
+      this.backToList();
+    } catch (e: any) {
+      console.error('Product save error:', e);
+      const msg = e?.error?.message || e?.message || 'Lỗi không xác định';
+      alert('Lỗi khi lưu sản phẩm: ' + msg);
+      this.saving = false;
     }
-
-    this.variants$.next(variants);
-    this.images$.next(imgs);
-    this.isDirty = false;
-    this.saving = false;
-    this.syncRoute(this.selectedProductId, 'detail', true);
   }
 
-  private clearEditState(): void {
-    this.editForm = null;
-    this.originalProductSnapshot = null;
-    this.isDirty = false;
-    this.saving = false;
-    this.isCreateMode = false;
-    this.editVariants = [];
-    this.editImages = [];
+  private async uploadBlob(blobUrl: string): Promise<string> {
+    const blob = await fetch(blobUrl).then((r) => r.blob());
+    const fd = new FormData();
+    fd.append('image', blob, 'image.jpg');
+    const res = await lastValueFrom(this.http.post<any>('http://localhost:3000/api/upload', fd));
+    return res?.data?.imageUrl || blobUrl;
   }
 
-  // ── Export CSV ───────────────────────────────────────────────────────────
-  exportCsv(rows: ProductRowVM[]): void {
-    const header = [
-      'product_id',
-      'product_name',
-      'brand_name',
-      'room',
-      'price_min',
-      'price_max',
-      'inventory_total',
-      'sold_total',
-      'rating_avg',
-      'discount_percent',
-      'warranty_months',
-      'tags',
-    ];
-    const lines = rows.map((r) => [
-      csvCell(r.id),
-      csvCell(r.name),
-      csvCell(r.brand),
-      csvCell(r.roomLabel),
-      csvCell(r.priceMin ?? ''),
-      csvCell(r.priceMax ?? ''),
-      csvCell(r.inventoryTotal),
-      csvCell(r.soldTotal),
-      csvCell(r.ratingAvg ?? ''),
-      csvCell(r.discountPercent),
-      csvCell(r.warranty),
-      csvCell((r.tags || []).join('|')),
-    ]);
-    const csv = [header.join(','), ...lines.map((x) => x.join(','))].join('\n');
-    downloadText(
-      csv,
-      `products_${new Date().toISOString().slice(0, 10)}.csv`,
-      'text/csv;charset=utf-8;',
-    );
-  }
-
-  // ── Delete ───────────────────────────────────────────────────────────────
   softDelete(productId: string): void {
     this.deleteItemId = productId;
     this.deleteItemType = 'product';
-    this.deleteModalTitle = 'Xác nhận xóa sản phẩm';
-    this.deleteModalMessage =
-      'Bạn có chắc chắn muốn xóa sản phẩm này? Dữ liệu sẽ bị gỡ khỏi danh sách quản lý.';
+    this.deleteModalTitle = 'Xác nhận xóa';
+    this.deleteModalMessage = 'Bạn có chắc chắn muốn xóa sản phẩm này?';
     this.deleteModalOpen = true;
   }
 
-  onConfirmDelete(): void {
+  async onConfirmDelete(): Promise<void> {
     if (!this.deleteItemId) return;
-
-    if (this.deleteItemType === 'product') {
-      this.products$.next(this.products$.value.filter((p) => p._id !== this.deleteItemId));
-      if (this.selectedProductId === this.deleteItemId) {
-        this.clearEditState();
-        this.syncRoute(null, 'list', true);
+    try {
+      if (this.deleteItemType === 'product') {
+        await lastValueFrom(
+          this.http.delete(`http://localhost:3000/api/admin/products/${this.deleteItemId}`)
+        );
+      } else {
+        // Mock delete comment or real API
+        const d = this.detailSubject$.value;
+        if (d) d.comments = d.comments.filter(x => x.id !== this.deleteItemId);
+        this.isDirty = true;
       }
-    } else if (this.selectedProductId && this.selectedProductId !== 'new') {
-      const list = this.getComments(this.selectedProductId).filter(
-        (x) => x.id !== this.deleteItemId,
-      );
-      this.commentsByProduct.set(this.selectedProductId, list);
-      this.isDirty = true;
+      this.loadData();
+    } catch (e) {
+      console.error(e);
     }
-
     this.deleteModalOpen = false;
-    this.deleteItemId = null;
   }
 
   onCancelDelete(): void {
     this.deleteModalOpen = false;
-    this.deleteItemId = null;
-  }
-
-  // ── Comments ─────────────────────────────────────────────────────────────
-  private getComments(productId: ProductId): ProductComment[] {
-    const existing = this.commentsByProduct.get(productId);
-    if (existing) return existing;
-    const seed = buildMockComments(productId);
-    this.commentsByProduct.set(productId, seed);
-    return seed;
-  }
-
-  toggleCommentHidden(cmtId: string): void {
-    if (!this.selectedProductId || this.selectedProductId === 'new') return;
-    const list = this.getComments(this.selectedProductId);
-    const idx = list.findIndex((x) => x.id === cmtId);
-    if (idx < 0) return;
-    list[idx] = { ...list[idx], hidden: !list[idx].hidden };
-    this.commentsByProduct.set(this.selectedProductId, list.slice());
-    this.isDirty = true;
-  }
-
-  deleteComment(cmtId: string): void {
-    if (!this.selectedProductId || this.selectedProductId === 'new') return;
-    this.deleteItemId = cmtId;
-    this.deleteItemType = 'comment';
-    this.deleteModalTitle = 'Xác nhận xóa đánh giá';
-    this.deleteModalMessage = 'Bạn có chắc chắn muốn xóa đánh giá này khỏi hệ thống?';
-    this.deleteModalOpen = true;
-  }
-
-  // ── Status helpers ───────────────────────────────────────────────────────
-  headerStatusLabel(inventoryTotal: number): string {
-    if (inventoryTotal <= 0) return 'Hết hàng';
-    if (inventoryTotal <= this.query$.value.lowStockThreshold) return 'Sắp hết';
-    return 'Đang bán';
-  }
-
-  headerStatusClass(inventoryTotal: number): string {
-    if (inventoryTotal <= 0) return 'hb-pill-danger';
-    if (inventoryTotal <= this.query$.value.lowStockThreshold) return 'hb-pill-warn';
-    return 'hb-pill-ok';
   }
 
   stopEvent(ev: Event): void {
     ev.stopPropagation();
   }
 
-  private nextNumericProductId(): number {
-    const ids = this.products$.value
-      .map((p) => toNumberSafe(p._id))
-      .filter((n) => Number.isFinite(n)) as number[];
-    return (ids.length ? Math.max(...ids) : 0) + 1;
-  }
-}
-
-// ─── Pure utility functions ───────────────────────────────────────────────────
-
-/**
- * IListProducts.tags là string (comma-separated)
- * Iproduct.tags là string[]
- * → chuẩn hóa về string[]
- */
-function normalizeTags(tags: string | string[] | undefined): string[] {
-  if (!tags) return [];
-  if (Array.isArray(tags)) return tags.filter(Boolean);
-  return tags
-    .split(',')
-    .map((t) => t.trim())
-    .filter(Boolean);
-}
-
-/**
- * Resolve ảnh bìa theo thứ tự ưu tiên:
- * 1. main_image  — có ngay sau getAllProducts()
- * 2. is_main image của variant default — có sau loadProductDetail()
- * 3. image_url[0] — có sau loadProductDetail()
- */
-function resolveMainImage(
-  p: ProductData,
-  pv: Iproduct_variants[],
-  images: Iproduct_variants_image[],
-): string | null {
-  if (p.main_image) return p.main_image;
-
-  const defaultVariant = pv.find((x) => x.is_default) ?? pv[0];
-  if (defaultVariant) {
-    const main = images.find((im) => im.product_varant === defaultVariant._id && im.is_main);
-    if (main?.url) return main.url;
+  private clearEditState(): void {
+    this.editForm = null;
+    this.isDirty = false;
+    this.saving = false;
+    this.isCreateMode = false;
+    this.editVariants = [];
+    this.editImages = [];
+    this.detailSubject$.next(null);
   }
 
-  return Array.isArray(p.image_url) && p.image_url.length ? (p.image_url[0] ?? null) : null;
-}
+  exportCsv(): void {
+    const header = ['ID', 'Name', 'Brand', 'Price Min', 'Stock'];
+    const rows = this.exportRows.map(r => [r.id, r.name, r.brand, r.priceMin, r.inventoryTotal]);
+    const csvContent = [header, ...rows].map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "products.csv");
+    link.click();
+  }
 
-function inferRoomFromProduct(p: ProductData): string {
-  const tags = normalizeTags(p.tags).join(' ').toLowerCase();
-  const imgs = (Array.isArray(p.image_url) ? p.image_url : []).join(' ').toLowerCase();
-  if (tags.includes('living room') || imgs.includes('living_room')) return 'Phòng khách';
-  if (tags.includes('bedroom') || imgs.includes('bedroom')) return 'Phòng ngủ';
-  if (tags.includes('dining') || imgs.includes('dining_room')) return 'Phòng ăn';
-  if (tags.includes('office') || imgs.includes('office')) return 'Phòng làm việc';
-  return 'Khác';
+  headerStatusLabel(inventoryTotal: number): string {
+    if (inventoryTotal <= 0) return 'Hết hàng';
+    if (inventoryTotal <= 10) return 'Sắp hết';
+    return 'Còn hàng';
+  }
+
+  headerStatusClass(inventoryTotal: number): string {
+    if (inventoryTotal <= 0) return 'hb-pill-danger';
+    if (inventoryTotal <= 10) return 'hb-pill-warning';
+    return 'hb-pill-success';
+  }
 }
 
 function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
 }
 
-function clampNumber(v: any, min: number, max: number): number {
-  const n = Number(v);
-  return Number.isNaN(n) ? min : clamp(n, min, max);
-}
-
-function round2(n: number): number {
-  return Math.round(n * 100) / 100;
-}
-
-function toNumberSafe(v: any): number {
-  const n = Number(String(v).trim());
-  return Number.isFinite(n) ? n : NaN;
-}
-
-function compareByKey(a: ProductRowVM, b: ProductRowVM, key: any, dir: SortDir): number {
+function compareByKey(a: any, b: any, key: string, dir: SortDir): number {
   const factor = dir === 'asc' ? 1 : -1;
-  if (key === 'id') {
-    const av = toNumberSafe(a.id);
-    const bv = toNumberSafe(b.id);
-    if (Number.isFinite(av) && Number.isFinite(bv)) return (av - bv) * factor;
-    return String(a.id).localeCompare(String(b.id)) * factor;
-  }
-  const av = (a as any)[key];
-  const bv = (b as any)[key];
-  if (av == null && bv == null) return 0;
-  if (av == null) return 1 * factor;
-  if (bv == null) return -1 * factor;
-  if (typeof av === 'string' || typeof bv === 'string') {
-    return String(av).localeCompare(String(bv)) * factor;
-  }
-  return (Number(av) - Number(bv)) * factor;
+  const av = a[key];
+  const bv = b[key];
+  if (av < bv) return -1 * factor;
+  if (av > bv) return 1 * factor;
+  return 0;
 }
 
-function parseTags(tagsText: string): string[] {
-  return (tagsText || '')
-    .split(',')
-    .map((x) => x.trim())
-    .filter(Boolean);
-}
-
-function deepClone<T>(x: T): T {
-  return JSON.parse(JSON.stringify(x));
-}
-
-function csvCell(v: any): string {
-  const s = String(v ?? '');
-  const escaped = s.replace(/"/g, '""');
-  return /[",\n]/.test(escaped) ? `"${escaped}"` : escaped;
-}
-
-function downloadText(content: string, filename: string, mime: string): void {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-function buildMockComments(productId: ProductId): ProductComment[] {
-  return [
-    {
-      id: 'cmt-001',
-      userName: 'Mai Anh',
-      rating: 5,
-      content: 'Chất lượng tốt, form chắc. Giao nhanh hơn dự kiến.',
-      createdAt: new Date(Date.now() - 864e5 * 2).toISOString(),
-      hidden: false,
-    },
-    {
-      id: 'cmt-002',
-      userName: 'Nguyễn Khánh Xuân',
-      rating: 4,
-      content: 'Màu đúng như hình. Lắp ráp hơi mất thời gian nhưng ổn.',
-      createdAt: new Date(Date.now() - 864e5 * 5).toISOString(),
-      hidden: false,
-    },
-    {
-      id: 'cmt-003',
-      userName: 'Võ Hồng Phúc',
-      rating: 5,
-      content: 'Ngồi êm, vải đẹp. Sẽ mua thêm cho phòng ngủ.',
-      createdAt: new Date(Date.now() - 864e5 * 8).toISOString(),
-      hidden: false,
-    },
-    {
-      id: 'cmt-004',
-      userName: 'Nguyễn Minh Quân',
-      rating: 3,
-      content: 'Đóng gói tốt. Tuy nhiên giao chậm 1 ngày so với hẹn.',
-      createdAt: new Date(Date.now() - 864e5 * 12).toISOString(),
-      hidden: false,
-    },
-    {
-      id: 'cmt-005',
-      userName: 'Nguyễn Quang Phúc',
-      rating: 4,
-      content: 'Giá hợp lý, nhìn sang. Hy vọng dùng lâu bền.',
-      createdAt: new Date(Date.now() - 864e5 * 18).toISOString(),
-      hidden: false,
-    },
-  ].map((x) => ({ ...x, productId }));
+function inferRoomFromProduct(p: any): string {
+  const tags = Array.isArray(p.tags) ? p.tags.join(' ').toLowerCase() : '';
+  if (tags.includes('living')) return 'Phòng khách';
+  if (tags.includes('bed')) return 'Phòng ngủ';
+  if (tags.includes('dining')) return 'Phòng ăn';
+  return 'Khác';
 }

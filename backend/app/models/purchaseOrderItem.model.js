@@ -5,9 +5,9 @@ const purchaseOrderItemSchema = new mongoose.Schema({
     ref: "PurchaseOrder",
     required: true,
   },
-  product_id: {
+  product_variant_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
+    ref: "ProductVariant",
     required: true,
   },
   warehouse_id: {

@@ -184,21 +184,21 @@
             </div>
 
             <!-- Table Rows -->
-            <div
-              class="hb-table-row hb-grid-vouchers"
-              *ngFor="let v of vm.rows"
-              (click)="openDetail(v.voucher_id)"
-              [class.is-active]="v.voucher_id === selectedId"
-              title="Xem chi tiết"
-            >
-              <div class="hb-td hb-td-stt text-center">{{ v.stt }}</div>
+              <div
+                class="hb-table-row hb-grid-vouchers"
+                *ngFor="let v of vm.rows; trackBy: trackByVoucher"
+                (click)="openDetail(v._id)"
+                [class.is-active]="v._id === selectedId"
+                title="Xem chi tiết"
+              >
+                <div class="hb-td hb-td-stt text-center">{{ v.stt }}</div>
 
-              <div class="hb-td">
-                <div class="hb-text-truncate">
-                  <div class="text-primary">{{ v.code }}</div>
-                  <div class="text-muted small">ID: {{ v.voucher_id }}</div>
+                <div class="hb-td">
+                  <div class="hb-text-truncate">
+                    <div class="text-primary">{{ v.code }}</div>
+                    <div class="text-muted small">ID: {{ v._id }}</div>
+                  </div>
                 </div>
-              </div>
 
               <div class="hb-td">
                 <span class="hb-text-truncate" title="{{ v.voucher_name }}">{{
@@ -231,27 +231,27 @@
                 </span>
               </div>
 
-              <div class="hb-td hb-td-center">
-                <button
-                  class="hb-icon-btn"
-                  type="button"
-                  (click)="stopEvent($event); openEdit(v.voucher_id)"
-                  title="Chỉnh sửa nhanh"
-                >
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-              </div>
+                <div class="hb-td hb-td-center">
+                  <button
+                    class="hb-icon-btn"
+                    type="button"
+                    (click)="stopEvent($event); openEdit(v._id)"
+                    title="Chỉnh sửa nhanh"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </div>
 
-              <div class="hb-td hb-td-center">
-                <button
-                  class="hb-icon-btn danger"
-                  type="button"
-                  (click)="stopEvent($event); hardDelete(v.voucher_id)"
-                  title="Xóa voucher"
-                >
-                  <i class="bi bi-trash3"></i>
-                </button>
-              </div>
+                <div class="hb-td hb-td-center">
+                  <button
+                    class="hb-icon-btn danger"
+                    type="button"
+                    (click)="stopEvent($event); hardDelete(v._id)"
+                    title="Xóa voucher"
+                  >
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
             </div>
 
             <!-- Empty data handler -->
@@ -319,7 +319,7 @@
                 <div class="col-md-6">
                   <div class="hb-kv">
                     <div class="k">Mã Voucher ID</div>
-                    <div class="v">{{ d.voucher_id }}</div>
+                    <div class="v">{{ d._id }}</div>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -398,28 +398,28 @@
                   <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa voucher
                 </button>
 
-                <button
-                  class="btn btn-hb-outline"
-                  type="button"
-                  [disabled]="d.computed_status === 'expired' || d.computed_status === 'pending'"
-                  (click)="toggleActivePaused(d.voucher_id)"
-                >
-                  <i
-                    class="bi"
-                    [ngClass]="d.status === 'paused' ? 'bi-play-fill' : 'bi-pause-fill'"
-                  ></i>
-                  {{ d.status === 'paused' ? 'Kích hoạt lại' : 'Tạm dừng voucher' }}
-                </button>
+                  <button
+                    class="btn btn-hb-outline"
+                    type="button"
+                    [disabled]="d.computed_status === 'expired' || d.computed_status === 'pending'"
+                    (click)="toggleActivePaused(d._id)"
+                  >
+                    <i
+                      class="bi"
+                      [ngClass]="d.status === 'paused' ? 'bi-play-fill' : 'bi-pause-fill'"
+                    ></i>
+                    {{ d.status === 'paused' ? 'Kích hoạt lại' : 'Tạm dừng voucher' }}
+                  </button>
 
                 <div class="hb-divider my-2"></div>
 
-                <button
-                  class="btn btn-hb-outline-danger"
-                  type="button"
-                  (click)="hardDelete(d.voucher_id)"
-                >
-                  <i class="bi bi-trash3 me-1"></i> Xóa voucher
-                </button>
+                  <button
+                    class="btn btn-hb-outline-danger"
+                    type="button"
+                    (click)="hardDelete(d._id)"
+                  >
+                    <i class="bi bi-trash3 me-1"></i> Xóa voucher
+                  </button>
               </div>
             </div>
 
@@ -623,7 +623,7 @@
                     <div class="text-primary fw-bold" style="font-size: 24px; line-height: 1">
                       {{ d.code }}
                     </div>
-                    <div class="text-muted small mt-1">ID: {{ d.voucher_id }}</div>
+                    <div class="text-muted small mt-1">ID: {{ d._id }}</div>
                   </div>
 
                   <div class="hb-divider"></div>
