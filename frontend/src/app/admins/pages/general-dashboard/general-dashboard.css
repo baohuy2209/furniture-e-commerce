@@ -6,14 +6,7 @@
   --hb-border: rgba(0, 0, 0, 0.12);
   --hb-text: rgba(0, 0, 0, 0.78);
   --hb-muted: rgba(0, 0, 0, 0.55);
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    Segoe UI,
-    Roboto,
-    Arial,
-    sans-serif;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   display: block;
   height: 100%;
 }
@@ -32,7 +25,8 @@
 */
 .hb-page-header {
   position: sticky;
-  top: -24px; /* Sát mép trên của main container */
+  top: -24px;
+  /* Sát mép trên của main container */
   z-index: 100;
   background: #ffffff;
 
@@ -97,6 +91,7 @@
   border-radius: var(--hb-radius-sm);
   transition: all 0.2s;
 }
+
 .btn-hb:hover {
   filter: brightness(0.95);
   color: #fff;
@@ -110,6 +105,7 @@
   padding: 8px 16px;
   border-radius: var(--hb-radius-sm);
 }
+
 .btn-hb-accent:hover {
   filter: brightness(0.96);
   color: #1f1f1f;
@@ -123,10 +119,12 @@
   padding: 7px 16px;
   border-radius: var(--hb-radius-sm);
 }
+
 .btn-hb-outline:hover {
   background: rgba(61, 82, 157, 0.06);
   color: var(--hb-primary);
 }
+
 .btn-hb-outline.active {
   background: var(--hb-accent) !important;
   border-color: var(--hb-accent) !important;
@@ -230,14 +228,17 @@
   background: rgba(46, 204, 113, 0.12);
   color: #27ae60;
 }
+
 .hb-sc-icon.orders {
   background: rgba(52, 152, 219, 0.12);
   color: #2980b9;
 }
+
 .hb-sc-icon.active {
   background: rgba(255, 145, 31, 0.12);
   color: #e67e22;
 }
+
 .hb-sc-icon.customers {
   background: rgba(155, 89, 182, 0.12);
   color: #8e44ad;
@@ -354,31 +355,37 @@
   stroke: #2ecc71;
   background: #2ecc71;
 }
+
 .hb-donut-seg[data-k='shipping'],
 .hb-leg-dot[data-k='shipping'] {
   stroke: #ff911f;
   background: #ff911f;
 }
+
 .hb-donut-seg[data-k='packed'],
 .hb-leg-dot[data-k='packed'] {
   stroke: #3498db;
   background: #3498db;
 }
+
 .hb-donut-seg[data-k='pending'],
 .hb-leg-dot[data-k='pending'] {
   stroke: #95a5a6;
   background: #95a5a6;
 }
+
 .hb-donut-seg[data-k='cancelled'],
 .hb-leg-dot[data-k='cancelled'] {
   stroke: #e74c3c;
   background: #e74c3c;
 }
+
 .hb-donut-seg[data-k='return_requested'],
 .hb-leg-dot[data-k='return_requested'] {
   stroke: #e67e22;
   background: #e67e22;
 }
+
 .hb-donut-seg[data-k='exchange_requested'],
 .hb-leg-dot[data-k='exchange_requested'] {
   stroke: #9b59b6;
@@ -460,18 +467,22 @@
   background: #f3f4f6;
   color: #4b5563;
 }
+
 .pill-active {
   background: #e0f2fe;
   color: #0369a1;
 }
+
 .pill-delivered {
   background: #dcfce7;
   color: #15803d;
 }
+
 .pill-cancelled {
   background: #fee2e2;
   color: #b91c1c;
 }
+
 .pill-warn {
   background: #ffedd5;
   color: #9a3412;
@@ -504,6 +515,7 @@
 .hb-prod-info {
   min-width: 0;
 }
+
 .hb-prod-name {
   font-weight: 800;
   font-size: 14px;
@@ -512,11 +524,13 @@
   text-overflow: ellipsis;
   color: var(--hb-text);
 }
+
 .hb-prod-id {
   font-size: 12px;
   color: var(--hb-muted);
   font-weight: 400;
 }
+
 .hb-prod-stat {
   font-weight: 800;
   color: var(--hb-primary);
@@ -560,6 +574,7 @@
   .hb-dashboard-grid {
     grid-template-columns: 1fr;
   }
+
   .hb-summary-row {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -570,10 +585,12 @@
     flex-direction: column;
     align-items: stretch;
   }
+
   .hb-global-filter {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .hb-summary-row {
     grid-template-columns: 1fr;
   }
