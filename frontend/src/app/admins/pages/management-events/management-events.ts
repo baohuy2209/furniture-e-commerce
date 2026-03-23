@@ -2,8 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { BehaviorSubject, Subject, combineLatest, map, take, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest, map, take, takeUntil, finalize } from 'rxjs';
 import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { EventService } from '../../../services/event-service';
+import { ToastService } from '../../../services/toast-service';
+import { IEvent } from '../../../../interface';
 
 type EventStatus = 'draft' | 'published' | 'paused' | 'ended' | 'cancelled';
 type EventVisibility = 'public' | 'private';
@@ -124,6 +127,8 @@ export class ManagementEvents implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private eventService: EventService,
+    private toastService: ToastService,
   ) {}
 
   mode: Mode = 'list';
@@ -164,7 +169,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
   sortBy: SortKey = 'start_at';
   sortDir: SortDir = 'desc';
 
-  private _events$ = new BehaviorSubject<EventEntity[]>(seedEvents());
+  private _events$ = new BehaviorSubject<EventEntity[]>([]);
   private _tick$ = new BehaviorSubject(0);
 
   vm$ = combineLatest([this._events$, this._tick$, this.createStep$]).pipe(
@@ -246,6 +251,139 @@ export class ManagementEvents implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.bindRouteState();
+    this.loadEvents();
+  }
+
+  private loadEvents(): void {
+    this.eventService
+      .getAllEvents()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          const entities = res.data.map((e) => this.mapToEntity(e));
+          this._events$.next(entities);
+        },
+        error: (err) => {
+          console.error('Failed to load events', err);
+        },
+      });
+  }
+
+  private mapToEntity(e: IEvent): EventEntity {
+    return {
+      event_id: e._id,
+      event_code: e.slug || '',
+      event_name: e.title || '',
+      description: e.description || '',
+      start_at: e.date_range?.startDate ? new Date(e.date_range.startDate).toISOString() : '',
+      end_at: e.date_range?.endDate ? new Date(e.date_range.endDate).toISOString() : '',
+      location_name: e.location?.name || '',
+      address: e.location?.address || '',
+      city: e.location?.city || '',
+      banner_url: e.images?.find((img) => img.is_main)?.url_image || e.images?.[0]?.url_image || '',
+      visibility: 'public',
+      status: this.mapStatusFromBackend(e.status),
+      capacity: e.registration?.maxSlot || 0,
+      registered_count: e.registration?.registeredCount || 0,
+      highlights: e.hightlight_des || [],
+      schedule: (e.timeline_event || []).map((t, idx) => ({
+        item_id: `S${idx}`,
+        start_time: t.start_time,
+        end_time: t.end_time,
+        title: t.title,
+        description: t.description,
+      })),
+      created_at: (e as any).createdAt || '',
+      updated_at: (e as any).updatedAt || '',
+      images: {
+        banner:
+          e.images?.find((img) => img.is_main) || e.images?.[0]
+            ? { url: e.images.find((img) => img.is_main)?.url_image || e.images[0].url_image }
+            : null,
+        gallery: (e.images || []).map((img, idx) => ({
+          image_id: `IMG_${idx}`,
+          url: img.url_image,
+          is_cover: !!img.is_main,
+        })),
+        coverImageId: e.images?.find((img) => img.is_main) ? 'IMG_MAIN' : null,
+      },
+    };
+  }
+
+  private mapToIEvent(entity: Partial<EventEntity>): IEvent {
+    // For mapping back to backend format
+    const res: any = {
+      title: entity.event_name!,
+      slug: entity.event_code!,
+      description: entity.description || '',
+      images: [
+        ...(entity.banner_url ? [{ url_image: entity.banner_url, is_main: true }] : []),
+        ...(entity.images?.gallery || [])
+          .filter((g) => g.url !== entity.banner_url)
+          .map((g) => ({
+            url_image: g.url,
+            is_main: !!g.is_cover,
+          })),
+      ],
+      category: 'General',
+      hightlight_des: entity.highlights || [],
+      date_range: {
+        startDate: new Date(entity.start_at!),
+        endDate: new Date(entity.end_at!),
+      },
+      location: {
+        name: entity.location_name || '',
+        address: entity.address || '',
+        city: entity.city || '',
+      },
+      timeline_event: (entity.schedule || []).map((s) => ({
+        start_time: s.start_time,
+        end_time: s.end_time,
+        title: s.title,
+        description: s.description || '',
+      })),
+      registration: {
+        requireRegister: true,
+        isFree: true,
+        maxSlot: entity.capacity || 0,
+        registeredCount: entity.registered_count || 0,
+      },
+      status: this.mapStatusToBackend(entity.status!),
+    };
+
+    if (entity.event_id && !entity.event_id.startsWith('EVT_')) {
+      res._id = entity.event_id;
+    }
+
+    return res as IEvent;
+  }
+
+  private mapStatusFromBackend(s: string): EventStatus {
+    switch (s) {
+      case 'UPCOMING':
+        return 'published';
+      case 'ONGOING':
+        return 'published';
+      case 'ENDED':
+        return 'ended';
+      default:
+        return 'draft';
+    }
+  }
+
+  private mapStatusToBackend(s: EventStatus): string {
+    switch (s) {
+      case 'draft':
+        return 'UPCOMING';
+      case 'published':
+        return 'UPCOMING'; // Will be refined by dates usually, but UPCOMING is safe for new/pub
+      case 'ended':
+        return 'ENDED';
+      case 'cancelled':
+        return 'ENDED';
+      default:
+        return 'UPCOMING';
+    }
   }
 
   ngOnDestroy(): void {
@@ -619,11 +757,22 @@ export class ManagementEvents implements OnInit, OnDestroy {
     if (!id) return;
 
     this.createStep$.next(1);
-    const next = this._events$.value.filter((x) => x.event_id !== id);
-    this._events$.next(next);
-    this.refreshList();
-
-    if (this.selectedId === id) this.backToList();
+    this.eventService
+      .deleteEvent(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.toastService.success('Đã xóa sự kiện');
+          const next = this._events$.value.filter((x) => x.event_id !== id);
+          this._events$.next(next);
+          this.refreshList();
+          if (this.selectedId === id) this.backToList();
+        },
+        error: (err) => {
+          this.toastService.error('Lỗi khi xóa sự kiện: ' + (err.error?.message || err.message));
+          console.error('Failed to delete event', err);
+        },
+      });
   }
 
   // ===== banner =====
@@ -824,22 +973,50 @@ export class ManagementEvents implements OnInit, OnDestroy {
       patched.capacity = patched.registered_count;
     }
 
-    if (this._events$.value.find((x) => x.event_id === patched.event_id)) {
-      const all = this._events$.value.map((x) => (x.event_id === patched.event_id ? patched : x));
-      this._events$.next(all);
-    } else {
-      this._events$.next([patched, ...this._events$.value]);
-    }
+    const dataToSave = this.mapToIEvent(patched);
 
-    this.detail = patched;
+    if (this.selectedId === 'NEW') {
+      this.eventService.createNewEvent(dataToSave).subscribe({
+        next: (res) => {
+          this.toastService.success('Đã tạo sự kiện mới thành công');
+          const newEntity = this.mapToEntity(res.data);
+          this._events$.next([newEntity, ...this._events$.value]);
+          this.finalizeSave(newEntity);
+        },
+        error: (err) => {
+          this.toastService.error('Không thể tạo sự kiện: ' + (err.error?.message || err.message));
+          console.error('Create failed', err);
+        },
+      });
+    } else {
+      this.eventService.updateEvent(this.selectedId!, dataToSave).subscribe({
+        next: (res) => {
+          this.toastService.success('Đã cập nhật sự kiện thành công');
+          const updatedEntity = this.mapToEntity(res.data);
+          const all = this._events$.value.map((x) =>
+            x.event_id === updatedEntity.event_id ? updatedEntity : x,
+          );
+          this._events$.next(all);
+          this.finalizeSave(updatedEntity);
+        },
+        error: (err) => {
+          this.toastService.error('Cập nhật thất bại: ' + (err.error?.message || err.message));
+          console.error('Update failed', err);
+        },
+      });
+    }
+  }
+
+  private finalizeSave(entity: EventEntity) {
+    this.detail = entity;
     this.editModel = null;
     this.saveModalOpen = false;
-    this.pendingNewEvent = null; // Clear if it was new
+    this.pendingNewEvent = null;
 
     this.resetUploadsState();
     this.refreshList();
     this.createStep$.next(2);
-    this.syncRoute(patched.event_id, 'detail', true);
+    this.syncRoute(entity.event_id, 'detail', true);
   }
 
   publishEvent() {
@@ -849,11 +1026,25 @@ export class ManagementEvents implements OnInit, OnDestroy {
       status: 'published' as EventStatus,
       updated_at: new Date().toISOString(),
     };
-    const all = this._events$.value.map((x) => (x.event_id === patched.event_id ? patched : x));
-    this._events$.next(all);
-    this.detail = patched;
-    this.createStep$.next(3);
-    this.refreshList();
+
+    const dataToSave = this.mapToIEvent(patched);
+    this.eventService.updateEvent(patched.event_id, dataToSave).subscribe({
+      next: (res) => {
+        this.toastService.success('Đã xuất bản sự kiện thành công');
+        const updatedEntity = this.mapToEntity(res.data);
+        const all = this._events$.value.map((x) =>
+          x.event_id === updatedEntity.event_id ? updatedEntity : x,
+        );
+        this._events$.next(all);
+        this.detail = updatedEntity;
+        this.createStep$.next(3);
+        this.refreshList();
+      },
+      error: (err) => {
+        this.toastService.error('Xuất bản thất bại: ' + (err.error?.message || err.message));
+        console.error('Publish failed', err);
+      },
+    });
   }
 
   stopEvent(e: MouseEvent) {

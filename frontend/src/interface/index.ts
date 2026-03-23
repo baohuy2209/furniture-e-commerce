@@ -165,7 +165,7 @@ export interface IEvent {
   description: string;
   images: {
     url_image: string;
-    is_main: string;
+    is_main: boolean;
   }[];
   category: string;
   hightlight_des: string[];
