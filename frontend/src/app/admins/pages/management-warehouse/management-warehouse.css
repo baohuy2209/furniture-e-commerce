@@ -1,4 +1,13 @@
 :host {
+  --hb-primary: #818cf8;
+  --hb-accent: #fbbf24;
+  --hb-card-bg: #0d111a; /* Synchronized blacker dark */
+  --hb-radius: 16px;
+  --hb-radius-sm: 12px;
+  --hb-radius-lg: 20px;
+  --hb-border: rgba(255, 255, 255, 0.06);
+  --hb-text: #f3f4f6;
+  --hb-muted: #9ca3af;
   display: block;
   height: 100%;
   min-height: 0;
@@ -19,10 +28,35 @@
 /* Shell managed globally */
 
 /* HEADER sticky trong vùng content */
-/* Header managed globally */
+.hb-page-header {
+  position: sticky;
+  top: -24px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -24px -24px 24px -24px;
+  padding: 28px 24px 10px 24px;
+  background-color: var(--hb-surface);
+  border-bottom: 1px solid var(--hb-border);
+  backdrop-filter: blur(14px);
+}
 
 .hb-header-left {
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hb-title {
+  font-size: 40px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ffffff 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
 }
 
 .hb-header-actions {
@@ -123,32 +157,7 @@
   border-radius: 0 var(--hb-radius-sm) var(--hb-radius-sm) 0;
 }
 
-.hb-summary-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-shrink: 0;
-}
-
-.hb-summary-card {
-  background: rgba(17, 24, 39, 0.8) !important;
-  border: 1px solid var(--hb-border) !important;
-  backdrop-filter: blur(10px) !important;
-  border-radius: var(--hb-radius);
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.hb-summary-card:hover {
-  background: rgba(17, 24, 39, 0.95) !important;
-  border-color: var(--hb-primary-glow) !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), var(--shadow-glow) !important;
-  transform: translateY(-5px);
-}
+/* SUMMARY SYSTEM - Cleaned up to use global admin-dark rules */
 
 /* Global Sync */
 

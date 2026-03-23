@@ -1,4 +1,4 @@
-<div class="hb-page-shell" *ngIf="vm$ | async as vm">
+<div class="hb-page-shell p-2" *ngIf="vm$ | async as vm">
     <div class="hb-page-header">
         <div class="hb-header-left">
             <div class="hb-title" routerLink="/admin/support-customers" style="cursor: pointer">
@@ -10,7 +10,7 @@
             <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
                 <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
             </button>
-            <button class="btn btn-hb" type="button" (click)="exportCsv(exportRows)">
+            <button class="btn btn-hb-outline" type="button" (click)="exportCsv(exportRows)">
                 <i class="bi bi-download me-1"></i> Xuất CSV
             </button>
         </div>

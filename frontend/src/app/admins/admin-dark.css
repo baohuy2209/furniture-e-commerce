@@ -9,18 +9,16 @@
   --hb-accent: #fbbf24;
 
   --hb-bg-main: #060912;
-  --hb-surface: #111827;
-  --hb-surface-hover: #1f2937;
-  --hb-primary: #818cf8;
+  --hb-surface: #0a0c12; /* Blacker surface */
+  --hb-surface-hover: #131722;
   --hb-primary-glow: rgba(129, 140, 248, 0.4);
-  --hb-accent: #fbbf24;
   --hb-border: rgba(255, 255, 255, 0.08);
   --hb-border-active: rgba(129, 140, 248, 0.4);
   --hb-text: #ffffff;
-  /* Default is now white */
   --hb-text-strong: #ffffff;
-  --hb-muted: #e5e7eb;
-  /* Muted is now light grey */
+  --hb-muted: #9ca3af;
+  --hb-radius: 16px;
+  --hb-card-bg: #0d111a; /* Blacker card background */
   --shadow-glow: 0 0 20px rgba(129, 140, 248, 0.1);
 }
 
@@ -367,16 +365,17 @@ section {
 /* PAGE SHELL & HEADERS - Unified Global Rule based on Dashboard */
 .hb-page-header {
   position: sticky !important;
-  top: 0 !important;
+  top: -24px !important;
   z-index: 100 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
   gap: 12px !important;
-  background-color: transparent !important;
+  background-color: var(--hb-surface) !important;
   border-bottom: 1px solid var(--hb-border) !important;
-  padding: 12px 48px 12px 24px !important;
-  /* Right padding 48px to accommodate scrollbars/layout spacing */
+  backdrop-filter: blur(14px) !important;
+  padding: 28px 24px 10px 24px !important;
+  margin: -24px -24px 24px -24px !important;
 }
 
 .hb-header-actions {
@@ -434,51 +433,47 @@ section {
   border-radius: var(--hb-radius) !important;
 }
 
-/* SUMMARY SYSTEM */
+/* /* SUMMARY SYSTEM - Forced consistency across all modules */
 .hb-summary-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-  margin-bottom: 20px;
-  flex: 0 0 auto;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  margin-top: 14px !important;
+  margin-bottom: 8px !important;
+  flex: none !important;
 }
 
 .hb-summary-card {
-  background-color: var(--hb-surface) !important;
-  border: 1px solid var(--hb-border) !important;
-  box-shadow: none !important;
   border-radius: var(--hb-radius) !important;
+  background-color: var(--hb-card-bg) !important;
+  border: 1px solid var(--hb-border) !important;
   padding: 14px 16px !important;
   display: flex !important;
-  flex-direction: row !important;
-  /* Back to horizontal icon + text */
   align-items: center !important;
-  gap: 16px !important;
-  position: relative;
-  transition: all 0.2s ease;
-  flex: 1;
+  gap: 14px !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  height: 84px !important; /* Fixed height for absolute consistency */
 }
 
 .hb-summary-card:hover {
   border-color: var(--hb-border-active) !important;
-  background-color: var(--hb-surface-hover) !important;
+  transform: translateY(-1px) !important;
 }
 
 .hb-sc-icon {
-  width: 56px !important;
-  height: 56px !important;
-  border-radius: 14px !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 12px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 24px !important;
-  /* Larger icon */
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: #fff !important;
-  /* Force white icon */
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
-  /* Brighten/Glow */
+  font-size: 22px !important;
+  background: rgba(129, 140, 248, 0.12) !important;
+  border: 1px solid rgba(129, 140, 248, 0.2) !important;
+  color: #818cf8 !important;
+  filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.4)) !important;
+  flex-shrink: 0 !important;
 }
 
 .hb-sc-label {
@@ -852,41 +847,41 @@ svg text {
 
 /* Specific Card Theming with Advanced Gradients */
 .hb-sc-icon.revenue {
-  background: linear-gradient(135deg, rgba(129, 140, 248, 0.15), rgba(129, 140, 248, 0.05)) !important;
-  color: #818cf8 !important;
-  border-color: rgba(129, 140, 248, 0.3) !important;
+  background: linear-gradient(135deg, rgba(129, 140, 248, 0.15), rgba(129, 140, 248, 0.05));
+  color: #818cf8;
+  border-color: rgba(129, 140, 248, 0.3);
   box-shadow: 0 0 15px rgba(129, 140, 248, 0.15);
 }
 
 .hb-sc-icon.orders {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05)) !important;
-  color: #fbbf24 !important;
-  border-color: rgba(251, 191, 36, 0.3) !important;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05));
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.3);
   box-shadow: 0 0 15px rgba(251, 191, 36, 0.15);
 }
 
 /* 1. Default/Sky Blue (Tổng sản phẩm) */
 .hb-sc-icon {
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(56, 189, 248, 0.05)) !important;
-  color: #38bdf8 !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(56, 189, 248, 0.05));
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
   box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
 }
 
 /* 2. Amber/Orange (Cảnh báo Hết hàng) */
 .hb-sc-icon.warn {
-  background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.05)) !important;
-  color: #eab308 !important;
-  border-color: rgba(234, 179, 8, 0.3) !important;
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(234, 179, 8, 0.05));
+  color: #eab308;
+  border-color: rgba(234, 179, 8, 0.3);
   box-shadow: 0 0 15px rgba(234, 179, 8, 0.15);
 }
 
 /* 3. Emerald Green (Tổng lượt bán / Thành công) */
 .hb-sc-icon.active,
 .hb-sc-icon.ok {
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(74, 222, 128, 0.05)) !important;
-  color: #4ade80 !important;
-  border-color: rgba(74, 222, 128, 0.3) !important;
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(74, 222, 128, 0.05));
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.3);
   box-shadow: 0 0 15px rgba(74, 222, 128, 0.15);
 }
 

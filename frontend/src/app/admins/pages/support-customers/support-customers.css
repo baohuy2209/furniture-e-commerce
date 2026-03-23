@@ -6,11 +6,42 @@
 
 /* Shell managed globally */
 
+.hb-page-header {
+  position: sticky;
+  top: -24px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -24px -24px 24px -24px;
+  padding: 28px 24px 10px 24px;
+  background-color: var(--hb-surface);
+  border-bottom: 1px solid var(--hb-border);
+  backdrop-filter: blur(14px);
+}
+
+.hb-header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.hb-title {
+  font-size: 40px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ffffff 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
 .hb-header-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 /* Body managed globally */
@@ -354,6 +385,8 @@
     border-top: 1px solid var(--hb-border);
     background: var(--hb-card-bg);
 }
+
+/* SUMMARY SYSTEM - Cleaned up to use global admin-dark rules */
 
 .hb-page-btn {
     min-width: 38px;

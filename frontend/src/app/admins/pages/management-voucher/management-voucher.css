@@ -27,21 +27,37 @@
 
 /* Shell managed globally */
 
-/* Headers & Actions are now managed globally in admin-dark.css */
-.hb-header-left {
-  min-width: 0;
-}
-
-.hb-header-actions {
+.hb-page-header {
+  position: sticky;
+  top: -24px;
+  z-index: 100;
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
+  margin: -24px -24px 24px -24px;
+  padding: 28px 24px 10px 24px;
+  background-color: var(--hb-surface);
+  border-bottom: 1px solid var(--hb-border);
+  backdrop-filter: blur(14px);
 }
 
-/* Body managed globally */
+.hb-header-left {
+  display: flex;
+  flex-direction: column;
+}
 
-/* Visual Styles for Titles and Buttons are now managed globally */
+.hb-title {
+  font-size: 40px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #ffffff 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
 .hb-detail-title {
   font-size: 28px;
   font-weight: 800;
@@ -396,6 +412,21 @@
   gap: 16px;
 }
 
+:host {
+  --hb-primary: #818cf8;
+  --hb-accent: #fbbf24;
+  --hb-card-bg: #0d111a; /* Synchronized blacker dark */
+  --hb-radius: 16px;
+  --hb-radius-sm: 12px;
+  --hb-radius-lg: 20px;
+  --hb-border: rgba(255, 255, 255, 0.06);
+  --hb-text: #f3f4f6;
+  --hb-muted: #9ca3af;
+  display: block;
+  height: 100%;
+  min-height: 0;
+}
+
 .hb-kv {
   border: 1px solid var(--hb-border);
   border-radius: 14px;
@@ -517,6 +548,8 @@
   display: inline-flex;
   align-items: center;
 }
+
+/* SUMMARY SYSTEM - Cleaned up to use global admin-dark rules */
 
 /* ===== 2-STEP WIZARD ===== */
 .hb-wizard-steps {
