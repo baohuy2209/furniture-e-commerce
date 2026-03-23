@@ -1,5 +1,24 @@
 const Event = require("../models/event.model");
 const eventService = require("../../services/event.service");
+const cloudinary = require("../config/cloudinary");
+
+async function uploadImages(images) {
+  if (!images || !Array.isArray(images)) return;
+  for (let img of images) {
+    if (img.url_image && img.url_image.startsWith("data:image")) {
+      try {
+        const result = await cloudinary.uploader.upload(img.url_image, {
+          folder: "events",
+        });
+        img.url_image = result.secure_url;
+      } catch (error) {
+        console.error("Cloudinary upload failed", error);
+        throw new Error("Failed to upload image to Cloudinary");
+      }
+    }
+  }
+}
+
 class EventController {
   // [GET] /api/events/
   async getAllEvents(req, res) {
@@ -86,6 +105,7 @@ class EventController {
   // [POST] /api/events
   async createEvent(req, res) {
     try {
+      await uploadImages(req.body.images);
       const newEvent = await Event.create(req.body);
       return res
         .status(200)
@@ -101,9 +121,12 @@ class EventController {
   async updateEvent(req, res) {
     try {
       const eventId = req.params.id;
-      const updatedEvent = await Event.findByIdAndUpdate(eventId, {
-        ...req.body,
-      });
+      await uploadImages(req.body.images);
+      const updatedEvent = await Event.findByIdAndUpdate(
+        eventId,
+        { ...req.body },
+        { new: true },
+      );
       if (!updatedEvent) {
         return res
           .status(404)

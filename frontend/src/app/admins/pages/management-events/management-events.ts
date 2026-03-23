@@ -2,14 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { BehaviorSubject, Subject, combineLatest, map, take, takeUntil, finalize } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest, map, take, takeUntil, finalize, debounceTime } from 'rxjs';
 import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
 import { EventService } from '../../../services/event-service';
 import { ToastService } from '../../../services/toast-service';
 import { IEvent } from '../../../../interface';
 
 type EventStatus = 'draft' | 'published' | 'paused' | 'ended' | 'cancelled';
-type EventVisibility = 'public' | 'private';
 type Phase = 'upcoming' | 'ongoing' | 'past';
 type Mode = 'list' | 'detail' | 'edit';
 
@@ -59,7 +58,6 @@ interface EventEntity {
   banner_url: string;
   cover_url?: string;
 
-  visibility: EventVisibility;
   status: EventStatus;
 
   capacity: number;
@@ -73,9 +71,6 @@ interface EventEntity {
 
   created_at: string;
   updated_at: string;
-
-  // backend-ready
-  images?: EventImages;
 }
 
 interface EventRowVM {
@@ -131,18 +126,25 @@ export class ManagementEvents implements OnInit, OnDestroy {
     private toastService: ToastService,
   ) {}
 
+  private searchSubject = new Subject<string>();
+
   mode: Mode = 'list';
   selectedId: string | null = null;
   detail: EventEntity | null = null;
   editModel: Partial<EventEntity> | null = null;
   createStep$ = new BehaviorSubject<number>(1);
+  saving = false;
 
   // ===== image upload states =====
-  bannerFile: File | null = null;
   bannerPreviewUrl: string | null = null;
-
-  // local editor gallery state
-  editGallery: EventImageItem[] = [];
+  newHighlight = '';
+  newScheduleItem: EventScheduleItem = {
+    item_id: '',
+    start_time: '09:00',
+    end_time: '10:00',
+    title: '',
+    description: '',
+  };
 
   // dirty tracking
   isDirty = false;
@@ -220,7 +222,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
           capacityText: `${e.registered_count}/${e.capacity}`,
           phase,
           status: e.status,
-          banner_url: this.getBannerUrl(e),
+          banner_url: e.banner_url,
         };
       });
 
@@ -252,6 +254,15 @@ export class ManagementEvents implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.bindRouteState();
     this.loadEvents();
+    this.initSearchDebounce();
+  }
+
+  private initSearchDebounce(): void {
+    this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe((v) => {
+      this.q = v;
+      this.page = 1;
+      this.refreshList();
+    });
   }
 
   private loadEvents(): void {
@@ -270,7 +281,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   private mapToEntity(e: IEvent): EventEntity {
-    return {
+    const entity: EventEntity = {
       event_id: e._id,
       event_code: e.slug || '',
       event_name: e.title || '',
@@ -281,7 +292,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
       address: e.location?.address || '',
       city: e.location?.city || '',
       banner_url: e.images?.find((img) => img.is_main)?.url_image || e.images?.[0]?.url_image || '',
-      visibility: 'public',
+      cover_url: '', // Legacy, not used with new image handling
       status: this.mapStatusFromBackend(e.status),
       capacity: e.registration?.maxSlot || 0,
       registered_count: e.registration?.registeredCount || 0,
@@ -293,21 +304,12 @@ export class ManagementEvents implements OnInit, OnDestroy {
         title: t.title,
         description: t.description,
       })),
+      contact_phone: '',
+      contact_email: '',
       created_at: (e as any).createdAt || '',
       updated_at: (e as any).updatedAt || '',
-      images: {
-        banner:
-          e.images?.find((img) => img.is_main) || e.images?.[0]
-            ? { url: e.images.find((img) => img.is_main)?.url_image || e.images[0].url_image }
-            : null,
-        gallery: (e.images || []).map((img, idx) => ({
-          image_id: `IMG_${idx}`,
-          url: img.url_image,
-          is_cover: !!img.is_main,
-        })),
-        coverImageId: e.images?.find((img) => img.is_main) ? 'IMG_MAIN' : null,
-      },
     };
+    return entity;
   }
 
   private mapToIEvent(entity: Partial<EventEntity>): IEvent {
@@ -316,15 +318,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
       title: entity.event_name!,
       slug: entity.event_code!,
       description: entity.description || '',
-      images: [
-        ...(entity.banner_url ? [{ url_image: entity.banner_url, is_main: true }] : []),
-        ...(entity.images?.gallery || [])
-          .filter((g) => g.url !== entity.banner_url)
-          .map((g) => ({
-            url_image: g.url,
-            is_main: !!g.is_cover,
-          })),
-      ],
+      images: entity.banner_url ? [{ url_image: entity.banner_url, is_main: true }] : [],
       category: 'General',
       hightlight_des: entity.highlights || [],
       date_range: {
@@ -470,18 +464,16 @@ export class ManagementEvents implements OnInit, OnDestroy {
       city: e.city,
       capacity: e.capacity,
       status: e.status,
-      visibility: e.visibility,
       registered_count: e.registered_count,
       highlights: [...(e.highlights || [])],
       schedule: JSON.parse(JSON.stringify(e.schedule || [])),
       contact_phone: e.contact_phone,
       contact_email: e.contact_email,
-      images: deepClone(this.normalizeImages(e)),
+      banner_url: e.banner_url,
     };
 
     this.resetUploadsState();
-    this.bannerPreviewUrl = this.getBannerUrl(e);
-    this.editGallery = deepClone(this.normalizeImages(e).gallery);
+    this.bannerPreviewUrl = e.banner_url;
 
     this.originalSnapshot = JSON.stringify(this.buildDirtyPayload());
     this.isDirty = false;
@@ -495,15 +487,12 @@ export class ManagementEvents implements OnInit, OnDestroy {
     return {
       editModel: this.editModel,
       bannerPreviewUrl: this.bannerPreviewUrl,
-      editGallery: this.editGallery,
     };
   }
 
   // ===== filters =====
   onChangeQ(v: string) {
-    this.q = v;
-    this.page = 1;
-    this.refreshList();
+    this.searchSubject.next(v);
   }
 
   onChangePhase(v: '' | Phase) {
@@ -709,15 +698,13 @@ export class ManagementEvents implements OnInit, OnDestroy {
       description: '',
       start_at: startISO,
       end_at: endISO,
-      location_name: 'HomeBase',
+      location_name: 'Hà Nội',
       address: '',
-      city: 'TP.HCM',
-      banner_url:
-        'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
+      city: 'Hà Nội',
+      banner_url: '',
       cover_url: '',
-      visibility: 'public',
       status: 'draft',
-      capacity: 50,
+      capacity: 100,
       registered_count: 0,
       highlights: [],
       schedule: [],
@@ -725,14 +712,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
       contact_email: '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      images: {
-        banner: {
-          url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
-        },
-        gallery: [],
-        coverImageId: null,
-      },
     };
+  }
+
+  onSelectEvent(id: string) {
+    this.syncRoute(id, 'detail', true);
   }
 
   createNewEvent() {
@@ -776,147 +760,29 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   // ===== banner =====
-  onBannerPicked(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0] || null;
+  onBannerPicked(e: Event) {
+    const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
-
-    this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
-
-    this.bannerFile = file;
-    this.bannerPreviewUrl = URL.createObjectURL(file);
-
-    if (this.editModel?.images) {
-      this.editModel.images.banner = {
-        url: this.bannerPreviewUrl,
-        file_name: file.name,
-      };
-    }
-
-    this.markDirty();
-    input.value = '';
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.bannerPreviewUrl = reader.result as string;
+      this.markDirty();
+    };
+    reader.readAsDataURL(file);
   }
 
   removeBannerPicked() {
-    this.bannerFile = null;
-    this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
     this.bannerPreviewUrl = null;
-
-    if (this.editModel?.images) {
-      this.editModel.images.banner = null;
-    }
-
     this.markDirty();
-  }
-
-  // ===== gallery =====
-  onGalleryPicked(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    const files = Array.from(input.files || []);
-    if (!files.length) return;
-
-    files.forEach((file) => {
-      const preview = URL.createObjectURL(file);
-      const item: EventImageItem = {
-        image_id: cryptoId(),
-        url: preview,
-        file_name: file.name,
-        is_cover: false,
-      };
-      this.editGallery.push(item);
-    });
-
-    if (this.editModel?.images) {
-      this.editModel.images.gallery = this.editGallery;
-      if (!this.editModel.images.coverImageId && this.editGallery.length > 0) {
-        this.editModel.images.coverImageId = this.editGallery[0].image_id;
-        this.syncCoverFlags();
-      }
-    }
-
-    this.markDirty();
-    input.value = '';
-  }
-
-  removeGalleryImage(i: number) {
-    const img = this.editGallery[i];
-    if (!img) return;
-
-    this.revokePreviewIfObjectUrl(img.url);
-    const removedId = img.image_id;
-
-    this.editGallery.splice(i, 1);
-
-    if (this.editModel?.images) {
-      this.editModel.images.gallery = this.editGallery;
-
-      if (this.editModel.images.coverImageId === removedId) {
-        this.editModel.images.coverImageId = this.editGallery[0]?.image_id ?? null;
-      }
-
-      this.syncCoverFlags();
-    }
-
-    this.markDirty();
-  }
-
-  setCoverImage(imageId: string) {
-    if (!this.editModel?.images) return;
-    this.editModel.images.coverImageId = imageId;
-    this.syncCoverFlags();
-    this.markDirty();
-  }
-
-  private syncCoverFlags() {
-    if (!this.editModel?.images) return;
-    const coverId = this.editModel.images.coverImageId;
-    this.editGallery = this.editGallery.map((img) => ({
-      ...img,
-      is_cover: img.image_id === coverId,
-    }));
-    this.editModel.images.gallery = this.editGallery;
-  }
-
-  private normalizeImages(e: EventEntity): EventImages {
-    if (e.images) {
-      return {
-        banner: e.images.banner ?? (e.banner_url ? { url: e.banner_url } : null),
-        gallery: e.images.gallery ?? [],
-        coverImageId: e.images.coverImageId ?? null,
-      };
-    }
-
-    return {
-      banner: e.banner_url ? { url: e.banner_url } : null,
-      gallery: e.cover_url
-        ? [
-            {
-              image_id: cryptoId(),
-              url: e.cover_url,
-              is_cover: true,
-            },
-          ]
-        : [],
-      coverImageId: null,
-    };
-  }
-
-  getBannerUrl(e: EventEntity): string {
-    return e.images?.banner?.url || e.banner_url || '';
   }
 
   private resetUploadsState() {
-    this.bannerFile = null;
     this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
     this.bannerPreviewUrl = null;
-
-    this.editGallery.forEach((x) => this.revokePreviewIfObjectUrl(x.url));
-    this.editGallery = [];
   }
 
   private revokeAllPreviews() {
     this.revokePreviewIfObjectUrl(this.bannerPreviewUrl);
-    this.editGallery.forEach((x) => this.revokePreviewIfObjectUrl(x.url));
   }
 
   private revokePreviewIfObjectUrl(url: string | null) {
@@ -934,21 +800,11 @@ export class ManagementEvents implements OnInit, OnDestroy {
   }
 
   executeSave() {
-    if (!this.detail || !this.editModel) {
+    if (!this.detail || !this.editModel || this.saving) {
       this.saveModalOpen = false;
       return;
     }
-
-    const normalizedImages: EventImages = {
-      banner:
-        this.editModel.images?.banner ??
-        (this.bannerPreviewUrl ? { url: this.bannerPreviewUrl } : null),
-      gallery: this.editGallery,
-      coverImageId: this.editModel.images?.coverImageId ?? null,
-    };
-
-    const coverImg =
-      normalizedImages.gallery.find((x) => x.image_id === normalizedImages.coverImageId) ?? null;
+    this.saving = true;
 
     const patched: EventEntity = {
       ...this.detail,
@@ -962,9 +818,8 @@ export class ManagementEvents implements OnInit, OnDestroy {
         true,
       ),
 
-      banner_url: normalizedImages.banner?.url || this.bannerPreviewUrl || this.detail.banner_url,
-      cover_url: coverImg?.url || '',
-      images: normalizedImages,
+      banner_url: this.bannerPreviewUrl || this.detail.banner_url,
+      cover_url: '', // Not used with new image handling
 
       updated_at: new Date().toISOString(),
     } as EventEntity;
@@ -987,7 +842,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
           this.toastService.error('Không thể tạo sự kiện: ' + (err.error?.message || err.message));
           console.error('Create failed', err);
         },
-      });
+      }).add(() => this.saving = false);
     } else {
       this.eventService.updateEvent(this.selectedId!, dataToSave).subscribe({
         next: (res) => {
@@ -1003,7 +858,7 @@ export class ManagementEvents implements OnInit, OnDestroy {
           this.toastService.error('Cập nhật thất bại: ' + (err.error?.message || err.message));
           console.error('Update failed', err);
         },
-      });
+      }).add(() => this.saving = false);
     }
   }
 
@@ -1015,12 +870,13 @@ export class ManagementEvents implements OnInit, OnDestroy {
 
     this.resetUploadsState();
     this.refreshList();
-    this.createStep$.next(2);
+    this.createStep$.next(1);
     this.syncRoute(entity.event_id, 'detail', true);
   }
 
   publishEvent() {
-    if (!this.detail) return;
+    if (!this.detail || this.saving) return;
+    this.saving = true;
     const patched = {
       ...this.detail,
       status: 'published' as EventStatus,
@@ -1037,58 +893,58 @@ export class ManagementEvents implements OnInit, OnDestroy {
         );
         this._events$.next(all);
         this.detail = updatedEntity;
-        this.createStep$.next(3);
+        this.createStep$.next(1);
         this.refreshList();
       },
       error: (err) => {
         this.toastService.error('Xuất bản thất bại: ' + (err.error?.message || err.message));
         console.error('Publish failed', err);
       },
-    });
+    }).add(() => (this.saving = false));
   }
 
   stopEvent(e: MouseEvent) {
-    e.preventDefault();
     e.stopPropagation();
   }
 
+  // ===== Edit Actions =====
   addHighlight() {
-    if (!this.editModel) return;
-    const list = (this.editModel.highlights ?? []) as string[];
-    list.push('Highlight mới...');
-    this.editModel.highlights = list;
+    const text = this.newHighlight.trim();
+    if (!text || !this.editModel) return;
+    if (!this.editModel.highlights) this.editModel.highlights = [];
+    this.editModel.highlights.push(text);
+    this.newHighlight = '';
     this.markDirty();
   }
 
-  removeHighlight(i: number) {
-    if (!this.editModel) return;
-    const list = (this.editModel.highlights ?? []) as string[];
-    list.splice(i, 1);
-    this.editModel.highlights = list;
+  removeHighlight(idx: number) {
+    if (!this.editModel?.highlights) return;
+    this.editModel.highlights.splice(idx, 1);
     this.markDirty();
   }
 
   addScheduleItem() {
-    if (!this.editModel) return;
-    const list = (this.editModel.schedule ?? []) as EventScheduleItem[];
-    list.push({
-      item_id: cryptoId(),
+    const item = { ...this.newScheduleItem, item_id: cryptoId() };
+    if (!item.title.trim() || !this.editModel) return;
+    if (!this.editModel.schedule) this.editModel.schedule = [];
+    this.editModel.schedule.push(item);
+    this.newScheduleItem = {
+      item_id: '',
       start_time: '09:00',
       end_time: '10:00',
-      title: 'Mục chương trình...',
+      title: '',
       description: '',
-    });
-    this.editModel.schedule = list;
+    };
     this.markDirty();
   }
 
-  removeScheduleItem(i: number) {
-    if (!this.editModel) return;
-    const list = (this.editModel.schedule ?? []) as EventScheduleItem[];
-    list.splice(i, 1);
-    this.editModel.schedule = list;
+  removeScheduleItem(idx: number) {
+    if (!this.editModel?.schedule) return;
+    this.editModel.schedule.splice(idx, 1);
     this.markDirty();
   }
+
+
 
   phaseLabel(p: Phase) {
     if (p === 'ongoing') return 'Đang diễn ra';
@@ -1139,6 +995,20 @@ export class ManagementEvents implements OnInit, OnDestroy {
 
   fmtDateRange(startISO: string, endISO: string) {
     return `${this.fmtDateOnly(startISO)} → ${this.fmtDateOnly(endISO)}`;
+  }
+
+  get dateError(): string | null {
+    if (!this.editModel?.start_at || !this.editModel?.end_at) return null;
+    const s = new Date(this.editModel.start_at).getTime();
+    const e = new Date(this.editModel.end_at).getTime();
+    if (s > e) return 'Ngày kết thúc không được trước ngày bắt đầu';
+    return null;
+  }
+
+  get isFormValid(): boolean {
+    const em = this.editModel;
+    if (!em) return false;
+    return !!em.event_name?.trim() && !!em.start_at && !!em.end_at && !this.dateError;
   }
 
   fmtTimeRange(it: EventScheduleItem) {
@@ -1222,50 +1092,15 @@ function seedEvents(): EventEntity[] {
     location_name: 'SECC',
     address: 'Quận 7',
     city: 'TP.HCM',
-    banner_url:
-      'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
-    cover_url:
-      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
-    visibility: 'public',
+    banner_url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
+    cover_url: '',
     status: 'published',
     capacity: 200,
     registered_count: 47,
-    highlights: [
-      'Hơn 100 thương hiệu nội thất cao cấp tham gia',
-      'Triển lãm các bộ sưu tập nội thất độc quyền',
-      'Workshop thiết kế không gian sống hiện đại',
-    ],
-    schedule: [
-      { item_id: 'S1', start_time: '09:00', end_time: '10:00', title: 'Khai mạc', description: '' },
-      {
-        item_id: 'S2',
-        start_time: '10:00',
-        end_time: '12:00',
-        title: 'Tham quan',
-        description: '',
-      },
-    ],
-    contact_phone: '(+84) 901 234 567',
-    contact_email: 'events@homebase.vn',
+    highlights: ['Hơn 100 thương hiệu tham gia', 'Workshop thực tế'],
+    schedule: [],
     created_at: new Date(now - 1000 * 60 * 60 * 24 * 10).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 60 * 2).toISOString(),
-    images: {
-      banner: {
-        url: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=60',
-      },
-      gallery: [
-        {
-          image_id: 'IMG_001',
-          url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
-          is_cover: true,
-        },
-        {
-          image_id: 'IMG_002',
-          url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=60',
-        },
-      ],
-      coverImageId: 'IMG_001',
-    },
   };
 
   const e2: EventEntity = {
@@ -1281,7 +1116,6 @@ function seedEvents(): EventEntity[] {
     banner_url:
       'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
     cover_url: '',
-    visibility: 'public',
     status: 'published',
     capacity: 120,
     registered_count: 88,
@@ -1294,13 +1128,6 @@ function seedEvents(): EventEntity[] {
     contact_email: 'events@homebase.vn',
     created_at: new Date(now - 1000 * 60 * 60 * 24 * 2).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 60 * 1).toISOString(),
-    images: {
-      banner: {
-        url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=60',
-      },
-      gallery: [],
-      coverImageId: null,
-    },
   };
 
   const e3: EventEntity = {
@@ -1316,7 +1143,6 @@ function seedEvents(): EventEntity[] {
     banner_url:
       'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=60',
     cover_url: '',
-    visibility: 'private',
     status: 'draft',
     capacity: 60,
     registered_count: 0,
@@ -1328,13 +1154,6 @@ function seedEvents(): EventEntity[] {
     contact_email: 'vip@homebase.vn',
     created_at: new Date(now - 1000 * 60 * 60 * 24 * 1).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 20).toISOString(),
-    images: {
-      banner: {
-        url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=60',
-      },
-      gallery: [],
-      coverImageId: null,
-    },
   };
 
   return [e1, e2, e3];

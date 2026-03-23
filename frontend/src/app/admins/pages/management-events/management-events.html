@@ -23,20 +23,13 @@
     <!-- DETAIL/EDIT ACTIONS -->
     <ng-container *ngIf="vm.mode === 'detail' || vm.mode === 'edit'">
       <div class="hb-header-actions">
-        <ng-container *ngIf="vm.createStep === 1">
-          <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()">
-            <i class="bi bi-x-lg me-1"></i> Hủy soạn thảo
-          </button>
-        </ng-container>
+        <button class="btn btn-hb-outline" type="button" (click)="cancelEdit()" *ngIf="vm.mode === 'edit'">
+          <i class="bi bi-x-lg me-1"></i> Hủy soạn thảo
+        </button>
 
-        <ng-container *ngIf="vm.createStep === 3">
-          <button class="btn btn-hb" type="button" (click)="goList()">
-            <i class="bi bi-list-task me-1"></i> Về danh sách
-          </button>
-        </ng-container>
 
         <div class="hb-divider-v mx-2" *ngIf="vm.createStep !== 3"></div>
-        <button class="btn btn-hb-outline" (click)="goList()" *ngIf="vm.createStep !== 3">
+        <button class="btn btn-hb-outline" (click)="goList()" *ngIf="vm.createStep !== 3" [disabled]="saving">
           <i class="bi bi-house me-1"></i> Thoát
         </button>
       </div>
@@ -47,24 +40,24 @@
   <div class="hb-page-body">
     <!-- LIST VIEW -->
     <ng-container *ngIf="vm.mode === 'list'">
-      <div class="hb-summary-row">
+      <div class="hb-summary-row mb-4">
         <div class="hb-summary-card">
           <div class="hb-sc-icon"><i class="bi bi-calendar-event"></i></div>
-          <div class="hb-sc-content">
+          <div>
             <div class="hb-sc-label">Tổng sự kiện</div>
             <div class="hb-sc-value">{{ vm.summary.totalCount }}</div>
           </div>
         </div>
         <div class="hb-summary-card">
           <div class="hb-sc-icon ok"><i class="bi bi-activity"></i></div>
-          <div class="hb-sc-content">
+          <div>
             <div class="hb-sc-label">Đang diễn ra</div>
             <div class="hb-sc-value">{{ vm.summary.ongoingCount }}</div>
           </div>
         </div>
         <div class="hb-summary-card">
           <div class="hb-sc-icon warn"><i class="bi bi-clock-history"></i></div>
-          <div class="hb-sc-content">
+          <div>
             <div class="hb-sc-label">Sắp diễn ra</div>
             <div class="hb-sc-value">{{ vm.summary.upcomingCount }}</div>
           </div>
@@ -176,58 +169,7 @@
     </ng-container>
 
     <!-- STEPPER HEADER -->
-    <div class="card hb-card mb-4" *ngIf="vm.mode !== 'list'">
-      <div class="card-body p-4">
-        <div class="d-flex align-items-center gap-3 mb-4">
-          <h4 style="font-weight: 800; color: #fff; margin: 0">LẬP THAY ĐỔI SỰ KIỆN MỚI</h4>
-          <span class="hb-pill" style="font-size: 11px">Mã: Tự sinh khi hoàn tất</span>
-          <span class="hb-pill pill-warn" style="font-size: 11px">Bản nháp</span>
-        </div>
-        <div class="hb-wizard-steps">
-          <div
-            class="hb-step"
-            [class.active]="vm.createStep === 1"
-            [class.done]="vm.createStep > 1"
-            (click)="vm.createStep > 1 && enterEdit()"
-          >
-            <div class="step-circle">1</div>
-            <div class="step-label">Thiết lập sự kiện</div>
-          </div>
-          <div class="step-connector" [class.filled]="vm.createStep > 1"></div>
-          <div
-            class="hb-step"
-            [class.active]="vm.createStep === 2"
-            [class.done]="vm.createStep > 2"
-            (click)="vm.createStep > 2 && openDetail(vm.selectedId!)"
-          >
-            <div class="step-circle">2</div>
-            <div class="step-label">Rà soát chi tiết</div>
-          </div>
-          <div class="step-connector" [class.filled]="vm.createStep > 2"></div>
-          <div class="hb-step" [class.active]="vm.createStep === 3">
-            <div class="step-circle">3</div>
-            <div class="step-label">Hoàn tất xuất bản</div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- SUCCESS -->
-    <ng-container *ngIf="vm.mode !== 'list' && vm.createStep === 3">
-      <div class="card hb-card hb-card-pad text-center py-5">
-        <div class="mb-4">
-          <i class="bi bi-patch-check-fill text-success" style="font-size: 80px"></i>
-        </div>
-        <h2 class="hb-h1 mb-3">SỰ KIỆN ĐÃ ĐƯỢC XUẤT BẢN!</h2>
-        <p class="text-muted mb-5">Thông tin sự kiện đã được cập nhật và sẵn sàng để đăng ký.</p>
-        <div class="d-flex justify-content-center gap-3">
-          <button class="btn btn-hb-outline" (click)="openDetail(vm.selectedId!)">
-            Xem lại sự kiện
-          </button>
-          <button class="btn btn-hb px-5" (click)="goList()">Về trang quản lý</button>
-        </div>
-      </div>
-    </ng-container>
 
     <!-- DETAIL VIEW -->
     <ng-container *ngIf="vm.mode === 'detail' && vm.createStep !== 3 && vm.detail as eventDetail">
@@ -236,7 +178,7 @@
           <div class="card hb-card mb-3 p-0 border-0 overflow-hidden">
             <div
               class="hb-event-hero-cover"
-              [style.backgroundImage]="'url(' + getBannerUrl(eventDetail) + ')'"
+              [style.backgroundImage]="'url(' + eventDetail.banner_url + ')'"
             >
               <div class="hb-event-hero-overlay">
                 <div class="d-flex gap-2">
@@ -287,13 +229,6 @@
             <div class="d-grid gap-2">
               <button class="btn btn-hb-accent" (click)="enterEdit()">
                 <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa thông tin
-              </button>
-              <button
-                class="btn btn-hb-publish py-2 my-2"
-                (click)="publishEvent()"
-                *ngIf="vm.createStep === 2"
-              >
-                <i class="bi bi-send-check me-2 fs-5"></i> XÁC NHẬN ĐĂNG BÀI
               </button>
               <div class="hb-divider my-2"></div>
               <button class="btn btn-hb-danger-outline" (click)="deleteEvent(eventDetail.event_id)">
@@ -350,6 +285,9 @@
                 (ngModelChange)="markDirty()"
                 placeholder="Ví dụ: Interior Expo 2025"
               />
+              <div class="text-danger small mt-1" *ngIf="em.event_name === ''">
+                <i class="bi bi-exclamation-triangle me-1"></i> Tên sự kiện không được để trống
+              </div>
             </div>
             <div class="row g-3">
               <div class="col-md-6">
@@ -373,7 +311,7 @@
             </div>
             <div class="row g-3 mt-1">
               <div class="col-md-6">
-                <label class="form-label">Ngày bắt đầu</label
+                <label class="form-label">Ngày bắt đầu *</label
                 ><input
                   class="form-control"
                   type="date"
@@ -382,13 +320,16 @@
                 />
               </div>
               <div class="col-md-6">
-                <label class="form-label">Ngày kết thúc</label
+                <label class="form-label">Ngày kết thúc *</label
                 ><input
                   class="form-control"
                   type="date"
                   [(ngModel)]="em.end_at"
                   (ngModelChange)="markDirty()"
                 />
+                <div class="text-danger small mt-1" *ngIf="dateError">
+                  <i class="bi bi-exclamation-triangle me-1 text-danger"></i> {{ dateError }}
+                </div>
               </div>
             </div>
             <div class="mt-4">
@@ -423,6 +364,65 @@
                 Chưa có banner. Hãy upload ảnh banner cho sự kiện.
               </div></ng-template
             >
+
+            <!-- HIGHLIGHTS EDITOR -->
+            <hr class="hb-hr" />
+            <div class="hb-section-title"><i class="bi bi-star me-2"></i>Điểm nổi bật</div>
+            <div class="hb-edit-list mb-3">
+              <div class="hb-edit-item" *ngFor="let h of em.highlights; let i = index">
+                <span>{{ h }}</span>
+                <button class="btn btn-link text-danger p-0 ms-2" (click)="removeHighlight(i)">
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Thêm điểm nổi bật mới..."
+                [(ngModel)]="newHighlight"
+                (keyup.enter)="addHighlight()"
+              />
+              <button class="btn btn-hb-outline" type="button" (click)="addHighlight()">
+                <i class="bi bi-plus-lg"></i>
+              </button>
+            </div>
+
+            <!-- SCHEDULE EDITOR -->
+            <hr class="hb-hr" />
+            <div class="hb-section-title"><i class="bi bi-clock-history me-2"></i>Chương trình</div>
+            <div class="hb-edit-timeline mb-3">
+              <div class="hb-edit-tl-item" *ngFor="let it of em.schedule; let i = index">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <span class="badge bg-primary me-2">{{ it.start_time }} - {{ it.end_time }}</span>
+                    <strong>{{ it.title }}</strong>
+                    <div class="text-muted small ps-4">{{ it.description }}</div>
+                  </div>
+                  <button class="btn btn-link text-danger p-0" (click)="removeScheduleItem(i)">
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="hb-add-schedule-form p-3">
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <label class="small text-muted">Bắt đầu</label>
+                  <input type="time" class="form-control form-control-sm" [(ngModel)]="newScheduleItem.start_time" />
+                </div>
+                <div class="col-6">
+                  <label class="small text-muted">Kết thúc</label>
+                  <input type="time" class="form-control form-control-sm" [(ngModel)]="newScheduleItem.end_time" />
+                </div>
+              </div>
+              <input type="text" class="form-control form-control-sm mb-2" placeholder="Tiêu đề chương trình..." [(ngModel)]="newScheduleItem.title" />
+              <textarea class="form-control form-control-sm mb-2" rows="2" placeholder="Mô tả ngắn..." [(ngModel)]="newScheduleItem.description"></textarea>
+              <button class="btn btn-hb-outline btn-sm w-100" (click)="addScheduleItem()">
+                <i class="bi bi-plus-lg me-1"></i> Thêm vào chương trình
+              </button>
+            </div>
           </div>
         </div>
         <div class="col-lg-4">
@@ -461,11 +461,12 @@
             </div>
             <hr class="hb-hr" />
             <button
-              class="btn btn-hb w-100 mb-2 py-2"
-              (click)="saveEdit()"
-              [disabled]="!em.event_name || (vm.selectedId !== 'NEW' && !isDirty)"
+              class="btn btn-hb-primary w-100"
+              (click)="executeSave()"
+              [disabled]="!isFormValid || (vm.selectedId !== 'NEW' && !isDirty) || saving"
             >
-              <i class="bi bi-arrow-right-circle me-1"></i> TIẾP THEO: XEM TRƯỚC
+              <i class="bi bi-arrow-right-circle me-1"></i>
+              {{ vm.selectedId === 'NEW' ? 'TIẾP THEO: XEM TRƯỚC' : 'LƯU THAY ĐỔI' }}
             </button>
             <button class="btn btn-hb-outline w-100 py-2" (click)="cancelEdit()">Hủy bỏ</button>
           </div>
