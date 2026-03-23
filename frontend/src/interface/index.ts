@@ -260,12 +260,18 @@ export interface IOrderItem {
 }
 export interface ICustomerInquiry {
   _id: string;
-  user_id: string;
+  user_id: string | { _id: string; name: string; email: string; phone: string };
+  category: string;
   subject: string;
   message: string;
-  status: string;
-  resolving_staff_id: string;
-  staff_response: string;
+  status?: string;
+  priority?: string;
+  resolving_staff_id?: string | { _id: string; name: string };
+  staff_response?: string;
+  internal_notes?: string;
+  due_date?: Date | string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 export interface IAddress {
   _id: string;
