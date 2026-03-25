@@ -7,8 +7,17 @@ class WarrantyController {
   async createWarrantyRequest(req, res) {
     try {
       const userId = req.userId;
-      const { fullname, email, phone, issue_description, product_variant_id } =
-        req.body;
+      const {
+        fullname,
+        email,
+        phone,
+        issue_description,
+        product_variant_id,
+        order_id,
+        order_item_id,
+        warranty_method,
+        warranty_reasons,
+      } = req.body;
 
       const newRequest = new WarrantyRequest({
         user_id: userId,
@@ -17,6 +26,10 @@ class WarrantyController {
         phone,
         issue_description,
         product_variant_id,
+        order_id,
+        order_item_id,
+        warranty_method,
+        warranty_reasons,
         request_date: new Date(),
       });
       await newRequest.save();
@@ -61,7 +74,7 @@ class WarrantyController {
       const userId = req.userId;
       const warranties = await WarrantyRequest.find({
         user_id: userId,
-      }).populate("product_variant_id");
+      });
       return res.status(200).json({
         message: "Lấy danh sách bảo hành thành công",
         data: warranties,

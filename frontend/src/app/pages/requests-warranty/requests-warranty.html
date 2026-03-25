@@ -1,263 +1,230 @@
 <div class="warranty-container">
-    <!-- Header / Search -->
-    <div class="page-header">
-        <div class="search-box">
-            <input type="text" placeholder="Tìm kiếm sản phẩm" [(ngModel)]="searchTerm">
-            <i class="fa-solid fa-magnifying-glass"></i>
+  <!-- NEW WARRANTY REQUEST FORM -->
+  <div class="warranty-form-section">
+    <h2 class="section-title">Tạo yêu cầu bảo hành mới</h2>
+
+    <div class="form-card">
+      <!-- Order Selection Cards -->
+      <div class="selection-section">
+        <label class="section-label">Chọn đơn hàng đã nhận</label>
+        <div class="order-selection-list">
+          @for (order of deliveredOrders; track $index) {
+            <div
+              class="order-selection-card"
+              [class.selected]="selectedOrderId === order._id"
+              (click)="selectOrder(order._id)"
+            >
+              <div class="order-card-header">
+                <span class="order-id">#{{ order.order_number }}</span>
+                <span class="order-status-badge">Đã nhận</span>
+              </div>
+              <div class="order-card-body">
+                <p class="order-date">
+                  <i class="fa-regular fa-calendar"></i>
+                  {{ order.completed_at | date: 'dd/MM/yyyy' }}
+                </p>
+                <p class="order-items-count">
+                  <i class="fa-solid fa-box"></i> {{ order.items.length }} sản phẩm
+                </p>
+              </div>
+              @if (selectedOrderId === order._id) {
+                <div class="selected-indicator">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+              }
+            </div>
+          }
         </div>
+        @if (deliveredOrders.length === 0 && !loadingOrders) {
+          <div class="no-orders">Bạn chưa có đơn hàng nào đã được giao để yêu cầu bảo hành.</div>
+        }
+      </div>
+
+      <!-- Product Selection Grid (Conditional) -->
+      @if (selectedOrderId) {
+        <div class="selection-section animate-slide-down">
+          <label class="section-label">Chọn sản phẩm cần bảo hành</label>
+          <div class="product-selection-grid">
+            @for (p of availableProducts; track $index) {
+              <div
+                class="product-selection-card"
+                [class.selected]="selectedProductId === p.item.product_variant_id"
+                (click)="selectProduct(p)"
+              >
+                <div class="product-card-img">
+                  <img
+                    [src]="
+                      p.url
+                        ? p.url
+                        : 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80'
+                    "
+                    alt="Product"
+                  />
+                </div>
+                <div class="product-card-info">
+                  <h4 class="product-name">{{ p.item.product_name }}</h4>
+                  <p class="product-qty">Số lượng: {{ p.item.quantity }}</p>
+                  <p class="product-price">{{ p.item.unit_price | number: '1.0-0' }} VND</p>
+                </div>
+                @if (selectedProductId === p.item.product_variant_id) {
+                  <div class="selected-indicator">
+                    <i class="fa-solid fa-circle-check"></i>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Warranty Method -->
+      <div class="form-section">
+        <h3>Chọn phương thức bảo hành</h3>
+        <div class="radio-group-inline">
+          <label class="radio-item" [class.active]="warrantyMethod === 'home'">
+            <input type="radio" name="method" value="home" [(ngModel)]="warrantyMethod" />
+            <i class="fa-solid fa-house"></i> Bảo hành tại nhà
+          </label>
+          <label class="radio-item" [class.active]="warrantyMethod === 'store'">
+            <input type="radio" name="method" value="store" [(ngModel)]="warrantyMethod" />
+            <i class="fa-solid fa-shop"></i> Bảo hành tại xưởng
+          </label>
+          <label class="radio-item" [class.active]="warrantyMethod === 'return'">
+            <input type="radio" name="method" value="return" [(ngModel)]="warrantyMethod" />
+            <i class="fa-solid fa-rotate"></i> Đổi trả hàng
+          </label>
+        </div>
+      </div>
+
+      <!-- Reasons -->
+      <div class="form-section">
+        <h3>Lý do yêu cầu</h3>
+        <div class="reasons-grid">
+          <label class="checkbox-item" *ngFor="let reason of warrantyReasons">
+            <input type="checkbox" [(ngModel)]="reason.checked" />
+            <span>{{ reason.label }}</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Image Upload Section -->
+      <div class="form-section">
+        <h3>Hình ảnh tình trạng sản phẩm</h3>
+        <p class="section-subtitle">
+          Vui lòng cung cấp hình ảnh hiển thị rõ tình trạng lỗi của sản phẩm.
+        </p>
+
+        <div class="upload-container">
+          <div class="upload-box" (click)="fileInput.click()">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span>Nhấn để tải ảnh hoặc kéo thả vào đây</span>
+            <input
+              #fileInput
+              type="file"
+              multiple
+              accept="image/*"
+              (change)="onFileSelected($event)"
+              hidden
+            />
+          </div>
+
+          <div class="preview-gallery" *ngIf="selectedImages.length > 0">
+            <div
+              class="preview-item animate-slide-down"
+              *ngFor="let img of selectedImages; let i = index"
+            >
+              <img [src]="img.url" alt="Preview" />
+              <button class="btn-remove-img" (click)="removeImage(i)" title="Xóa ảnh">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-section">
+        <h3>Mô tả chi tiết vấn đề</h3>
+        <textarea
+          class="form-textarea"
+          placeholder="Vui lòng mô tả chi tiết tình trạng sản phẩm..."
+          [(ngModel)]="warrantyNote"
+        ></textarea>
+      </div>
+
+      <!-- Footer -->
+      <div class="form-footer">
+        <label class="agreement-checkbox">
+          <input type="checkbox" [(ngModel)]="agreedToTerms" />
+          Tôi đồng ý với <a href="#">chính sách bảo hành</a> của HomeBase
+        </label>
+        <button class="btn-submit" (click)="submitWarrantyRequest()">Gửi yêu cầu bảo hành</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SENT REQUESTS LIST -->
+  <div class="requests-list-section">
+    <h2 class="section-title">Danh sách yêu cầu của tôi</h2>
+
+    <!-- Tabs Navigation -->
+    <div class="list-header">
+      <div class="tabs-nav">
+        <button [class.active]="activeListTab === 'all'" (click)="setListTab('all')">
+          Tất cả yêu cầu
+        </button>
+        <button [class.active]="activeListTab === 'unresolved'" (click)="setListTab('unresolved')">
+          Chờ duyệt
+        </button>
+        <button [class.active]="activeListTab === 'resolved'" (click)="setListTab('resolved')">
+          Đã duyệt
+        </button>
+      </div>
+      <div class="search-box">
+        <input type="text" placeholder="Tìm kiếm yêu cầu..." [(ngModel)]="searchTerm" />
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
     </div>
 
-    <!-- List of Warranty Items -->
-    <div class="warranty-list">
-        <div class="warranty-card" *ngFor="let item of warrantyItems">
-
-            <!-- Main Card Content -->
-            <div class="card-main">
-                <!-- Left: Image -->
-                <div class="card-image">
-                    <img [src]="item.image" [alt]="item.productName">
-                    <!-- Navigation Arrows (Mock UI) -->
-                    <div class="img-nav">
-                        <button class="nav-btn"><i class="fa-solid fa-arrow-left"></i></button>
-                        <span>Mặt hàng: 1/3</span> <!-- Static for now as per image -->
-                        <button class="nav-btn"><i class="fa-solid fa-arrow-right"></i></button>
-                    </div>
-                </div>
-
-                <!-- Middle: Info & Dates -->
-                <div class="card-info">
-                    <h3 class="product-name">{{ item.productName }}</h3>
-                    <div class="product-variant">
-                        <p><strong>Ghế:</strong> {{ item.variant }}</p>
-                        <p><strong>Chân:</strong> {{ item.note }}</p>
-                    </div>
-
-                    <div class="dates-info">
-                        <p><strong>Ngày đặt:</strong> {{ item.orderDate }}</p>
-                        <p><strong>Ngày nhận:</strong> {{ item.receiveDate }}</p>
-                        <p><strong>Phương thức thanh toán:</strong> {{ item.paymentMethod }}</p>
-                        <p><strong>Địa chỉ:</strong> {{ item.address }}</p>
-                        <p><strong>Mã vận đơn:</strong> {{ item.orderId }}</p>
-                        <p><strong>Trạng thái:</strong> <span class="status-confirmed">Đã nhận</span></p>
-                        <p class="warranty-expiry">Thời hạn bảo hành / đổi trả: {{ item.warrantyEndDate }}</p>
-                    </div>
-                </div>
-
-                <!-- Right: Price & Actions -->
-                <div class="card-actions">
-                    <div class="price-row">
-                        <span class="label">Đơn giá:</span>
-                        <span class="value strike">{{ item.unitPrice + 100000 | number:'1.0-0' }} VND</span>
-                    </div>
-                    <div class="price-row">
-                        <span class="label">Số lượng:</span>
-                        <span class="value">x{{ item.quantity }}</span>
-                    </div>
-                    <div class="price-row">
-                        <span class="label">Khuyến mãi:</span>
-                        <span class="value">{{ item.discount | number:'1.0-0' }} VND</span>
-                    </div>
-                    <div class="price-row total">
-                        <span class="label">Thành tiền:</span>
-                        <span class="value highlight">{{ item.totalPrice | number:'1.0-0' }} VND</span>
-                    </div>
-
-                    <div class="order-total-row">
-                        <span class="label">Tổng giá trị đơn:</span>
-                        <span class="value red">{{ item.orderTotalValue | number:'1.0-0' }} VND</span>
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn-warranty" (click)="openWarrantyPopup(item)">Bảo hành / Đổi trả</button>
-                        <button class="btn-expand" (click)="toggleExpand(item.id)">
-                            {{ expandedItemId === item.id ? 'Thu gọn' : 'Mở rộng' }}
-                        </button>
-                    </div>
-                </div>
+    <!-- Requests List -->
+    <div class="requests-grid">
+      @for (req of filteredRequests; track $index) {
+        <div class="request-card">
+          <div class="request-img">
+            <img [src]="req.images[0]" alt="Product" />
+          </div>
+          <div class="request-info">
+            <div class="request-header">
+              <span class="request-id">#{{ req._id }}</span>
+              <span class="request-date">{{ req.request_date | date: 'dd/MM/yyyy' }}</span>
             </div>
-
-            <!-- Expanded Order Details -->
-            <div class="expanded-details" *ngIf="expandedItemId === item.id">
-                <div class="details-header">
-                    <h4>Thông tin đơn hàng</h4>
-                </div>
-                <div class="details-grid">
-                    <div class="detail-col">
-                        <p><strong>Ngày đặt:</strong> {{ item.orderDate }}</p>
-                        <p><strong>Phương thức thanh toán:</strong> {{ item.paymentMethod }}</p>
-                        <p><strong>Trạng thái:</strong> Chờ xác nhận</p> <!-- Mock status -->
-                        <p class="red-text"><strong>Tổng giá trị đơn:</strong> {{ item.orderTotalValue | number:'1.0-0'
-                            }} VND</p>
-                    </div>
-                    <div class="detail-col">
-                        <p><strong>Mã vận đơn:</strong> {{ item.orderId }}</p>
-                        <p><strong>Địa chỉ:</strong> {{ item.address }}</p>
-                    </div>
-                    <div class="detail-col action-col">
-                        <button class="btn-collapse" (click)="toggleExpand(item.id)">Thu gọn</button>
-                    </div>
-                </div>
-
-                <!-- Expanded List Item (Repeating the item to simulate list inside order) -->
-                <div class="nested-item">
-                    <div class="nested-img">
-                        <img [src]="item.image" alt="">
-                        <span class="img-counter">Mặt hàng: 1/3</span>
-                    </div>
-                    <div class="nested-info">
-                        <h5>{{ item.productName }}</h5>
-                        <p>Ghế: {{ item.variant }}</p>
-                        <p>Chân: {{ item.note }}</p>
-                        <p>Ngày nhận: {{ item.receiveDate }}</p>
-                        <button class="btn-warranty small" (click)="openWarrantyPopup(item)">Bảo hành / Đổi trả</button>
-                    </div>
-                    <div class="nested-price">
-                        <div class="row"><span class="lbl">Đơn giá:</span> <span>{{ item.unitPrice | number:'1.0-0' }}
-                                VND</span></div>
-                        <div class="row"><span class="lbl">Số lượng:</span> <span>x{{ item.quantity }}</span></div>
-                        <div class="row"><span class="lbl">Khuyến mãi:</span> <span>{{ item.discount | number:'1.0-0' }}
-                                VND</span></div>
-                        <div class="row"><span class="lbl">Thành tiền:</span> <span>{{ item.totalPrice | number:'1.0-0'
-                                }} VND</span></div>
-                        <p class="expiry">Thời hạn bảo hành / đổi trả: {{ item.warrantyEndDate }}</p>
-                    </div>
-                </div>
-                <!-- Create duplicates to show 'multiple items' in order -->
-                <div class="nested-item">
-                    <div class="nested-img">
-                        <img [src]="item.image" alt="">
-                        <span class="img-counter">Mặt hàng: 2/3</span>
-                    </div>
-                    <div class="nested-info">
-                        <h5>{{ item.productName }}</h5>
-                        <p>Ghế: {{ item.variant }}</p>
-                        <p>Chân: {{ item.note }}</p>
-                        <p>Ngày nhận: {{ item.receiveDate }}</p>
-                        <button class="btn-warranty small" (click)="openWarrantyPopup(item)">Bảo hành / Đổi trả</button>
-                    </div>
-                    <div class="nested-price">
-                        <div class="row"><span class="lbl">Đơn giá:</span> <span>{{ item.unitPrice | number:'1.0-0' }}
-                                VND</span></div>
-                        <div class="row"><span class="lbl">Số lượng:</span> <span>x{{ item.quantity }}</span></div>
-                        <div class="row"><span class="lbl">Khuyến mãi:</span> <span>{{ item.discount | number:'1.0-0' }}
-                                VND</span></div>
-                        <div class="row"><span class="lbl">Thành tiền:</span> <span>{{ item.totalPrice | number:'1.0-0'
-                                }} VND</span></div>
-                        <p class="expiry red-text">Hết thời hạn bảo hành / đổi trả</p>
-                    </div>
-                </div>
+            <h4 class="product-name">{{ req.productName }}</h4>
+            <p class="issue-text">{{ req.issue_description }}</p>
+            <div class="request-footer">
+              <div class="request-status-info">
+                <span
+                  class="status-badge"
+                  [class.pending]="req.warranty_status === 'pending'"
+                  [class.approved]="req.warranty_status === 'approved'"
+                >
+                  {{ getStatusLabel(req.warranty_status) }}
+                </span>
+                @if (req.images && req.images.length > 0) {
+                  <span class="images-count-badge">
+                    <i class="fa-regular fa-image"></i> {{ req.images.length }} ảnh
+                  </span>
+                }
+              </div>
+              <button class="btn-view-detail">Xem chi tiết</button>
             </div>
-
+          </div>
         </div>
+      }
+
+      <div class="no-data" *ngIf="filteredRequests.length === 0">
+        <i class="fa-solid fa-folder-open"></i>
+        <p>Không có yêu cầu nào trong mục này</p>
+      </div>
     </div>
-</div>
-
-<!-- WARRANTY POPUP MODAL -->
-<div class="warranty-modal-overlay" *ngIf="showWarrantyPopup">
-    <div class="warranty-modal">
-        <!-- Blue Header -->
-        <div class="modal-header">
-            Bạn có muốn lưu những thay đổi sau?
-        </div>
-
-        <div class="modal-body">
-            <h3>Chọn phương thức bảo hành</h3>
-
-            <!-- Radio Options -->
-            <div class="radio-group">
-                <label class="radio-card" [class.checked]="warrantyMethod === 'home'">
-                    <div class="radio-content">
-                        <i class="fa-solid fa-house-chimney icon"></i>
-                        <span class="text">Bảo hành tại nhà</span>
-                    </div>
-                    <input type="radio" name="warrantyMethod" value="home" [(ngModel)]="warrantyMethod">
-                    <span class="radio-circle"></span>
-                </label>
-
-                <label class="radio-card" [class.checked]="warrantyMethod === 'store'">
-                    <div class="radio-content">
-                        <i class="fa-solid fa-briefcase icon"></i>
-                        <span class="text">Bảo hành tại cơ sở sản xuất</span>
-                    </div>
-                    <input type="radio" name="warrantyMethod" value="store" [(ngModel)]="warrantyMethod">
-                    <span class="radio-circle"></span>
-                </label>
-
-                <label class="radio-card" [class.checked]="warrantyMethod === 'return'">
-                    <div class="radio-content">
-                        <i class="fa-solid fa-wallet icon"></i>
-                        <span class="text">Đổi trả hàng khác</span>
-                    </div>
-                    <input type="radio" name="warrantyMethod" value="return" [(ngModel)]="warrantyMethod">
-                    <span class="radio-circle"></span>
-                </label>
-            </div>
-
-            <!-- Reason Checkboxes -->
-            <div class="reason-section">
-                <h4>Lý do trả hàng</h4>
-                <div class="reason-grid">
-                    <label class="reason-check">
-                        <input type="checkbox"> <span>Sản phẩm móp méo, bong tróc</span>
-                    </label>
-                    <label class="reason-check">
-                        <input type="checkbox"> <span>Sản phẩm thiếu thành phần, linh kiện</span>
-                    </label>
-                    <label class="reason-check">
-                        <input type="checkbox"> <span>Sản phẩm sai mẫu mã, kích thước</span>
-                    </label>
-                    <label class="reason-check">
-                        <input type="checkbox"> <span>Sản phẩm sai, thiếu chức năng</span>
-                    </label>
-                    <label class="reason-check">
-                        <input type="checkbox"> <span>Lý do khác</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Note Textarea -->
-            <div class="note-section">
-                <h4>Bạn có thể chia sẻ thêm về vấn đề của sản phẩm không?</h4>
-                <textarea placeholder="Vui lòng nhập văn bản" [(ngModel)]="warrantyNote"></textarea>
-            </div>
-
-            <!-- Selected Item Summary Card -->
-            <div class="selected-item-summary" *ngIf="selectedWarrantyItem">
-                <div class="summary-header">Một hàng bạn đã chọn</div>
-                <div class="summary-content">
-                    <img [src]="selectedWarrantyItem.image" alt="">
-                    <div class="summary-info">
-                        <h5>{{ selectedWarrantyItem.productName }}</h5>
-                        <p>Ghế: {{ selectedWarrantyItem.variant }}</p>
-                        <p>Chân: {{ selectedWarrantyItem.note }}</p>
-                        <p>Ngày nhận: {{ selectedWarrantyItem.receiveDate }}</p>
-                    </div>
-                    <div class="summary-price">
-                        <div class="row"><span>Đơn giá:</span> <span>{{ selectedWarrantyItem.unitPrice | number:'1.0-0'
-                                }} VND</span></div>
-                        <div class="row"><span>Số lượng:</span> <span>x{{ selectedWarrantyItem.quantity }}</span></div>
-                        <div class="row"><span>Khuyến mãi:</span> <span>{{ selectedWarrantyItem.discount |
-                                number:'1.0-0' }} VND</span></div>
-                        <div class="row total"><span>Thành tiền:</span> <span>{{ selectedWarrantyItem.totalPrice |
-                                number:'1.0-0' }} VND</span></div>
-                        <p class="mini-expiry">Thời hạn bảo hành / đổi trả: {{ selectedWarrantyItem.warrantyEndDate }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer Agreement -->
-            <div class="modal-footer">
-                <label class="agreement">
-                    <input type="checkbox" [(ngModel)]="agreedToTerms">
-                    <span>Tôi đã đọc và đồng ý với <a href="#">Điều Khoản và Điều Kiện</a> của HomeBase</span>
-                </label>
-
-                <div class="footer-buttons">
-                    <button class="btn-cancel" (click)="closeWarrantyPopup()">Hủy bỏ</button>
-                    <button class="btn-confirm">Xác nhận</button>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>

@@ -131,12 +131,16 @@ export interface IUpholstery {
 export interface IWarrantyRequest {
   _id: string;
   user_id: string;
+  order_id?: string;
+  order_item_id?: string;
   request_date: Date;
   fullname: string;
   email: string;
   phone: string;
   issue_description: string;
-  warranty_status: string;
+  warranty_status?: string;
+  warranty_method: string;
+  warranty_reasons: string[];
   approved_by: string;
   approved_date: Date;
   resolution_note: string;
@@ -149,9 +153,10 @@ export interface IWarrantyImage {
   image_url: string[];
 }
 export interface IReview {
-  _id: string;
+  _id?: string;
   product_id: string;
   user_id: string;
+  order_item_id: string;
   rating: number;
   comments: string;
   images: string[];
@@ -413,4 +418,20 @@ export interface IOrderAdmin {
   cancel_reason: string;
   createdAt: string | Date;
   updatedAt: string | Date;
+}
+export interface IVoucher {
+  _id?: string;
+  user: string;
+  voucher_name: string;
+  code: string;
+  value: number;
+  type: string;
+  min_order_value: number;
+  usage_limit: number;
+  used_count: number;
+  start_date: Date;
+  end_date: Date;
+  status: 'active' | 'paused' | 'expired' | 'pending';
+  appliedTo: string;
+  applied_products: string[];
 }

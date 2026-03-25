@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, computed, signal } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -7,6 +7,7 @@ import { ToastService } from '../../services/toast-service';
 import { IOrder, IOrderItem, IOrderItemShipping, IPayment } from '../../../interface';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs';
+import { ReviewService } from '../../services/review-service';
 // IOrder + IOrderItem gộp lại để hiển thị
 export interface IOrderWithItems extends IOrder {
   items: { item: IOrderItem; shipping: IOrderItemShipping; payment: IPayment }[];
@@ -46,13 +47,19 @@ export class MyOrders implements OnInit {
     { key: 'returned', label: 'Đã trả', statuses: ['returned'] },
     { key: 'cancelled', label: 'Đã hủy', statuses: ['cancelled'] },
   ];
-
   // ── State ─────────────────────────────────────────────────────────────
   allOrders = signal<IOrderWithItems[]>([]);
   activeTab = signal('pending');
   searchQuery = signal('');
   loading = signal(false);
-
+  selectedFile: File[] = [];
+  previewUrl: string[] = [];
+  review = {
+    rating: 0,
+    comments: '',
+  };
+  selectedOrderItem: IOrderItem | null = null;
+  error: string = '';
   // ── Computed ──────────────────────────────────────────────────────────
   activeTabStatuses = computed(
     () => this.tabs.find((t) => t.key === this.activeTab())?.statuses ?? [],
@@ -90,13 +97,63 @@ export class MyOrders implements OnInit {
 
   constructor(
     private orderService: OrderServices,
+    private reviewService: ReviewService,
     private toastService: ToastService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
     this.loadOrders();
   }
-
+  submitReview(form: any) {
+    if (form.invalid || this.review.rating === 0) {
+      this.toastService.error('Vui lòng nhập đầy đủ thông tin');
+      return;
+    }
+    this.reviewService
+      .createReviewProduct(
+        this.review.rating,
+        this.review.comments,
+        this.selectedFile,
+        this.selectedOrderItem?._id!,
+      )
+      .subscribe({
+        next: (res) => {
+          this.toastService.success(res.message);
+          form.reset();
+          this.selectedFile = [];
+        },
+        error: (err) => {
+          if (err.status === 404 || err.status === 400 || err.status === 401) {
+            this.error = err.error?.message || 'Không tìm thấy địa chỉ người dùng nào';
+          } else {
+            this.error = 'Có lỗi ở phía server';
+          }
+          this.cdr.detectChanges();
+        },
+      });
+    console.log(form);
+    console.log(this.review);
+    console.log(this.selectedFile);
+    console.log(this.selectedOrderItem);
+  }
+  onClickOrderItem(item: IOrderItem) {
+    this.selectedOrderItem = item;
+  }
+  onImageSelect(event: any) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const files = Array.from(input.files);
+      for (let file of files) {
+        this.selectedFile.push(file);
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.previewUrl.push(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }
   // ── Load tất cả đơn hàng ─────────────────────────────────────────────
   loadOrders() {
     this.loading.set(true);

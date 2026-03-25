@@ -231,5 +231,6 @@ export const routes: Routes = [
           ),
       },
     ],
+    canActivate: [authGuard],
   },
 ];

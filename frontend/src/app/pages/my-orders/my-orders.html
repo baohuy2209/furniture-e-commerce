@@ -109,7 +109,14 @@
                   {{ getStatusLabel(item.item.status) }}
                 </span>
                 @if (item.item.status === 'delivered' && !item.item.reviewed) {
-                  <button class="btn-review"><i class="fas fa-star me-1"></i>Đánh giá</button>
+                  <button
+                    class="btn-review"
+                    data-bs-toggle="modal"
+                    data-bs-target="#reviewModal"
+                    (click)="onClickOrderItem(item.item)"
+                  >
+                    <i class="fas fa-star me-1"></i>Đánh giá
+                  </button>
                 }
                 @if (item.item.status === 'delivered' && item.item.reviewed) {
                   <span class="reviewed-badge"> <i class="fas fa-check me-1"></i>Đã đánh giá </span>
@@ -226,4 +233,84 @@
       }
     </div>
   }
+</div>
+<div class="modal fade" id="reviewModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content review-modal">
+      <!-- HEADER -->
+      <div class="modal-header border-0">
+        <h5 class="modal-title">
+          <i class="bi bi-star-fill me-2 text-warning"></i>
+          Đánh giá sản phẩm
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+        <form #f="ngForm" (ngSubmit)="submitReview(f)">
+          <!-- ⭐ RATING -->
+          <div class="mb-4 text-center">
+            <label class="form-label d-block mb-2"
+              >Chọn số sao <span class="text-danger">*</span></label
+            >
+
+            <div class="rating-stars">
+              @for (star of [1, 2, 3, 4, 5]; track star) {
+                <i
+                  class="bi"
+                  [ngClass]="review.rating >= star ? 'bi-star-fill active' : 'bi-star'"
+                  (click)="review.rating = star"
+                >
+                </i>
+              }
+            </div>
+          </div>
+
+          <!-- 💬 COMMENT -->
+          <div class="mb-3">
+            <label class="form-label">Nhận xét của bạn <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control custom-input"
+              rows="4"
+              name="comments"
+              #comments="ngModel"
+              [(ngModel)]="review.comments"
+              placeholder="Chia sẻ trải nghiệm của bạn..."
+              [class.is-invalid]="comments.invalid && comments.touched"
+              required
+            ></textarea>
+          </div>
+
+          <!-- 🖼️ IMAGE UPLOAD -->
+          <div class="mb-3">
+            <label class="form-label">Hình ảnh (tuỳ chọn)</label>
+
+            <input
+              type="file"
+              class="form-control custom-input"
+              multiple
+              (change)="onImageSelect($event)"
+              accept="image/*"
+            />
+
+            <!-- Preview -->
+            <div class="image-preview mt-3">
+              @for (img of previewUrl; track img) {
+                <div class="preview-item">
+                  <img [src]="img" />
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- FOOTER -->
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-submit">Gửi đánh giá</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

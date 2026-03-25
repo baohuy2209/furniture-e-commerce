@@ -24,6 +24,7 @@ import { HttpClient } from '@angular/common/http';
 import { AddressService } from '../../services/address-service';
 import { UserService } from '../../services/user-service';
 import { OrderServices } from '../../services/order-services';
+import { ReviewService } from '../../services/review-service';
 declare var bootstrap: any;
 const SHIPPING_FEE_FOR_GUEST = 150000;
 interface Province {
@@ -98,6 +99,7 @@ export class ProductDetails implements OnInit {
     private userAddressService: AddressService,
     private userService: UserService,
     private orderService: OrderServices,
+    private reviewService: ReviewService,
   ) {}
   setActive(index: number): void {
     this.activeIndex = index;

@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { IReview } from '../../interface';
+import { Iproduct, IReview } from '../../interface';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -9,9 +9,21 @@ import { environment } from '../../environments/environment.development';
 })
 export class ReviewService {
   constructor(private http: HttpClient) {}
-  createReviewProduct(data: IReview): Observable<{ message: string; data: IReview }> {
+  createReviewProduct(
+    rating: number,
+    comments: string,
+    images: File[],
+    orderItemId: string,
+  ): Observable<{ message: string; data: IReview }> {
+    const formData = new FormData();
+    formData.append('rating', rating.toString());
+    formData.append('comments', comments);
+    formData.append('orderItemId', orderItemId);
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images', images[i]);
+    }
     return this.http
-      .post<{ message: string; data: IReview }>(`${environment.backend_url}/reviews`, data, {
+      .post<{ message: string; data: IReview }>(`${environment.backend_url}/reviews`, formData, {
         withCredentials: true,
       })
       .pipe(retry(2), catchError(this.handleError));
@@ -26,11 +38,17 @@ export class ReviewService {
       )
       .pipe(retry(2), catchError(this.handleError));
   }
-  getReviewsByUser(): Observable<{ message: string; data: IReview[] }> {
+  getReviewsByUser(): Observable<{
+    message: string;
+    data: (Omit<IReview, 'product_id'> & { product_id: Iproduct })[];
+  }> {
     return this.http
-      .get<{ message: string; data: IReview[] }>(`${environment.backend_url}/reviews/user`, {
-        withCredentials: true,
-      })
+      .get<{ message: string; data: (Omit<IReview, 'product_id'> & { product_id: Iproduct })[] }>(
+        `${environment.backend_url}/reviews/user`,
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   getNewsReviewByAdmin(): Observable<{ message: string; data: IReview[] }> {

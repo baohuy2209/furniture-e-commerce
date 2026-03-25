@@ -13,6 +13,12 @@ const path = require("path");
 const { formatVND } = require("../utils/utils");
 const UserAddress = require("../app/models/userAddress.model");
 class OrderService {
+  async updateOrderItemsReview(orderItemId) {
+    const itemOrder = await OrderItem.findByIdAndUpdate(orderItemId, {
+      reviewed: true,
+    });
+    return itemOrder;
+  }
   async checkout(userId, checkoutData) {
     const { address_id, shipping_method, shipping_fee, payment_method, note } =
       checkoutData;
