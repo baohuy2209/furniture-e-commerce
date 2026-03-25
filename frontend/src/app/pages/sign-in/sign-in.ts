@@ -39,7 +39,7 @@ export class SignIn {
         }
         this.success = res.message;
         f.reset();
-        if (res.data.roles.includes('ROLE_ADMIN')) {
+        if (res.data.roles.includes('ROLE_ADMIN') || res.data.roles.includes('ROLE_MODERATOR')) {
           this.router.navigate(['/admin']);
           return;
         }
