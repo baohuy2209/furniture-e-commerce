@@ -27,7 +27,7 @@ export class WarehouseService {
     return this.http
       .post<{ message: string; data: IWarehouse }>(
         `${environment.backend_url}/warehouse`,
-        { data },
+        data,
         {
           withCredentials: true,
         },
@@ -38,7 +38,7 @@ export class WarehouseService {
     return this.http
       .patch<{ message: string; data: IWarehouse }>(
         `${environment.backend_url}/warehouse/${id}`,
-        { data },
+        data,
         {
           withCredentials: true,
         },

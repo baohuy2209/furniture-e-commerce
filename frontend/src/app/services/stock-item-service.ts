@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, Observable, retry, tap, throwError } from 'rxjs';
+import { catchError, Observable, retry, throwError } from 'rxjs';
 import { IAdminStockItem, IStockItem } from '../../interface';
 import { environment } from '../../environments/environment.development';
 

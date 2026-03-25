@@ -223,6 +223,14 @@ export const routes: Routes = [
             (m) => m.ManagementWarehouse,
           ),
       },
+      {
+        path: 'management-voucher',
+        loadComponent: () =>
+          import('./admins/pages/management-voucher/management-voucher').then(
+            (m) => m.ManagementVoucher,
+          ),
+      },
     ],
+    canActivate: [authGuard],
   },
 ];

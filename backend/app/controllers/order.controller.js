@@ -125,7 +125,7 @@ class OrderController {
     }
   }
 
-  // [PUT] /api/orders/admin/item-status/:orderItemId
+  // [PATCH] /api/orders/admin/item-status/:orderItemId
   async updateOrderItemStatus(req, res) {
     try {
       const { status } = req.body;
@@ -144,7 +144,7 @@ class OrderController {
     }
   }
 
-  // [PUT] /api/orders/admin/payment-status/:paymentId
+  // [PATCH] /api/orders/admin/payment-status/:paymentId
   async updatePaymentStatus(req, res) {
     try {
       const { status } = req.body;

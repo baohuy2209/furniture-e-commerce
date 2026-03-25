@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px; }
+        .header { background-color: #4a5568; color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+        .content { padding: 20px; }
+        .footer { text-align: center; font-size: 12px; color: #777; padding: 20px; }
+        .label { font-weight: bold; color: #4a5568; }
+        .message-box { background-color: #f7fafc; padding: 15px; border-left: 4px solid #4a5568; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Hỗ trợ khách hàng - HomeBase</h2>
+        </div>
+        <div class="content">
+            <p>Xin chào <strong>{{customerName}}</strong>,</p>
+            <p>Chúng tôi đã nhận được yêu cầu hỗ trợ của bạn về việc: <strong>{{subject}}</strong> (Mã yêu cầu: {{inquiryId}}).</p>
+            
+            <p><span class="label">Câu hỏi của bạn:</span></p>
+            <div class="message-box">{{customerMessage}}</div>
+
+            <p><span class="label">Phản hồi từ đội ngũ hỗ trợ:</span></p>
+            <div class="message-box">{{staffResponse}}</div>
+
+            <p>Nếu bạn có bất kỳ thắc mắc nào khác, vui lòng phản hồi email này hoặc liên hệ với chúng tôi qua số điện thoại hỗ trợ.</p>
+            <p>Trân trọng,</p>
+            <p>Đội ngũ HomeBase</p>
+        </div>
+        <div class="footer">
+            <p>© 2026 HomeBase Furniture. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -24,9 +24,16 @@ const registerEventRoute = require("./registerEvent.routes");
 const stockItemRoute = require("./stockItem.routes");
 const stockMovementRoute = require("./stockMovement.routes");
 const warehouseRoute = require("./warehouse.routes");
+const adminProductRoute = require("./admin.product.routes");
+const adminVoucherRoute = require("./admin.voucher.routes");
+const poRoute = require("./purchaseOrder.routes");
+const uploadRoute = require("./upload.routes");
+
 function route(app) {
   app.use("/api/auth", authRoute);
   app.use("/api/products", productRoute);
+  app.use("/api/admin/products", adminProductRoute);
+  app.use("/api/admin/vouchers", adminVoucherRoute);
   app.use("/api/blogs", blogRoute);
   app.use("/api/events", eventRoute);
   app.use("/api/register-events", registerEventRoute);
@@ -51,5 +58,7 @@ function route(app) {
   app.use("/api/stock-items", stockItemRoute);
   app.use("/api/stock-movements", stockMovementRoute);
   app.use("/api/warehouse", warehouseRoute);
+  app.use("/api/admin/purchase-orders", poRoute);
+  app.use("/api/upload", uploadRoute);
 }
 module.exports = route;

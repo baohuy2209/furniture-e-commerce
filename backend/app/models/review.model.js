@@ -10,6 +10,11 @@ const reviewSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    order_item_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "OrderItem",
+      required: true,
+    },
     rating: {
       type: Number,
       required: true,

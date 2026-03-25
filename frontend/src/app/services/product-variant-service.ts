@@ -45,6 +45,20 @@ export class ProductVariantService {
       )
       .pipe(retry(2), catchError(this.handleError));
   }
+  getVariantByMeasurementFields(
+    productId: string,
+    filters: Record<string, string>, // { upholstery: "Belge...", sofa_direction: "left" }
+  ): Observable<{ message: string; data: Iproduct_variants }> {
+    return this.http
+      .get<{ message: string; data: Iproduct_variants }>(
+        `${environment.backend_url}/product-variant/products/${productId}/select`,
+        {
+          params: filters,
+          withCredentials: true,
+        },
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
   handleError(err: HttpErrorResponse) {
     return throwError(() => err);
   }

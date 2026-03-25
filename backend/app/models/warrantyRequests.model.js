@@ -9,6 +9,8 @@ const warrantyRequestSchemas = new mongoose.Schema(
     request_date: {
       type: Date,
     },
+    order_id: { type: String },
+    order_item_id: { type: String },
     fullname: {
       type: String,
       required: true,
@@ -28,6 +30,10 @@ const warrantyRequestSchemas = new mongoose.Schema(
       enum: ["unresolved", "resolved", "rejected"],
       default: "unresolved",
     },
+    warranty_method: {
+      type: String,
+    },
+    warranty_reasons: [{ type: String }],
     approved_by: {
       type: String,
     },

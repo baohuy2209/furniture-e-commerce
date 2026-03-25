@@ -12,7 +12,15 @@ const fs = require("fs");
 const path = require("path");
 const { formatVND } = require("../utils/utils");
 const UserAddress = require("../app/models/userAddress.model");
+const productService = require("../services/product.service");
+const userService = require("../services/user.service");
 class OrderService {
+  async updateOrderItemsReview(orderItemId) {
+    const itemOrder = await OrderItem.findByIdAndUpdate(orderItemId, {
+      reviewed: true,
+    });
+    return itemOrder;
+  }
   async checkout(userId, checkoutData) {
     const { address_id, shipping_method, shipping_fee, payment_method, note } =
       checkoutData;
@@ -66,7 +74,10 @@ class OrderService {
         item_subtotal: item.subtotal,
         status: "pending",
       });
-
+      await productService.changeAboutInventory(
+        orderItem.product_variant_id,
+        item.quantity,
+      );
       const itemShippingFee = isFirst ? shipping_fee : 0; // Gom hết shipping fee vào item đầu tiên
 
       const orderItemShipping = await OrderItemShipping.create({
@@ -85,7 +96,13 @@ class OrderService {
 
       isFirst = false;
     }
-
+    const { data, message } = await userService.increasePointOnPrice(
+      userId,
+      order.total_amount,
+    );
+    if (!data) {
+      return message;
+    }
     // Xóa giỏ hàng
     await CartItem.deleteMany({ cart_id: cart._id });
     await Cart.findByIdAndUpdate(cart._id, { total_item: 0, total_amount: 0 });
@@ -156,6 +173,10 @@ class OrderService {
       payment_method: "cod",
       status: "pending",
     });
+    await productService.changeAboutInventory(
+      orderItem.product_variant_id,
+      orderItem.quantity,
+    );
     const transporter = nodemailer.createTransport({
       service: "gmail",
       port: 587,

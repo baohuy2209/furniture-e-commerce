@@ -1,4 +1,4 @@
-<div class="product-card">
+<div class="product-card" (click)="navigateProductDetail()">
   @if (productInfo.discount_percent !== 0) {
     <span class="sale-badge">SALE {{ productInfo.discount_percent }}%</span>
   }

@@ -56,7 +56,7 @@ class WarehouseController {
         });
       }
       return res.status(200).json({
-        message: "Đã cập nhật thành công loại sản phẩm",
+        message: "Cập nhật thông tin nhà kho thành công",
         data: updatedWarehouse,
       });
     } catch (e) {

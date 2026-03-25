@@ -15,6 +15,7 @@ export class Features {
         quantity: 120,
         image_url:
           'images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_arezzon_fabric_3331/main/image.png',
+        url: '/products',
       },
       {
         id: 2,
@@ -22,6 +23,7 @@ export class Features {
         quantity: 85,
         image_url:
           'images/products/dinning_room/kingston_dining_table/h29_w39_l63/table_dark_oak_veneer/leg_matt_black_lacquered/main/image.png',
+        url: '/products',
       },
       {
         id: 3,
@@ -29,18 +31,21 @@ export class Features {
         quantity: 95,
         image_url:
           'images/products/bedroom/lugano_nightstand/cabinet_matte_ash_gray_lacquered/leg_ash_gray_lacquered/main/image.png',
+        url: '/products',
       },
       {
         id: 4,
         name: 'Giường ngủ',
         quantity: 120,
         image_url: 'images/products/bedroom/bolzano_bed/red_lucca_fabric_3323/main/image.png',
+        url: '/products',
       },
       {
         id: 5,
         name: 'Vật dụng trang trí',
         quantity: 45,
         image_url: 'images/products/bathroom/whirlwind_rug/w67_l94/main/image.png',
+        url: '/products',
       },
     ],
     rooms: [

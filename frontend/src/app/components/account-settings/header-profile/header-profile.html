@@ -1,11 +1,23 @@
 <div class="card user-header-banner-card mb-4">
   <div class="card-body">
     <div class="d-flex user-info-header">
-      <img
-        [src]="user?.avatar ? user?.avatar : 'user/image.png'"
-        alt="User Avatar"
-        class="profile-avatar-lg me-4"
-      />
+      <div class="avatar-wrapper">
+        <img
+          [src]="user?.avatar ? user?.avatar : 'user/image.png'"
+          alt="User Avatar"
+          class="profile-avatar-lg"
+        />
+        <button class="btn-avatar-edit" (click)="avatarInput.click()" title="Đổi ảnh đại diện">
+          <i class="fa-solid fa-pencil"></i>
+        </button>
+        <input
+          #avatarInput
+          type="file"
+          (change)="onAvatarSelected($event)"
+          hidden
+          accept="image/*"
+        />
+      </div>
       <div>
         <h2>{{ user?.name }}</h2>
         <p>{{ user?.email }}</p>

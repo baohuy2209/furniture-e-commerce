@@ -23,6 +23,15 @@ export class UserService {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
+  updateUserAvatar(file: File): Observable<{ message: string }> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http
+      .patch<{ message: string }>(`${environment.backend_url}/user/profile/images`, formData, {
+        withCredentials: true,
+      })
+      .pipe(retry(2), catchError(this.handleError));
+  }
   changePassword(oldPassword: string, newPassword: string): Observable<{ message: string }> {
     return this.http
       .post<{ message: string }>(
@@ -53,6 +62,27 @@ export class UserService {
       .post<{ message: string; data: IUser }>(`${environment.backend_url}/user/create-user`, data, {
         withCredentials: true,
       })
+      .pipe(retry(2), catchError(this.handleError));
+  }
+  getAllInfoUser(): Observable<{ message: string; data: IUser[] }> {
+    return this.http
+      .get<{ message: string; data: IUser[] }>(`${environment.backend_url}/user/admin/`, {
+        withCredentials: true,
+      })
+      .pipe(retry(2), catchError(this.handleError));
+  }
+  changeStatusAccount(
+    userId: string,
+    status: string,
+  ): Observable<{ message: string; data: IUser }> {
+    return this.http
+      .post<{ message: string; data: IUser }>(
+        `${environment.backend_url}/user/admin/${userId}`,
+        { status },
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   handleError(err: HttpErrorResponse) {

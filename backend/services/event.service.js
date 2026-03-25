@@ -3,6 +3,7 @@ class EventService {
   async getPastEvents() {
     try {
       const listPastEvents = await Event.find({
+        status: "PUBLISHED",
         "date_range.endDate": { $lt: new Date() },
       });
       return {
@@ -17,6 +18,7 @@ class EventService {
   async getUpcommingEvents() {
     try {
       const listUpcommingEvents = await Event.find({
+        status: "PUBLISHED",
         "date_range.startDate": { $gt: new Date() },
       });
       return {
@@ -31,6 +33,7 @@ class EventService {
   async getCurrentEvents() {
     try {
       const happeningEvents = await Event.find({
+        status: "PUBLISHED",
         "date_range.startDate": { $lt: new Date() },
         "date_range.endDate": { $gt: new Date() },
       });

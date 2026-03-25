@@ -1,4 +1,4 @@
-const { cloudinary } = require("../server");
+const cloudinary = require("../app/config/cloudinary");
 const { OAuth2Client } = require("google-auth-library");
 // Chuẩn hóa tên
 function normalize(str = "") {
@@ -66,7 +66,8 @@ async function uploadImage(file, folder = "furniture-e-commer") {
 }
 const getPagination = (page, size) => {
   const limit = size ? +size : 20;
-  const offset = page ? page * limit : 0;
+  const p = page ? +page : 1;
+  const offset = (p > 0 ? p - 1 : 0) * limit;
   return { limit, offset };
 };
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);

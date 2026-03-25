@@ -11,12 +11,16 @@ import {
   Iproduct,
   Iproduct_variants,
   Iproduct_variants_image,
+  IReview,
   IUser,
 } from '../../../interface';
 import { Product } from '../../services/product';
 import { formatPrice } from '../../utils/utils';
 import { CardProduct } from '../../components/card-product/card-product';
-import { ProductReviews } from '../../components/product-details/product-reviews/product-reviews';
+import {
+  ProductReviews,
+  ReviewSummary,
+} from '../../components/product-details/product-reviews/product-reviews';
 import { ToastService } from '../../services/toast-service';
 import { AuthService } from '../../services/auth';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +28,8 @@ import { HttpClient } from '@angular/common/http';
 import { AddressService } from '../../services/address-service';
 import { UserService } from '../../services/user-service';
 import { OrderServices } from '../../services/order-services';
+import { ReviewService } from '../../services/review-service';
+import { forkJoin, map, of, switchMap } from 'rxjs';
 declare var bootstrap: any;
 const SHIPPING_FEE_FOR_GUEST = 150000;
 interface Province {
@@ -84,6 +90,12 @@ export class ProductDetails implements OnInit {
   isShowAddressModel: boolean = false;
   isShowUserInfoModal: boolean = false;
   selectedLeg = 'beige';
+  allReviewProduct: (Omit<IReview, 'user_id'> & { user_id: IUser })[] = [];
+  summaryReviewProduct: ReviewSummary = {
+    average: 0,
+    total: 0,
+    distribution: [],
+  };
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -98,6 +110,7 @@ export class ProductDetails implements OnInit {
     private userAddressService: AddressService,
     private userService: UserService,
     private orderService: OrderServices,
+    private reviewService: ReviewService,
   ) {}
   setActive(index: number): void {
     this.activeIndex = index;
@@ -116,8 +129,14 @@ export class ProductDetails implements OnInit {
         this.current_product_variant = res.data.defaultProductVariant;
         if (res.data.productInfo.product_component) {
           for (const [key, value] of Object.entries(res.data.productInfo.product_component)) {
-            this.productVariantComponent[key] = value;
-            this.productVariantComponentActive[key] = 0;
+            this.productVariantComponent[key] = value as string[];
+
+            // ✅ Sync index từ measurement của default variant
+            const defaultValue = (
+              res.data.defaultProductVariant.measurement as Record<string, any>
+            )?.[key];
+            const defaultIndex = defaultValue ? (value as string[]).indexOf(defaultValue) : 0;
+            this.productVariantComponentActive[key] = defaultIndex >= 0 ? defaultIndex : 0;
           }
         }
         this.success = res.message;
@@ -137,6 +156,7 @@ export class ProductDetails implements OnInit {
             this.cdr.detectChanges();
           },
         });
+        this.loadReviewsWithUser(this.product_id!);
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -151,6 +171,52 @@ export class ProductDetails implements OnInit {
     this.http
       .get<Province[]>('http://localhost:3000/provinces')
       .subscribe((data) => this.provinces.set(data));
+  }
+  loadSummaryProductViews() {
+    this.summaryReviewProduct.average = this.current_product_variant?.rating.average!;
+    this.summaryReviewProduct.total = this.current_product_variant?.rating.count!;
+    this.summaryReviewProduct.distribution = [
+      { star: 5, count: this.getLengthfilterReviewByStar(5) },
+      { star: 4, count: this.getLengthfilterReviewByStar(4) },
+      { star: 3, count: this.getLengthfilterReviewByStar(3) },
+      { star: 2, count: this.getLengthfilterReviewByStar(2) },
+      { star: 1, count: this.getLengthfilterReviewByStar(1) },
+    ];
+  }
+  getLengthfilterReviewByStar(star: number) {
+    return this.allReviewProduct.filter((review) => review.rating === star).length;
+  }
+  loadReviewsWithUser(productId: string) {
+    this.reviewService
+      .getReviewsByProduct(productId)
+      .pipe(
+        switchMap((res) => {
+          const reviews = res.data;
+
+          if (reviews.length === 0) return of([]);
+
+          return forkJoin(
+            reviews.map((review) =>
+              this.userService.getUserInfo().pipe(
+                map((userRes) => ({
+                  ...review,
+                  user_id: userRes.data,
+                })),
+              ),
+            ),
+          );
+        }),
+      )
+      .subscribe({
+        next: (data) => {
+          this.allReviewProduct = data;
+          this.loadSummaryProductViews();
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.toastService.error('Có lỗi khi tải đánh giá sản phẩm');
+        },
+      });
   }
   incQty(): void {
     this.qty++;
@@ -333,15 +399,40 @@ export class ProductDetails implements OnInit {
     });
   }
 
+  selectUpholsteryAndClose(value: string): void {
+    const index = this.productVariantComponent['upholstery']?.indexOf(value);
+    if (index === -1 || index === undefined) return;
+    this.selectComponentVariantValue('upholstery', index);
+  }
   selectComponentVariantValue(key: string, index: number) {
     this.productVariantComponentActive[key] = index;
-    console.log(this.productVariantComponentActive);
-  }
-  selectUpholsteryAndClose(option: string): void {
-    // this.selectedId = option.id;
-    // this.selectedOption = option;
-    // this.optionSelected.emit(option);
-    // this.isOpen = false;
-    console.log(option);
+
+    // Build filter từ tất cả các key đang active
+    const filters: Record<string, string> = {};
+    for (const [k, idx] of Object.entries(this.productVariantComponentActive)) {
+      filters[k] = this.productVariantComponent[k][idx];
+    }
+
+    this.productVariantService
+      .getVariantByMeasurementFields(this.product_id!, filters)
+      .pipe(
+        switchMap((res) => {
+          this.current_product_variant = res.data;
+          this.loadSummaryProductViews();
+
+          return this.productVariantImageSerivce.getAllImageByProductVariantId(res.data._id);
+        }),
+      )
+      .subscribe({
+        next: (imgRes) => {
+          this.images = imgRes.data; // ✅ cập nhật ảnh gallery
+          this.activeIndex = 0; // reset về ảnh đầu
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          if (err.status === 404) return; // không tìm thấy → không làm gì
+          this.toastService.error('Có lỗi khi tải biến thể sản phẩm');
+        },
+      });
   }
 }

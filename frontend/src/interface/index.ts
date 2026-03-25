@@ -18,6 +18,8 @@ export interface IUser {
   points: number;
   roles: string[];
   dob: string;
+  authProvider?: string;
+  googleId?: string;
   createdAt: Date;
 }
 export interface ILogin {
@@ -44,7 +46,7 @@ export interface IListProducts {
   product_name: string;
   description: string;
   discount_percent: number;
-  tags: string;
+  tags: string[];
   price: number;
   num_selled: number;
   rating: number;
@@ -129,14 +131,18 @@ export interface IUpholstery {
 export interface IWarrantyRequest {
   _id: string;
   user_id: string;
+  order_id?: string;
+  order_item_id?: string;
   request_date: Date;
   fullname: string;
   email: string;
   phone: string;
   issue_description: string;
-  warranty_status: string;
+  warranty_status?: string;
+  warranty_method: string;
+  warranty_reasons: string[];
   approved_by: string;
-  approved_data: Date;
+  approved_date: Date;
   resolution_note: string;
   completed_date: Date;
   product_variant_id: string;
@@ -147,12 +153,15 @@ export interface IWarrantyImage {
   image_url: string[];
 }
 export interface IReview {
-  _id: string;
+  _id?: string;
   product_id: string;
   user_id: string;
+  order_item_id: string;
   rating: number;
   comments: string;
   images: string[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 export interface IEvent {
   _id: string;
@@ -161,7 +170,7 @@ export interface IEvent {
   description: string;
   images: {
     url_image: string;
-    is_main: string;
+    is_main: boolean;
   }[];
   category: string;
   hightlight_des: string[];
@@ -237,6 +246,8 @@ export interface IOrder {
   note: string;
   completed_at: string;
   cancel_reason: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 export interface IOrderItem {
   _id: string;
@@ -249,15 +260,23 @@ export interface IOrderItem {
   item_subtotal: number;
   status: 'pending' | 'packed' | 'shipped' | 'delivered' | 'cancelled' | 'returned';
   reviewed: boolean;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 export interface ICustomerInquiry {
   _id: string;
-  user_id: string;
+  user_id: string | { _id: string; name: string; email: string; phone: string };
+  category: string;
   subject: string;
   message: string;
-  status: string;
-  resolving_staff_id: string;
-  staff_response: string;
+  status?: string;
+  priority?: string;
+  resolving_staff_id?: string | { _id: string; name: string };
+  staff_response?: string;
+  internal_notes?: string;
+  due_date?: Date | string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 export interface IAddress {
   _id: string;
@@ -380,4 +399,39 @@ export interface IPayment {
   payment_method: string;
   status: string;
   paid_at: string | Date;
+}
+export interface IOrderAdmin {
+  _id: string;
+  user_id: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  order_number: string;
+  status: string;
+  before_total: number;
+  discount_total: number;
+  total_shipping_fee: number;
+  total_amount: number;
+  payment_status: string;
+  note: string;
+  cancel_reason: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
+export interface IVoucher {
+  _id?: string;
+  user: string;
+  voucher_name: string;
+  code: string;
+  value: number;
+  type: string;
+  min_order_value: number;
+  usage_limit: number;
+  used_count: number;
+  start_date: Date;
+  end_date: Date;
+  status: 'active' | 'paused' | 'expired' | 'pending';
+  appliedTo: string;
+  applied_products: string[];
 }
