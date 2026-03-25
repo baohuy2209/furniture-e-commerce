@@ -20,14 +20,12 @@ export class FlashSale {
   categories = [
     {
       category_name: 'BED',
-      image_url:
-        'https://images.unsplash.com/photo-1505693419148-de0462054ff5?w=200&h=200&fit=crop',
+      image_url: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6',
       is_highlight: false,
     },
     {
       category_name: 'CHAIR',
-      image_url:
-        'https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=200&h=200&fit=crop',
+      image_url: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0',
       is_highlight: true,
     },
   ];

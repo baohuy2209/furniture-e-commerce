@@ -29,7 +29,12 @@
                 <h4 class="cat-name" [class.text-orange]="cat.is_highlight">
                   {{ cat.category_name }}
                 </h4>
-                <img [src]="cat.image_url" [alt]="cat.category_name" class="cat-img" />
+                <img
+                  [src]="cat.image_url"
+                  [alt]="cat.category_name"
+                  class="cat-img"
+                  style="object-fit: cover"
+                />
               </div>
             }
           </div>

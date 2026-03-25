@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { IReview, IUser } from '../../../../interface';
+import { formatDate } from '../../../utils/utils';
 export interface ReviewSummary {
   average: number;
   total: number;
@@ -24,51 +26,20 @@ export interface Review {
   standalone: true,
 })
 export class ProductReviews {
-  @Input() summary: ReviewSummary = {
-    average: 4.8,
-    total: 100,
-    distribution: [
-      { star: 5, count: 78 },
-      { star: 4, count: 12 },
-      { star: 3, count: 6 },
-      { star: 2, count: 3 },
-      { star: 1, count: 1 },
-    ],
-  };
+  @Input() summary!: ReviewSummary;
+  // {
+  //   average: 4.8,
+  //   total: 100,
+  //   distribution: [
+  //     { star: 5, count: 78 },
+  //     { star: 4, count: 12 },
+  //     { star: 3, count: 6 },
+  //     { star: 2, count: 3 },
+  //     { star: 1, count: 1 },
+  //   ],
+  // };
 
-  @Input() reviews: Review[] = [
-    {
-      username: 'Xhin22',
-      avatar: 'https://i.pravatar.cc/150?img=47',
-      totalReviews: 1,
-      rating: 5,
-      comments:
-        'Đây là chiếc sofa đầu tiên và duy nhất tôi đặt mua trên HomeBase, và tôi thực sự rất hài lòng! Tôi đã yêu cầu thiết kế sofa theo ý riêng, dựa trên hai tông màu tôi yêu thích, và kết quả thật tuyệt vời. Cảm giác thoải mái và niềm vui chân thật mà chiếc sofa này mang lại thật khó diễn tả — vừa tinh tế, vừa gần gũi.',
-      images: [
-        'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=300&q=80',
-        'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&q=80',
-      ],
-      timeAgo: '1 tháng trước',
-    },
-    {
-      username: 'MinhTuan',
-      totalReviews: 3,
-      rating: 4.5,
-      comments:
-        'Chất lượng vải rất tốt, đóng gói cẩn thận. Giao hàng nhanh hơn dự kiến. Màu sắc thực tế đẹp hơn trên ảnh sản phẩm.',
-      timeAgo: '2 tháng trước',
-    },
-    {
-      username: 'LinhNguyen',
-      avatar: 'https://i.pravatar.cc/150?img=32',
-      totalReviews: 7,
-      rating: 5,
-      comments:
-        'Sofa đẹp lắm, ngồi cực kỳ thoải mái. Gia đình tôi ai cũng khen. Sẽ giới thiệu cho bạn bè!',
-      images: ['https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=300&q=80'],
-      timeAgo: '3 tháng trước',
-    },
-  ];
+  @Input() reviews!: (Omit<IReview, 'user_id'> & { user_id: IUser })[];
 
   lightboxImage: string | null = null;
 
@@ -99,5 +70,8 @@ export class ProductReviews {
 
   closeLightbox(): void {
     this.lightboxImage = null;
+  }
+  formatDateTime(date: Date | string) {
+    return formatDate(date);
   }
 }

@@ -23,6 +23,15 @@ export class UserService {
       })
       .pipe(retry(2), catchError(this.handleError));
   }
+  updateUserAvatar(file: File): Observable<{ message: string }> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http
+      .patch<{ message: string }>(`${environment.backend_url}/user/profile/images`, formData, {
+        withCredentials: true,
+      })
+      .pipe(retry(2), catchError(this.handleError));
+  }
   changePassword(oldPassword: string, newPassword: string): Observable<{ message: string }> {
     return this.http
       .post<{ message: string }>(

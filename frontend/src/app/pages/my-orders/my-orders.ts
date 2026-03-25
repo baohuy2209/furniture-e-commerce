@@ -119,6 +119,11 @@ export class MyOrders implements OnInit {
       )
       .subscribe({
         next: (res) => {
+          if (res.data.assignedVoucher != null) {
+            this.toastService.success(
+              `Bạn đã hoàn thành đánh giá và được tặng thêm voucher ${res.data.assignedVoucher.voucher_name}`,
+            );
+          }
           this.toastService.success(res.message);
           form.reset();
           this.selectedFile = [];

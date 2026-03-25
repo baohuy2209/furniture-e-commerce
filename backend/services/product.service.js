@@ -2,6 +2,8 @@ const ProductVariant = require("../app/models/productVariant.model");
 const ProductVariantImage = require("../app/models/productVariantImage.model");
 const ProductTags = require("../app/models/productTags.model");
 const ProductCategory = require("../app/models/productCategory.model");
+const StockItem = require("../app/models/stockItem.model");
+const stockService = require("../services/stock.service");
 class ProductService {
   async getListProductInfo(products) {
     const listProductInfo = await Promise.all(
@@ -92,6 +94,45 @@ class ProductService {
   async getProductCategoriesIdBySlug(slug) {
     const productCategory = await ProductCategory.findOne({ slug: slug });
     return productCategory._id;
+  }
+  // Thay đổi số lượng khi được khách hàng hoặc mua
+  async changeAboutInventory(product_variant_id, quantity) {
+    const stockItem = await StockItem.findOne({ product_variant_id });
+    if (!stockItem) throw new Error("Không tìm thấy tồn kho");
+    await stockService.decreaseStock(product_variant_id, quantity);
+    const productVariant = await ProductVariant.findByIdAndUpdate(
+      product_variant_id,
+      {
+        $inc: {
+          num_selled: quantity,
+          num_inventory: -quantity,
+        },
+      },
+    );
+    return productVariant;
+  }
+  async updateProductVariantRating(product_variant_id, newRating) {
+    // Lấy rating hiện tại
+    const variant = await ProductVariant.findById(product_variant_id);
+    if (!variant) throw new Error("Không tìm thấy sản phẩm");
+
+    const currentCount = variant.rating.count || 0;
+    const currentAverage = variant.rating.average || 0;
+
+    // Tính average mới
+    const newCount = currentCount + 1;
+    const newAverage = (currentAverage * currentCount + newRating) / newCount;
+
+    return await ProductVariant.findByIdAndUpdate(
+      product_variant_id,
+      {
+        $set: {
+          "rating.average": Math.round(newAverage * 10) / 10, // làm tròn 1 chữ số thập phân
+          "rating.count": newCount,
+        },
+      },
+      { new: true },
+    );
   }
 }
 

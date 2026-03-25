@@ -99,7 +99,11 @@ export class MyPromotions implements OnInit {
     this.promotionService.getUserPoints().subscribe({
       next: (res) => {
         this.userPoints = res.data;
-        this.cdr;
+        this.vipInfo.set({
+          ...this.vipInfo(), // giữ các trường cũ
+          currentPoints: res.data,
+        });
+        this.cdr.detectChanges();
       },
       error: (err) => {
         if (err.status === 404 || err.status === 400 || err.status === 401) {

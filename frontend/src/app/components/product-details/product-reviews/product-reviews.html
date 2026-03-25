@@ -5,19 +5,20 @@
     <div class="rv-score-block">
       <div class="rv-score-number">{{ summary.average }}<span class="rv-score-denom">/5</span></div>
       <div class="rv-stars">
-        <span
-          *ngFor="let s of getStars(summary.average)"
-          class="rv-star"
-          [class.rv-star--full]="s === 'full'"
-          [class.rv-star--half]="s === 'half'"
-        >
-          <svg width="18" height="18" viewBox="0 0 20 20">
-            <polygon
-              points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"
-              [attr.fill]="s === 'full' ? '#F59E0B' : s === 'half' ? '#F59E0B' : '#E5E7EB'"
-            />
-          </svg>
-        </span>
+        @for (s of getStars(summary.average); track $index) {
+          <span
+            class="rv-star"
+            [class.rv-star--full]="s === 'full'"
+            [class.rv-star--half]="s === 'half'"
+          >
+            <svg width="18" height="18" viewBox="0 0 20 20">
+              <polygon
+                points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"
+                [attr.fill]="s === 'full' ? '#F59E0B' : s === 'half' ? '#F59E0B' : '#E5E7EB'"
+              />
+            </svg>
+          </span>
+        }
       </div>
       <div class="rv-total">{{ summary.total }} đánh giá</div>
     </div>
@@ -26,13 +27,15 @@
 
     <!-- Bar chart -->
     <div class="rv-bars">
-      <div *ngFor="let bar of summary.distribution" class="rv-bar-row">
-        <span class="rv-bar-label">{{ bar.star }} sao</span>
-        <div class="rv-bar-track">
-          <div class="rv-bar-fill" [style.width.%]="getBarPercent(bar.count)"></div>
+      @for (bar of summary.distribution; track $index) {
+        <div class="rv-bar-row">
+          <span class="rv-bar-label">{{ bar.star }} sao</span>
+          <div class="rv-bar-track">
+            <div class="rv-bar-fill" [style.width.%]="getBarPercent(bar.count)"></div>
+          </div>
+          <span class="rv-bar-count">{{ bar.count }}</span>
         </div>
-        <span class="rv-bar-count">{{ bar.count }}</span>
-      </div>
+      }
     </div>
   </div>
 
@@ -41,55 +44,70 @@
 
   <!-- Review list -->
   <div class="rv-list">
-    <div *ngFor="let review of reviews" class="rv-card">
-      <div class="rv-card-header">
-        <!-- Avatar + user info -->
-        <div class="rv-user">
-          <div class="rv-avatar">
-            <img *ngIf="review.avatar" [src]="review.avatar" [alt]="review.username" />
-            <span *ngIf="!review.avatar">{{ getInitials(review.username) }}</span>
+    @if (reviews.length > 0) {
+      @for (review of reviews; track $index) {
+        <div class="rv-card">
+          <div class="rv-card-header">
+            <!-- Avatar + user info -->
+            <div class="rv-user">
+              <div class="rv-avatar">
+                <img
+                  [src]="review.user_id.avatar ? review.user_id.avatar : 'user/image.png'"
+                  [alt]="review.user_id.name"
+                />
+                <span>{{ getInitials(review.user_id.username) }}</span>
+              </div>
+              <div class="rv-user-info">
+                <span class="rv-username">{{ review.user_id.name }}</span>
+              </div>
+            </div>
+            <!-- Date -->
+            <span class="rv-date">{{ formatDateTime(review.createdAt) }}</span>
           </div>
-          <div class="rv-user-info">
-            <span class="rv-username">{{ review.username }}</span>
-            <span class="rv-user-count">Tổng lượt đánh giá: {{ review.totalReviews }}</span>
+
+          <!-- Stars + rating -->
+          <div class="rv-card-rating">
+            <span
+              *ngFor="let s of getStars(review.rating)"
+              class="rv-star rv-star--sm"
+              [class.rv-star--full]="s === 'full'"
+              [class.rv-star--half]="s === 'half'"
+            >
+              <svg width="14" height="14" viewBox="0 0 20 20">
+                <polygon
+                  points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"
+                  [attr.fill]="s === 'full' ? '#F59E0B' : s === 'half' ? '#F59E0B' : '#E5E7EB'"
+                />
+              </svg>
+            </span>
+            <span class="rv-rating-num">{{ review.rating.toFixed(1) }}</span>
           </div>
+
+          <!-- Comment -->
+          <p class="rv-comment">{{ review.comments }}</p>
+
+          <!-- Images -->
+          @if (review.images && review.images.length) {
+            <div class="rv-images">
+              @for (img of review.images; track $index) {
+                <div class="rv-img-wrap" (click)="openImage(img)">
+                  <img [src]="img" alt="Review image" />
+                </div>
+              }
+            </div>
+          }
         </div>
-        <!-- Date -->
-        <span class="rv-date">{{ review.timeAgo }}</span>
-      </div>
-
-      <!-- Stars + rating -->
-      <div class="rv-card-rating">
-        <span
-          *ngFor="let s of getStars(review.rating)"
-          class="rv-star rv-star--sm"
-          [class.rv-star--full]="s === 'full'"
-          [class.rv-star--half]="s === 'half'"
-        >
-          <svg width="14" height="14" viewBox="0 0 20 20">
-            <polygon
-              points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7"
-              [attr.fill]="s === 'full' ? '#F59E0B' : s === 'half' ? '#F59E0B' : '#E5E7EB'"
-            />
-          </svg>
-        </span>
-        <span class="rv-rating-num">{{ review.rating.toFixed(1) }}</span>
-      </div>
-
-      <!-- Comment -->
-      <p class="rv-comment">{{ review.comments }}</p>
-
-      <!-- Images -->
-      <div *ngIf="review.images && review.images.length" class="rv-images">
-        <div *ngFor="let img of review.images" class="rv-img-wrap" (click)="openImage(img)">
-          <img [src]="img" alt="Review image" />
-        </div>
-      </div>
-    </div>
+      }
+    }
+    @if (reviews.length === 0) {
+      <p class="p-4">Chưa có bình luận nào</p>
+    }
   </div>
 </div>
 
 <!-- Lightbox -->
-<div class="rv-lightbox" *ngIf="lightboxImage" (click)="closeLightbox()">
-  <img [src]="lightboxImage" alt="Lightbox" />
-</div>
+@if (lightboxImage) {
+  <div class="rv-lightbox" (click)="closeLightbox()">
+    <img [src]="lightboxImage" alt="Lightbox" />
+  </div>
+}

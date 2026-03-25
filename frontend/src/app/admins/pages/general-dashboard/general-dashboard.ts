@@ -32,44 +32,6 @@ type OrderStatus =
   | 'exchange_requested'
   | 'exchanged';
 
-interface ORDER {
-  order_id: string;
-  order_number: string;
-  user_id: string;
-  status: OrderStatus;
-  total_amount: number;
-  created_at: string; // ISO
-}
-
-interface USER_MIN {
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  phone: string;
-}
-
-interface ORDER_ITEM_MIN {
-  order_item_id: string;
-  order_id: string;
-  product_id: string;
-  quantity: number;
-}
-
-interface PRODUCT_MIN {
-  product_id: string;
-  product_name: string;
-  image_url?: string;
-}
-
-interface REVIEW {
-  review_id: string;
-  user_id: string;
-  product_id: string;
-  rating: number; // 1..5
-  comment: string;
-  created_at: string; // ISO
-}
-
 function n(x: any, fallback = 0): number {
   const v = Number(x);
   return Number.isFinite(v) ? v : fallback;
@@ -155,7 +117,10 @@ export class GeneralDashboard implements OnInit {
   orders: IOrderAdmin[] = [];
   orderItems: { item: IOrderItem; shipping: IOrderItemShipping; payment: IPayment }[] = [];
   products: IListProducts[] = [];
-  reviews: IReview[] = [];
+  reviews: (Omit<IReview, 'user_id'> & {
+    user_id: { _id: string; email: string };
+    product_id: { _id: string; product_name: string };
+  })[] = [];
 
   // Interactive Chart State
   hoveredBucket: any = null;
@@ -522,7 +487,6 @@ export class GeneralDashboard implements OnInit {
     this.userService.getAllInfoUser().subscribe({
       next: (res) => {
         this.users = res.data;
-        console.log(this.users);
       },
       error: (err) => {
         if (err.status === 404 || err.status === 400 || err.status === 401) {

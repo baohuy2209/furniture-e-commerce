@@ -2,6 +2,8 @@ const orderService = require("../../services/order.service");
 const Review = require("../models/review.model");
 const ProductVariant = require("../models/productVariant.model");
 const { uploadImage } = require("../../utils/utils");
+const productService = require("../../services/product.service");
+const voucherService = require("../../services/voucher.service");
 class ReviewController {
   // [POST] /api/reviews
   async submitReview(req, res) {
@@ -45,9 +47,12 @@ class ReviewController {
       }
       newReview.images = finalImages;
       await newReview.save();
+      await productService.updateProductVariantRating(productVariantId, rating);
+      const assignedVoucher =
+        await voucherService.assignVoucherToUserAfterReview(user_id);
       return res.status(200).json({
         message: "Gửi đánh giá thành công",
-        data: newReview,
+        data: { newReview, assignedVoucher },
       });
     } catch (e) {
       console.error(e);

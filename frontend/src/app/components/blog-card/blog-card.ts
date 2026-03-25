@@ -20,6 +20,6 @@ export class BlogCard {
     return formatDate(this.blogInfo.publishedAt);
   }
   onClick() {
-    this.router.navigate([`${this.blogInfo._id}`], { relativeTo: this.route });
+    this.router.navigate([`/blogs/${this.blogInfo._id}`]);
   }
 }

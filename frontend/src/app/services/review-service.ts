@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { Iproduct, IReview } from '../../interface';
+import { Iproduct, IReview, IVoucher } from '../../interface';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class ReviewService {
     comments: string,
     images: File[],
     orderItemId: string,
-  ): Observable<{ message: string; data: IReview }> {
+  ): Observable<{ message: string; data: { newReview: IReview; assignedVoucher: IVoucher } }> {
     const formData = new FormData();
     formData.append('rating', rating.toString());
     formData.append('comments', comments);
@@ -23,9 +23,13 @@ export class ReviewService {
       formData.append('images', images[i]);
     }
     return this.http
-      .post<{ message: string; data: IReview }>(`${environment.backend_url}/reviews`, formData, {
-        withCredentials: true,
-      })
+      .post<{ message: string; data: { newReview: IReview; assignedVoucher: IVoucher } }>(
+        `${environment.backend_url}/reviews`,
+        formData,
+        {
+          withCredentials: true,
+        },
+      )
       .pipe(retry(2), catchError(this.handleError));
   }
   getReviewsByProduct(id: string): Observable<{ message: string; data: IReview[] }> {
@@ -51,14 +55,23 @@ export class ReviewService {
       )
       .pipe(retry(2), catchError(this.handleError));
   }
-  getNewsReviewByAdmin(): Observable<{ message: string; data: IReview[] }> {
+  getNewsReviewByAdmin(): Observable<{
+    message: string;
+    data: (Omit<IReview, 'user_id'> & {
+      user_id: { _id: string; email: string };
+      product_id: { _id: string; product_name: string };
+    })[];
+  }> {
     return this.http
-      .get<{ message: string; data: IReview[] }>(
-        `${environment.backend_url}/reviews/admin/news-review`,
-        {
-          withCredentials: true,
-        },
-      )
+      .get<{
+        message: string;
+        data: (Omit<IReview, 'user_id'> & {
+          user_id: { _id: string; email: string };
+          product_id: { _id: string; product_name: string };
+        })[];
+      }>(`${environment.backend_url}/reviews/admin/news-review`, {
+        withCredentials: true,
+      })
       .pipe(retry(2), catchError(this.handleError));
   }
   handleError(err: HttpErrorResponse) {

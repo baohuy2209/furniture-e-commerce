@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, HostListener, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -11,8 +11,12 @@ import {
   map,
   takeUntil,
   lastValueFrom,
+  throwError,
+  retry,
+  catchError,
 } from 'rxjs';
 import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { ToastService } from '../../../services/toast-service';
 
 type SortDir = 'asc' | 'desc';
 type ProductId = string;
@@ -130,16 +134,7 @@ interface ProductDetailVM {
 @Component({
   selector: 'app-management-products',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-
-    NgIf,
-    NgFor,
-    DatePipe,
-    ConfirmModal,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, NgIf, NgFor, DatePipe, ConfirmModal],
   templateUrl: './management-products.html',
   styleUrls: ['./management-products.css'],
 })
@@ -287,7 +282,8 @@ export class ManagementProducts implements OnInit, OnDestroy {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit(): void {
@@ -554,7 +550,9 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
     try {
       const res = await lastValueFrom(
-        this.http.get<any>(`${environment.backend_url}/admin/products/${productId}`, { withCredentials: true })
+        this.http.get<any>(`${environment.backend_url}/admin/products/${productId}`, {
+          withCredentials: true,
+        }),
       );
       const data = res.data;
       const p = data.product;
@@ -616,7 +614,9 @@ export class ManagementProducts implements OnInit, OnDestroy {
         comments: data.comments || [],
         inventoryTotal: data.variants.reduce((s: number, v: any) => s + (v.num_inventory || 0), 0),
         soldTotal: data.variants.reduce((s: number, v: any) => s + (v.num_selled || 0), 0),
-        ratingAvg: data.variants.reduce((s: number, v: any) => s + (v.rating?.average || 0), 0) / (data.variants.length || 1),
+        ratingAvg:
+          data.variants.reduce((s: number, v: any) => s + (v.rating?.average || 0), 0) /
+          (data.variants.length || 1),
         priceMin: Math.min(...data.variants.map((v: any) => v.price || 999999999)),
         priceMax: Math.max(...data.variants.map((v: any) => v.price || 0)),
       };
@@ -648,7 +648,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   variantPreviewLabel(v: VariantEditVM): string {
     if (v.componentEntries.length > 0) {
-      return v.componentEntries.map(e => `${e.key}: ${e.value}`).join(', ');
+      return v.componentEntries.map((e) => `${e.key}: ${e.value}`).join(', ');
     }
     return v.sku || 'Biến thể mới';
   }
@@ -733,17 +733,17 @@ export class ManagementProducts implements OnInit, OnDestroy {
   toggleCommentHidden(commentId: string): void {
     const d = this.detailSubject$.value;
     if (!d) return;
-    const c = d.comments.find(x => x.id === commentId);
+    const c = d.comments.find((x) => x.id === commentId);
     if (c) c.hidden = !c.hidden;
     this.isDirty = true;
   }
 
   deleteComment(commentId: string): void {
-     this.deleteItemId = commentId;
-     this.deleteItemType = 'comment';
-     this.deleteModalTitle = 'Xác nhận xóa đánh giá';
-     this.deleteModalMessage = 'Bạn có chắc chắn muốn xóa đánh giá này không?';
-     this.deleteModalOpen = true;
+    this.deleteItemId = commentId;
+    this.deleteItemType = 'comment';
+    this.deleteModalTitle = 'Xác nhận xóa đánh giá';
+    this.deleteModalMessage = 'Bạn có chắc chắn muốn xóa đánh giá này không?';
+    this.deleteModalOpen = true;
   }
 
   saveEdit(): void {
@@ -758,8 +758,8 @@ export class ManagementProducts implements OnInit, OnDestroy {
     try {
       for (const img of this.editImages) {
         if (img.isNew) {
-           img.url = await this.uploadBlob(img.url);
-           img.isNew = false;
+          img.url = await this.uploadBlob(img.url);
+          img.isNew = false;
         }
       }
 
@@ -775,23 +775,29 @@ export class ManagementProducts implements OnInit, OnDestroy {
       const payload = {
         editForm: {
           ...this.editForm,
-          product_main_image: this.editImages[0]?.url || ''
+          product_main_image: this.editImages[0]?.url || '',
         },
         editVariants: this.editVariants,
       };
 
       if (this.isCreateMode) {
-        await lastValueFrom(this.http.post(`${environment.backend_url}/admin/products`, payload, { withCredentials: true }));
+        await lastValueFrom(
+          this.http
+            .post(`${environment.backend_url}/admin/products`, payload, {
+              withCredentials: true,
+            })
+            .pipe(retry(2), catchError(this.handleError)),
+        );
       } else {
         await lastValueFrom(
           this.http.put(
             `${environment.backend_url}/admin/products/${this.selectedProductId}`,
             payload,
-            { withCredentials: true }
+            { withCredentials: true },
           ),
         );
       }
-
+      this.toastService.success('Tạo sản phẩm thành công');
       this.isDirty = false;
       this.saving = false;
       this.loadData();
@@ -802,6 +808,9 @@ export class ManagementProducts implements OnInit, OnDestroy {
       alert('Lỗi khi lưu sản phẩm: ' + msg);
       this.saving = false;
     }
+  }
+  handleError(err: HttpErrorResponse) {
+    return throwError(() => err);
   }
 
   private async uploadBlob(blobUrl: string): Promise<string> {
@@ -825,12 +834,12 @@ export class ManagementProducts implements OnInit, OnDestroy {
     try {
       if (this.deleteItemType === 'product') {
         await lastValueFrom(
-          this.http.delete(`http://localhost:3000/api/admin/products/${this.deleteItemId}`)
+          this.http.delete(`http://localhost:3000/api/admin/products/${this.deleteItemId}`),
         );
       } else {
         // Mock delete comment or real API
         const d = this.detailSubject$.value;
-        if (d) d.comments = d.comments.filter(x => x.id !== this.deleteItemId);
+        if (d) d.comments = d.comments.filter((x) => x.id !== this.deleteItemId);
         this.isDirty = true;
       }
       this.loadData();
@@ -860,13 +869,13 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   exportCsv(): void {
     const header = ['ID', 'Name', 'Brand', 'Price Min', 'Stock'];
-    const rows = this.exportRows.map(r => [r.id, r.name, r.brand, r.priceMin, r.inventoryTotal]);
-    const csvContent = [header, ...rows].map(e => e.join(",")).join("\n");
+    const rows = this.exportRows.map((r) => [r.id, r.name, r.brand, r.priceMin, r.inventoryTotal]);
+    const csvContent = [header, ...rows].map((e) => e.join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", "products.csv");
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'products.csv');
     link.click();
   }
 

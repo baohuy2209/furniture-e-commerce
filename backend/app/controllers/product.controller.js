@@ -4,7 +4,7 @@ const ProductTags = require("../models/productTags.model");
 const Product = require("../models/product.model");
 const productService = require("../../services/product.service");
 const { getPagination, generateSlug } = require("../../utils/utils");
-
+const stockItemService = require("../../services/stock.service");
 class ProductController {
   // [GET] /api/products/
   async getAllProduct(req, res) {
@@ -16,7 +16,7 @@ class ProductController {
       const { limit, offset } = getPagination(page, size);
       const products = await Product.paginate(condition, { offset, limit });
       const { data, message } = await productService.getListProductInfo(
-        products.docs
+        products.docs,
       );
       if (!data) {
         return res.status(404).json({ data: null, message });
@@ -43,7 +43,8 @@ class ProductController {
       const products = await Product.find({
         categories: { $in: productCategoryId },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -69,7 +70,8 @@ class ProductController {
       const products = await Product.find({
         categories: { $in: productCategoryId },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -95,7 +97,8 @@ class ProductController {
       const products = await Product.find({
         categories: { $in: productCategoryId },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -121,7 +124,8 @@ class ProductController {
       const products = await Product.find({
         categories: { $in: productCategoryId },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -147,7 +151,8 @@ class ProductController {
       const products = await Product.find({
         categories: { $in: productCategoryId },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -173,7 +178,8 @@ class ProductController {
       const products = await Product.find({
         categories: { $in: productCategoryId },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -207,7 +213,8 @@ class ProductController {
   async getBestSellerProduct(req, res) {
     try {
       const products = await Product.find({});
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -236,7 +243,8 @@ class ProductController {
           $in: productCategoryId,
         },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -265,7 +273,8 @@ class ProductController {
           $in: productCategoryId,
         },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -294,7 +303,8 @@ class ProductController {
           $in: productCategoryId,
         },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -323,7 +333,8 @@ class ProductController {
           $in: productCategoryId,
         },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -352,7 +363,8 @@ class ProductController {
           $in: productCategoryId,
         },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -381,7 +393,8 @@ class ProductController {
           $in: productCategoryId,
         },
       });
-      const { data, message } = await productService.getListProductInfo(products);
+      const { data, message } =
+        await productService.getListProductInfo(products);
       if (!data) {
         return res.status(404).json({ data: null, message });
       }
@@ -404,7 +417,7 @@ class ProductController {
         await productService.getMainProductVariantInfo(productId);
       const listMainImageDefaultProduct =
         await productService.getAllDefaultProductVariantImage(
-          defaultProductVariant._id
+          defaultProductVariant._id,
         );
       return res.status(200).json({
         message: `Lấy thông tin sản phẩm có id ${req.params.id} thành công`,
@@ -540,12 +553,12 @@ class ProductController {
 
     const formattedProducts = data.map((p) => {
       const pVariants = allVariants.filter(
-        (v) => v.product.toString() === p._id.toString()
+        (v) => v.product.toString() === p._id.toString(),
       );
       const pImages = pVariants.flatMap((v) =>
         allImages.filter(
-          (img) => img.product_variant.toString() === v._id.toString()
-        )
+          (img) => img.product_variant.toString() === v._id.toString(),
+        ),
       );
 
       return {
@@ -647,10 +660,10 @@ class ProductController {
         product: newProduct._id,
         sku: ev.sku,
         price: Number(ev.price) || 0,
-        num_inventory: Number(ev.num_inventory) || 0,
+        num_inventory: Number(ev.num_inventory) || 50,
         num_selled: Number(ev.num_selled) || 0,
         weight: Number(ev.weight) || 0,
-        rating: { average: Number(ev.rating) || 0, count: 0 },
+        rating: { average: Number(ev.rating) || 5, count: 0 },
         expected_delivery: ev.expected_delivery,
         designed_by: ev.designed_by,
         is_default: !!ev.is_default,
@@ -659,7 +672,8 @@ class ProductController {
 
       const vImages = ev.images || [];
       for (let i = 0; i < vImages.length; i++) {
-        const url = typeof vImages[i] === "object" ? vImages[i].url : vImages[i];
+        const url =
+          typeof vImages[i] === "object" ? vImages[i].url : vImages[i];
         if (!url) continue;
         await new ProductVariantImage({
           product_variant: variant._id,
@@ -668,7 +682,14 @@ class ProductController {
           is_main: i === 0,
         }).save();
       }
+      await stockItemService.createStockItem(
+        variant._id,
+        "69bc0e68fb90522f5fd9f7e6",
+        50,
+        50,
+      );
     }
+
     return newProduct;
   }
 
@@ -729,7 +750,8 @@ class ProductController {
 
       const vImages = ev.images || [];
       for (let i = 0; i < vImages.length; i++) {
-        const url = typeof vImages[i] === "object" ? vImages[i].url : vImages[i];
+        const url =
+          typeof vImages[i] === "object" ? vImages[i].url : vImages[i];
         if (!url) continue;
         await new ProductVariantImage({
           product_variant: variant._id,
@@ -814,7 +836,10 @@ class ProductController {
 
   async apiUpdateProduct(req, res) {
     try {
-      const data = await this.updateFullProductInternal(req.params.id, req.body);
+      const data = await this.updateFullProductInternal(
+        req.params.id,
+        req.body,
+      );
       return res.status(200).json({ message: "Thành công", data });
     } catch (err) {
       console.error(err);

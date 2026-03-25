@@ -35,48 +35,6 @@ export class MyReviews implements OnInit {
     private orderServices: OrderServices,
     private cdr: ChangeDetectorRef,
   ) {}
-  //   {
-  //     reviewId: 'rv-001',
-  //     productId: 'it-1',
-  //     productName: 'Sofa Góc Hiện Đại Mây & Da',
-  //     productImage:
-  //       'images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image1.png',
-  //     productColor: 'Beige',
-  //     productMaterial: 'Gỗ Sồi',
-  //     productPrice: 19990000,
-  //     productDiscount: 100000,
-  //     // NỘI DUNG BÌNH LUẬN GIẢ LẬP CỦA NGUYỄN BẢO HUY
-  //     reviewText:
-  //       'Bộ sofa này thực sự vượt xa mong đợi của tôi! Chất liệu vải êm ái, khung gỗ sồi chắc chắn, ngồi rất thoải mái. Thiết kế hiện đại nhưng vẫn giữ được nét sang trọng, làm bừng sáng cả phòng khách. Giao hàng nhanh và đóng gói cẩn thận. Rất hài lòng với Homebase!',
-  //     reviewImages: [
-  //       'images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image1.png',
-  //       'images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image2.png',
-  //     ],
-  //     rating: 5, // Đánh giá 5 sao
-  //     reviewDate: '13/09/2025',
-  //     authorName: this.currentUser.firstName + ' ' + this.currentUser.lastName,
-  //     authorUsername: '@' + this.currentUser.username,
-  //     authorAvatar: this.currentUser.avatar,
-  //   },
-  //   {
-  //     reviewId: 'rv-002',
-  //     productId: 'it-2',
-  //     productName: 'Expose Side Table',
-  //     productImage: 'images/products/living_room/expose_side_table/image1.png',
-  //     productColor: 'Black',
-  //     productMaterial: 'N/A',
-  //     productPrice: 5000000, // Giá giả định cho khớp với mockup
-  //     productDiscount: 100000, // Khuyến mãi giả định
-  //     reviewText:
-  //       'Bàn Expose Side Table có thiết kế rất độc đáo và tinh tế, phù hợp với mọi không gian hiện đại. Màu đen sang trọng, chất liệu bền đẹp. Là điểm nhấn hoàn hảo cho góc phòng khách hoặc cạnh sofa. Mặc dù nhỏ gọn nhưng rất tiện dụng. Highly recommend!',
-  //     reviewImages: ['images/products/living_room/expose_side_table/image1.png'],
-  //     rating: 4,
-  //     reviewDate: '15/09/2025',
-  //     authorName: this.currentUser.firstName + ' ' + this.currentUser.lastName,
-  //     authorUsername: '@' + this.currentUser.username,
-  //     authorAvatar: this.currentUser.avatar,
-  //   },
-  // ]);
   userOrderItems: { item: IOrderItem; shipping: IOrderItemShipping; payment: IPayment }[] = [];
   userOrders: IOrder[] = [];
   currentUserInfo: IUser | null = null;

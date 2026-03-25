@@ -1,4 +1,5 @@
 const userService = require("../../services/user.service");
+const { uploadImage } = require("../../utils/utils");
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 class UserController {
@@ -49,7 +50,30 @@ class UserController {
         .json({ message: "Lỗi hệ thống: " + e, data: null });
     }
   }
-
+  // [PATCH] /api/user/profile/images
+  async updateUserAvatar(req, res) {
+    try {
+      const userId = req.userId;
+      const file = req.file;
+      const imageUrl = (await uploadImage(file.path, "user")).url;
+      const userInfo = await User.findByIdAndUpdate(userId, {
+        avatar: imageUrl,
+      });
+      if (!userInfo) {
+        return res
+          .status(404)
+          .json({ message: "Không tìm thấy thông tin người dùng" });
+      }
+      return res
+        .status(200)
+        .json({ message: "Đã cập nhật thành công ảnh đại diện" });
+    } catch (e) {
+      console.error(e);
+      return res
+        .status(500)
+        .json({ message: "Lỗi hệ thống: " + e, data: null });
+    }
+  }
   // [POST] /api/user/change-password
   async changePassword(req, res) {
     try {
