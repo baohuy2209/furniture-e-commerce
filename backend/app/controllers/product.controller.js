@@ -439,14 +439,15 @@ class ProductController {
   async getRelatedProduct(req, res) {
     try {
       const { listProductCategoryIds } = req.body;
+      console.log(listProductCategoryIds);
       const relatedProducts = await Product.find({
         categories: { $in: listProductCategoryIds },
       });
-      const listRelatedProducts =
+      const { data, message } =
         await productService.getListProductInfo(relatedProducts);
       return res.status(200).json({
-        message: `Lấy thành công các dữ liệu liên quan`,
-        data: listRelatedProducts,
+        message,
+        data: data,
       });
     } catch (e) {
       console.error(e);

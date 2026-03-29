@@ -12,5 +12,5 @@ export const environment = {
   home_featured_product_url: 'assets/home/category.json',
   home_room_url: 'assets/home/room.json',
   backend_url: 'http://localhost:3000/api',
-  GOOGLE_CLIENT_ID: '345035006177-ltqn5l1d6hn63sg2ltod5rq2o88b045f.apps.googleusercontent.com',
+  GOOGLE_CLIENT_ID: '385123205939-egq7q1n3d0mapbkb5nii1kmdi1rkl86c.apps.googleusercontent.com',
 };

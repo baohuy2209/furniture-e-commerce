@@ -603,10 +603,9 @@
   -ms-overflow-style: none; /* IE/Edge */
   padding: 8px 32px 16px; /* breathing room top/bottom, gutter left/right */
   cursor: grab;
-}
-
-.product-scroll-wrapper::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .product-scroll-wrapper:active {
@@ -617,13 +616,22 @@
 .product-track {
   display: flex;
   gap: 20px;
-  width: max-content; /* expands beyond viewport = enables scroll */
+  width: 100%; /* expands beyond viewport = enables scroll */
+  max-width: 1200px;
+  margin: 0px auto;
+  overflow-x: auto;
   align-items: stretch;
 }
 
+.product-card {
+  flex: 0 0 300px; /* QUAN TRỌNG: Cố định chiều rộng thẻ, không cho co lại */
+  scroll-snap-align: start; /* Thẻ sẽ hít vào lề trái khi dừng cuộn */
+  transition: transform 0.3s ease; /* Hiệu ứng nhẹ khi tương tác */
+}
 /* Each slot — controls card width */
 .product-card-slot {
-  flex: 0 0 260px; /* fixed width per card */
+  scroll-snap-align: start;
+  flex: 0 0 380px;
   min-width: 0;
 }
 

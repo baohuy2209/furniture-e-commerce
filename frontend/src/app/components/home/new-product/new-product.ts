@@ -20,6 +20,10 @@ export class NewProduct implements OnInit {
     private productService: Product,
     private router: Router,
   ) {}
+  navigateProduct() {
+    // Placeholder for navigation logic, e.g. using Angular Router
+    this.router.navigate(['/products']);
+  }
   ngOnInit(): void {
     this.productService.getNewProducts().subscribe({
       next: (res) => {

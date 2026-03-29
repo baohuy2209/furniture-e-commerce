@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -14,6 +15,7 @@ import { AuthService } from '../../../services/auth';
 import { UserService } from '../../../services/user-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CartStateService } from '../../../services/cart-state-service';
 
 @Component({
   selector: 'app-header-events',
@@ -41,14 +43,17 @@ export class HeaderEvents implements OnInit, OnDestroy, AfterViewInit {
     private authService: AuthService,
     private userService: UserService,
     private cdr: ChangeDetectorRef,
-  ) {}
+    public cartState: CartStateService,
+  ) {
+    this.currentToken = this.authService.getAccessToken();
+    if (this.currentToken) {
+      afterNextRender(() => {
+        this.cartState.syncCart().subscribe();
+      });
+    }
+  }
 
   ngOnInit(): void {
-    // Cart
-    this.updateCartCount();
-    this.cartUpdateListener = () => this.updateCartCount();
-    window.addEventListener('cartUpdated', this.cartUpdateListener);
-
     this.currentToken = this.authService.getAccessToken();
     if (this.currentToken) {
       this.userService.getUserInfo().subscribe({
@@ -86,16 +91,6 @@ export class HeaderEvents implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {}
 
-  updateCartCount(): void {
-    const savedCart = localStorage.getItem('homebase_cart');
-    if (savedCart) {
-      const items = JSON.parse(savedCart);
-      this.cartCount = items.reduce((total: number, item: any) => total + item.quantity, 0);
-    } else {
-      this.cartCount = 0;
-    }
-  }
-
   getCurrentUrl(): string {
     const segments = this.router.url.split('/');
     return segments[1] === '' ? 'home' : segments[1];
@@ -129,8 +124,19 @@ export class HeaderEvents implements OnInit, OnDestroy, AfterViewInit {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']);
-    window.location.reload();
+    this.authService.logout().subscribe({
+      next: (res) => {
+        this.success = res.message;
+        window.location.href = '/';
+      },
+      error: (err) => {
+        if (err.status === 404 || err.status === 400 || err.status === 401) {
+          this.error = err.error?.message || 'Không tìm thấy thông tin người dùng nào';
+        } else {
+          this.error = 'Có lỗi ở phía server';
+        }
+        this.cdr.detectChanges();
+      },
+    });
   }
 }

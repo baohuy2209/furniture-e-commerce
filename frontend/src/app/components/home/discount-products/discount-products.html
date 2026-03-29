@@ -38,7 +38,11 @@
                   >
                 }
               </div>
-              <button class="btn-buy" [class.secondary]="product.theme === 'blue'">
+              <button
+                class="btn-buy"
+                [class.secondary]="product.theme === 'blue'"
+                (click)="navigateProduct()"
+              >
                 Mua Ngay <i class="fas fa-arrow-right"></i>
               </button>
             </div>

@@ -88,13 +88,13 @@ export class Product {
       .pipe(retry(2), catchError(this.handleError));
   }
   getRelatedProduct(
-    listlistProductCategoryIds: string[],
+    listProductCategoryIds: string[],
   ): Observable<{ message: string; data: IListProducts[] }> {
     return this.httpClient
       .post<{ message: string; data: IListProducts[] }>(
         `${environment.backend_url}/products/related-product`,
         {
-          listlistProductCategoryIds,
+          listProductCategoryIds,
         },
         { withCredentials: true },
       )

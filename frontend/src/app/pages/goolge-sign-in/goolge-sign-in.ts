@@ -19,16 +19,28 @@ export class GoolgeSignIn implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.initializeGoogleSignIn();
+    // this.initializeGoogleSignIn();
+  }
+  ngAfterViewInit(): void {
+    this.checkGoogleLibrary();
   }
 
+  private checkGoogleLibrary() {
+    // Đợi cho đến khi đối tượng 'google' sẵn sàng
+    const interval = setInterval(() => {
+      if (typeof google !== 'undefined' && google.accounts) {
+        clearInterval(interval);
+        this.initializeGoogleSignIn();
+      }
+    }, 100); // Kiểm tra mỗi 100ms
+  }
   initializeGoogleSignIn() {
     google.accounts.id.initialize({
       client_id: `${environment.GOOGLE_CLIENT_ID}`,
       callback: (response: any) => this.handleCredentialResponse(response),
     });
 
-    // google.accounts.id.renderButton(document.getElementById('google-signin-button'));
+    google.accounts.id.renderButton(document.getElementById('google-signin-button'));
 
     google.accounts.id.prompt(); // also display the One Tap dialog
   }

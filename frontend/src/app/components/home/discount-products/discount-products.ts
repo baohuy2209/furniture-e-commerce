@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-discount-products',
   imports: [DecimalPipe],
@@ -8,6 +9,7 @@ import { DecimalPipe } from '@angular/common';
   styleUrl: './discount-products.css',
 })
 export class DiscountProducts {
+  constructor(private router: Router) {}
   // Aligned with ERD `PRODUCT` and `PRODUCT_VARIANT` tables
   discount_products = [
     {
@@ -34,4 +36,8 @@ export class DiscountProducts {
       badge_text: 'BÁN CHẠY', // Maps to derived logic from `num_sold` in real app
     },
   ];
+  navigateProduct() {
+    // Placeholder for navigation logic, e.g. using Angular Router
+    this.router.navigate(['/products']);
+  }
 }

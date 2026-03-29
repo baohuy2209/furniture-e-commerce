@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-flash-sale',
@@ -8,6 +9,7 @@ import { Component } from '@angular/core';
   styleUrl: './flash-sale.css',
 })
 export class FlashSale {
+  constructor(private router: Router) {}
   // Aligned with ERD `EVENT` table
   flash_sale_data = {
     event_name: 'Flash Sale: Cuối Tuần',
@@ -29,4 +31,8 @@ export class FlashSale {
       is_highlight: true,
     },
   ];
+  navigateProduct() {
+    // Placeholder for navigation logic, e.g. using Angular Router
+    this.router.navigate(['/products']);
+  }
 }

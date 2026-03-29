@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-features',
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './features.css',
 })
 export class Features {
+  constructor(private router: Router) {}
   child_data: any = {
     category_product: [
       {
@@ -70,4 +72,10 @@ export class Features {
     ],
   };
   errMsg: string = '';
+  navigateCart() {
+    this.router.navigate(['/cart']);
+  }
+  navigateProduct() {
+    this.router.navigate(['/products']);
+  }
 }

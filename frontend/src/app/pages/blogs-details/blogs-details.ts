@@ -108,6 +108,7 @@ export class BlogsDetails {
         this.cdr.detectChanges();
       },
     });
+    window.scrollTo(0, 0);
   }
 
   /**

@@ -54,6 +54,7 @@ export class EventPageDetails implements OnInit {
         this.cdr.detectChanges();
       },
     });
+    window.scrollTo(0, 0);
   }
 
   goBack() {

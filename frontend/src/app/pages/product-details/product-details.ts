@@ -146,6 +146,7 @@ export class ProductDetails implements OnInit {
             this.relatedProducts = res.data;
             this.success = res.message;
             this.toastService.success(`${this.success}`);
+            this.cdr.detectChanges();
           },
           error: (err) => {
             if (err.status === 404 || err.status === 400 || err.status === 401) {
@@ -171,6 +172,7 @@ export class ProductDetails implements OnInit {
     this.http
       .get<Province[]>('http://localhost:3000/provinces')
       .subscribe((data) => this.provinces.set(data));
+    window.scrollTo(0, 0);
   }
   loadSummaryProductViews() {
     this.summaryReviewProduct.average = this.current_product_variant?.rating.average!;
@@ -434,5 +436,18 @@ export class ProductDetails implements OnInit {
           this.toastService.error('Có lỗi khi tải biến thể sản phẩm');
         },
       });
+  }
+  scrollNext() {
+    const container = document.querySelector('.product-scroll-wrapper');
+    if (container) {
+      container.scrollBy({ left: 320, behavior: 'smooth' }); // 300px thẻ + 20px gap
+    }
+  }
+
+  scrollPrev() {
+    const container = document.querySelector('.product-scroll-wrapper');
+    if (container) {
+      container.scrollBy({ left: -320, behavior: 'smooth' });
+    }
   }
 }
