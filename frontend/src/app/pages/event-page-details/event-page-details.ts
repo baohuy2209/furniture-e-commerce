@@ -34,8 +34,17 @@ export class EventPageDetails implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.event_id = this.route.snapshot.paramMap.get('id');
-    this.eventService.getDetailEvent(this.event_id!).subscribe({
+    this.route.paramMap.subscribe((params) => {
+      this.event_id = params.get('id');
+      if (this.event_id) {
+        this.loadEventData(this.event_id);
+        window.scrollTo(0, 0);
+      }
+    });
+  }
+
+  loadEventData(eventId: string): void {
+    this.eventService.getDetailEvent(eventId).subscribe({
       next: (res) => {
         if (!res.data) {
           this.success = 'Không tìm thấy sự kiện nào';

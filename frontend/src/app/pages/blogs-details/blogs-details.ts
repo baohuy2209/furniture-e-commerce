@@ -47,13 +47,23 @@ export class BlogsDetails {
   }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      this.blog_id = params.get('id');
+      if (this.blog_id) {
+        this.loadBlogData(this.blog_id);
+        window.scrollTo(0, 0);
+      }
+    });
+  }
+
+  loadBlogData(blogId: string): void {
     // Get current page URL and title
-    this.blog_id = this.route.snapshot.paramMap.get('id');
     this.articleUrl = window.location.href;
     this.articleTitle = document.title || 'Bài viết về thiết kế nội thất';
-    this.blogService.getDetailBlog(this.blog_id!).subscribe({
+    this.blogService.getDetailBlog(blogId).subscribe({
       next: (res) => {
         this.blog_detail = res.data;
+        this.listBlogTags = []; // Reset tags
         res.data.tags.forEach((tagId: string) => {
           this.blogTagsService.getDetailBlogTags(tagId).subscribe({
             next: (res) => {

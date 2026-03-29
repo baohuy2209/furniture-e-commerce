@@ -116,8 +116,21 @@ export class ProductDetails implements OnInit {
     this.activeIndex = index;
   }
   ngOnInit(): void {
-    this.product_id = this.route.snapshot.paramMap.get('id');
-    this.productService.getProductDetail(this.product_id!).subscribe({
+    this.route.paramMap.subscribe((params) => {
+      this.product_id = params.get('id');
+      if (this.product_id) {
+        this.loadProductData(this.product_id);
+        window.scrollTo(0, 0);
+      }
+    });
+
+    this.http
+      .get<Province[]>('http://localhost:3000/provinces')
+      .subscribe((data) => this.provinces.set(data));
+  }
+
+  loadProductData(productId: string): void {
+    this.productService.getProductDetail(productId).subscribe({
       next: (res) => {
         if (!res.data) {
           this.success = 'Không tìm thấy sản phẩm nào';
@@ -156,7 +169,7 @@ export class ProductDetails implements OnInit {
             this.cdr.detectChanges();
           },
         });
-        this.loadReviewsWithUser(this.product_id!);
+        this.loadReviewsWithUser(productId);
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -168,9 +181,6 @@ export class ProductDetails implements OnInit {
         this.cdr.detectChanges();
       },
     });
-    this.http
-      .get<Province[]>('http://localhost:3000/provinces')
-      .subscribe((data) => this.provinces.set(data));
   }
   loadSummaryProductViews() {
     this.summaryReviewProduct.average = this.current_product_variant?.rating.average!;
