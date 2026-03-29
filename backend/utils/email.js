@@ -19,10 +19,11 @@ async function sendEmail(to, subject, html) {
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_SERVICE || `HomeBase <${process.env.EMAIL_USER}>`,
+      from: `"HomeBase Team" <${process.env.EMAIL_USER}>`,
       to: to,
       subject: subject,
       html: html,
+      priority: "high", // Helps with mobile notifications
     };
 
     const info = await transporter.sendMail(mailOptions);

@@ -26,7 +26,7 @@ class StockMovementController {
     try {
       const {
         warehouse_id,
-        product_id,
+        product_variant_id,
         reference_id,
         reference_type,
         quantity_change,

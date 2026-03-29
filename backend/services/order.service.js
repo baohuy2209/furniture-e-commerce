@@ -219,10 +219,11 @@ class OrderService {
       .replace("{{province}}", addressInfo.province);
 
     const mailOptions = {
-      from: process.env.EMAIL_SERVICE,
+      from: `"HomeBase Team" <${process.env.EMAIL_USER}>`,
       to: userInfo.email,
       subject: `Thông tin đơn hàng của khách hàng ${userInfo.name}`,
       html,
+      priority: "high",
     };
     await transporter.sendMail(mailOptions);
     return {
@@ -243,7 +244,7 @@ class OrderService {
     const query = { _id: orderId };
     if (userId) query.user_id = userId;
 
-    const order = await Order.findOne(query);
+    const order = await Order.findOne(query).populate("user_id", "name email");
     if (!order) throw new Error("Không tìm thấy đơn hàng");
 
     const items = await OrderItem.find({ order_id: orderId });

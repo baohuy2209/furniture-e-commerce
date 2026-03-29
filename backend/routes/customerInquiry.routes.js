@@ -1,38 +1,37 @@
 const express = require("express");
 const customerInquiryController = require("../app/controllers/customerInquiry.controller");
-const { authJwt } = require("../middlewares");
 const router = express.Router();
 
 // Client routes
 router.post(
   "/",
-  customerInquiryController.createTicket,
+  customerInquiryController.createTicket
 );
 
 router.get(
   "/user",
-  customerInquiryController.getUserTickets,
+  customerInquiryController.getUserTickets
 );
 
 // Admin routes
 router.get(
   "/all",
-  customerInquiryController.getAllTickets,
+  customerInquiryController.getAllTickets
 );
 
 router.get(
   "/:id",
-  customerInquiryController.getTicketById,
+  customerInquiryController.getTicketById
 );
 
 router.patch(
   "/respond/:id",
-  customerInquiryController.respondToTicket,
+  customerInquiryController.respondToTicket
 );
 
 router.delete(
   "/:id",
-  customerInquiryController.deleteTicket,
+  customerInquiryController.deleteTicket
 );
 
 module.exports = router;

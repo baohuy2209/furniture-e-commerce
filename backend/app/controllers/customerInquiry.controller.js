@@ -131,7 +131,7 @@ class CustomerInquiryController {
             .replace("{{customerMessage}}", ticket.message)
             .replace("{{staffResponse}}", staff_response);
 
-          await sendEmail(ticket.user_id.email, `Phản hồi từ HomeBase: ${ticket.subject}`, html);
+          await sendEmail(ticket.user_id.email, `[HomeBase] Phản hồi yêu cầu hỗ trợ: ${ticket.subject}`, html);
         } catch (mailError) {
           console.error("Lỗi khi gửi mail: ", mailError);
           // Vẫn lưu ticket thành công nhưng báo lỗi gửi mail

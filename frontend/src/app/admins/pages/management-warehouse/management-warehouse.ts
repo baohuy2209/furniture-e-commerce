@@ -6,7 +6,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../../environments/environment';
 import { BehaviorSubject, combineLatest, map, lastValueFrom, forkJoin, catchError, of } from 'rxjs';
-import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { ConfirmModal, ConfirmModalType } from '../../components/confirm-modal/confirm-modal';
 
 type SortDir = 'asc' | 'desc';
 type ReferenceType = 'purchase_order' | 'customer_order' | 'transfer' | 'adjustment';
@@ -226,8 +226,13 @@ export class ManagementWarehouse implements OnInit {
   private pendingDiscardAction: (() => void) | null = null;
 
   saveModalOpen = false;
+  poModalOpen = false;
   discardModalOpen = false;
   invalidSaveModalOpen = false;
+  noticeModalOpen = false;
+  noticeTitle = '';
+  noticeMessage = '';
+  noticeType: ConfirmModalType = 'info';
 
   q = '';
   f_warehouse_id = '';
@@ -515,6 +520,20 @@ export class ManagementWarehouse implements OnInit {
   }
   onCancelDiscard() { this.discardModalOpen = false; this.pendingDiscardAction = null; }
   onCancelSave() { this.saveModalOpen = false; }
+  onCancelPO() { this.poModalOpen = false; }
+
+  confirmPO() {
+    this.poModalOpen = false;
+    this.executePO();
+  }
+
+  showNotice(title: string, message: string, type: ConfirmModalType = 'info'): void {
+    this.noticeTitle = title;
+    this.noticeMessage = message;
+    this.noticeType = type;
+    this.noticeModalOpen = true;
+    this.cdr.markForCheck();
+  }
 
   async saveEdit() {
     const draft = this.editModel$.value;
@@ -522,18 +541,34 @@ export class ManagementWarehouse implements OnInit {
     if (!draft || !id) return;
     const target = this.stockItems$.value.find(s => s._id === id);
     if (!target) return;
-    const payload = {
+    
+    // Transfer out
+    const deductPayload = {
       warehouse_id: target.warehouse_id?._id || target.warehouse_id,
-      product_id: target.product_variant_id?._id || target.product_variant_id,
-      quantity_change: draft.qtyAbs, 
-      reason: draft.reason || 'Điều chỉnh thủ công',
-      reference_type: 'adjustment'
+      product_variant_id: target.product_variant_id?._id || target.product_variant_id,
+      quantity_change: -Math.abs(draft.qtyAbs),
+      reason: draft.reason || 'Điều chuyển đi',
+      reference_type: 'transfer_out'
     };
+
+    // Transfer in
+    const addPayload = {
+      warehouse_id: draft.targetWarehouseId,
+      product_variant_id: target.product_variant_id?._id || target.product_variant_id,
+      quantity_change: Math.abs(draft.qtyAbs),
+      reason: draft.reason || 'Nhận điều chuyển',
+      reference_type: 'transfer_in'
+    };
+
     try {
-      await lastValueFrom(this.http.post(`${environment.backend_url}/stock-movements`, payload, { withCredentials: true }));
+      await lastValueFrom(this.http.post(`${environment.backend_url}/stock-movements`, deductPayload, { withCredentials: true }));
+      await lastValueFrom(this.http.post(`${environment.backend_url}/stock-movements`, addPayload, { withCredentials: true }));
+      this.showNotice('Thành công', 'Điều chỉnh tồn kho thành công!', 'success');
       this.loadData();
       this.goList();
-    } catch (err) { alert('Lỗi khi điều chỉnh kho'); }
+    } catch (err) { 
+      this.showNotice('Lỗi hệ thống', 'Có lỗi xảy ra khi điều chỉnh kho.', 'danger'); 
+    }
   }
 
   exportCsvStock() {
@@ -595,6 +630,7 @@ export class ManagementWarehouse implements OnInit {
   }
 
   async executeSave() {
+    this.saveModalOpen = false;
     this.saveEdit();
   }
 
@@ -617,13 +653,13 @@ export class ManagementWarehouse implements OnInit {
       if (res && res.data && res.data._id) {
         await lastValueFrom(this.http.patch(`${environment.backend_url}/admin/purchase-orders/${res.data._id}/status`, { status: 'received' }, { withCredentials: true }));
       }
-      alert('Tạo phiếu nhập hàng và nhập kho thành công!');
+      this.showNotice('Thành công', 'Tạo phiếu nhập hàng và nhập kho thành công!', 'success');
       this.loadData();
       this.clearEditState();
       this.syncRoute(null, 'list');
     } catch (err) { 
       console.error(err);
-      alert('Lỗi khi tạo PO'); 
+      this.showNotice('Lỗi hệ thống', 'Có lỗi xảy ra khi tạo PO.', 'danger'); 
     }
   }
   addImportItem() {

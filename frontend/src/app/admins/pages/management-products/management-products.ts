@@ -15,7 +15,7 @@ import {
   retry,
   catchError,
 } from 'rxjs';
-import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { ConfirmModal, ConfirmModalType } from '../../components/confirm-modal/confirm-modal';
 import { ToastService } from '../../../services/toast-service';
 
 type SortDir = 'asc' | 'desc';
@@ -167,6 +167,10 @@ export class ManagementProducts implements OnInit, OnDestroy {
 
   saveModalOpen = false;
   discardModalOpen = false;
+  noticeModalOpen = false;
+  noticeTitle = '';
+  noticeMessage = '';
+  noticeType: ConfirmModalType = 'info';
 
   query$ = new BehaviorSubject<ListQuery>({
     q: '',
@@ -750,6 +754,13 @@ export class ManagementProducts implements OnInit, OnDestroy {
     this.saveModalOpen = true;
   }
 
+  showNotice(title: string, message: string, type: ConfirmModalType = 'info'): void {
+    this.noticeTitle = title;
+    this.noticeMessage = message;
+    this.noticeType = type;
+    this.noticeModalOpen = true;
+  }
+
   async executeSave(): Promise<void> {
     if (!this.editForm) return;
     this.saveModalOpen = false;
@@ -788,6 +799,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
             })
             .pipe(retry(2), catchError(this.handleError)),
         );
+        this.showNotice('Thành công', 'Tạo sản phẩm mới thành công!', 'success');
       } else {
         await lastValueFrom(
           this.http.put(
@@ -796,8 +808,8 @@ export class ManagementProducts implements OnInit, OnDestroy {
             { withCredentials: true },
           ),
         );
+        this.showNotice('Thành công', 'Cập nhật thông tin sản phẩm thành công!', 'success');
       }
-      this.toastService.success('Tạo sản phẩm thành công');
       this.isDirty = false;
       this.saving = false;
       this.loadData();
@@ -805,7 +817,7 @@ export class ManagementProducts implements OnInit, OnDestroy {
     } catch (e: any) {
       console.error('Product save error:', e);
       const msg = e?.error?.message || e?.message || 'Lỗi không xác định';
-      alert('Lỗi khi lưu sản phẩm: ' + msg);
+      this.showNotice('Lỗi hệ thống', 'Có lỗi xảy ra khi lưu sản phẩm: ' + msg, 'danger');
       this.saving = false;
     }
   }

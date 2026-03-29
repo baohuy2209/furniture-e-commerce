@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, combineLatest, map, takeUntil } from 'rxjs';
-import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { ConfirmModal, ConfirmModalType } from '../../components/confirm-modal/confirm-modal';
 import { CustomerInquiryService } from '../../../services/customer-inquiry-service';
 import { ICustomerInquiry } from '../../../../interface';
 
@@ -144,6 +144,10 @@ export class SupportCustomers implements OnInit, OnDestroy {
 
   deleteTargetId: string | null = null;
   advanceTargetId: string | null = null;
+  noticeModalOpen = false;
+  noticeTitle = '';
+  noticeMessage = '';
+  noticeType: ConfirmModalType = 'info';
 
   statusOptions: { value: InquiryStatus; label: string }[] = [
     { value: 'open', label: 'Mới' },
@@ -468,6 +472,13 @@ export class SupportCustomers implements OnInit, OnDestroy {
 
   onCancelSave(): void { this.saveModalOpen = false; }
 
+  showNotice(title: string, message: string, type: ConfirmModalType = 'info'): void {
+    this.noticeTitle = title;
+    this.noticeMessage = message;
+    this.noticeType = type;
+    this.noticeModalOpen = true;
+  }
+
   executeSave(sendEmail: boolean = false): void {
     if (!this.detail || !this.editForm) { this.saveModalOpen = false; return; }
     this.saving = true;
@@ -491,17 +502,19 @@ export class SupportCustomers implements OnInit, OnDestroy {
         this.syncRoute(this.selectedId, 'detail', true);
         if (sendEmail) {
           if ((res as any).mailError) {
-            alert('Đã lưu dữ liệu nhưng KHÔNG gửi được email. Lỗi: ' + (res as any).mailError);
+            this.showNotice('Lưu dữ liệu', 'Đã lưu dữ liệu nhưng KHÔNG gửi được email. Lỗi: ' + (res as any).mailError, 'warning');
           } else {
-            alert('Đã lưu và gửi phản hồi cho khách hàng thành công!');
+            this.showNotice('Thành công', 'Đã lưu và gửi phản hồi cho khách hàng thành công!', 'success');
           }
+        } else {
+          this.showNotice('Thành công', 'Đã lưu thông tin xử lý thành công!', 'success');
         }
       },
       error: (err) => {
         this.saving = false;
         this.saveModalOpen = false;
         console.error('Save failed', err);
-        alert('Có lỗi xảy ra khi lưu thông tin: ' + (err.error?.message || err.message));
+        this.showNotice('Lỗi hệ thống', 'Có lỗi xảy ra khi lưu thông tin: ' + (err.error?.message || err.message), 'danger');
       }
     });
   }
@@ -509,12 +522,10 @@ export class SupportCustomers implements OnInit, OnDestroy {
   sendToCustomer(): void {
     if (!this.detail || !this.editForm) return;
     if (!this.editForm.resolution) {
-      alert('Vui lòng nhập hướng giải quyết trước khi gửi!');
+      this.showNotice('Cảnh báo', 'Vui lòng nhập hướng giải quyết trước khi gửi!', 'warning');
       return;
     }
-    if (confirm('Bạn có chắc chắn muốn lưu và GỬI email phản hồi này cho khách hàng?')) {
-      this.executeSave(true);
-    }
+    this.executeSave(true);
   }
 
   canAdvance(status: InquiryStatus): boolean {

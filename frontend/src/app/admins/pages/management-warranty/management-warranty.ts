@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, combineLatest, map, takeUntil, finalize } from 'rxjs';
-import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { ConfirmModal, ConfirmModalType } from '../../components/confirm-modal/confirm-modal';
 import { WarrantyService } from '../../../services/warranty-service';
 import { IUser, IWarrantyRequest } from '../../../../interface';
 
@@ -86,6 +86,10 @@ export class ManagementWarranty implements OnInit, OnDestroy {
   deleteTargetId: string | null = null;
   advanceModalOpen = false;
   advanceTargetId: string | null = null;
+  noticeModalOpen = false;
+  noticeTitle = '';
+  noticeMessage = '';
+  noticeType: ConfirmModalType = 'info';
 
   statusOptions: StatusOption[] = [
     { value: 'unresolved', label: 'Chưa xử lý' },
@@ -286,6 +290,14 @@ export class ManagementWarranty implements OnInit, OnDestroy {
     this.saveModalOpen = false;
   }
 
+  showNotice(title: string, message: string, type: ConfirmModalType = 'info'): void {
+    this.noticeTitle = title;
+    this.noticeMessage = message;
+    this.noticeType = type;
+    this.noticeModalOpen = true;
+    this.cdr.detectChanges();
+  }
+
   executeSave(): void {
     if (!this.detail) {
       this.saveModalOpen = false;
@@ -303,11 +315,13 @@ export class ManagementWarranty implements OnInit, OnDestroy {
         next: () => {
           this.saveModalOpen = false;
           this.isDirty = false;
+          this.showNotice('Thành công', 'Cập nhật trạng thái bảo hành thành công!', 'success');
           this.loadAll();
           this.loadDetail(this.detail!._id);
         },
-        error: () => {
+        error: (err) => {
           this.saveModalOpen = false;
+          this.showNotice('Lỗi hệ thống', 'Có lỗi xảy ra khi lưu thông tin: ' + (err.error?.message || err.message), 'danger');
         },
       });
   }

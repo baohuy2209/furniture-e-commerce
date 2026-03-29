@@ -20,7 +20,7 @@
 
     <!-- Modal Actions -->
     <div class="hb-modal-actions">
-      <button class="btn hb-btn-cancel" (click)="onCancel()">{{ cancelLabel }}</button>
+      <button class="btn hb-btn-cancel" *ngIf="!hideCancel" (click)="onCancel()">{{ cancelLabel }}</button>
       <button
         class="btn"
         [ngClass]="{

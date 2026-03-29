@@ -135,9 +135,7 @@
   border-radius: 10px !important;
 }
 
-.form-control::placeholder {
-  color: rgba(255, 255, 255, 0.4) !important;
-}
+/* Placeholder managed globally in admin-dark.css */
 
 /* Option styling moved to global admin-dark.css */
 

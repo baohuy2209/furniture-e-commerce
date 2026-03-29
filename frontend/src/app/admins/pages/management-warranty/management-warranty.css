@@ -177,6 +177,7 @@
     minmax(220px, 1.8fr) /* Mô tả */
     150px /* Trạng thái */
     120px /* Ngày tạo */
+    56px /* Sửa */
     56px; /* Xóa */
   align-items: center;
 }

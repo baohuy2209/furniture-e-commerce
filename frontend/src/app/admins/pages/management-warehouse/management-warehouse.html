@@ -440,7 +440,7 @@
 
                 <div class="d-flex gap-2 justify-content-end">
                   <button class="btn btn-hb-outline px-4 py-2" type="button" (click)="backToDetail()">Hủy bỏ</button>
-                  <button class="btn btn-hb px-5 py-2" type="button" (click)="saveEdit()"
+                  <button class="btn btn-hb px-5 py-2" type="button" (click)="saveModalOpen = true"
                     [disabled]="!em.qtyAbs || em.qtyAbs >= d.stock.quantity_on_hand || !em.targetWarehouseId || !em.reason || !em.reason.trim()">
                     <i class="bi bi-check2-circle me-1"></i> XÁC NHẬN LƯU
                   </button>
@@ -716,7 +716,7 @@
                   <button class="btn btn-hb-outline px-4" (click)="prevImportStep()">
                     <i class="bi bi-arrow-left me-1"></i> Quay lại bổ sung
                   </button>
-                  <button class="btn btn-hb-success px-5" (click)="executePO()">
+                  <button class="btn btn-hb-success px-5" (click)="poModalOpen = true">
                     <i class="bi bi-check2-all me-1"></i> XÁC NHẬN CHỐT ĐƠN
                   </button>
                 </div>
@@ -776,7 +776,24 @@
 
   <!-- SAVE CONFIRM MODAL -->
   <hb-confirm-modal [isOpen]="saveModalOpen" title="Xác nhận ghi sổ"
-    message="Hệ thống sẽ ghi nhận biến động kho và cập nhật số dư tồn kho. Tiếp tục?" [type]="'info'"
-    confirmLabel="Xác nhận lưu" (confirm)="executeSave()" (cancel)="onCancelSave()">
+    message="Hệ thống sẽ chuyển số lượng tồn kho sang cơ sở nhận. Bạn chắc chắn chứ?" [type]="'info'"
+    confirmLabel="Đồng ý điều chuyển" (confirm)="executeSave()" (cancel)="onCancelSave()">
+  </hb-confirm-modal>
+
+  <!-- DISCARD CONFIRM -->
+  <hb-confirm-modal [isOpen]="discardModalOpen" title="Hủy bỏ thay đổi"
+    message="Bạn có chắc chắn muốn thoát? Mọi thao tác chưa được lưu lại sẽ hoàn toàn biến mất." [type]="'danger'"
+    confirmLabel="Chắc chắn thoát" (confirm)="onConfirmDiscard()" (cancel)="onCancelDiscard()">
+  </hb-confirm-modal>
+
+  <!-- PO MODAL -->
+  <hb-confirm-modal [isOpen]="poModalOpen" title="Xác nhận nhập kho"
+    message="Thay đổi này sẽ lập tức tạo ra các bản ghi Stock Movement vĩnh viễn và không thể hoàn tác. Tiếp tục?" [type]="'warning'"
+    confirmLabel="Xác nhận chốt đơn" (confirm)="confirmPO()" (cancel)="onCancelPO()">
+  </hb-confirm-modal>
+
+  <!-- NOTICE MODAL -->
+  <hb-confirm-modal [isOpen]="noticeModalOpen" [title]="noticeTitle"
+    [message]="noticeMessage" [type]="noticeType" confirmLabel="Đã hiểu" [hideCancel]="true" (confirm)="noticeModalOpen = false">
   </hb-confirm-modal>
 </div>
