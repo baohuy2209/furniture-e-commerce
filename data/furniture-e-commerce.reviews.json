@@ -1,0 +1,82 @@
+[{
+  "_id": {
+    "$oid": "69c2bad633a67e6947b8fadd"
+  },
+  "product_id": {
+    "$oid": "699d977cc400dbca31d7dba2"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "order_item_id": {
+    "$oid": "69beacaee6a50f7d2c24ab89"
+  },
+  "rating": 5,
+  "comments": "Sản phẩm này rất tốt",
+  "images": [
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774369499/reviews/stidotl23n817xfvftis.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774369499/reviews/mhsizsyigvvk8nlvfy2g.png"
+  ],
+  "createdAt": {
+    "$date": "2026-03-24T16:24:54.744Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-24T16:24:59.438Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "69c2baf433a67e6947b8fae2"
+  },
+  "product_id": {
+    "$oid": "699d977cc400dbca31d7dba1"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "order_item_id": {
+    "$oid": "69beacaee6a50f7d2c24ab8f"
+  },
+  "rating": 5,
+  "comments": "Sản phẩm này cũng rất tốt",
+  "images": [
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774369528/reviews/e0kpv2fazraz398xut4x.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774369529/reviews/lpm1yiewnf461ukunwfn.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774369528/reviews/h3pwourjyvo8z4n1z3ty.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774369528/reviews/jkeorpfn74xrtdvrf7ow.png"
+  ],
+  "createdAt": {
+    "$date": "2026-03-24T16:25:24.458Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-24T16:25:29.455Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "69c3a61d01f45501d3fca4c2"
+  },
+  "product_id": {
+    "$oid": "69c396f75aa8ca00cf30b961"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "order_item_id": {
+    "$oid": "69c3a28cdd44789cb6b448fb"
+  },
+  "rating": 5,
+  "comments": "Tôi đã nhận được sản phẩm, sản phẩm rất tốt",
+  "images": [
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774429729/reviews/pyit3vhhdwp8b4xmqomj.png"
+  ],
+  "createdAt": {
+    "$date": "2026-03-25T09:08:45.781Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T09:08:49.805Z"
+  },
+  "__v": 1
+}]

@@ -944,8 +944,11 @@
   "warehouse_id": {
     "$oid": "69bc0e68fb90522f5fd9f7e6"
   },
-  "quantity_on_hand": 69,
-  "quantity_reserved": 8
+  "quantity_on_hand": 68,
+  "quantity_reserved": 8,
+  "updatedAt": {
+    "$date": "2026-03-25T09:34:50.918Z"
+  }
 },
 {
   "_id": {
@@ -1505,4 +1508,44 @@
   },
   "quantity_on_hand": 17,
   "quantity_reserved": 3
+},
+{
+  "_id": {
+    "$oid": "69c394946d953b65373633f1"
+  },
+  "product_variant_id": {
+    "$oid": "69c394946d953b65373633e6"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 50,
+  "quantity_reserved": 50,
+  "createdAt": {
+    "$date": "2026-03-25T07:53:56.439Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T07:53:56.439Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c396f75aa8ca00cf30b96e"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "warehouse_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "quantity_on_hand": 31,
+  "quantity_reserved": 50,
+  "createdAt": {
+    "$date": "2026-03-25T08:04:07.705Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:53:49.835Z"
+  },
+  "__v": 0
 }]

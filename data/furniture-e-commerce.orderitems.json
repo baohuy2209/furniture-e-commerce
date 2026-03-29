@@ -1,0 +1,925 @@
+[{
+  "_id": {
+    "$oid": "69bea7a5e6a50f7d2c24a9f2"
+  },
+  "order_id": {
+    "$oid": "69bea7a5e6a50f7d2c24a9f0"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "product_name": "Tượng hình học Geometric",
+  "unit_price": 22800000,
+  "quantity": 2,
+  "discount_percent": 5,
+  "item_subtotal": 43320000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-21T14:13:57.225Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-21T14:13:57.225Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bea7a5e6a50f7d2c24a9fb"
+  },
+  "order_id": {
+    "$oid": "69bea7a5e6a50f7d2c24a9f9"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "product_name": "Tượng hình học Geometric",
+  "unit_price": 22800000,
+  "quantity": 2,
+  "discount_percent": 5,
+  "item_subtotal": 43320000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-21T14:13:57.253Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-21T14:13:57.253Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bea7a5e6a50f7d2c24aa04"
+  },
+  "order_id": {
+    "$oid": "69bea7a5e6a50f7d2c24aa02"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "product_name": "Tượng hình học Geometric",
+  "unit_price": 22800000,
+  "quantity": 2,
+  "discount_percent": 5,
+  "item_subtotal": 43320000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-21T14:13:57.279Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-21T14:13:57.279Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bea907e6a50f7d2c24aa25"
+  },
+  "order_id": {
+    "$oid": "69bea907e6a50f7d2c24aa23"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "product_name": "Tượng hình học Geometric",
+  "unit_price": 22800000,
+  "quantity": 2,
+  "discount_percent": 5,
+  "item_subtotal": 43320000,
+  "status": "delivered",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-21T14:19:51.331Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T07:13:23.499Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69beacaee6a50f7d2c24ab89"
+  },
+  "order_id": {
+    "$oid": "69beacaee6a50f7d2c24ab87"
+  },
+  "product_variant_id": {
+    "$oid": "699dccea02c4dc45263a0a92"
+  },
+  "product_name": "Gương Medina",
+  "unit_price": 26500000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 26500000,
+  "status": "delivered",
+  "reviewed": true,
+  "createdAt": {
+    "$date": "2026-03-21T14:35:26.063Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-24T16:24:54.723Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69beacaee6a50f7d2c24ab8f"
+  },
+  "order_id": {
+    "$oid": "69beacaee6a50f7d2c24ab87"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdb"
+  },
+  "product_name": "Tượng Magnolia",
+  "unit_price": 13560000,
+  "quantity": 1,
+  "discount_percent": 10,
+  "item_subtotal": 12204000,
+  "status": "delivered",
+  "reviewed": true,
+  "createdAt": {
+    "$date": "2026-03-21T14:35:26.073Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-24T16:25:24.452Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69beacaee6a50f7d2c24ab95"
+  },
+  "order_id": {
+    "$oid": "69beacaee6a50f7d2c24ab87"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "product_name": "Bình hoa kim loại Luna",
+  "unit_price": 22800000,
+  "quantity": 1,
+  "discount_percent": 10,
+  "item_subtotal": 20520000,
+  "status": "delivered",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-21T14:35:26.080Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T14:42:22.322Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bf7b518a24f4c97a21080f"
+  },
+  "order_id": {
+    "$oid": "69bf7b518a24f4c97a21080d"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "product_name": "Bình hoa Rubble",
+  "unit_price": 11330000,
+  "quantity": 1,
+  "discount_percent": 5,
+  "item_subtotal": 10913500,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-22T05:17:05.891Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T05:17:05.891Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bf7b528a24f4c97a21081a"
+  },
+  "order_id": {
+    "$oid": "69bf7b528a24f4c97a210818"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "product_name": "Bình hoa Rubble",
+  "unit_price": 11330000,
+  "quantity": 1,
+  "discount_percent": 5,
+  "item_subtotal": 10913500,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-22T05:17:06.033Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T05:17:06.033Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bf7b528a24f4c97a210825"
+  },
+  "order_id": {
+    "$oid": "69bf7b528a24f4c97a210823"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "product_name": "Bình hoa Rubble",
+  "unit_price": 11330000,
+  "quantity": 1,
+  "discount_percent": 5,
+  "item_subtotal": 10913500,
+  "status": "delivered",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-22T05:17:06.060Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T14:33:34.274Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bf7d76002ac505edc1f7d2"
+  },
+  "order_id": {
+    "$oid": "69bf7d76002ac505edc1f7d0"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "product_name": "Bình hoa Rubble",
+  "unit_price": 11330000,
+  "quantity": 1,
+  "discount_percent": 5,
+  "item_subtotal": 10913500,
+  "status": "delivered",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-22T05:26:14.525Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T14:33:02.701Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a004e8fd32ed55c70f9e"
+  },
+  "order_id": {
+    "$oid": "69c3a004e8fd32ed55c70f9c"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:42:44.106Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:42:44.106Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a004e8fd32ed55c70fa8"
+  },
+  "order_id": {
+    "$oid": "69c3a004e8fd32ed55c70fa6"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:42:44.152Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:42:44.152Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a004e8fd32ed55c70fb2"
+  },
+  "order_id": {
+    "$oid": "69c3a004e8fd32ed55c70fb0"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:42:44.186Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:42:44.186Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a060e8fd32ed55c70fbc"
+  },
+  "order_id": {
+    "$oid": "69c3a060e8fd32ed55c70fba"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:44:16.319Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:44:16.319Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a060e8fd32ed55c70fc6"
+  },
+  "order_id": {
+    "$oid": "69c3a060e8fd32ed55c70fc4"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:44:16.378Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:44:16.378Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a060e8fd32ed55c70fd0"
+  },
+  "order_id": {
+    "$oid": "69c3a060e8fd32ed55c70fce"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:44:16.430Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:44:16.430Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a0e68c3bae7212f7d199"
+  },
+  "order_id": {
+    "$oid": "69c3a0e68c3bae7212f7d197"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:46:30.614Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:46:30.614Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a0e68c3bae7212f7d1a5"
+  },
+  "order_id": {
+    "$oid": "69c3a0e68c3bae7212f7d1a3"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:46:30.682Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:46:30.682Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a0e68c3bae7212f7d1b1"
+  },
+  "order_id": {
+    "$oid": "69c3a0e68c3bae7212f7d1af"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:46:30.718Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:46:30.718Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a0ee8c3bae7212f7d1bd"
+  },
+  "order_id": {
+    "$oid": "69c3a0ee8c3bae7212f7d1bb"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:46:38.150Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:46:38.150Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a0ee8c3bae7212f7d1c9"
+  },
+  "order_id": {
+    "$oid": "69c3a0ee8c3bae7212f7d1c7"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:46:38.197Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:46:38.197Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a0ee8c3bae7212f7d1d5"
+  },
+  "order_id": {
+    "$oid": "69c3a0ee8c3bae7212f7d1d3"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:46:38.242Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:46:38.242Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a0f68c3bae7212f7d1e1"
+  },
+  "order_id": {
+    "$oid": "69c3a0f68c3bae7212f7d1df"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:46:46.373Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:46:46.373Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a0f68c3bae7212f7d1ed"
+  },
+  "order_id": {
+    "$oid": "69c3a0f68c3bae7212f7d1eb"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:46:46.410Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:46:46.410Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a0f68c3bae7212f7d1f9"
+  },
+  "order_id": {
+    "$oid": "69c3a0f68c3bae7212f7d1f7"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:46:46.446Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:46:46.446Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a1398c3bae7212f7d205"
+  },
+  "order_id": {
+    "$oid": "69c3a1398c3bae7212f7d203"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:47:53.683Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:47:53.683Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a1398c3bae7212f7d211"
+  },
+  "order_id": {
+    "$oid": "69c3a1398c3bae7212f7d20f"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:47:53.707Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:47:53.707Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a1398c3bae7212f7d21d"
+  },
+  "order_id": {
+    "$oid": "69c3a1398c3bae7212f7d21b"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:47:53.737Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:47:53.737Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a214d8782203456ff5d8"
+  },
+  "order_id": {
+    "$oid": "69c3a214d8782203456ff5d6"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:51:32.429Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:51:32.429Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a214d8782203456ff5e4"
+  },
+  "order_id": {
+    "$oid": "69c3a214d8782203456ff5e2"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:51:32.481Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:51:32.481Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a214d8782203456ff5f0"
+  },
+  "order_id": {
+    "$oid": "69c3a214d8782203456ff5ee"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:51:32.517Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:51:32.517Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a28cdd44789cb6b448e3"
+  },
+  "order_id": {
+    "$oid": "69c3a28cdd44789cb6b448e1"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:53:32.226Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:53:32.226Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a28cdd44789cb6b448ef"
+  },
+  "order_id": {
+    "$oid": "69c3a28cdd44789cb6b448ed"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:53:32.282Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:53:32.282Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a28cdd44789cb6b448fb"
+  },
+  "order_id": {
+    "$oid": "69c3a28cdd44789cb6b448f9"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "delivered",
+  "reviewed": true,
+  "createdAt": {
+    "$date": "2026-03-25T08:53:32.320Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T09:08:45.769Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a29da966e00cb4f225a5"
+  },
+  "order_id": {
+    "$oid": "69c3a29da966e00cb4f225a3"
+  },
+  "product_variant_id": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "unit_price": 4350000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 4350000,
+  "status": "delivered",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T08:53:49.831Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:56:20.219Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3ac3a16f5c73df365e109"
+  },
+  "order_id": {
+    "$oid": "69c3ac3a16f5c73df365e107"
+  },
+  "product_variant_id": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "product_name": "Bình hoa Float",
+  "unit_price": 16890000,
+  "quantity": 1,
+  "discount_percent": 0,
+  "item_subtotal": 16890000,
+  "status": "pending",
+  "reviewed": false,
+  "createdAt": {
+    "$date": "2026-03-25T09:34:50.909Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T09:34:50.909Z"
+  },
+  "__v": 0
+}]

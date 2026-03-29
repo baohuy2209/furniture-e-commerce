@@ -133,3 +133,8 @@
   font-size: 12px;
   opacity: 0.6;
 }
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}

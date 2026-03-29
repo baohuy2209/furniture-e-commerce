@@ -1,0 +1,157 @@
+[{
+  "_id": {
+    "$oid": "69bea907e6a50f7d2c24aa27"
+  },
+  "order_item_id": {
+    "$oid": "69bea907e6a50f7d2c24aa25"
+  },
+  "shipping_discount_percent": 0,
+  "address_id": {
+    "$oid": "69bd76d17dd92a0c9524fc0b"
+  },
+  "shipping_method": "STANDARD_DELIVERY",
+  "shipping_fee": 0,
+  "estimate_delivery": "3-5 ngày",
+  "createdAt": {
+    "$date": "2026-03-21T14:19:51.337Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-21T14:19:51.337Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69beacaee6a50f7d2c24ab8b"
+  },
+  "order_item_id": {
+    "$oid": "69beacaee6a50f7d2c24ab89"
+  },
+  "shipping_discount_percent": 0,
+  "address_id": {
+    "$oid": "69bd76d17dd92a0c9524fc0b"
+  },
+  "shipping_method": "STANDARD_DELIVERY",
+  "shipping_fee": 0,
+  "estimate_delivery": "3-5 ngày",
+  "createdAt": {
+    "$date": "2026-03-21T14:35:26.067Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-21T14:35:26.067Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69beacaee6a50f7d2c24ab91"
+  },
+  "order_item_id": {
+    "$oid": "69beacaee6a50f7d2c24ab8f"
+  },
+  "shipping_discount_percent": 0,
+  "address_id": {
+    "$oid": "69bd76d17dd92a0c9524fc0b"
+  },
+  "shipping_method": "STANDARD_DELIVERY",
+  "shipping_fee": 0,
+  "estimate_delivery": "3-5 ngày",
+  "createdAt": {
+    "$date": "2026-03-21T14:35:26.075Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-21T14:35:26.075Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69beacaee6a50f7d2c24ab97"
+  },
+  "order_item_id": {
+    "$oid": "69beacaee6a50f7d2c24ab95"
+  },
+  "shipping_discount_percent": 0,
+  "address_id": {
+    "$oid": "69bd76d17dd92a0c9524fc0b"
+  },
+  "shipping_method": "STANDARD_DELIVERY",
+  "shipping_fee": 0,
+  "estimate_delivery": "3-5 ngày",
+  "createdAt": {
+    "$date": "2026-03-21T14:35:26.083Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-21T14:35:26.083Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bf7d76002ac505edc1f7d4"
+  },
+  "order_item_id": {
+    "$oid": "69bf7d76002ac505edc1f7d2"
+  },
+  "shipping_discount_percent": 0,
+  "address_id": {
+    "$oid": "69bf7d76002ac505edc1f7cb"
+  },
+  "shipping_method": "STANDARD_DELIVERY",
+  "shipping_fee": 150000,
+  "estimate_delivery": "7-16 ngày",
+  "shipping_provider": "J&T",
+  "createdAt": {
+    "$date": "2026-03-22T05:26:14.533Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T05:26:14.533Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3a29da966e00cb4f225ab"
+  },
+  "order_item_id": {
+    "$oid": "69c3a29da966e00cb4f225a5"
+  },
+  "shipping_discount_percent": 0,
+  "address_id": {
+    "$oid": "69bd76d17dd92a0c9524fc0b"
+  },
+  "shipping_method": "STANDARD_DELIVERY",
+  "shipping_fee": 35000,
+  "estimate_delivery": "3-5 ngày",
+  "shipping_provider": "J&T",
+  "createdAt": {
+    "$date": "2026-03-25T08:53:49.840Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:53:49.840Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3ac3a16f5c73df365e10f"
+  },
+  "order_item_id": {
+    "$oid": "69c3ac3a16f5c73df365e109"
+  },
+  "shipping_discount_percent": 0,
+  "address_id": {
+    "$oid": "69bd76d17dd92a0c9524fc0b"
+  },
+  "shipping_method": "STANDARD_DELIVERY",
+  "shipping_fee": 0,
+  "estimate_delivery": "3-5 ngày",
+  "shipping_provider": "J&T",
+  "createdAt": {
+    "$date": "2026-03-25T09:34:50.926Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T09:34:50.926Z"
+  },
+  "__v": 0
+}]

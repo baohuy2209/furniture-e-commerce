@@ -1,0 +1,659 @@
+[{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7db96"
+  },
+  "product_name": "Sofa góc Hammpton có tựa lưng điều chỉnh và ngăn chứa (bên trái)",
+  "brand": "Hammpton",
+  "description": "Sofa góc phong cách hiện đại với tựa lưng điều chỉnh linh hoạt và ngăn chứa đồ tiện lợi, phù hợp cho phòng khách.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71e2"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e3"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e4"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71fa"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e5"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e6"
+    }
+  ],
+  "discount_percent": 10,
+  "is_assembly": false,
+  "product_component": {
+    "sofa_direction": [
+      "left",
+      "right"
+    ],
+    "upholstery": [
+      "Belge Arezzo Fabric 3331",
+      "Belge Lucca Fabric 3320",
+      "Camel Lucca Fabric 3324",
+      "Green Arezzo Fabric 3334",
+      "Light Brown Arezzo Fabric 3332",
+      "Ochre Arezzo Fabric 3333",
+      "Red Lucca Fabric 3323",
+      "Stone Grey Napoli Fabric 2255",
+      "White Lucca Fabric 3321",
+      "White Rimini Fabric 3083"
+    ]
+  },
+  "warranty": 12,
+  "important_functions": [
+    "Tựa lưng điều chỉnh linh hoạt",
+    "Ngăn chứa đồ tích hợp",
+    "Thiết kế sofa góc tiết kiệm không gian"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf0"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf8"
+    }
+  ],
+  "image_url": [
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image1.png",
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image2.png",
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image3.png",
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image4.png",
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/image5.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7db99"
+  },
+  "product_name": "Tượng hình lá Mango",
+  "brand": "Mango",
+  "description": "Tượng trang trí lấy cảm hứng từ hình lá cây, mang phong cách hiện đại.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71f6"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71f2"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea7201"
+    }
+  ],
+  "discount_percent": 0,
+  "is_assembly": true,
+  "warranty": 12,
+  "important_functions": [
+    "Trang trí không gian",
+    "Thiết kế gọn nhẹ"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf1"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf9"
+    }
+  ],
+  "image_url": [
+    "images/products/living_room/mango_leaf_sculpture/image1.png",
+    "images/products/living_room/mango_leaf_sculpture/image2.png",
+    "images/products/living_room/mango_leaf_sculpture/image3.png",
+    "images/products/living_room/mango_leaf_sculpture/image4.png",
+    "images/products/living_room/mango_leaf_sculpture/image5.png",
+    "images/products/living_room/mango_leaf_sculpture/image6.png",
+    "images/products/living_room/mango_leaf_sculpture/image7.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7db9a"
+  },
+  "product_name": "Bình hoa Rubble",
+  "brand": "Rubble",
+  "description": "Bình hoa kim loại sang trọng, phù hợp trang trí phòng khách, ngoài trời.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71f7"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71f3"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea7202"
+    }
+  ],
+  "discount_percent": 5,
+  "is_assembly": false,
+  "warranty": 6,
+  "important_functions": [
+    "Sử dụng linh hoạt",
+    "Thiết kế chắc chắn"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf1"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cfa"
+    }
+  ],
+  "image_url": [
+    "images/products/outdoor/rubble_vase/image1.png",
+    "images/products/outdoor/rubble_vase/image2.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7db9b"
+  },
+  "product_name": "Tô trang trí Sweet Art",
+  "brand": "Sweet Art",
+  "description": "Tô trang trí, phong cách với thiết kế nghệ thuật.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71f8"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e9"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea7203"
+    }
+  ],
+  "discount_percent": 10,
+  "is_assembly": false,
+  "warranty": 12,
+  "important_functions": [
+    "Trang trí tường",
+    "Mở rộng không gian"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf7"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf8"
+    }
+  ],
+  "image_url": [
+    "images/products/kitchen/sweet_art_bowl/image1.png",
+    "images/products/kitchen/sweet_art_bowl/image2.png",
+    "images/products/kitchen/sweet_art_bowl/image3.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7db9c"
+  },
+  "product_name": "Tượng san hô Belize",
+  "brand": "Belize",
+  "description": "Tượng trang trí lấy cảm hứng từ san hô, mang phong cách nghệ thuật hiện đại.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71e7"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e8"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e4"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71fc"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e9"
+    }
+  ],
+  "discount_percent": 5,
+  "is_assembly": false,
+  "warranty": 12,
+  "important_functions": [
+    "Trang trí không gian",
+    "Thiết kế nghệ thuật"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf7"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf8"
+    }
+  ],
+  "image_url": [
+    "images/products/living_room/belize_coral_sculpture/image1.png",
+    "images/products/living_room/belize_coral_sculpture/image2.png",
+    "images/products/living_room/belize_coral_sculpture/image3.png",
+    "images/products/living_room/belize_coral_sculpture/image4.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7db9d"
+  },
+  "product_name": "Bình hoa Float",
+  "brand": "Float",
+  "description": "Bình hoa phong cách tối giản, phù hợp trang trí phòng tắm.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71ed"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71f0"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71fd"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71f9"
+    }
+  ],
+  "discount_percent": 0,
+  "is_assembly": true,
+  "warranty": 6,
+  "important_functions": [
+    "Chống nước",
+    "Thiết kế tối giản"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf7"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cfb"
+    }
+  ],
+  "image_url": [
+    "images/products/bathroom/float_vase/image1.png",
+    "images/products/bathroom/float_vase/image2.png",
+    "images/products/bathroom/float_vase/image3.png",
+    "images/products/bathroom/float_vase/image4.png",
+    "images/products/bathroom/float_vase/image5.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7db9e"
+  },
+  "product_name": "Tượng Flora 5",
+  "brand": "Flora",
+  "description": "Tượng trang trí thủ công mang phong cách nghệ thuật hiện đại.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71e7"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71ea"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e4"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71fe"
+    }
+  ],
+  "discount_percent": 5,
+  "is_assembly": false,
+  "warranty": 12,
+  "important_functions": [
+    "Trang trí nội thất",
+    "Sản phẩm thủ công"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf7"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf8"
+    }
+  ],
+  "image_url": [
+    "images/products/living_room/flora_5_sculpture/image1.png",
+    "images/products/living_room/flora_5_sculpture/image2.png",
+    "images/products/living_room/flora_5_sculpture/image3.png",
+    "images/products/living_room/flora_5_sculpture/image4.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7db9f"
+  },
+  "product_name": "Tượng hình học Geometric",
+  "brand": "Geometric",
+  "description": "Tượng trang trí hình học, tạo điểm nhấn hiện đại cho không gian.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71e7"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71eb"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e4"
+    }
+  ],
+  "discount_percent": 5,
+  "is_assembly": false,
+  "warranty": 12,
+  "important_functions": [
+    "Trang trí nghệ thuật",
+    "Thiết kế hình học"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf7"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf8"
+    }
+  ],
+  "image_url": [
+    "images/products/living_room/geometric_sculpture/image1.png",
+    "images/products/living_room/geometric_sculpture/image2.png",
+    "images/products/living_room/geometric_sculpture/image3.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7dba0"
+  },
+  "product_name": "Bình hoa kim loại Luna",
+  "brand": "Luna",
+  "description": "Bình hoa kim loại sang trọng, phù hợp trang trí phòng khách.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71ed"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71ee"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e4"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71ff"
+    }
+  ],
+  "discount_percent": 10,
+  "is_assembly": false,
+  "warranty": 12,
+  "important_functions": [
+    "Chất liệu kim loại cao cấp",
+    "Trang trí nội thất"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf7"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf8"
+    }
+  ],
+  "image_url": [
+    "images/products/living_room/luna_metal_vase/image1.png",
+    "images/products/living_room/luna_metal_vase/image2.png",
+    "images/products/living_room/luna_metal_vase/image3.png",
+    "images/products/living_room/luna_metal_vase/image4.png",
+    "images/products/living_room/luna_metal_vase/image5.png",
+    "images/products/living_room/luna_metal_vase/image6.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7dba1"
+  },
+  "product_name": "Tượng Magnolia",
+  "brand": "Magnolia",
+  "description": "Tượng trang trí mang phong cách tinh tế, nhẹ nhàng.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71e7"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e8"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e4"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea7200"
+    }
+  ],
+  "discount_percent": 10,
+  "is_assembly": false,
+  "warranty": 12,
+  "important_functions": [
+    "Trang trí không gian",
+    "Thiết kế tinh tế"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf7"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf8"
+    }
+  ],
+  "image_url": [
+    "images/products/living_room/magnolia_sculpture/image1.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7dba2"
+  },
+  "product_name": "Gương Medina",
+  "brand": "Medina",
+  "description": "Gương trang trí thiết kế đơn giản, phù hợp nhiều không gian.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71f4"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea7205"
+    }
+  ],
+  "discount_percent": 0,
+  "is_assembly": false,
+  "warranty": 12,
+  "important_functions": [
+    "Phù hợp trang trí trong nhiều không gian khác nhau",
+    "Sử dụng linh hoạt"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf1"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf8"
+    }
+  ],
+  "image_url": [
+    "images/products/living_room/medina_mirror/image1.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d977cc400dbca31d7db97"
+  },
+  "product_name": "Sofa góc Hammpton có tựa lưng điều chỉnh và ngăn chứa (bên phải)",
+  "brand": "Hammpton",
+  "description": "Phiên bản sofa góc Hammpton bên phải với tựa lưng điều chỉnh và ngăn chứa đồ thông minh.",
+  "tags": [
+    {
+      "$oid": "699d531503c4b1aef1ea71e2"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e3"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e4"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71fa"
+    },
+    {
+      "$oid": "699d531503c4b1aef1ea71e6"
+    }
+  ],
+  "discount_percent": 10,
+  "is_assembly": false,
+  "product_component": {
+    "sofa_direction": [
+      "left",
+      "right"
+    ],
+    "upholstery": [
+      "Belge Arezzon Fabric 3331",
+      "Belge Lucca Fabric 3320",
+      "Camel Lucca Fabric 3324",
+      "Green Arezzo Fabric 3334",
+      "Light Brown Arezzo Fabric 3332",
+      "Ochre Arezzo Fabric 3333",
+      "Red Lucca Fabric 3323",
+      "Stone Grey Napoli Fabric 2255",
+      "White Lucca Fabric 3321",
+      "White Rimini Fabric 3083"
+    ]
+  },
+  "warranty": 12,
+  "important_functions": [
+    "Tựa lưng điều chỉnh",
+    "Ngăn chứa trong tay vịn",
+    "Đệm ngồi êm ái"
+  ],
+  "categories": [
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf0"
+    },
+    {
+      "$oid": "699d49ee6d5cf60b02c67cf8"
+    }
+  ],
+  "image_url": [
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image1.png",
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image2.png",
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image3.png",
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image4.png",
+    "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/image5.png"
+  ],
+  "createdAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T12:20:12.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c396f75aa8ca00cf30b961"
+  },
+  "product_name": "Đèn trần phòng tắm HAVSDUN",
+  "brand": "IKEA",
+  "description": "Đèn trần HAVSDUN mang phong cách tối giản Bắc Âu, phù hợp cho không gian phòng tắm hiện đại.",
+  "tags": [
+    {
+      "$oid": "69c390549003591d72fd7fc6"
+    },
+    {
+      "$oid": "69c394946d953b65373633e2"
+    }
+  ],
+  "discount_percent": 0,
+  "is_assembly": false,
+  "warranty": 12,
+  "important_functions": [],
+  "categories": [],
+  "image_url": [],
+  "createdAt": {
+    "$date": "2026-03-25T08:04:07.692Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:04:07.692Z"
+  },
+  "__v": 0
+}]

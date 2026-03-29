@@ -1,0 +1,156 @@
+[{
+  "_id": {
+    "$oid": "69a59667bf93938a992a3ac3"
+  },
+  "username": "huynb23411",
+  "name": "Nguyễn Bảo Huy",
+  "email": "huynb23411@st.uel.edu.vn",
+  "password_hash": "$2b$10$xgJSNG09JoGquwzQza8AWuSP.eJAErZF7EqyOMANpffQqu63DzUN6",
+  "phone": "0375686583",
+  "status": "unlocked",
+  "is_verified": false,
+  "roles": [
+    {
+      "$oid": "698b4c9949cd010f85b7e43b"
+    }
+  ],
+  "__v": 1,
+  "last_login": {
+    "$date": "2026-03-11T17:50:12.937Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "username": "huynguyen002311",
+  "name": "Nguyễn Bảo Huy",
+  "email": "huynguyen002311@gmail.com",
+  "password_hash": "$2b$10$zh3xdaNJY0D.Vf33llExgeysRiMYIBNPWgfcluJsrIse5oDm0odvm",
+  "phone": "0348403449",
+  "status": "unlocked",
+  "is_verified": true,
+  "roles": [
+    {
+      "$oid": "698b4c9949cd010f85b7e43b"
+    },
+    {
+      "$oid": "698b4c9949cd010f85b7e43d"
+    },
+    {
+      "$oid": "698b4c9949cd010f85b7e43f"
+    }
+  ],
+  "__v": 1,
+  "last_login": {
+    "$date": "2026-03-25T05:27:51.105Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T09:34:50.939Z"
+  },
+  "gender": "male",
+  "authProvider": "local",
+  "dob": {
+    "$date": "2005-09-22T00:00:00.000Z"
+  },
+  "points": 2,
+  "avatar": "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774416878/user/u9hzxclaphgsliva0og2.jpg"
+},
+{
+  "_id": {
+    "$oid": "69b3ae948c7b09ba592fae32"
+  },
+  "username": "vvnam965",
+  "name": "Trần Võ Nam",
+  "email": "vvnam965@gmail.com",
+  "password_hash": "$2b$10$OljJMB/ifLB6.k64/or1suCpFGDrjhdXZd0vqRvIiHaTnt1cHw62S",
+  "phone": "0375686583",
+  "status": "unlocked",
+  "is_verified": false,
+  "points": 0,
+  "roles": [
+    {
+      "$oid": "698b4c9949cd010f85b7e43b"
+    }
+  ],
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "69b3c3e4ed1f44966503c5fc"
+  },
+  "username": "huyn61777",
+  "name": "Nguyễn Bảo Huy",
+  "email": "huyn61777@gmail.com",
+  "password_hash": "$2b$10$6Vmq7ziljgEJ7ju30SWx8eRk8T4hYT5bYcDYjFtCWxURQfFQ5Eq3y",
+  "phone": "0348403449",
+  "status": "locked",
+  "is_verified": true,
+  "points": 0,
+  "roles": [
+    {
+      "$oid": "698b4c9949cd010f85b7e43b"
+    }
+  ],
+  "__v": 1,
+  "last_login": {
+    "$date": "2026-03-15T15:07:36.424Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T14:56:16.230Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69bf7d61002ac505edc1f7c7"
+  },
+  "username": "phucvh23411",
+  "name": "Võ Hồng Phúc",
+  "email": "phucvh23411@st.uel.edu.vn",
+  "phone": "0913950340",
+  "status": "unlocked",
+  "is_verified": false,
+  "points": 0,
+  "authProvider": "guest",
+  "roles": [
+    {
+      "$oid": "698b4c9949cd010f85b7e43b"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-03-22T05:25:53.029Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T05:25:53.040Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "69c3ad6616f5c73df365e2b0"
+  },
+  "username": "nyntb23411",
+  "name": "Nguyễn Bảo Ny",
+  "email": "nyntb23411@st.uel.edu.vn",
+  "password_hash": "$2b$10$p/WSVs31XE81ozzdXodzWudQmY4SAUmt6Z7zBo8nVfAq97XCCHZ7i",
+  "phone": "0376968922",
+  "status": "unlocked",
+  "is_verified": true,
+  "points": 0,
+  "authProvider": "local",
+  "roles": [
+    {
+      "$oid": "698b4c9949cd010f85b7e43b"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-03-25T09:39:50.261Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T09:55:55.996Z"
+  },
+  "__v": 1,
+  "last_login": {
+    "$date": "2026-03-25T09:45:34.830Z"
+  }
+}]

@@ -1,0 +1,85 @@
+[{
+  "_id": {
+    "$oid": "69bfd8f53640e5d62e9de9d2"
+  },
+  "warranty_request_id": {
+    "$oid": "69bfd8f13640e5d62e9de9d0"
+  },
+  "image_url": [
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774180597/warranties/cwuxj0tth6vywunaggtt.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774180597/warranties/qmsenrgigrqxcvk3z2ir.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774180597/warranties/kjuitpikgnvrzb6f9wfm.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774180597/warranties/w6wogojqs9gnhxpkwo6o.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774180597/warranties/z80hxn5yvr83nas7289r.png"
+  ],
+  "createdAt": {
+    "$date": "2026-03-22T11:56:37.481Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T11:56:37.481Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bfecca09eb22c9765e729a"
+  },
+  "warranty_request_id": {
+    "$oid": "69bfecc509eb22c9765e7298"
+  },
+  "image_url": [
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185674/warranties/tlswdcbyyt1smfdzjetm.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185674/warranties/glcodgo3zmfiqyzfoyvb.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185674/warranties/zdizgnymbfgsvrilstld.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185674/warranties/vug65v8mn2nlo0ldqoez.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185674/warranties/hn2asjiijczrlo3o9v6g.png"
+  ],
+  "createdAt": {
+    "$date": "2026-03-22T13:21:14.557Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T13:21:14.557Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bfedc887788a23179cb448"
+  },
+  "warranty_request_id": {
+    "$oid": "69bfedc387788a23179cb446"
+  },
+  "image_url": [
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185928/warranties/qjbm7vyx8g406iyatvxx.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185928/warranties/n2srahcnxbkfo0fkcuft.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185928/warranties/jp0z1j4fpx5gzj70vdqq.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185928/warranties/mfuh2s26yhfrqslipl42.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774185928/warranties/ujezjuxutni5yfw6ms4c.png"
+  ],
+  "createdAt": {
+    "$date": "2026-03-22T13:25:28.989Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T13:25:28.989Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c3649e058ceea32c4037c1"
+  },
+  "warranty_request_id": {
+    "$oid": "69c36498058ceea32c4037bf"
+  },
+  "image_url": [
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774412959/warranties/ghwz1ikxsnu1skkyv3zn.png",
+    "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774412957/warranties/ueke2vukt1nodegs0vi0.png"
+  ],
+  "createdAt": {
+    "$date": "2026-03-25T04:29:18.952Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T04:29:18.952Z"
+  },
+  "__v": 0
+}]
