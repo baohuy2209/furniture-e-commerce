@@ -556,24 +556,45 @@
                             <th>Giao hàng</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr *ngFor="let v of d.variants">
-                            <td class="text-muted" style="font-size: 12px">
+                        <tbody style="background-color: black !important">
+                          <tr
+                            *ngFor="let v of d.variants"
+                            style="background-color: black !important"
+                            class="table-row"
+                          >
+                            <td
+                              class="text-muted"
+                              style="font-size: 12px"
+                              style="background-color: black !important"
+                            >
                               {{ v._id }}
                             </td>
-                            <td class="text-end fw-bold" style="color: #818cf8">
+                            <td
+                              class="text-end fw-bold"
+                              style="color: #818cf8"
+                              style="background-color: black !important"
+                            >
                               {{ v.price | number }}
                             </td>
-                            <td class="text-end">{{ v.num_inventory }}</td>
-                            <td class="text-end text-muted">{{ v.num_selled }}</td>
-                            <td class="text-end">
+                            <td class="text-end" style="background-color: black !important">
+                              {{ v.num_inventory }}
+                            </td>
+                            <td
+                              class="text-end text-muted"
+                              style="background-color: black !important"
+                            >
+                              {{ v.num_selled }}
+                            </td>
+                            <td class="text-end" style="background-color: black !important">
                               <i
                                 class="bi bi-star-fill text-warning me-1"
                                 style="font-size: 11px"
                               ></i
-                              >{{ v.rating }}
+                              >{{ v.rating.average }}
                             </td>
-                            <td style="color: #94a3b8">{{ v.expected_delivery }}</td>
+                            <td style="color: #94a3b8" style="background-color: black !important">
+                              {{ v.expected_delivery }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
