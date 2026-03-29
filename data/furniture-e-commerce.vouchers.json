@@ -1,0 +1,29 @@
+[{
+  "_id": {
+    "$oid": "69c38c4d1bc9b2973a4b184f"
+  },
+  "voucher_name": "Khuyến mãi ngày 8/3",
+  "code": "SALE8THANG3",
+  "value": 5,
+  "type": "percent",
+  "min_order_value": 10000000,
+  "usage_limit": 1,
+  "used_count": 0,
+  "start_date": {
+    "$date": "2026-03-25T07:13:00.000Z"
+  },
+  "end_date": {
+    "$date": "2026-03-25T07:13:00.000Z"
+  },
+  "status": "active",
+  "description": "Giảm giá đặc biệt nhân ngày Quốc tế Phụ nữ 8/3",
+  "appliedTo": "all",
+  "applied_products": [],
+  "createdAt": {
+    "$date": "2026-03-25T07:18:37.135Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T07:18:37.135Z"
+  },
+  "__v": 0
+}]

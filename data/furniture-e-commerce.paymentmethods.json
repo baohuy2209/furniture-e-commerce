@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "69bd8ffb696640838c0643fc"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "type": "bank",
+  "bankName": "MBBANK",
+  "name": "Ngân hàng",
+  "cardNumber": "0375686583",
+  "owner": "NGUYEN BAO HUY",
+  "isDefault": true,
+  "createdAt": {
+    "$date": "2026-03-20T18:20:43.027Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-20T18:20:49.487Z"
+  },
+  "__v": 0
+}]

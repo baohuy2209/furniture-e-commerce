@@ -1,0 +1,114 @@
+[{
+  "_id": {
+    "$oid": "69bfd8f13640e5d62e9de9d0"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "request_date": {
+    "$date": "2026-03-22T11:56:33.003Z"
+  },
+  "fullname": "Nguyễn Bảo Huy",
+  "email": "huynguyen002311@gmail.com",
+  "phone": "0375686583",
+  "issue_description": "Tôi mới mua sản phẩm này được 2 tuần thì nó bị hỏng chân rồi, tôi cần bảo hành sản phẩm này",
+  "warranty_status": "resolved",
+  "createdAt": {
+    "$date": "2026-03-22T11:56:33.013Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T12:04:41.029Z"
+  },
+  "__v": 0,
+  "approved_by": "Nguyễn Bảo Huy",
+  "approved_date": {
+    "$date": "2026-03-22T12:04:41.028Z"
+  },
+  "completed_date": {
+    "$date": "2026-03-22T12:04:41.028Z"
+  },
+  "resolution_note": "Đã giải quyết ổn thỏa"
+},
+{
+  "_id": {
+    "$oid": "69bfecc509eb22c9765e7298"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "request_date": {
+    "$date": "2026-03-22T13:21:09.963Z"
+  },
+  "fullname": "Nguyễn Bảo Huy",
+  "email": "huynguyen002311@gmail.com",
+  "phone": "0375686583",
+  "issue_description": "Tôi mới mua sản phẩm này được 2 tuần thì nó bị hỏng chân rồi, tôi cần bảo hành sản phẩm này",
+  "warranty_status": "resolved",
+  "createdAt": {
+    "$date": "2026-03-22T13:21:09.971Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T13:25:05.645Z"
+  },
+  "__v": 0,
+  "approved_date": {
+    "$date": "2026-03-22T13:25:05.644Z"
+  },
+  "completed_date": {
+    "$date": "2026-03-22T13:25:05.644Z"
+  },
+  "resolution_note": "Đã xử lí ổn "
+},
+{
+  "_id": {
+    "$oid": "69bfedc387788a23179cb446"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "request_date": {
+    "$date": "2026-03-22T13:25:23.918Z"
+  },
+  "fullname": "Nguyễn Bảo Huy",
+  "email": "huynguyen002311@gmail.com",
+  "phone": "0375686583",
+  "issue_description": "Tôi mới mua sản phẩm này được 2 tuần thì nó bị hỏng chân rồi, tôi cần bảo hành sản phẩm này",
+  "warranty_status": "unresolved",
+  "createdAt": {
+    "$date": "2026-03-22T13:25:23.927Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T13:25:23.927Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c36498058ceea32c4037bf"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "request_date": {
+    "$date": "2026-03-25T04:29:12.373Z"
+  },
+  "order_id": "69beacaee6a50f7d2c24ab87",
+  "order_item_id": "69beacaee6a50f7d2c24ab8f",
+  "fullname": "Nguyễn Bảo Huy",
+  "email": "huynguyen002311@gmail.com",
+  "phone": "0348403449",
+  "issue_description": "Tôi cần bảo hánh sản phẩm này ",
+  "warranty_status": "unresolved",
+  "warranty_method": "store",
+  "warranty_reasons": [
+    "Sản phẩm thiếu thành phần, linh kiện",
+    "Sản phẩm sai, thiếu chức năng"
+  ],
+  "createdAt": {
+    "$date": "2026-03-25T04:29:12.386Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T04:29:12.386Z"
+  },
+  "__v": 0
+}]

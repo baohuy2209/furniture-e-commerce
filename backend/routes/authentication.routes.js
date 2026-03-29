@@ -1,5 +1,5 @@
 const express = require("express");
-const { verifySignUp, authJwt } = require("../middlewares");
+const { verifySignUp } = require("../middlewares");
 const authController = require("../app/controllers/auth.controller");
 const router = express.Router();
 router.use(function (req, res, next) {
@@ -13,7 +13,7 @@ router.post(
   authController.signup,
 );
 router.post("/signin", authController.signin);
-router.post("/logout", [authJwt.protectedRoute], authController.logout);
+router.post("/logout", authController.logout);
 router.post("/google", authController.googleAuthentication);
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/reset-password/check-otp", authController.checkOtpResetPassword);

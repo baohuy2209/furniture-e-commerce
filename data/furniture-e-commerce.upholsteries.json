@@ -1,0 +1,1221 @@
+[{
+  "_id": {
+    "$oid": "699d5c52234118629afdd12a"
+  },
+  "name": "Belge Arezzo Fabric 3331",
+  "fabric_name": "Arezzo",
+  "color": "Beige",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_arezzo_fabric_3331/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd132"
+  },
+  "name": "Sand Ravello Fabric 3220",
+  "fabric_name": "Ravello",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/sand_ravello_fabric_3220/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd130"
+  },
+  "name": "Sand Colored Nani Fabric 2110",
+  "fabric_name": "Nani",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/sand_colored_nani_fabric_2110/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd131"
+  },
+  "name": "Belge Ravello Fabric 3221",
+  "fabric_name": "Ravello",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_ravello_fabric_3221/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd135"
+  },
+  "name": "Belge Tuscany Fabric 3201",
+  "fabric_name": "Tuscany",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_tuscany_fabric_3201/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd136"
+  },
+  "name": "Belge Frisco Fabric With Aquaclean 2070",
+  "fabric_name": "Frisco",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_frisco_fabric_with_aquaclean_2070/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd137"
+  },
+  "name": "Belge Lazio Fabric 3091",
+  "fabric_name": "Lazio",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_lazio_fabric_3091/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd138"
+  },
+  "name": "Belge Tomelilla Fabric 3145",
+  "fabric_name": "Tomelilla",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_tomelilla_fabric_3145/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd139"
+  },
+  "name": "Golden Belge Avellino Fabric 3251",
+  "fabric_name": "Avellino",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/golden_belge_avellino_fabric_3251/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd13a"
+  },
+  "name": "Sand Napoli Fabric 2267",
+  "fabric_name": "Napoli",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/sand_napoli_fabric_2267/image.png ",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd13b"
+  },
+  "name": "Ochre Copenhagen Fabric 3312",
+  "fabric_name": "Copenhagen",
+  "color": "Yellow",
+  "material": "Fabric",
+  "image": "images/upholstery/ochre_copenhagen_fabric_3312/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd13c"
+  },
+  "name": "Mustard Capri Fabric 3234",
+  "fabric_name": "Capri",
+  "color": "Yellow",
+  "material": "Fabric",
+  "image": "images/upholstery/mustard_capri_fabric_3234/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd13d"
+  },
+  "name": "Mustard Bristol Fabric 3066",
+  "fabric_name": "Bristol",
+  "color": "Yellow",
+  "material": "Fabric",
+  "image": "images/upholstery/mustard_bristol_fabric_3066/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd13e"
+  },
+  "name": "Mustard Bologna Fabric 3255",
+  "fabric_name": "Bologna",
+  "color": "Yellow",
+  "material": "Fabric",
+  "image": "images/upholstery/mustard_bologna_fabric_3255/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd13f"
+  },
+  "name": "Mustard Tuscany Fabric 3205",
+  "fabric_name": "Tuscany",
+  "color": "Yellow",
+  "material": "Fabric",
+  "image": "images/upholstery/mustard_tuscany_fabric_3205/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd133"
+  },
+  "name": "Sand Bologna Fabric 3254",
+  "fabric_name": "Bologna",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/sand_bologna_fabric_3254/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd134"
+  },
+  "name": "Belge Skagen Fabric 3160",
+  "fabric_name": "Skagen",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_skagen_fabric_3160/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd142"
+  },
+  "name": "Light Brown Arezzo Fabric 3332",
+  "fabric_name": "Arezzo",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/light_brown_arezzo_fabric_3332/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd143"
+  },
+  "name": "Brown Copenhagen Fabric 3311",
+  "fabric_name": "Copenhagen",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/brown_copenhagen_fabric_3311/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd144"
+  },
+  "name": "Camel Lucca Fabric 3324",
+  "fabric_name": "Orlando",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/camel_lucca_fabric_3324/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd145"
+  },
+  "name": "Dark Sand Orlando Fabric 3082",
+  "fabric_name": "Orlando",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_sand_orlando_fabric_3082/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd146"
+  },
+  "name": "Camel Rimini Fabric 3085",
+  "fabric_name": "Rimini",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/camel_rimini_fabric_3085/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd147"
+  },
+  "name": "Sand Skagen Fabric 3161",
+  "fabric_name": "Skagen",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/sand_skagen_fabric_3161/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd148"
+  },
+  "name": "Brown Tuscany Fabric 3202",
+  "fabric_name": "Tuscany",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/brown_tuscany_fabric_3202/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd149"
+  },
+  "name": "Camel Frisco Fabric With Aquaclean 2067",
+  "fabric_name": "Frisco",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/camel_frisco_fabric_with_aquaclean_2067/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd14a"
+  },
+  "name": "Brown Lazio Fabric 3096",
+  "fabric_name": "Lazio",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/brown_lazio_fabric_3096/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd14b"
+  },
+  "name": "Taupe Napoli Fabric 2261",
+  "fabric_name": "Napoli",
+  "color": "Brown",
+  "material": "Fabric",
+  "image": "images/upholstery/taupe_napoli_fabric_2261/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd14c"
+  },
+  "name": "Caramel Nordic Grain Leather 5134",
+  "fabric_name": "Nordic Grain",
+  "color": "Brown",
+  "material": "Leather",
+  "image": "images/upholstery/caramel_nordic_grain_leather_5134/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd14d"
+  },
+  "name": "Taupe Nordic Grain Leather 5132",
+  "fabric_name": "Nordic Grain",
+  "color": "Brown",
+  "material": "Leather",
+  "image": "images/upholstery/taupe_nordic_grain_leather_5132/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd14e"
+  },
+  "name": "Cognac York Leather 5120",
+  "fabric_name": "York",
+  "color": "Brown",
+  "material": "Leather",
+  "image": "images/upholstery/cognac_york_leather_5120/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd14f"
+  },
+  "name": "Light Brown York Leather 5122",
+  "fabric_name": "York",
+  "color": "Light Brown",
+  "material": "Leather",
+  "image": "images/upholstery/light_brown_york_leather_5122/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd150"
+  },
+  "name": "Caramel Nordic Vintage Leather 5150",
+  "fabric_name": "Nordic Vintage",
+  "color": "Brown",
+  "material": "Leather",
+  "image": "images/upholstery/caramel_nordic_vintage_leather_5150/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd151"
+  },
+  "name": "Dark Brown Nordic Vintage Leather 5152",
+  "fabric_name": "Nordic Vintage",
+  "color": "Brown",
+  "material": "Leather",
+  "image": "images/upholstery/dark_brown_nordic_vintage_leather_5152/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd152"
+  },
+  "name": "Green Arezzo Fabric 3334",
+  "fabric_name": "Arezzo",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/green_arezzo_fabric_3334/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd154"
+  },
+  "name": "Green Rimini Fabric 3086",
+  "fabric_name": "Rimini",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/green_rimini_fabric_3086/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd153"
+  },
+  "name": "Green Lucca Fabric 3322",
+  "fabric_name": "Fabric",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/green_lucca_fabric_3322/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd155"
+  },
+  "name": "Green Capri Fabric 3232",
+  "fabric_name": "Capri",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/green_capri_fabric_3232/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd140"
+  },
+  "name": "Mustard Tomelilla Fabric 3143",
+  "fabric_name": "Tomelilla",
+  "color": "Yellow",
+  "material": "Fabric",
+  "image": "images/upholstery/mustard_tomelilla_fabric_3143/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd141"
+  },
+  "name": "Golden Belge Napoli Fabric 2252",
+  "fabric_name": "Napoli",
+  "color": "Yellow",
+  "material": "Fabric",
+  "image": "images/upholstery/golden_belge_napoli_fabric_2252/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd158"
+  },
+  "name": "Dark Green Bologna Fabric 3256",
+  "fabric_name": "Bologna",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_green_bologna_fabric_3256/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd159"
+  },
+  "name": "Olive Green Bolgona Fabric 3257",
+  "fabric_name": "Bologna",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/olive_green_bologna_fabric_3257/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd15a"
+  },
+  "name": "Green Skagen Fabric 3165",
+  "fabric_name": "Fabric",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/green_skagen_fabric_3165/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd15b"
+  },
+  "name": "Forest Green Tuscany Fabric 3208",
+  "fabric_name": "Tuscany",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/forest_green_tuscany_fabric_3208/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd15c"
+  },
+  "name": "Green Tuscany Fabric 3204",
+  "fabric_name": "Tuscany",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/green_tuscany_fabric_3204/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd15d"
+  },
+  "name": "Dark Green Frisco Fabric With Aquaclean 2058",
+  "fabric_name": "Frisco",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_green_frisco_fabric_with_aquaclean_2058/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd15e"
+  },
+  "name": "Light Green Lazio Fabric 3092",
+  "fabric_name": "Lazio",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/light_green_lazio_fabric_3092/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd15f"
+  },
+  "name": "Dark Green Lazio Fabric 3094",
+  "fabric_name": "Green",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_green_lazio_fabric_3094/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd160"
+  },
+  "name": "Green Avellino Fabric 3252",
+  "fabric_name": "Avellino",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/green_avellino_fabric_3252/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd161"
+  },
+  "name": "Dusty Green Napoli Fabric 2268",
+  "fabric_name": "Napoli",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/dusty_green_napoli_fabric_2268/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd162"
+  },
+  "name": "Forest Green Napoli Fabric 2256",
+  "fabric_name": "Napoli",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/forest_green_napoli_fabric_2256/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd163"
+  },
+  "name": "Olive Green Nordic Grain Leather 5133",
+  "fabric_name": "Nordic Grain",
+  "color": "Green",
+  "material": "Leather",
+  "image": "images/upholstery/olive_green_nordic_grain_leather_5133/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd164"
+  },
+  "name": "Olive Green York Leather 5121",
+  "fabric_name": "York",
+  "color": "Green",
+  "material": "Leather",
+  "image": "images/upholstery/olive_green_york_leather_5121/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd165"
+  },
+  "name": "White Copenhagen Fabric 3310",
+  "fabric_name": "Copenhagen",
+  "color": "White",
+  "material": "Fabric",
+  "image": "images/upholstery/white_copenhagen_fabric_3310/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd166"
+  },
+  "name": "White Lucca Fabric 3321",
+  "fabric_name": "Lucca",
+  "color": "White",
+  "material": "Fabric",
+  "image": "images/upholstery/white_lucca_fabric_3321/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd167"
+  },
+  "name": "White Rimini Fabric 3083",
+  "fabric_name": "Rimini",
+  "color": "White",
+  "material": "Fabric",
+  "image": "images/upholstery/white_rimini_fabric_3083/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd168"
+  },
+  "name": "White Tuscany Fabric 3200",
+  "fabric_name": "Tuscany",
+  "color": "White",
+  "material": "Fabric",
+  "image": "images/upholstery/white_tuscany_fabric_3200/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd169"
+  },
+  "name": "White Lazio Fabric 3090",
+  "fabric_name": "Lazio",
+  "color": "White",
+  "material": "Fabric",
+  "image": "images/upholstery/white_lazio_fabric_3090/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd16a"
+  },
+  "name": "Vanilla Nordic Grain Leather 5136",
+  "fabric_name": "Nordic Grain",
+  "color": "White",
+  "material": "Leather",
+  "image": "images/upholstery/vanilla_nordic_grain_leather_5136/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd16b"
+  },
+  "name": "Red Lucca Fabric 3323",
+  "fabric_name": "Lucca",
+  "color": "Red",
+  "material": "Fabric",
+  "image": "images/upholstery/red_lucca_fabric_3323/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd16c"
+  },
+  "name": "Brick Red Rimini Fabric 3088",
+  "fabric_name": "Rimini",
+  "color": "Red",
+  "material": "Rimini",
+  "image": "images/upholstery/brick_red_rimini_fabric_3088/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd16d"
+  },
+  "name": "Dusty Rose Ravello Fabric 3224",
+  "fabric_name": "Ravello",
+  "color": "Red",
+  "material": "Fabric",
+  "image": "images/upholstery/dusty_rose_ravello_fabric_3224/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd16e"
+  },
+  "name": "Cherry Red Bologna Fabric 3258",
+  "fabric_name": "Bologna",
+  "color": "Red",
+  "material": "Fabric",
+  "image": "images/upholstery/cherry_red_bologna_fabric_3258/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd16f"
+  },
+  "name": "Burgundy Tuscany Fabric 3207",
+  "fabric_name": "Tuscany",
+  "color": "Red",
+  "material": "Fabric",
+  "image": "images/upholstery/burgundy_tuscany_fabric_3207/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd170"
+  },
+  "name": "Burgundy Frisco Fabric 2278",
+  "fabric_name": "Frisco",
+  "color": "Red",
+  "material": "Fabric",
+  "image": "images/upholstery/burgundy_frisco_fabric_2278/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd171"
+  },
+  "name": "Red Avellino Fabric 3250",
+  "fabric_name": "Avellino",
+  "color": "Red",
+  "material": "Fabric",
+  "image": "images/upholstery/red_avellino_fabric_3250/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd172"
+  },
+  "name": "Burgundy Nordic Vintage Leather 5145",
+  "fabric_name": "Nordic Vintage",
+  "color": "Red",
+  "material": "Leather",
+  "image": "images/upholstery/burgundy_nordic_vintage_leather_5145/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd156"
+  },
+  "name": "Dark Green Bristol Fabric 3068",
+  "fabric_name": "Bristol",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_green_bristol_fabric_3068/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd157"
+  },
+  "name": "Dark Green Ravello Fabric 3223",
+  "fabric_name": "Ravello",
+  "color": "Green",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_green_ravello_fabric_3223/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd175"
+  },
+  "name": "Steel Skagen Fabric 3164",
+  "fabric_name": "Skagen",
+  "color": "Dark Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/steel_skagen_fabric_3164/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd176"
+  },
+  "name": "Gray Tuscany Fabric 3203",
+  "fabric_name": "Tuscany",
+  "color": "Dark Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/gray_tuscany_fabric_3203/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd177"
+  },
+  "name": "Stone Gray Frisco Fabric With Aquaclean 2067",
+  "fabric_name": "Frisco",
+  "color": "Dark Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/stone_gray_frisco_fabric_with_aquaclean_2067/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd178"
+  },
+  "name": "Dark Gray Frisco Fabric With Aquaclean 2064",
+  "fabric_name": "Frisco",
+  "color": "Dark Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_gray_frisco_fabric_with_aquaclean_2064/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd179"
+  },
+  "name": "Stone Grey Napoli Fabric 2255",
+  "fabric_name": "Napoli",
+  "color": "Dark Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/stone_gray_napoli_fabric_2255/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd17a"
+  },
+  "name": "Stone Nordic Vintage Leather 5151",
+  "fabric_name": "Nordic Vintage",
+  "color": "Dark Gray",
+  "material": "Leather",
+  "image": "images/upholstery/stone_nordic_vintage_leather_5151/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd17b"
+  },
+  "name": "Mole Nordic Grain Leather 5137",
+  "fabric_name": "Nordic Grain",
+  "color": "Dark Gray",
+  "material": "Leather",
+  "image": "images/upholstery/mole_nordic_grain_leather_5137/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd17c"
+  },
+  "name": "Blue Capri Fabric 3233",
+  "fabric_name": "Capri",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/blue_capri_fabric_3233/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd17d"
+  },
+  "name": "Light Blue Bristol Fabric 3064",
+  "fabric_name": "Bristol",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/light_blue_bristol_fabric_3064/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd17e"
+  },
+  "name": "Blue Bristol Fabric 3065",
+  "fabric_name": "Bristol",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/blue_bristol_fabric_3065/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd17f"
+  },
+  "name": "Dark Blue Ravello Fabric 3225",
+  "fabric_name": "Ravello",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_blue_ravello_fabric_3225/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd180"
+  },
+  "name": "Dark Blue Skagen Fabric 3163",
+  "fabric_name": "Skagen",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_blue_skagen_fabric_3163/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd181"
+  },
+  "name": "Blue Tuscany Fabric 3206",
+  "fabric_name": "Tuscany",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/blue_tuscany_fabric_3206/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd182"
+  },
+  "name": "Dusty Blue Frisco Fabric 2275",
+  "fabric_name": "Frisco",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/dusty_blue_frisco_fabric_2275/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd183"
+  },
+  "name": "Light Blue Frisco Fabric With Aquaclean 2056",
+  "fabric_name": "Frisco",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/light_blue_frisco_fabric_with_aquaclean_2056/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd184"
+  },
+  "name": "Navy Blue Frisco Fabric With Aquaclean 2059",
+  "fabric_name": "Frisco",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/navy_blue_frisco_fabric_with_aquaclean_2059/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd185"
+  },
+  "name": "Dark Blue Frisco Fabric With Aquaclean 2065",
+  "fabric_name": "Frisco",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_blue_frisco_fabric_with_aquaclean_2065/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd186"
+  },
+  "name": "Blue Tomelilla Fabric 3144",
+  "fabric_name": "Tomelilla",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/blue_tomelilla_fabric_3144/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd187"
+  },
+  "name": "Dusty Blue Avellino Fabric 3253",
+  "fabric_name": "Avellino",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/dusty_blue_avellino_fabric_3253/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd188"
+  },
+  "name": "Turquoise Napoli Fabric 2253",
+  "fabric_name": "Napoli",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/turquoise_napoli_fabric_2253/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd189"
+  },
+  "name": "Dark Blue Napoli Fabric 2257",
+  "fabric_name": "Napoli",
+  "color": "Blue",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_blue_napoli_fabric_2257/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd18a"
+  },
+  "name": "Light Gray Bristol Fabric 3060",
+  "fabric_name": "Bristol",
+  "color": "Light Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/light_gray_bristol_fabric_3060/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd18b"
+  },
+  "name": "Gray Ravello Fabric 3222",
+  "fabric_name": "Ravello",
+  "color": "Light Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/gray_ravello_fabric_3222/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd18c"
+  },
+  "name": "Light Gray Frisco Fabric With Aquaclean 2063",
+  "fabric_name": "Frisco",
+  "color": "Light Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/light_gray_frisco_fabric_with_aquaclean_2063/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd18d"
+  },
+  "name": "Dark Gray Frisco Fabric With Aquaclean 2064",
+  "fabric_name": "Frisco",
+  "color": "Light Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_gray_frisco_fabric_with_aquaclean_2064/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd18e"
+  },
+  "name": "Gray Lazio Fabric 3097",
+  "fabric_name": "Lazio",
+  "color": "Light Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/gray_lazio_fabric_3097/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd18f"
+  },
+  "name": "Grey Tomelilla Fabric 3142",
+  "fabric_name": "Tomelilla",
+  "color": "Light Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/grey_tomelilla_fabric_3142/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd190"
+  },
+  "name": "Silver Gray Napoli 2250",
+  "fabric_name": "Napoli",
+  "color": "Light Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/silver_gray_napoli_2250/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd191"
+  },
+  "name": "Stone Nordic Grain Leather 5131",
+  "fabric_name": "Nordic Grain",
+  "color": "Light Gray",
+  "material": "Leather",
+  "image": "images/upholstery/stone_nordic_grain_leather_5131/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd192"
+  },
+  "name": "Light Gray Nordic Grain Leather 5135",
+  "fabric_name": "Nordic Grain",
+  "color": "Light Gray",
+  "material": "Leather",
+  "image": "images/upholstery/light_gray_nordic_grain_leather_5135/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd193"
+  },
+  "name": "Mole Nordic Grain Leather 5137",
+  "fabric_name": "Nordic Grain",
+  "color": "Light Gray",
+  "material": "Leather",
+  "image": "images/upholstery/mole_nordic_grain_leather_5137/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd194"
+  },
+  "name": "Stone Nordic Vintage Leather 5151",
+  "fabric_name": "Nordic Vintage",
+  "color": "Light Gray",
+  "material": "Leather",
+  "image": "images/upholstery/stone_nordic_vintage_leather_5151/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd195"
+  },
+  "name": "Dark Gray Frisco Fabric With Aquaclean 2064",
+  "fabric_name": "Frisco",
+  "color": "Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_gray_frisco_fabric_with_aquaclean_2064/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd196"
+  },
+  "name": "Mole Nordic Grain Leather 5137",
+  "fabric_name": "Nordic Grain",
+  "color": "Gray",
+  "material": "Leather",
+  "image": "images/upholstery/mole_nordic_grain_leather_5137/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd197"
+  },
+  "name": "Stone Nordic Vintage Leather 5151",
+  "fabric_name": "Nordic Vintage",
+  "color": "Gray",
+  "material": "Leather",
+  "image": "images/upholstery/stone_nordic_vintage_leather_5151/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd173"
+  },
+  "name": "Dark Gray Orlando Fabric 3081",
+  "fabric_name": "Orlando",
+  "color": "Dark Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_gray_orlando_fabric_3081/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd174"
+  },
+  "name": "Dark Gray Nani Fabric 2111",
+  "fabric_name": "Nani",
+  "color": "Dark Gray",
+  "material": "Fabric",
+  "image": "images/upholstery/dark_gray_nani_fabric_2111/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd198"
+  },
+  "name": "Black Nordic Grain Leather 5130",
+  "fabric_name": "Nordic Grain",
+  "color": "Black",
+  "material": "Leather",
+  "image": "images/upholstery/black_nordic_grain_leather_5130/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd12f"
+  },
+  "name": "Sand Capri Fabric 3231",
+  "fabric_name": "Capri",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/sand_capri_fabric_3231/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd12b"
+  },
+  "name": "Ochre Arezzo Fabric 3333",
+  "fabric_name": "Arezzo",
+  "color": "Yellow",
+  "material": "Fabric",
+  "image": "images/upholstery/ochre_arezzo_fabric_3333/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd12c"
+  },
+  "name": "Belge Lucca Fabric 3320",
+  "fabric_name": "Lucca",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_lucca_fabric_3320/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd12d"
+  },
+  "name": "Belge Rimini Fabric 3087",
+  "fabric_name": "Rimini",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_rimini_fabric_3087/image.png",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699d5c52234118629afdd12e"
+  },
+  "name": "Belge Capri Fabric 3230",
+  "fabric_name": "Capri",
+  "color": "Belge",
+  "material": "Fabric",
+  "image": "images/upholstery/belge_capri_fabric_3230/image.png",
+  "__v": 0
+}]

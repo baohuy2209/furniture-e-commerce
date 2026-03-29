@@ -1,0 +1,380 @@
+[{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10003"
+  },
+  "name": "Nguyễn Minh Thư",
+  "slug": "nguyen-minh-thu",
+  "email": "thu.nguyen@homebase.vn",
+  "avatar_url": "images/blog/authors/minhthu.png",
+  "bio": "Nhà thiết kế nội thất chuyên về không gian căn hộ chung cư và giải pháp lưu trữ thông minh.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10001"
+  },
+  "name": "buutanh",
+  "slug": "buu-tanh",
+  "email": "buutanh@homebase.vn",
+  "avatar_url": "images/blog/authors/buutanh.png",
+  "bio": "Chuyên gia Bữu Tánh với hơn 10 năm kinh nghiệm trong lĩnh vực thiết kế và tư vấn nội thất cao cấp.",
+  "role": "admin",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.997Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.997Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10002"
+  },
+  "name": "Lê Hoàng Nam",
+  "slug": "le-hoang-nam",
+  "email": "nam.le@homebase.vn",
+  "avatar_url": "images/blog/authors/hoangnam.png",
+  "bio": "Kiến trúc sư trưởng tại HomeBase, chuyên gia về phong cách kiến trúc hiện đại và tối giản.",
+  "role": "editor",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10004"
+  },
+  "name": "Trần Thanh Hà",
+  "slug": "tran-thanh-ha",
+  "email": "ha.tran@homebase.vn",
+  "avatar_url": "images/blog/authors/thanhha.png",
+  "bio": "Chuyên gia tư vấn màu sắc và ánh sáng, giúp khách hàng tạo nên không gian sống đầy cảm xúc.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10005"
+  },
+  "name": "Phạm Quốc Bảo",
+  "slug": "pham-quoc-bao",
+  "email": "bao.pham@homebase.vn",
+  "avatar_url": "images/blog/authors/quocbao.png",
+  "bio": "Chuyên viên nghiên cứu vật liệu nội thất bền vững và gỗ tự nhiên cao cấp.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10006"
+  },
+  "name": "Vũ Thu Trang",
+  "slug": "vu-thu-trang",
+  "email": "trang.vu@homebase.vn",
+  "avatar_url": "images/blog/authors/thutrang.png",
+  "bio": "Cố vấn phong thủy nội thất, giúp cân bằng năng lượng và tài lộc cho gia chủ.",
+  "role": "editor",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10007"
+  },
+  "name": "Đặng Minh Hiếu",
+  "slug": "dang-minh-hieu",
+  "email": "hieu.dang@homebase.vn",
+  "avatar_url": "images/blog/authors/minhhieu.png",
+  "bio": "Kỹ sư giải pháp Smart Home, tích hợp công nghệ vào không gian sống hiện đại.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10009"
+  },
+  "name": "Trương Vĩnh Kỳ",
+  "slug": "truong-vinh-ky",
+  "email": "ky.truong@homebase.vn",
+  "avatar_url": "images/blog/authors/vinhky.png",
+  "bio": "Nghệ nhân mộc, am hiểu sâu sắc về các loại gỗ quý và kỹ thuật sản xuất đồ thủ công.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10008"
+  },
+  "name": "Bùi Tuyết Nhi",
+  "slug": "bui-tuyet-nhi",
+  "email": "nhi.bui@homebase.vn",
+  "avatar_url": "images/blog/authors/tuyetnhi.png",
+  "bio": "Blogger chuyên về phong cách Vintage và Retro, yêu thích những món đồ có giá trị thời gian.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10010"
+  },
+  "name": "Lâm Gia Hân",
+  "slug": "lam-gia-han",
+  "email": "han.lam@homebase.vn",
+  "avatar_url": "images/blog/authors/giahan.png",
+  "bio": "Người truyền cảm hứng về lối sống Minimalism - Sống tối giản để hạnh phúc hơn.",
+  "role": "editor",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10014"
+  },
+  "name": "Hồ Ngọc Lan",
+  "slug": "ho-ngoc-lan",
+  "email": "lan.ho@homebase.vn",
+  "avatar_url": "images/blog/authors/ngoclan.png",
+  "bio": "Người sáng tạo nội dung về nghệ thuật cắm hoa và trang trí bàn tiệc gia đình.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10011"
+  },
+  "name": "Ngô Bảo Long",
+  "slug": "ngo-bao-long",
+  "email": "long.ngo@homebase.vn",
+  "avatar_url": "images/blog/authors/baolong.png",
+  "bio": "Chuyên gia thiết kế nội thất phong cách Industrial và Loft mạnh mẽ, cá tính.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10012"
+  },
+  "name": "Phan Anh Thư",
+  "slug": "phan-anh-thu",
+  "email": "thu.phan@homebase.vn",
+  "avatar_url": "images/blog/authors/anhthu.png",
+  "bio": "Tư vấn thiết kế phòng ngủ và các giải pháp giúp cải thiện chất lượng giấc ngủ qua không gian.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10019"
+  },
+  "name": "Lương Thu Thủy",
+  "slug": "luong-thu-thuy",
+  "email": "thuy.luong@homebase.vn",
+  "avatar_url": "images/blog/authors/thuthuy.png",
+  "bio": "Chuyên gia thiết kế bếp và phòng ăn, tối ưu hóa công năng cho người nội trợ.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10015"
+  },
+  "name": "Cao Minh Tuấn",
+  "slug": "cao-minh-tuan",
+  "email": "tuan.cao@homebase.vn",
+  "avatar_url": "images/blog/authors/minhtuan.png",
+  "bio": "Giám đốc sáng tạo, người định hình xu hướng phong cách mới cho HomeBase.",
+  "role": "admin",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10017"
+  },
+  "name": "Võ Hoàng Yến",
+  "slug": "vo-hoang-yen",
+  "email": "yen.vo@homebase.vn",
+  "avatar_url": "images/blog/authors/hoangyen.png",
+  "bio": "Blogger phong cách sống, chuyên chia sẻ mẹo vặt bảo quản và vệ sinh đồ nội thất.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10018"
+  },
+  "name": "Trịnh Công Sơn",
+  "slug": "trinh-cong-son",
+  "email": "son.trinh@homebase.vn",
+  "avatar_url": "images/blog/authors/congson.png",
+  "bio": "Cố vấn nghệ thuật, kết hợp tranh vẽ và các tác phẩm điêu khắc vào trang trí nội thất.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10020"
+  },
+  "name": "Phan Thanh Bình",
+  "slug": "phan-thanh-binh",
+  "email": "binh.phan@homebase.vn",
+  "avatar_url": "images/blog/authors/thanhbinh.png",
+  "bio": "Người đam mê DIY, hướng dẫn tự làm đồ decor độc đáo từ vật liệu tái chế.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10013"
+  },
+  "name": "Lý Gia Thành",
+  "slug": "ly-gia-thanh",
+  "email": "thanh.ly@homebase.vn",
+  "avatar_url": "images/blog/authors/giathanh.png",
+  "bio": "Kiến trúc sư cảnh quan, chuyên gia đưa mảng xanh vào không gian nhà phố.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2a1a1e1a1e1a1e1a10016"
+  },
+  "name": "Đỗ Kim Ngân",
+  "slug": "do-kim-ngan",
+  "email": "ngan.do@homebase.vn",
+  "avatar_url": "images/blog/authors/kimngan.png",
+  "bio": "Nhà thiết kế say mê phong cách Scandinavian, mang sự ấm áp của Bắc Âu vào căn nhà Việt.",
+  "role": "writer",
+  "status": "active",
+  "createdAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:17:56.998Z"
+  },
+  "__v": 0
+}]

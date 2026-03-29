@@ -1,0 +1,40 @@
+[{
+  "_id": {
+    "$oid": "69bc0e68fb90522f5fd9f7e6"
+  },
+  "name": "Kho Hà Nội",
+  "address_warehouse": "45 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+  "warehouse_area": "1200",
+  "warehouse_status": "active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bc0e8efb90522f5fd9f7ea"
+  },
+  "name": "Kho Đà Nẵng",
+  "address_warehouse": "78 Nguyễn Hữu Thọ, Hải Châu, Đà Nẵng",
+  "warehouse_area": "900",
+  "warehouse_status": "active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bc0ea9fb90522f5fd9f7ee"
+  },
+  "name": "Kho Bình Dương",
+  "address_warehouse": "KCN VSIP 1, Thuận An, Bình Dương",
+  "warehouse_area": "2000",
+  "warehouse_status": "active",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bc0ec2fb90522f5fd9f7f2"
+  },
+  "name": "Kho Cần Thơ",
+  "address_warehouse": "12 Võ Văn Kiệt, Ninh Kiều, Cần Thơ",
+  "warehouse_area": "800",
+  "warehouse_status": "active",
+  "__v": 0
+}]

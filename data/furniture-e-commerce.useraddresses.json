@@ -1,0 +1,105 @@
+[{
+  "_id": {
+    "$oid": "69bd73dd41f045d524bc213b"
+  },
+  "user": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "name": "Nguyễn Bảo Huy",
+  "phone": "0348403449",
+  "province": "Tỉnh Bắc Ninh",
+  "ward": "Xã Lạng Giang",
+  "address_detail": "Hẻm 300, thôn Phú Hòa",
+  "is_default": false,
+  "createdAt": {
+    "$date": "2026-03-20T16:20:45.953Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-20T16:38:15.813Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bd76d17dd92a0c9524fc0b"
+  },
+  "user": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "name": "Nguyễn Bảo Huy",
+  "phone": "0388936043",
+  "province": "Tỉnh Gia Lai",
+  "ward": "Xã Tây Sơn",
+  "address_detail": "xóm Hòa Đông, thôn Phú Hòa",
+  "is_default": true,
+  "createdAt": {
+    "$date": "2026-03-20T16:33:21.030Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-20T16:37:21.904Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bf78483fc521e0e5a1a944"
+  },
+  "user": {
+    "$oid": "69bf78203fc521e0e5a1a940"
+  },
+  "name": "Võ Hồng Phúc",
+  "phone": "0913950340",
+  "province": "Thành phố Hồ Chí Minh",
+  "ward": "Phường Chánh Phú Hòa",
+  "address_detail": "Nhà 98, hẻm 300, đường Lê Lợi",
+  "is_default": true,
+  "createdAt": {
+    "$date": "2026-03-22T05:04:08.425Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T05:04:08.425Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bf7b518a24f4c97a210808"
+  },
+  "user": {
+    "$oid": "69bf7b338a24f4c97a210804"
+  },
+  "name": "Võ Hồng Phúc",
+  "phone": "0913950340",
+  "province": "Thành phố Hà Nội",
+  "ward": "Phường Cầu Giấy",
+  "address_detail": "Nhà 89, đường Hai Bà Trưng",
+  "is_default": true,
+  "createdAt": {
+    "$date": "2026-03-22T05:17:05.861Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T05:17:05.861Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69bf7d76002ac505edc1f7cb"
+  },
+  "user": {
+    "$oid": "69bf7d61002ac505edc1f7c7"
+  },
+  "name": "Võ Hồng Phúc",
+  "phone": "0913950340",
+  "province": "Thành phố Hồ Chí Minh",
+  "ward": "Phường Bình Dương",
+  "address_detail": "Hẻm 300, đường Nguyễn Tri Phương",
+  "is_default": true,
+  "createdAt": {
+    "$date": "2026-03-22T05:26:14.488Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-22T05:26:14.488Z"
+  },
+  "__v": 0
+}]

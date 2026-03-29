@@ -1,0 +1,19 @@
+[{
+  "_id": {
+    "$oid": "69b97343d255fcb1422714c5"
+  },
+  "event_id": {
+    "$oid": "69a411203396538553d3538e"
+  },
+  "fullname": "Nguyen Bao Huy",
+  "email": "huynguyen002311@gmail.com",
+  "phone": "0375686583",
+  "note": "Tôi muốn tìm hiểu về nội thất mới cho căn nhà mới của mình ",
+  "createdAt": {
+    "$date": "2026-03-17T15:29:07.335Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T15:29:07.335Z"
+  },
+  "__v": 0
+}]

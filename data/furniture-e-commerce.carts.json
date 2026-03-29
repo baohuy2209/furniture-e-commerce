@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "69be68339ef441337166f511"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "cart_status": "active",
+  "total_item": 0,
+  "total_amount": 0,
+  "createdAt": {
+    "$date": "2026-03-21T09:43:15.515Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T09:34:51.027Z"
+  },
+  "__v": 0
+}]

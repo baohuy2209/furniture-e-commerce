@@ -1,0 +1,2556 @@
+[{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837def"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_arezzon_fabric_3331/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df0"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_arezzon_fabric_3331/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df3"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_arezzon_fabric_3331/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df4"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_lucca_fabric_3320/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df5"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_lucca_fabric_3320/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df6"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_lucca_fabric_3320/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df7"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_lucca_fabric_3320/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df8"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_lucca_fabric_3320/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df9"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/camel_lucca_fabric_3324/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837dfa"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/camel_lucca_fabric_3324/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837dfb"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/camel_lucca_fabric_3324/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837dfc"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/camel_lucca_fabric_3324/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837dfd"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/camel_lucca_fabric_3324/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df1"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_arezzon_fabric_3331/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837df2"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/belge_arezzon_fabric_3331/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.263Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e00"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc6"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/green_arezzo_fabric_3334/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e01"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc6"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/green_arezzo_fabric_3334/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e02"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc6"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/green_arezzo_fabric_3334/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e03"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc7"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/light_brown_arezzo_fabric_3332/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e04"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc7"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/light_brown_arezzo_fabric_3332/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e05"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc7"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/light_brown_arezzo_fabric_3332/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e06"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc7"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/light_brown_arezzo_fabric_3332/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e07"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc7"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/light_brown_arezzo_fabric_3332/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e08"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc8"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/ochre_arezzo_fabric_3333/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e09"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc8"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/ochre_arezzo_fabric_3333/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e0a"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc8"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/ochre_arezzo_fabric_3333/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e0b"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc8"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/ochre_arezzo_fabric_3333/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e0c"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc8"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/ochre_arezzo_fabric_3333/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e0d"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc9"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/red_lucca_fabric_3323/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e0e"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc9"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/red_lucca_fabric_3323/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e0f"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc9"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/red_lucca_fabric_3323/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e10"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc9"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/red_lucca_fabric_3323/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e11"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc9"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/red_lucca_fabric_3323/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e12"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/stone_gray_napoli_fabric_2255/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837dfe"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc6"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/green_arezzo_fabric_3334/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e14"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/stone_gray_napoli_fabric_2255/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837dff"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cc6"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/green_arezzo_fabric_3334/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e16"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/stone_gray_napoli_fabric_2255/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e17"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/stone_gray_napoli_fabric_2255/image5.png",
+  "is_main": false,
+  "position": 5,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e18"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/stone_gray_napoli_fabric_2255/image6.png",
+  "is_main": false,
+  "position": 6,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e19"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/stone_gray_napoli_fabric_2255/image7.png",
+  "is_main": false,
+  "position": 7,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e1a"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccb"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/white_lucca_fabric_3321/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e1b"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccb"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/white_lucca_fabric_3321/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e1c"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccb"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/white_lucca_fabric_3321/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e1d"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccb"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/white_lucca_fabric_3321/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e1e"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccb"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/white_lucca_fabric_3321/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e1f"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccc"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/white_rimini_fabric_3083/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e20"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccc"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/white_rimini_fabric_3083/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e21"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccc"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/white_rimini_fabric_3083/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e22"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccc"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/white_rimini_fabric_3083/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e23"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccd"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/white_rimiri_fabric_3083/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e24"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccd"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/white_rimiri_fabric_3083/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e25"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccd"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/white_rimiri_fabric_3083/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e26"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccd"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/white_rimiri_fabric_3083/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e27"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccd"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/white_rimiri_fabric_3083/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e28"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cce"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/belge_arezzon_fabric_3331/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e29"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cce"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/belge_arezzon_fabric_3331/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e2a"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cce"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/belge_arezzon_fabric_3331/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e2b"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccf"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/belge_lucca_fabric_3320/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e2c"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccf"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/belge_lucca_fabric_3320/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e2d"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccf"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/belge_lucca_fabric_3320/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e2e"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8ccf"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/belge_lucca_fabric_3320/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e2f"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd0"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/camel_lucca_fabric_3324/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e13"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/stone_gray_napoli_fabric_2255/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e31"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd0"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/camel_lucca_fabric_3324/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e32"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd0"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/camel_lucca_fabric_3324/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e33"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd1"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/green_arezzo_fabric_3334/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e34"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd1"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/green_arezzo_fabric_3334/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e15"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cca"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_left_side/stone_gray_napoli_fabric_2255/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e36"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd2"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/light_brown_arezzo_fabric_3321/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e37"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd2"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/light_brown_arezzo_fabric_3321/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e38"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd2"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/light_brown_arezzo_fabric_3321/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e39"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd2"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/light_brown_arezzo_fabric_3321/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e3a"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd2"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/light_brown_arezzo_fabric_3321/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e3b"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/ochre_arezzo_fabric_3333/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e3c"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/ochre_arezzo_fabric_3333/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e3d"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/ochre_arezzo_fabric_3333/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e3e"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/ochre_arezzo_fabric_3333/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e3f"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd3"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/ochre_arezzo_fabric_3333/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e40"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/red_lucca_fabric_3323/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e41"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/red_lucca_fabric_3323/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e42"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/red_lucca_fabric_3323/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e43"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/red_lucca_fabric_3323/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e44"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd4"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/red_lucca_fabric_3323/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e45"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e46"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e47"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e48"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e49"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e4a"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image5.png",
+  "is_main": false,
+  "position": 5,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e4b"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd5"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/stone_grey_napoli_fabric_2255/image6.png",
+  "is_main": false,
+  "position": 6,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e4c"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd6"
+  },
+  "url": "images/products/living_room/belize_coral_sculpture/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e4d"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd6"
+  },
+  "url": "images/products/living_room/belize_coral_sculpture/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e4e"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd6"
+  },
+  "url": "images/products/living_room/belize_coral_sculpture/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e4f"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd6"
+  },
+  "url": "images/products/living_room/belize_coral_sculpture/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e50"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd6"
+  },
+  "url": "images/products/living_room/belize_coral_sculpture/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e51"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "url": "images/products/bathroom/float_vase/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e52"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "url": "images/products/bathroom/float_vase/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e53"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "url": "images/products/bathroom/float_vase/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e54"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "url": "images/products/bathroom/float_vase/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e30"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd0"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/camel_lucca_fabric_3324/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e35"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd1"
+  },
+  "url": "images/products/living_room/hampton_corner_sofa_with_adjustable_back_and_storage_on_right_side/green_arezzo_fabric_3334/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e57"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd8"
+  },
+  "url": "images/products/living_room/flora_5_sculpture/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e58"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd8"
+  },
+  "url": "images/products/living_room/flora_5_sculpture/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e59"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd8"
+  },
+  "url": "images/products/living_room/flora_5_sculpture/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e5a"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd8"
+  },
+  "url": "images/products/living_room/flora_5_sculpture/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e5b"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd8"
+  },
+  "url": "images/products/living_room/flora_5_sculpture/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e5c"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "url": "images/products/living_room/geometric_sculpture/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e5d"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "url": "images/products/living_room/geometric_sculpture/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e5e"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "url": "images/products/living_room/geometric_sculpture/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e5f"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd9"
+  },
+  "url": "images/products/living_room/geometric_sculpture/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e60"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "url": "images/products/living_room/luna_metal_vase/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e61"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "url": "images/products/living_room/luna_metal_vase/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e62"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "url": "images/products/living_room/luna_metal_vase/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e63"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "url": "images/products/living_room/luna_metal_vase/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e64"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "url": "images/products/living_room/luna_metal_vase/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e65"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "url": "images/products/living_room/luna_metal_vase/image5.png",
+  "is_main": false,
+  "position": 5,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e66"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cda"
+  },
+  "url": "images/products/living_room/luna_metal_vase/image6.png",
+  "is_main": false,
+  "position": 6,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e67"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cdb"
+  },
+  "url": "images/products/living_room/magnolia_sculpture/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e68"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cdb"
+  },
+  "url": "images/products/living_room/magnolia_sculpture/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e69"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "url": "images/products/outdoor/rubble_vase/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e6a"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "url": "images/products/outdoor/rubble_vase/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e6b"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cdc"
+  },
+  "url": "images/products/outdoor/rubble_vase/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e6c"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cdd"
+  },
+  "url": "images/products/kitchen/sweet_art_bowl/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e6d"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cdd"
+  },
+  "url": "images/products/kitchen/sweet_art_bowl/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e6e"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cdd"
+  },
+  "url": "images/products/kitchen/sweet_art_bowl/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.265Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e55"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "url": "images/products/bathroom/float_vase/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd5fe4218aa913e837e56"
+  },
+  "product_variant": {
+    "$oid": "699dac13f343b12e59fa8cd7"
+  },
+  "url": "images/products/bathroom/float_vase/image5.png",
+  "is_main": false,
+  "position": 5,
+  "createdAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T16:46:54.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fca"
+  },
+  "product_variant": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "url": "images/products/living_room/mango_leaf_sculpture/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fcb"
+  },
+  "product_variant": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "url": "images/products/living_room/mango_leaf_sculpture/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fcc"
+  },
+  "product_variant": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "url": "images/products/living_room/mango_leaf_sculpture/image2.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fcd"
+  },
+  "product_variant": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "url": "images/products/living_room/mango_leaf_sculpture/image3.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fcf"
+  },
+  "product_variant": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "url": "images/products/living_room/mango_leaf_sculpture/image5.png",
+  "is_main": false,
+  "position": 5,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fd1"
+  },
+  "product_variant": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "url": "images/products/living_room/mango_leaf_sculpture/image7.png",
+  "is_main": true,
+  "position": 7,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fd2"
+  },
+  "product_variant": {
+    "$oid": "699dccea02c4dc45263a0a92"
+  },
+  "url": "images/products/living_room/medina_mirror/main/image.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fd3"
+  },
+  "product_variant": {
+    "$oid": "699dccea02c4dc45263a0a92"
+  },
+  "url": "images/products/living_room/medina_mirror/image1.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fce"
+  },
+  "product_variant": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "url": "images/products/living_room/mango_leaf_sculpture/image4.png",
+  "is_main": false,
+  "position": 4,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "699dd93f4117006a28580fd0"
+  },
+  "product_variant": {
+    "$oid": "699dcbec0611fedb90d43351"
+  },
+  "url": "images/products/living_room/mango_leaf_sculpture/image6.png",
+  "is_main": true,
+  "position": 6,
+  "createdAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-24T17:00:47.182Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c396f75aa8ca00cf30b965"
+  },
+  "product_variant": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "url": "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774425844/products/xa8h3bujnrnywmf4hcwe.png",
+  "is_main": true,
+  "position": 0,
+  "createdAt": {
+    "$date": "2026-03-25T08:04:07.699Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:04:07.699Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c396f75aa8ca00cf30b967"
+  },
+  "product_variant": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "url": "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774425845/products/w7r1r0hmlda65jljipdz.png",
+  "is_main": false,
+  "position": 1,
+  "createdAt": {
+    "$date": "2026-03-25T08:04:07.700Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:04:07.700Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c396f75aa8ca00cf30b969"
+  },
+  "product_variant": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "url": "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774425846/products/bhbf3gs5iukbdjfbzdys.png",
+  "is_main": false,
+  "position": 2,
+  "createdAt": {
+    "$date": "2026-03-25T08:04:07.701Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:04:07.701Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c396f75aa8ca00cf30b96b"
+  },
+  "product_variant": {
+    "$oid": "69c396f75aa8ca00cf30b963"
+  },
+  "url": "https://res.cloudinary.com/djpqo3dy9/image/upload/v1774425848/products/uhlaphp2wrofshnjoeyh.png",
+  "is_main": false,
+  "position": 3,
+  "createdAt": {
+    "$date": "2026-03-25T08:04:07.702Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-25T08:04:07.702Z"
+  },
+  "__v": 0
+}]
