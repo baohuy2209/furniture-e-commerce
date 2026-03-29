@@ -1,12 +1,19 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { environment } from '../../../../environments/environment';
 import { BehaviorSubject, combineLatest, map, lastValueFrom, forkJoin, catchError, of } from 'rxjs';
-import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { ConfirmModal, ConfirmModalType } from '../../components/confirm-modal/confirm-modal';
 
 type SortDir = 'asc' | 'desc';
 type ReferenceType = 'purchase_order' | 'customer_order' | 'transfer' | 'adjustment';
@@ -213,7 +220,11 @@ export class ManagementWarehouse implements OnInit {
   private poItems$ = new BehaviorSubject<POEntity[]>([]);
   private brands$ = new BehaviorSubject<BrandEntity[]>([]);
 
-  private routeState$ = new BehaviorSubject<{ id: string | null; edit: boolean; createPO: boolean }>({
+  private routeState$ = new BehaviorSubject<{
+    id: string | null;
+    edit: boolean;
+    createPO: boolean;
+  }>({
     id: null,
     edit: false,
     createPO: false,
@@ -226,8 +237,13 @@ export class ManagementWarehouse implements OnInit {
   private pendingDiscardAction: (() => void) | null = null;
 
   saveModalOpen = false;
+  poModalOpen = false;
   discardModalOpen = false;
   invalidSaveModalOpen = false;
+  noticeModalOpen = false;
+  noticeTitle = '';
+  noticeMessage = '';
+  noticeType: ConfirmModalType = 'info';
 
   q = '';
   f_warehouse_id = '';
@@ -261,7 +277,7 @@ export class ManagementWarehouse implements OnInit {
             brand_id: '',
             note: '',
             tempItem: { warehouse_id: '', product_variant_id: '', quantity: 1, unit_cost: 0 },
-            items: []
+            items: [],
           };
           this.importDraft$.next(d);
           this.originalEditSnapshot = JSON.stringify(d);
@@ -321,8 +337,8 @@ export class ManagementWarehouse implements OnInit {
         const { id: selectedId, edit, createPO } = routeState;
         const mode: Mode = createPO ? 'create_po' : !selectedId ? 'list' : edit ? 'edit' : 'detail';
 
-        const variantMap = new Map<string, ProductVariantMin>(variants.map(v => [v._id, v]));
-        const whMap = new Map<string, WarehouseEntity>(warehouses.map(w => [w._id, w]));
+        const variantMap = new Map<string, ProductVariantMin>(variants.map((v) => [v._id, v]));
+        const whMap = new Map<string, WarehouseEntity>(warehouses.map((w) => [w._id, w]));
 
         const baseStock: StockRowVM[] = stockItems.map((si) => {
           const vId = si.product_variant_id?._id || si.product_variant_id;
@@ -354,15 +370,24 @@ export class ManagementWarehouse implements OnInit {
 
         const summary: SummaryVM = {
           totalSkus: baseStock.length,
-          lowStockCount: baseStock.filter(x => x.low_stock).length,
-          totalOnHandValueText: money(baseStock.reduce((acc, r) => acc + (r.quantity_on_hand * (variantMap.get(r.product_variant_id)?.price || 0)), 0))
+          lowStockCount: baseStock.filter((x) => x.low_stock).length,
+          totalOnHandValueText: money(
+            baseStock.reduce(
+              (acc, r) =>
+                acc + r.quantity_on_hand * (variantMap.get(r.product_variant_id)?.price || 0),
+              0,
+            ),
+          ),
         };
 
         const key = q.trim().toLowerCase();
         let filtered = baseStock
-          .filter(r => (whId ? r.warehouse_id === whId : true))
-          .filter(r => (lowOnly ? r.low_stock : true))
-          .filter(r => !key || `${r.sku} ${r.product_id} ${r.warehouse_name}`.toLowerCase().includes(key));
+          .filter((r) => (whId ? r.warehouse_id === whId : true))
+          .filter((r) => (lowOnly ? r.low_stock : true))
+          .filter(
+            (r) =>
+              !key || `${r.sku} ${r.product_id} ${r.warehouse_name}`.toLowerCase().includes(key),
+          );
 
         filtered.sort((a, b) => {
           const dir = sortDirStock === 'asc' ? 1 : -1;
@@ -377,19 +402,25 @@ export class ManagementWarehouse implements OnInit {
         const from = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
         const to = Math.min(total, safePage * pageSize);
 
-        const pageRows = filtered.slice((safePage - 1) * pageSize, safePage * pageSize).map((r, i) => ({
-          ...r,
-          stt: (safePage - 1) * pageSize + i + 1,
-        }));
+        const pageRows = filtered
+          .slice((safePage - 1) * pageSize, safePage * pageSize)
+          .map((r, i) => ({
+            ...r,
+            stt: (safePage - 1) * pageSize + i + 1,
+          }));
 
         let detailVM: StockDetailVM | null = null;
         if (selectedId) {
-          const s = stockItems.find(x => x._id === selectedId);
+          const s = stockItems.find((x) => x._id === selectedId);
           if (s) {
             const vId = s.product_variant_id?._id || s.product_variant_id;
             const wId = s.warehouse_id?._id || s.warehouse_id;
             const recent = movements
-              .filter(m => (m.product_id?._id || m.product_id) === vId && (m.warehouse_id?._id || m.warehouse_id) === wId)
+              .filter(
+                (m) =>
+                  (m.product_id?._id || m.product_id) === vId &&
+                  (m.warehouse_id?._id || m.warehouse_id) === wId,
+              )
               .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
               .slice(0, 10)
               .map(movementToVM);
@@ -399,7 +430,7 @@ export class ManagementWarehouse implements OnInit {
               warehouse: whMap.get(wId) || null,
               variant: variantMap.get(vId) || null,
               statusLabel: s.quantity_on_hand < DEFAULT_REORDER_POINT ? 'Low stock' : 'Ổn định',
-              statusPillClass: s.quantity_on_hand < DEFAULT_REORDER_POINT  ? 'pill-warn' : 'pill-ok',
+              statusPillClass: s.quantity_on_hand < DEFAULT_REORDER_POINT ? 'pill-warn' : 'pill-ok',
               onHandText: String(s.quantity_on_hand),
               updatedAtText: fmtDate(s.updatedAt),
               recentMovements: recent,
@@ -412,7 +443,12 @@ export class ManagementWarehouse implements OnInit {
         if (createPO && importDraft) {
           for (const it of importDraft.items) {
             const v = variantMap.get(it.product_variant_id);
-            const cur = baseStock.find(s => s.product_variant_id === it.product_variant_id && s.warehouse_id === it.warehouse_id)?.quantity_on_hand || 0;
+            const cur =
+              baseStock.find(
+                (s) =>
+                  s.product_variant_id === it.product_variant_id &&
+                  s.warehouse_id === it.warehouse_id,
+              )?.quantity_on_hand || 0;
             importTotalCost += it.quantity * it.unit_cost;
             importPreviewList.push({
               id: it.id,
@@ -422,7 +458,7 @@ export class ManagementWarehouse implements OnInit {
               expectedStock: cur + it.quantity,
               quantity: it.quantity,
               unit_cost: it.unit_cost,
-              subtotal: it.quantity * it.unit_cost
+              subtotal: it.quantity * it.unit_cost,
             });
           }
         }
@@ -450,19 +486,21 @@ export class ManagementWarehouse implements OnInit {
           brands,
           currentPanel: createPO ? 'import' : !selectedId ? null : edit ? 'adjust' : 'detail',
           poList: poItems.map((po: any) => {
-             // Backend already transformed this list in getAllPurchaseOrders
-             return {
-                po_id: po.po_id || po._id,
-                po_number: po.po_number || 'N/A',
-                brand_name: po.brand_name || 'N/A',
-                status: po.status as POStatus,
-                itemCount: po.item_count || 0,
-                totalCostText: money(po.total_cost || 0),
-                createdAtText: fmtDate(po.created_at || po.createdAt),
-                note: po.note || ''
-             };
+            // Backend already transformed this list in getAllPurchaseOrders
+            return {
+              po_id: po.po_id || po._id,
+              po_number: po.po_number || 'N/A',
+              brand_name: po.brand_name || 'N/A',
+              status: po.status as POStatus,
+              itemCount: po.item_count || 0,
+              totalCostText: money(po.total_cost || 0),
+              createdAtText: fmtDate(po.created_at || po.createdAt),
+              note: po.note || '',
+            };
           }),
-          transferList: movements.filter(m => m.reference_type === 'adjustment').map(movementToVM),
+          transferList: movements
+            .filter((m) => m.reference_type === 'adjustment')
+            .map(movementToVM),
           variants,
         };
         return vm;
@@ -470,40 +508,97 @@ export class ManagementWarehouse implements OnInit {
     ),
   );
 
-  onChangeQ(v: string) { this.q = v; this.q$.next(v); this.setPage(1); }
-  onChangeWarehouse(v: string) { this.f_warehouse_id = v; this.wh$.next(v); this.setPage(1); }
-  onToggleLowOnly(v: boolean) { this.f_low_only = !!v; this.lowOnly$.next(!!v); this.setPage(1); }
-  onChangePageSize(v: number) { this.pageSize = Number(v); this.pageSize$.next(this.pageSize); this.setPage(1); }
+  onChangeQ(v: string) {
+    this.q = v;
+    this.q$.next(v);
+    this.setPage(1);
+  }
+  onChangeWarehouse(v: string) {
+    this.f_warehouse_id = v;
+    this.wh$.next(v);
+    this.setPage(1);
+  }
+  onToggleLowOnly(v: boolean) {
+    this.f_low_only = !!v;
+    this.lowOnly$.next(!!v);
+    this.setPage(1);
+  }
+  onChangePageSize(v: number) {
+    this.pageSize = Number(v);
+    this.pageSize$.next(this.pageSize);
+    this.setPage(1);
+  }
   resetFilters() {
-    this.q = ''; this.f_warehouse_id = ''; this.f_low_only = false;
-    this.q$.next(''); this.wh$.next(''); this.lowOnly$.next(false);
-    this.sortKeyStock$.next('updated_at'); this.sortDirStock$.next('desc');
+    this.q = '';
+    this.f_warehouse_id = '';
+    this.f_low_only = false;
+    this.q$.next('');
+    this.wh$.next('');
+    this.lowOnly$.next(false);
+    this.sortKeyStock$.next('updated_at');
+    this.sortDirStock$.next('desc');
     this.setPage(1);
   }
   toggleSortStock(key: StockSortKey) {
     if (this.sortKeyStock$.value === key) {
       this.sortDirStock$.next(this.sortDirStock$.value === 'asc' ? 'desc' : 'asc');
-    } else { this.sortKeyStock$.next(key); this.sortDirStock$.next('asc'); }
+    } else {
+      this.sortKeyStock$.next(key);
+      this.sortDirStock$.next('asc');
+    }
   }
-  setPage(p: number) { this.page = p; this.page$.next(p); }
-  openDetail(id: string) { this.syncRoute(id, 'detail'); }
-  openAdjust(id: string) { this.syncRoute(id, 'edit'); }
-  openCreatePO() { this.importStep$.next(1); this.syncRoute(null, 'create_po'); }
-  cancelCreatePO() { this.goList(); }
-  goList() { this.attemptLeave(() => this.syncRoute(null, 'list')); }
-  enterEdit() { const id = this.routeState$.value.id; if (id) this.syncRoute(id, 'edit'); }
-  onHeaderBack() {
-    const s = this.routeState$.value;
-    if (s.id && s.edit) { this.backToDetail(); return; }
+  setPage(p: number) {
+    this.page = p;
+    this.page$.next(p);
+  }
+  openDetail(id: string) {
+    this.syncRoute(id, 'detail');
+  }
+  openAdjust(id: string) {
+    this.syncRoute(id, 'edit');
+  }
+  openCreatePO() {
+    this.importStep$.next(1);
+    this.syncRoute(null, 'create_po');
+  }
+  cancelCreatePO() {
     this.goList();
   }
-  backToDetail() { const id = this.routeState$.value.id; if (id) this.syncRoute(id, 'detail'); }
-  updateAdjustTarget(wid: string) { if (this.editModel$.value) this.editModel$.next({ ...this.editModel$.value, targetWarehouseId: wid }); }
-  updateAdjustQty(v: number) { if (this.editModel$.value) this.editModel$.next({ ...this.editModel$.value, qtyAbs: Number(v) }); }
-  updateAdjustReason(v: string) { if (this.editModel$.value) this.editModel$.next({ ...this.editModel$.value, reason: v }); }
+  goList() {
+    this.attemptLeave(() => this.syncRoute(null, 'list'));
+  }
+  enterEdit() {
+    const id = this.routeState$.value.id;
+    if (id) this.syncRoute(id, 'edit');
+  }
+  onHeaderBack() {
+    const s = this.routeState$.value;
+    if (s.id && s.edit) {
+      this.backToDetail();
+      return;
+    }
+    this.goList();
+  }
+  backToDetail() {
+    const id = this.routeState$.value.id;
+    if (id) this.syncRoute(id, 'detail');
+  }
+  updateAdjustTarget(wid: string) {
+    if (this.editModel$.value)
+      this.editModel$.next({ ...this.editModel$.value, targetWarehouseId: wid });
+  }
+  updateAdjustQty(v: number) {
+    if (this.editModel$.value)
+      this.editModel$.next({ ...this.editModel$.value, qtyAbs: Number(v) });
+  }
+  updateAdjustReason(v: string) {
+    if (this.editModel$.value) this.editModel$.next({ ...this.editModel$.value, reason: v });
+  }
   get isDirty() {
-    if (this.editModel$.value) return JSON.stringify(this.editModel$.value) !== this.originalEditSnapshot;
-    if (this.importDraft$.value) return JSON.stringify(this.importDraft$.value) !== this.originalEditSnapshot;
+    if (this.editModel$.value)
+      return JSON.stringify(this.editModel$.value) !== this.originalEditSnapshot;
+    if (this.importDraft$.value)
+      return JSON.stringify(this.importDraft$.value) !== this.originalEditSnapshot;
     return false;
   }
   onConfirmDiscard() {
@@ -513,27 +608,72 @@ export class ManagementWarehouse implements OnInit {
     this.clearEditState();
     action?.();
   }
-  onCancelDiscard() { this.discardModalOpen = false; this.pendingDiscardAction = null; }
-  onCancelSave() { this.saveModalOpen = false; }
+  onCancelDiscard() {
+    this.discardModalOpen = false;
+    this.pendingDiscardAction = null;
+  }
+  onCancelSave() {
+    this.saveModalOpen = false;
+  }
+  onCancelPO() {
+    this.poModalOpen = false;
+  }
+
+  confirmPO() {
+    this.poModalOpen = false;
+    this.executePO();
+  }
+
+  showNotice(title: string, message: string, type: ConfirmModalType = 'info'): void {
+    this.noticeTitle = title;
+    this.noticeMessage = message;
+    this.noticeType = type;
+    this.noticeModalOpen = true;
+    this.cdr.markForCheck();
+  }
 
   async saveEdit() {
     const draft = this.editModel$.value;
     const id = this.routeState$.value.id;
     if (!draft || !id) return;
-    const target = this.stockItems$.value.find(s => s._id === id);
+    const target = this.stockItems$.value.find((s) => s._id === id);
     if (!target) return;
-    const payload = {
+
+    // Transfer out
+    const deductPayload = {
       warehouse_id: target.warehouse_id?._id || target.warehouse_id,
-      product_id: target.product_variant_id?._id || target.product_variant_id,
-      quantity_change: draft.qtyAbs, 
-      reason: draft.reason || 'Điều chỉnh thủ công',
-      reference_type: 'adjustment'
+      product_variant_id: target.product_variant_id?._id || target.product_variant_id,
+      quantity_change: -Math.abs(draft.qtyAbs),
+      reason: draft.reason || 'Điều chuyển đi',
+      reference_type: 'transfer_out',
     };
+
+    // Transfer in
+    const addPayload = {
+      warehouse_id: draft.targetWarehouseId,
+      product_variant_id: target.product_variant_id?._id || target.product_variant_id,
+      quantity_change: Math.abs(draft.qtyAbs),
+      reason: draft.reason || 'Nhận điều chuyển',
+      reference_type: 'transfer_in',
+    };
+
     try {
-      await lastValueFrom(this.http.post(`${environment.backend_url}/stock-movements`, payload, { withCredentials: true }));
+      await lastValueFrom(
+        this.http.post(`${environment.backend_url}/stock-movements`, deductPayload, {
+          withCredentials: true,
+        }),
+      );
+      await lastValueFrom(
+        this.http.post(`${environment.backend_url}/stock-movements`, addPayload, {
+          withCredentials: true,
+        }),
+      );
+      this.showNotice('Thành công', 'Điều chỉnh tồn kho thành công!', 'success');
       this.loadData();
       this.goList();
-    } catch (err) { alert('Lỗi khi điều chỉnh kho'); }
+    } catch (err) {
+      this.showNotice('Lỗi hệ thống', 'Có lỗi xảy ra khi điều chỉnh kho.', 'danger');
+    }
   }
 
   exportCsvStock() {
@@ -566,8 +706,8 @@ export class ManagementWarehouse implements OnInit {
     const warehouses = this.warehouses$.value;
     const variants = this.variants$.value;
     const stockItems = this.stockItems$.value;
-    const variantMap = new Map<string, ProductVariantMin>(variants.map(v => [v._id, v]));
-    const whMap = new Map<string, WarehouseEntity>(warehouses.map(w => [w._id, w]));
+    const variantMap = new Map<string, ProductVariantMin>(variants.map((v) => [v._id, v]));
+    const whMap = new Map<string, WarehouseEntity>(warehouses.map((w) => [w._id, w]));
     return stockItems.map((si) => {
       const vId = si.product_variant_id?._id || si.product_variant_id;
       const wId = si.warehouse_id?._id || si.warehouse_id;
@@ -595,6 +735,7 @@ export class ManagementWarehouse implements OnInit {
   }
 
   async executeSave() {
+    this.saveModalOpen = false;
     this.saveEdit();
   }
 
@@ -604,26 +745,36 @@ export class ManagementWarehouse implements OnInit {
     const payload = {
       brand_id: draft.brand_id,
       note: draft.note,
-      items: draft.items.map(it => ({
+      items: draft.items.map((it) => ({
         product_variant_id: it.product_variant_id,
         warehouse_id: it.warehouse_id,
         quantity: it.quantity,
         unit_cost: it.unit_cost,
-        sku: this.variants$.value.find(v => v._id === it.product_variant_id)?.sku || ''
-      }))
+        sku: this.variants$.value.find((v) => v._id === it.product_variant_id)?.sku || '',
+      })),
     };
     try {
-      const res: any = await lastValueFrom(this.http.post(`${environment.backend_url}/admin/purchase-orders`, payload, { withCredentials: true }));
+      const res: any = await lastValueFrom(
+        this.http.post(`${environment.backend_url}/admin/purchase-orders`, payload, {
+          withCredentials: true,
+        }),
+      );
       if (res && res.data && res.data._id) {
-        await lastValueFrom(this.http.patch(`${environment.backend_url}/admin/purchase-orders/${res.data._id}/status`, { status: 'received' }, { withCredentials: true }));
+        await lastValueFrom(
+          this.http.patch(
+            `${environment.backend_url}/admin/purchase-orders/${res.data._id}/status`,
+            { status: 'received' },
+            { withCredentials: true },
+          ),
+        );
       }
-      alert('Tạo phiếu nhập hàng và nhập kho thành công!');
+      this.showNotice('Thành công', 'Tạo phiếu nhập hàng và nhập kho thành công!', 'success');
       this.loadData();
       this.clearEditState();
       this.syncRoute(null, 'list');
-    } catch (err) { 
+    } catch (err) {
       console.error(err);
-      alert('Lỗi khi tạo PO'); 
+      this.showNotice('Lỗi hệ thống', 'Có lỗi xảy ra khi tạo PO.', 'danger');
     }
   }
   addImportItem() {
@@ -632,61 +783,108 @@ export class ManagementWarehouse implements OnInit {
     const { warehouse_id, product_variant_id, quantity, unit_cost } = draft.tempItem;
     if (!warehouse_id || !product_variant_id || quantity <= 0) return;
     const newItem = { id: id16(), product_variant_id, warehouse_id, quantity, unit_cost };
-    this.importDraft$.next({ ...draft, items: [newItem, ...draft.items], tempItem: { ...draft.tempItem, product_variant_id: '', quantity: 1 } });
+    this.importDraft$.next({
+      ...draft,
+      items: [newItem, ...draft.items],
+      tempItem: { ...draft.tempItem, product_variant_id: '', quantity: 1 },
+    });
   }
   removeImportItem(id: string) {
     const draft = this.importDraft$.value;
-    if (draft) this.importDraft$.next({ ...draft, items: draft.items.filter(x => x.id !== id) });
+    if (draft) this.importDraft$.next({ ...draft, items: draft.items.filter((x) => x.id !== id) });
   }
-  nextImportStep() { this.importStep$.next(2); }
-  prevImportStep() { this.importStep$.next(1); }
+  nextImportStep() {
+    this.importStep$.next(2);
+  }
+  prevImportStep() {
+    this.importStep$.next(1);
+  }
   loadData(): void {
     const api = environment.backend_url;
     const opts = { withCredentials: true };
     forkJoin({
       wh: this.http.get<any>(`${api}/warehouse`, opts).pipe(catchError(() => of({ data: [] }))),
       si: this.http.get<any>(`${api}/stock-items`, opts).pipe(catchError(() => of({ data: [] }))),
-      mv: this.http.get<any>(`${api}/stock-movements`, opts).pipe(catchError(() => of({ data: [] }))),
-      po: this.http.get<any>(`${api}/admin/purchase-orders`, opts).pipe(catchError(() => of({ data: [] }))),
-      pv: this.http.get<any>(`${api}/product-variant`, opts).pipe(catchError(() => of({ data: [] }))),
-      br: this.http.get<any>(`${api}/brands`, opts).pipe(catchError(() => of({ data: [] })))
-    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (res) => {
-        this.warehouses$.next(res.wh.data || []);
-        this.stockItems$.next(res.si.data || []);
-        this.movements$.next(res.mv.data || []);
-        this.poItems$.next(res.po.data || []);
-        this.variants$.next(res.pv.data || []);
-        this.brands$.next(res.br.data || []);
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error('Warehouse loadData error:', err);
-        //alert('Lỗi khi tải dữ liệu kho. Vui lòng kiểm tra console.');
-      }
-    });
+      mv: this.http
+        .get<any>(`${api}/stock-movements`, opts)
+        .pipe(catchError(() => of({ data: [] }))),
+      po: this.http
+        .get<any>(`${api}/admin/purchase-orders`, opts)
+        .pipe(catchError(() => of({ data: [] }))),
+      pv: this.http
+        .get<any>(`${api}/product-variant`, opts)
+        .pipe(catchError(() => of({ data: [] }))),
+      br: this.http.get<any>(`${api}/brands`, opts).pipe(catchError(() => of({ data: [] }))),
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.warehouses$.next(res.wh.data || []);
+          this.stockItems$.next(res.si.data || []);
+          this.movements$.next(res.mv.data || []);
+          this.poItems$.next(res.po.data || []);
+          this.variants$.next(res.pv.data || []);
+          this.brands$.next(res.br.data || []);
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          console.error('Warehouse loadData error:', err);
+          //alert('Lỗi khi tải dữ liệu kho. Vui lòng kiểm tra console.');
+        },
+      });
   }
   getPOIconClass(s: POStatus) {
-    return s === 'received' ? 'icon-ok' : s === 'ordered' ? 'icon-blue' : s === 'draft' ? 'icon-purple' : 'icon-muted';
+    return s === 'received'
+      ? 'icon-ok'
+      : s === 'ordered'
+        ? 'icon-blue'
+        : s === 'draft'
+          ? 'icon-purple'
+          : 'icon-muted';
   }
   getPOIcon(s: POStatus) {
-    return s === 'received' ? 'bi-check-circle-fill' : s === 'ordered' ? 'bi-truck' : s === 'draft' ? 'bi-hourglass-split' : 'bi-x-circle';
+    return s === 'received'
+      ? 'bi-check-circle-fill'
+      : s === 'ordered'
+        ? 'bi-truck'
+        : s === 'draft'
+          ? 'bi-hourglass-split'
+          : 'bi-x-circle';
   }
   getPOPillClass(s: POStatus) {
-    return s === 'received' ? 'pill-ok' : s === 'ordered' ? 'pill-blue' : s === 'draft' ? 'pill-purple' : 'pill-cancelled';
+    return s === 'received'
+      ? 'pill-ok'
+      : s === 'ordered'
+        ? 'pill-blue'
+        : s === 'draft'
+          ? 'pill-purple'
+          : 'pill-cancelled';
   }
   getPOStatusLabel(s: POStatus) {
-    return s === 'received' ? 'Hoàn tất' : s === 'ordered' ? 'Đang xử lý' : s === 'draft' ? 'Nháp' : 'Đã hủy';
+    return s === 'received'
+      ? 'Hoàn tất'
+      : s === 'ordered'
+        ? 'Đang xử lý'
+        : s === 'draft'
+          ? 'Nháp'
+          : 'Đã hủy';
   }
   private syncRoute(id: string | null, mode: Mode) {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { id, edit: mode === 'edit' ? 'true' : null, action: mode === 'create_po' ? 'create_po' : null },
-      queryParamsHandling: 'merge'
+      queryParams: {
+        id,
+        edit: mode === 'edit' ? 'true' : null,
+        action: mode === 'create_po' ? 'create_po' : null,
+      },
+      queryParamsHandling: 'merge',
     });
   }
   private attemptLeave(action: () => void) {
-    if (!this.isDirty) { action(); return; }
+    if (!this.isDirty) {
+      action();
+      return;
+    }
     this.pendingDiscardAction = action;
     this.discardModalOpen = true;
     this.cdr.markForCheck();
@@ -701,17 +899,26 @@ export class ManagementWarehouse implements OnInit {
     this.originalEditSnapshot = null;
     this.importDraft$.next(null);
   }
-  stopEvent(e: MouseEvent) { e.preventDefault(); e.stopPropagation(); }
+  stopEvent(e: MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 }
 
 function getStockSortValue(r: StockRowVM, key: StockSortKey): any {
   switch (key) {
-    case 'product_variant_id': return r.product_variant_id.toLowerCase();
-    case 'sku': return r.sku.toLowerCase();
-    case 'warehouse': return r.warehouse_name.toLowerCase();
-    case 'status': return r.low_stock ? 0 : 1;
-    case 'quantity_on_hand': return r.quantity_on_hand;
-    case 'updated_at': return +new Date(r.updated_at);
+    case 'product_variant_id':
+      return r.product_variant_id.toLowerCase();
+    case 'sku':
+      return r.sku.toLowerCase();
+    case 'warehouse':
+      return r.warehouse_name.toLowerCase();
+    case 'status':
+      return r.low_stock ? 0 : 1;
+    case 'quantity_on_hand':
+      return r.quantity_on_hand;
+    case 'updated_at':
+      return +new Date(r.updated_at);
   }
 }
 function movementToVM(m: StockMovementEntity): MovementRowVM {
@@ -725,14 +932,20 @@ function movementToVM(m: StockMovementEntity): MovementRowVM {
     reason: m.reason,
   };
 }
-function safeText(v: any) { return typeof v === 'string' ? v : v == null ? '' : String(v); }
+function safeText(v: any) {
+  return typeof v === 'string' ? v : v == null ? '' : String(v);
+}
 function fmtDate(iso: string) {
   if (!iso) return 'N/A';
   const d = new Date(iso);
   return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
 }
-function money(v: number) { return Math.round(v).toLocaleString('vi-VN') + ' đ'; }
-function id16() { return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+function money(v: number) {
+  return Math.round(v).toLocaleString('vi-VN') + ' đ';
+}
+function id16() {
+  return Math.random().toString(16).slice(2) + Date.now().toString(16);
+}
 function csvEsc(v: any) {
   const s = String(v ?? '');
   if (s.includes(',') || s.includes('"') || s.includes('\n')) {

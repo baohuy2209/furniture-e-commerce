@@ -17,6 +17,7 @@ export class ConfirmModal {
   @Input() type: ConfirmModalType = 'info';
   @Input() confirmLabel = 'Xác nhận';
   @Input() cancelLabel = 'Hủy bỏ';
+  @Input() hideCancel = false;
 
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();

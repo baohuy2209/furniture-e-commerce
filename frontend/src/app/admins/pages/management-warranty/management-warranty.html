@@ -164,6 +164,9 @@
                 </div>
 
                 <div class="hb-th">
+                  <div class="th-content"><span>SỬA</span></div>
+                </div>
+                <div class="hb-th">
                   <div class="th-content"><span>XÓA</span></div>
                 </div>
               </div>
@@ -213,6 +216,11 @@
                   {{ r.request_date | date: 'dd/MM/yyyy' }}
                 </div>
 
+                <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
+                  <button class="hb-icon-btn" type="button" (click)="openDetail(r.id)">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                </div>
                 <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
                   <button
                     class="hb-icon-btn danger"
@@ -474,5 +482,15 @@
     cancelLabel="Đóng"
     (confirm)="onConfirmDelete()"
     (cancel)="onCancelDelete()"
+  ></hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="noticeModalOpen"
+    [title]="noticeTitle"
+    [message]="noticeMessage"
+    [type]="noticeType"
+    confirmLabel="Đã hiểu"
+    [hideCancel]="true"
+    (confirm)="noticeModalOpen = false"
   ></hb-confirm-modal>
 </div>

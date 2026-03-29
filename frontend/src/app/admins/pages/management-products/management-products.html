@@ -1565,4 +1565,14 @@
     (confirm)="executeSave()"
     (cancel)="saveModalOpen = false"
   ></hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="noticeModalOpen"
+    [title]="noticeTitle"
+    [message]="noticeMessage"
+    [type]="noticeType"
+    confirmLabel="Đã hiểu"
+    [hideCancel]="true"
+    (confirm)="noticeModalOpen = false"
+  ></hb-confirm-modal>
 </div>

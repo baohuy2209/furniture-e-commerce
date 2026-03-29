@@ -121,7 +121,6 @@
 
 /* ===== TYPO ===== */
 
-
 /* ===== NEW WIZARD STEPS (Warehouse Sync) ===== */
 .hb-wizard-steps {
   display: flex;
@@ -326,10 +325,7 @@
   padding: 8px;
 }
 
-.hb-filterbar input::placeholder {
-  color: #64748b;
-  opacity: 0.7;
-}
+/* Placeholder managed globally in admin-dark.css */
 
 @media (max-width: 1100px) {
   .hb-filterbar {

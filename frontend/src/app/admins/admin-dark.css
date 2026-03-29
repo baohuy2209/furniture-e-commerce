@@ -22,8 +22,8 @@
   --shadow-glow: 0 0 20px rgba(129, 140, 248, 0.1);
 }
 
-/* 
-   EXTREMELY AGGRESSIVE GLOBAL RESET 
+/*
+   EXTREMELY AGGRESSIVE GLOBAL RESET
    Targeting everything possible to kill the "White Border"
 */
 
@@ -139,9 +139,6 @@ section {
   filter: drop-shadow(0 0 5px white) !important;
 }
 
-
-
-
 .hb-summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -164,7 +161,9 @@ section {
 .hb-summary-card-v2:hover {
   transform: translateY(-5px);
   border-color: var(--hb-primary-glow);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), var(--shadow-glow);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    var(--shadow-glow);
 }
 
 .card-top {
@@ -320,7 +319,6 @@ section {
   color: white;
 }
 
-
 /* Killer for any white background in common UI containers */
 .container,
 .container-fluid,
@@ -340,10 +338,9 @@ section {
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-
 /* Kill padding on any potential container wrapping the outlet */
-.main-admin-content>div,
-.hb-page-shell>div {
+.main-admin-content > div,
+.hb-page-shell > div {
   padding: 0 !important;
   margin: 0 !important;
 }
@@ -352,7 +349,6 @@ section {
   padding: 10px 24px 24px 24px !important;
   background-color: var(--hb-bg-main) !important;
 }
-
 
 /* Ensure full bleed / no white border */
 .main-admin-content .container,
@@ -389,7 +385,14 @@ section {
   /* Fully sync with Dashboard 40px */
   letter-spacing: 0.5px !important;
   text-transform: uppercase !important;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif !important;
 }
 
 .hb-title {
@@ -433,10 +436,10 @@ section {
   border-radius: var(--hb-radius) !important;
 }
 
-/* /* SUMMARY SYSTEM - Forced consistency across all modules */
+/* SUMMARY SYSTEM - Forced consistency across all modules */
 .hb-summary-row {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
   gap: 10px !important;
   margin-top: 14px !important;
   margin-bottom: 8px !important;
@@ -444,6 +447,7 @@ section {
 }
 
 .hb-summary-card {
+  flex: 1 1 200px !important;
   border-radius: var(--hb-radius) !important;
   background-color: var(--hb-card-bg) !important;
   border: 1px solid var(--hb-border) !important;
@@ -629,7 +633,14 @@ section {
 .main-admin-content,
 .hb-page-shell {
   color: #ffffff !important;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif !important;
   font-size: 14px;
 }
 
@@ -651,14 +662,50 @@ section {
 .main-admin-content a,
 .main-admin-content button:not(.btn-hb-accent):not(.btn-hb-ghost):not(.btn-hb-outline-danger) {
   color: #ffffff !important;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif !important;
+}
+
+/* FORMS - INPUTS & PLACEHOLDERS - ACCESSIBILITY FIX */
+input,
+textarea,
+select,
+.form-control,
+.form-select,
+.hb-form-input,
+.hb-search-input {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+}
+
+/* Ensure placeholder text is bright enough to read but distinguishable from actual text */
+::placeholder {
+  color: rgba(255, 255, 255, 0.55) !important;
+  opacity: 1 !important;
+}
+
+/* Handle all pseudo-element variations for placeholders */
+input::placeholder,
+textarea::placeholder,
+.form-control::placeholder,
+.form-select::placeholder {
+  color: rgba(255, 255, 255, 0.55) !important;
+  font-style: italic !important;
 }
 
 .text-muted,
 .hb-muted,
 .sub,
 .lab {
-  color: #94a3b8 !important;
+  color: #9ca3af !important; /* Slightly brighter than original 94a3b8 */
   opacity: 1 !important;
 }
 
@@ -680,14 +727,14 @@ section {
 
 /* Dashboard V2 Polish */
 .hb-panel-v2 {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .hb-summary-card-v2 {
   cursor: pointer;
 }
-
-
 
 /* CHART & LEGEND TEXT */
 .hb-chart-legend .small,
@@ -717,82 +764,131 @@ svg text {
 }
 
 .chart-interactions line {
-  transition: x1 0.1s ease-out, x2 0.1s ease-out;
+  transition:
+    x1 0.1s ease-out,
+    x2 0.1s ease-out;
 }
 
+/* BUTTONS & CONTROLS - SUPER SYNCHRONIZED THEME */
+/* Force all buttons in the admin section to have readable text */
+.main-admin-content button,
+.hb-page-shell button,
+.btn,
+.btn-hb,
+.btn-hb-outline,
+.btn-hb-ghost,
+.btn-hb-primary,
+.btn-hb-success,
+.btn-hb-warning,
+.btn-hb-info,
+.hb-page-btn {
+  color: #ffffff !important; /* Force white text by default */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: 700 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
 
-
-/* BUTTONS - SUPER SYNCHRONIZED THEME */
-/* Force all header action buttons to be glass-themed by default */
-.hb-header-actions button {
-  background: rgba(255, 255, 255, 0.05) !important;
-  /* Base Glass Dark */
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+/* Base style for Generic btn-hb and btn-hb-outline */
+.btn-hb,
+.btn-hb-outline {
   border-radius: 10px !important;
-  margin-top: 0 !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
 }
 
-/* Explicit Synchronized Accent Style (Matching "Thêm sản phẩm") */
-.hb-header-actions button.btn-hb-accent,
-.hb-header-actions button.btn-primary,
-.hb-header-actions button.btn-warning {
-  background: rgba(129, 140, 248, 0.1) !important;
-  /* Navy/Blue Glow background */
-  color: #818cf8 !important;
-  /* Bright Blue text */
-  border: 1px solid rgba(129, 140, 248, 0.25) !important;
-  box-shadow: 0 4px 15px rgba(129, 140, 248, 0.1) !important;
+.btn-hb {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-.hb-header-actions button:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
+.btn-hb:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-hb-outline {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+.btn-hb-outline:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
   transform: translateY(-1px);
 }
 
-.hb-header-actions button.btn-hb-accent:hover {
-  background: rgba(129, 140, 248, 0.2) !important;
-  border-color: rgba(129, 140, 248, 0.45) !important;
-  box-shadow: 0 0 20px rgba(129, 140, 248, 0.2) !important;
+/* Header action specific - ensured same as above */
+.hb-header-actions button {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Success / Publish / Commit Buttons */
+/* INDIGO ACCENT (btn-hb-accent, btn-primary) */
+.btn-hb-accent,
+.btn-hb-primary,
+.hb-filter-reset {
+  background: rgba(129, 140, 248, 0.1) !important;
+  color: #818cf8 !important; /* Bright Indigo/Blue text */
+  border: 1px solid rgba(129, 140, 248, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(129, 140, 248, 0.1) !important;
+}
+
+.btn-hb-accent:hover,
+.btn-hb-primary:hover,
+.hb-filter-reset:hover {
+  background: rgba(129, 140, 248, 0.2) !important;
+  border-color: rgba(129, 140, 248, 0.5) !important;
+  box-shadow: 0 0 20px rgba(129, 140, 248, 0.25) !important;
+  color: #818cf8 !important;
+}
+
+/* SUCCESS / PUBLISH (Emerald) */
 .btn-hb-success,
 .btn-hb-publish {
   background: #10b981 !important;
   color: #ffffff !important;
   border: none !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.5px !important;
-  border-radius: 12px !important;
   box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .btn-hb-success:hover,
 .btn-hb-publish:hover {
   background: #059669 !important;
-  /* Emerald 600 */
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5), 0 0 15px rgba(16, 185, 129, 0.4) !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5) !important;
 }
 
-.btn-hb-success:active,
-.btn-hb-publish:active {
-  transform: translateY(1px);
+/* DANGER (Rose) */
+.btn-hb-outline-danger,
+.btn-hb-danger-outline,
+.btn-danger,
+.hb-icon-btn.danger {
+  border-color: rgba(248, 113, 113, 0.3) !important;
+  color: #f87171 !important;
+  background: rgba(248, 113, 113, 0.05) !important;
 }
 
-.btn-hb-success[disabled],
-.btn-hb-publish[disabled] {
-  background: rgba(16, 185, 129, 0.15) !important;
-  color: rgba(255, 255, 255, 0.3) !important;
-  box-shadow: none !important;
+.btn-hb-outline-danger:hover,
+.btn-hb-danger-outline:hover,
+.btn-danger:hover,
+.hb-icon-btn.danger:hover {
+  background: rgba(248, 113, 113, 0.15) !important;
+  border-color: #f87171 !important;
+  color: #f87171 !important;
+}
+
+/* Disabled states */
+button[disabled] {
+  opacity: 0.4 !important;
   cursor: not-allowed !important;
-  border: 1px solid rgba(16, 185, 129, 0.1) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
-
-/* Icons within these buttons are already colorful thanks to previous rules */
-
 
 /* ICONS & PREMIUM COLORFUL ACCENTS */
 /* Header Action Icons - Vibrant & Glowing */
@@ -887,19 +983,26 @@ svg text {
 
 .hb-sc-icon.customers,
 .hb-sc-icon.info {
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(56, 189, 248, 0.05)) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(56, 189, 248, 0.15),
+    rgba(56, 189, 248, 0.05)
+  ) !important;
   color: #38bdf8 !important;
   border-color: rgba(56, 189, 248, 0.3) !important;
   box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
 }
 
 .hb-sc-icon.danger {
-  background: linear-gradient(135deg, rgba(248, 113, 113, 0.15), rgba(248, 113, 113, 0.05)) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(248, 113, 113, 0.15),
+    rgba(248, 113, 113, 0.05)
+  ) !important;
   color: #f87171 !important;
   border-color: rgba(248, 113, 113, 0.3) !important;
   box-shadow: 0 0 15px rgba(248, 113, 113, 0.15);
 }
-
 
 /* TABLES */
 .hb-table-head {
@@ -949,12 +1052,12 @@ svg text {
 }
 
 /* Base proportions for filter items - synced with Product Management */
-.hb-filterbar>* {
+.hb-filterbar > * {
   flex: 1 1 auto !important;
 }
 
 /* Search box (input or wrapper) should be wider */
-.hb-filterbar>input.form-control,
+.hb-filterbar > input.form-control,
 .hb-filterbar .hb-search-input-wrapper {
   flex: 2.5 !important;
   min-width: 180px !important;
@@ -962,8 +1065,8 @@ svg text {
 
 /* Selects and other small controls */
 .hb-filterbar .form-select,
-.hb-filterbar input[type="date"],
-.hb-filterbar input[type="number"] {
+.hb-filterbar input[type='date'],
+.hb-filterbar input[type='number'] {
   flex: 1 !important;
   min-width: 120px !important;
 }

@@ -23,6 +23,7 @@ async function sendEmail(to, subject, html) {
       to: to,
       subject: subject,
       html: html,
+      priority: "high",
     };
 
     const info = await transporter.sendMail(mailOptions);

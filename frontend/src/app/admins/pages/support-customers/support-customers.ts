@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Subject, combineLatest, map, takeUntil } from 'rxjs';
-import { ConfirmModal } from '../../components/confirm-modal/confirm-modal';
+import { ConfirmModal, ConfirmModalType } from '../../components/confirm-modal/confirm-modal';
 import { CustomerInquiryService } from '../../../services/customer-inquiry-service';
 import { ICustomerInquiry } from '../../../../interface';
 
@@ -11,16 +11,9 @@ type SortDir = 'asc' | 'desc';
 type PageMode = 'list' | 'detail' | 'edit';
 
 type InquiryChannel = 'chat' | 'email' | 'phone' | 'form';
-type InquiryCategory =
-  | 'order'
-  | 'product'
-  | 'warranty'
-  | 'other';
+type InquiryCategory = 'order' | 'product' | 'warranty' | 'other';
 
-type InquiryStatus =
-  | 'open'
-  | 'in_progress'
-  | 'closed';
+type InquiryStatus = 'open' | 'in_progress' | 'closed';
 
 interface TimelineItem {
   at: string;
@@ -144,6 +137,10 @@ export class SupportCustomers implements OnInit, OnDestroy {
 
   deleteTargetId: string | null = null;
   advanceTargetId: string | null = null;
+  noticeModalOpen = false;
+  noticeTitle = '';
+  noticeMessage = '';
+  noticeType: ConfirmModalType = 'info';
 
   statusOptions: { value: InquiryStatus; label: string }[] = [
     { value: 'open', label: 'Mới' },
@@ -166,9 +163,17 @@ export class SupportCustomers implements OnInit, OnDestroy {
   ];
 
   query$ = new BehaviorSubject<ListQuery>({
-    q: '', channel: 'all', category: 'all', status: 'all', priority: 'all',
-    dateFrom: '', dateTo: '',
-    sortKey: 'expectedReplyAt', sortDir: 'asc', page: 1, pageSize: 10,
+    q: '',
+    channel: 'all',
+    category: 'all',
+    status: 'all',
+    priority: 'all',
+    dateFrom: '',
+    dateTo: '',
+    sortKey: 'expectedReplyAt',
+    sortDir: 'asc',
+    page: 1,
+    pageSize: 10,
   });
 
   private rowsAll$ = this.inquiries$.pipe(map((items) => items.map((x) => toRowVM(x))));
@@ -180,15 +185,18 @@ export class SupportCustomers implements OnInit, OnDestroy {
 
       if (q.length >= 1) {
         filtered = filtered.filter((r) => {
-          const hay = `${r.id} ${r.customerName} ${r.customerPhone} ${r.customerEmail} ${r.subject} ${r.assignee ?? ''}`.toLowerCase();
+          const hay =
+            `${r.id} ${r.customerName} ${r.customerPhone} ${r.customerEmail} ${r.subject} ${r.assignee ?? ''}`.toLowerCase();
           return hay.includes(q);
         });
       }
 
       if (query.channel !== 'all') filtered = filtered.filter((r) => r.channel === query.channel);
-      if (query.category !== 'all') filtered = filtered.filter((r) => r.category === query.category);
+      if (query.category !== 'all')
+        filtered = filtered.filter((r) => r.category === query.category);
       if (query.status !== 'all') filtered = filtered.filter((r) => r.status === query.status);
-      if (query.priority !== 'all') filtered = filtered.filter((r) => r.priority === query.priority);
+      if (query.priority !== 'all')
+        filtered = filtered.filter((r) => r.priority === query.priority);
 
       if (query.dateFrom) {
         const from = new Date(query.dateFrom + 'T00:00:00');
@@ -207,7 +215,9 @@ export class SupportCustomers implements OnInit, OnDestroy {
       const totalPages = Math.max(1, Math.ceil(total / query.pageSize));
       const page = clamp(query.page, 1, totalPages);
       const start = (page - 1) * query.pageSize;
-      const rows = filtered.slice(start, start + query.pageSize).map((r, i) => ({ ...r, stt: start + i + 1 }));
+      const rows = filtered
+        .slice(start, start + query.pageSize)
+        .map((r, i) => ({ ...r, stt: start + i + 1 }));
 
       const all = this.inquiries$.value;
       const kpiNew = all.filter((x) => x.status === 'open').length;
@@ -217,8 +227,13 @@ export class SupportCustomers implements OnInit, OnDestroy {
 
       return {
         query: { ...query, page },
-        rows, total, totalPages,
-        kpiNew, kpiInProgress, kpiClosed, kpiBreached,
+        rows,
+        total,
+        totalPages,
+        kpiNew,
+        kpiInProgress,
+        kpiClosed,
+        kpiBreached,
         totalCount: rowsAll.length,
         statusOptions: this.statusOptions,
       };
@@ -228,8 +243,8 @@ export class SupportCustomers implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private inquiryService: CustomerInquiryService
-  ) { }
+    private inquiryService: CustomerInquiryService,
+  ) {}
 
   ngOnInit(): void {
     this.loadInquiries();
@@ -244,19 +259,22 @@ export class SupportCustomers implements OnInit, OnDestroy {
   loadInquiries(): void {
     this.inquiryService.getAllInquiries().subscribe({
       next: (res) => {
-        const mappedData = (res.data || []).map(item => this.mapBackendToLocal(item));
+        const mappedData = (res.data || []).map((item) => this.mapBackendToLocal(item));
         this.inquiries$.next(mappedData);
       },
       error: (err) => {
         console.error('Failed to load inquiries', err);
-      }
+      },
     });
   }
 
   private mapBackendToLocal(item: ICustomerInquiry): CustomerInquiry {
-    const user = (item.user_id && typeof item.user_id === 'object') ? item.user_id : { name: 'Khách vãng lai', email: '—', phone: '—' };
+    const user =
+      item.user_id && typeof item.user_id === 'object'
+        ? item.user_id
+        : { name: 'Khách vãng lai', email: '—', phone: '—' };
     const staff = typeof item.resolving_staff_id === 'object' ? item.resolving_staff_id : null;
-    
+
     return {
       id: item._id,
       _id: item._id,
@@ -277,27 +295,41 @@ export class SupportCustomers implements OnInit, OnDestroy {
       createdAt: (item.createdAt as string) || new Date().toISOString(),
       updatedAt: (item.updatedAt as string) || new Date().toISOString(),
       expectedReplyAt: (item.due_date as string) || new Date().toISOString(),
-      timeline: []
+      timeline: [],
     } as any;
   }
 
   private mapPriorityToLocal(p: string): any {
     switch (p) {
-      case 'low': case 'Thấp': return 'low';
-      case 'medium': case 'Trung bình': return 'medium';
-      case 'high': case 'Cao': return 'high';
-      case 'urgent': case 'Khẩn cấp': return 'urgent';
-      default: return p || 'medium';
+      case 'low':
+      case 'Thấp':
+        return 'low';
+      case 'medium':
+      case 'Trung bình':
+        return 'medium';
+      case 'high':
+      case 'Cao':
+        return 'high';
+      case 'urgent':
+      case 'Khẩn cấp':
+        return 'urgent';
+      default:
+        return p || 'medium';
     }
   }
 
   private mapLocalPriorityToBackend(p: string): string {
     switch (p) {
-      case 'low': return 'low';
-      case 'medium': return 'medium';
-      case 'high': return 'high';
-      case 'urgent': return 'urgent';
-      default: return p;
+      case 'low':
+        return 'low';
+      case 'medium':
+        return 'medium';
+      case 'high':
+        return 'high';
+      case 'urgent':
+        return 'urgent';
+      default:
+        return p;
     }
   }
 
@@ -317,14 +349,14 @@ export class SupportCustomers implements OnInit, OnDestroy {
       }
 
       const currentList = this.inquiries$.value;
-      const item = currentList.find(x => x.id === id);
-      
+      const item = currentList.find((x) => x.id === id);
+
       if (!item) {
         this.inquiryService.getAllInquiries().subscribe({
           next: (res) => {
-            const list = res.data.map(i => this.mapBackendToLocal(i));
+            const list = res.data.map((i) => this.mapBackendToLocal(i));
             this.inquiries$.next(list);
-            const found = list.find(x => x.id === id);
+            const found = list.find((x) => x.id === id);
             if (found) {
               this.selectedId = id;
               this.detail = enrichDetail(found);
@@ -337,7 +369,7 @@ export class SupportCustomers implements OnInit, OnDestroy {
             } else {
               this.syncRoute(null, 'list', false);
             }
-          }
+          },
         });
         return;
       }
@@ -380,7 +412,10 @@ export class SupportCustomers implements OnInit, OnDestroy {
   }
 
   markDirty(): void {
-    if (!this.editForm || !this.originalSnapshot) { this.isDirty = false; return; }
+    if (!this.editForm || !this.originalSnapshot) {
+      this.isDirty = false;
+      return;
+    }
     this.isDirty = JSON.stringify(this.editForm) !== JSON.stringify(this.originalSnapshot);
   }
 
@@ -391,9 +426,17 @@ export class SupportCustomers implements OnInit, OnDestroy {
 
   resetFilters(): void {
     this.query$.next({
-      q: '', channel: 'all', category: 'all', status: 'all', priority: 'all',
-      dateFrom: '', dateTo: '',
-      sortKey: 'expectedReplyAt', sortDir: 'asc', page: 1, pageSize: 10,
+      q: '',
+      channel: 'all',
+      category: 'all',
+      status: 'all',
+      priority: 'all',
+      dateFrom: '',
+      dateTo: '',
+      sortKey: 'expectedReplyAt',
+      sortDir: 'asc',
+      page: 1,
+      pageSize: 10,
     });
   }
 
@@ -416,15 +459,23 @@ export class SupportCustomers implements OnInit, OnDestroy {
     this.query$.next({ ...q, page });
   }
 
-  openDetail(id: string): void { this.syncRoute(id, 'detail', true); }
-  openEditFromList(ev: MouseEvent, id: string): void { ev.stopPropagation(); this.syncRoute(id, 'edit', true); }
+  openDetail(id: string): void {
+    this.syncRoute(id, 'detail', true);
+  }
+  openEditFromList(ev: MouseEvent, id: string): void {
+    ev.stopPropagation();
+    this.syncRoute(id, 'edit', true);
+  }
 
   backToList(): void {
     this.attemptLeave(() => this.syncRoute(null, 'list', true));
   }
 
   onHeaderBack(): void {
-    if (this.mode === 'edit') { this.backToDetail(); return; }
+    if (this.mode === 'edit') {
+      this.backToDetail();
+      return;
+    }
     this.backToList();
   }
 
@@ -434,14 +485,22 @@ export class SupportCustomers implements OnInit, OnDestroy {
   }
 
   backToDetail(): void {
-    if (!this.selectedId) { this.backToList(); return; }
+    if (!this.selectedId) {
+      this.backToList();
+      return;
+    }
     this.attemptLeave(() => this.syncRoute(this.selectedId, 'detail', true));
   }
 
-  cancelEdit(): void { this.backToDetail(); }
+  cancelEdit(): void {
+    this.backToDetail();
+  }
 
   private attemptLeave(action: () => void): void {
-    if (!this.isDirty) { action(); return; }
+    if (!this.isDirty) {
+      action();
+      return;
+    }
     this.pendingDiscardAction = action;
     this.discardModalOpen = true;
   }
@@ -466,10 +525,22 @@ export class SupportCustomers implements OnInit, OnDestroy {
     this.saveModalOpen = true;
   }
 
-  onCancelSave(): void { this.saveModalOpen = false; }
+  onCancelSave(): void {
+    this.saveModalOpen = false;
+  }
+
+  showNotice(title: string, message: string, type: ConfirmModalType = 'info'): void {
+    this.noticeTitle = title;
+    this.noticeMessage = message;
+    this.noticeType = type;
+    this.noticeModalOpen = true;
+  }
 
   executeSave(sendEmail: boolean = false): void {
-    if (!this.detail || !this.editForm) { this.saveModalOpen = false; return; }
+    if (!this.detail || !this.editForm) {
+      this.saveModalOpen = false;
+      return;
+    }
     this.saving = true;
 
     const payload = {
@@ -478,7 +549,7 @@ export class SupportCustomers implements OnInit, OnDestroy {
       staff_response: this.editForm.resolution,
       internal_notes: this.editForm.internalNote,
       category: this.editForm.category,
-      send_email: sendEmail
+      send_email: sendEmail,
     };
 
     const mongoId = (this.detail as any)._id;
@@ -491,30 +562,42 @@ export class SupportCustomers implements OnInit, OnDestroy {
         this.syncRoute(this.selectedId, 'detail', true);
         if (sendEmail) {
           if ((res as any).mailError) {
-            alert('Đã lưu dữ liệu nhưng KHÔNG gửi được email. Lỗi: ' + (res as any).mailError);
+            this.showNotice(
+              'Lưu dữ liệu',
+              'Đã lưu dữ liệu nhưng KHÔNG gửi được email. Lỗi: ' + (res as any).mailError,
+              'warning',
+            );
           } else {
-            alert('Đã lưu và gửi phản hồi cho khách hàng thành công!');
+            this.showNotice(
+              'Thành công',
+              'Đã lưu và gửi phản hồi cho khách hàng thành công!',
+              'success',
+            );
           }
+        } else {
+          this.showNotice('Thành công', 'Đã lưu thông tin xử lý thành công!', 'success');
         }
       },
       error: (err) => {
         this.saving = false;
         this.saveModalOpen = false;
         console.error('Save failed', err);
-        alert('Có lỗi xảy ra khi lưu thông tin: ' + (err.error?.message || err.message));
-      }
+        this.showNotice(
+          'Lỗi hệ thống',
+          'Có lỗi xảy ra khi lưu thông tin: ' + (err.error?.message || err.message),
+          'danger',
+        );
+      },
     });
   }
 
   sendToCustomer(): void {
     if (!this.detail || !this.editForm) return;
     if (!this.editForm.resolution) {
-      alert('Vui lòng nhập hướng giải quyết trước khi gửi!');
+      this.showNotice('Cảnh báo', 'Vui lòng nhập hướng giải quyết trước khi gửi!', 'warning');
       return;
     }
-    if (confirm('Bạn có chắc chắn muốn lưu và GỬI email phản hồi này cho khách hàng?')) {
-      this.executeSave(true);
-    }
+    this.executeSave(true);
   }
 
   canAdvance(status: InquiryStatus): boolean {
@@ -526,7 +609,10 @@ export class SupportCustomers implements OnInit, OnDestroy {
     this.advanceModalOpen = true;
   }
 
-  onCancelAdvance(): void { this.advanceModalOpen = false; this.advanceTargetId = null; }
+  onCancelAdvance(): void {
+    this.advanceModalOpen = false;
+    this.advanceTargetId = null;
+  }
 
   onConfirmAdvance(): void {
     const id = this.advanceTargetId;
@@ -537,14 +623,14 @@ export class SupportCustomers implements OnInit, OnDestroy {
   }
 
   quickNextStatus(id: string): void {
-    const item = this.inquiries$.value.find(x => x.id === id);
+    const item = this.inquiries$.value.find((x) => x.id === id);
     if (!item) return;
     const next = nextStatus(item.status);
     if (!next) return;
 
     this.inquiryService.respondToInquiry((item as any)._id, { status: next }).subscribe({
       next: () => this.loadInquiries(),
-      error: (err) => console.error('Advance status failed', err)
+      error: (err) => console.error('Advance status failed', err),
     });
   }
 
@@ -559,15 +645,18 @@ export class SupportCustomers implements OnInit, OnDestroy {
     this.deleteModalOpen = true;
   }
 
-  onCancelDelete(): void { this.deleteModalOpen = false; this.deleteTargetId = null; }
+  onCancelDelete(): void {
+    this.deleteModalOpen = false;
+    this.deleteTargetId = null;
+  }
 
   onConfirmDelete(): void {
     const id = this.deleteTargetId;
     this.deleteModalOpen = false;
     this.deleteTargetId = null;
     if (!id) return;
-    
-    const item = this.inquiries$.value.find(x => x.id === id);
+
+    const item = this.inquiries$.value.find((x) => x.id === id);
     if (!item) return;
 
     this.inquiryService.deleteInquiry((item as any)._id).subscribe({
@@ -575,46 +664,65 @@ export class SupportCustomers implements OnInit, OnDestroy {
         this.loadInquiries();
         if (this.selectedId === id) this.syncRoute(null, 'list', true);
       },
-      error: (err) => console.error('Delete failed', err)
+      error: (err) => console.error('Delete failed', err),
     });
   }
 
   categoryBadgeClass(category: InquiryCategory): string {
     switch (category) {
-      case 'order': return 'hb-cat-order';
-      case 'product': return 'hb-cat-product';
-      case 'warranty': return 'hb-cat-warranty';
-      case 'other': return 'hb-cat-other';
-      default: return 'hb-cat-other';
+      case 'order':
+        return 'hb-cat-order';
+      case 'product':
+        return 'hb-cat-product';
+      case 'warranty':
+        return 'hb-cat-warranty';
+      case 'other':
+        return 'hb-cat-other';
+      default:
+        return 'hb-cat-other';
     }
   }
 
   statusBadgeClass(status: InquiryStatus): string {
     switch (status) {
-      case 'open': return 'hb-st-new';
-      case 'in_progress': return 'hb-st-checking';
-      case 'closed': return 'hb-st-done';
-      default: return 'hb-st-new';
+      case 'open':
+        return 'hb-st-new';
+      case 'in_progress':
+        return 'hb-st-checking';
+      case 'closed':
+        return 'hb-st-done';
+      default:
+        return 'hb-st-new';
     }
   }
 
   priorityBadgeClass(priority: string): string {
     switch (priority) {
-      case 'low': return 'hb-pri-low';
-      case 'medium': return 'hb-pri-medium';
-      case 'high': return 'hb-pri-high';
-      case 'urgent': return 'hb-pri-urgent';
-      default: return 'hb-pri-low';
+      case 'low':
+        return 'hb-pri-low';
+      case 'medium':
+        return 'hb-pri-medium';
+      case 'high':
+        return 'hb-pri-high';
+      case 'urgent':
+        return 'hb-pri-urgent';
+      default:
+        return 'hb-pri-low';
     }
   }
 
   channelIcon(channel: InquiryChannel): string {
     switch (channel) {
-      case 'chat': return 'bi-chat-dots';
-      case 'email': return 'bi-envelope';
-      case 'phone': return 'bi-telephone';
-      case 'form': return 'bi-card-checklist';
-      default: return 'bi-question-circle';
+      case 'chat':
+        return 'bi-chat-dots';
+      case 'email':
+        return 'bi-envelope';
+      case 'phone':
+        return 'bi-telephone';
+      case 'form':
+        return 'bi-card-checklist';
+      default:
+        return 'bi-question-circle';
     }
   }
 
@@ -624,10 +732,31 @@ export class SupportCustomers implements OnInit, OnDestroy {
   }
 
   exportCsv(rows: ListRowVM[]): void {
-    const header = ['ID', 'Khách hàng', 'SĐT', 'Email', 'Chủ đề', 'Kênh', 'Danh mục', 'Độ ưu tiên', 'Trạng thái', 'Người xử lý', 'Thời hạn phản hồi'];
+    const header = [
+      'ID',
+      'Khách hàng',
+      'SĐT',
+      'Email',
+      'Chủ đề',
+      'Kênh',
+      'Danh mục',
+      'Độ ưu tiên',
+      'Trạng thái',
+      'Người xử lý',
+      'Thời hạn phản hồi',
+    ];
     const lines = rows.map((r) => [
-      r.id, r.customerName, r.customerPhone, r.customerEmail, r.subject,
-      r.channel, r.category, r.priority, r.status, r.assignee ?? '', r.expectedReplyAt.toISOString(),
+      r.id,
+      r.customerName,
+      r.customerPhone,
+      r.customerEmail,
+      r.subject,
+      r.channel,
+      r.category,
+      r.priority,
+      r.status,
+      r.assignee ?? '',
+      r.expectedReplyAt.toISOString(),
     ]);
     const csv = [header, ...lines]
       .map((row) => row.map((x) => `"${String(x ?? '').replace(/"/g, '""')}"`).join(','))
@@ -697,49 +826,72 @@ function enrichDetail(x: CustomerInquiry): InquiryDetailVM {
 
 function statusLabel(s: InquiryStatus): string {
   switch (s) {
-    case 'open': return 'Mới';
-    case 'in_progress': return 'Đang xử lý';
-    case 'closed': return 'Đã đóng';
-    default: return s;
+    case 'open':
+      return 'Mới';
+    case 'in_progress':
+      return 'Đang xử lý';
+    case 'closed':
+      return 'Đã đóng';
+    default:
+      return s;
   }
 }
 
 function categoryLabel(c: InquiryCategory): string {
   switch (c) {
-    case 'order': return 'Vấn đề đơn hàng';
-    case 'product': return 'Tư vấn sản phẩm';
-    case 'warranty': return 'Yêu cầu bảo hành';
-    case 'other': return 'Góp ý khác';
-    default: return c;
+    case 'order':
+      return 'Vấn đề đơn hàng';
+    case 'product':
+      return 'Tư vấn sản phẩm';
+    case 'warranty':
+      return 'Yêu cầu bảo hành';
+    case 'other':
+      return 'Góp ý khác';
+    default:
+      return c;
   }
 }
 
 function channelLabel(c: InquiryChannel): string {
   switch (c) {
-    case 'chat': return 'Live Chat';
-    case 'email': return 'Email';
-    case 'phone': return 'Điện thoại';
-    case 'form': return 'Form liên hệ';
-    default: return c;
+    case 'chat':
+      return 'Live Chat';
+    case 'email':
+      return 'Email';
+    case 'phone':
+      return 'Điện thoại';
+    case 'form':
+      return 'Form liên hệ';
+    default:
+      return c;
   }
 }
 
 function priorityLabel(p: string): string {
   switch (p) {
-    case 'low': return 'Thấp';
-    case 'medium': return 'Trung bình';
-    case 'high': return 'Cao';
-    case 'urgent': return 'Khẩn cấp';
-    default: return p;
+    case 'low':
+      return 'Thấp';
+    case 'medium':
+      return 'Trung bình';
+    case 'high':
+      return 'Cao';
+    case 'urgent':
+      return 'Khẩn cấp';
+    default:
+      return p;
   }
 }
 
 function nextStatus(s: InquiryStatus): InquiryStatus | null {
   switch (s) {
-    case 'open': return 'in_progress';
-    case 'in_progress': return 'closed';
-    case 'closed': return null;
-    default: return null;
+    case 'open':
+      return 'in_progress';
+    case 'in_progress':
+      return 'closed';
+    case 'closed':
+      return null;
+    default:
+      return null;
   }
 }
 

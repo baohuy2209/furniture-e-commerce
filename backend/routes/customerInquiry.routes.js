@@ -6,7 +6,7 @@ const router = express.Router();
 // Client routes
 router.post("/", [authJwt.protectedRoute], customerInquiryController.createTicket);
 
-router.get("/user", customerInquiryController.getUserTickets);
+router.get("/user", [authJwt.protectedRoute], customerInquiryController.getUserTickets);
 
 // Admin routes
 router.get("/all", customerInquiryController.getAllTickets);

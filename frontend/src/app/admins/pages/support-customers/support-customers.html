@@ -1,492 +1,610 @@
 <div class="hb-page-shell p-2" *ngIf="vm$ | async as vm">
-    <div class="hb-page-header">
-        <div class="hb-header-left">
-            <div class="hb-title" routerLink="/admin/support-customers" style="cursor: pointer">
-                TƯ VẤN KHÁCH HÀNG
-            </div>
-        </div>
-
-        <div class="hb-header-actions" *ngIf="mode === 'list'">
-            <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
-                <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
-            </button>
-            <button class="btn btn-hb" type="button" (click)="exportCsv(exportRows)">
-                <i class="bi bi-download me-1"></i> Xuất CSV
-            </button>
-        </div>
-
-        <div class="hb-header-actions" *ngIf="mode === 'detail'">
-            <button class="btn btn-hb-outline" type="button" (click)="onHeaderBack()">
-                <i class="bi bi-arrow-left me-1"></i> Quay lại Danh sách
-            </button>
-        </div>
-
-        <div class="hb-header-actions" *ngIf="mode === 'edit'">
-            <button class="btn btn-hb-outline" type="button" (click)="onHeaderBack()">
-                <i class="bi bi-arrow-left me-1"></i> Quay lại Chi tiết
-            </button>
-        </div>
+  <div class="hb-page-header">
+    <div class="hb-header-left">
+      <div class="hb-title" routerLink="/admin/support-customers" style="cursor: pointer">
+        TƯ VẤN KHÁCH HÀNG
+      </div>
     </div>
 
-    <div class="hb-page-body">
-
-        <!-- ============ LIST MODE ============ -->
-        <ng-container *ngIf="mode === 'list'">
-            <!-- KPI Summary Row -->
-            <div class="hb-summary-row">
-                <div class="hb-summary-card">
-                    <div class="hb-sc-icon"><i class="bi bi-headset"></i></div>
-                    <div>
-                        <div class="hb-sc-label">Tổng yêu cầu</div>
-                        <div class="hb-sc-value">{{ vm.totalCount }}</div>
-                    </div>
-                </div>
-
-                <div class="hb-summary-card">
-                    <div class="hb-sc-icon warn"><i class="bi bi-hourglass-split"></i></div>
-                    <div>
-                        <div class="hb-sc-label">Đang xử lý</div>
-                        <div class="hb-sc-value">{{ vm.kpiInProgress }}</div>
-                    </div>
-                </div>
-
-                <div class="hb-summary-card">
-                    <div class="hb-sc-icon ok"><i class="bi bi-check-circle"></i></div>
-                    <div>
-                        <div class="hb-sc-label">Đã đóng</div>
-                        <div class="hb-sc-value">{{ vm.kpiClosed }}</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filter Bar -->
-            <div class="card hb-card hb-card-pad mb-3">
-                <div class="hb-filterbar">
-                    <input class="form-control" placeholder="ID / Khách hàng / Số điện thoại / Chủ đề..."
-                        [ngModel]="vm.query.q" (ngModelChange)="patchQuery({ q: $event })" />
-
-                    <select class="form-select" [ngModel]="vm.query.status"
-                        (ngModelChange)="patchQuery({ status: $event })">
-                        <option value="all">-- Trạng thái --</option>
-                        <option *ngFor="let s of vm.statusOptions" [value]="s.value">{{ s.label }}</option>
-                    </select>
-
-                    <select class="form-select" [ngModel]="vm.query.priority"
-                        (ngModelChange)="patchQuery({ priority: $event })">
-                        <option value="all">-- Ưu tiên --</option>
-                        <option *ngFor="let p of priorityOptions" [value]="p.value">{{ p.label }}</option>
-                    </select>
-
-                    <select class="form-select" [ngModel]="vm.query.pageSize"
-                        (ngModelChange)="patchQuery({ pageSize: $event })">
-                        <option [ngValue]="10">10 / trang</option>
-                        <option [ngValue]="20">20 / trang</option>
-                        <option [ngValue]="50">50 / trang</option>
-                    </select>
-
-                    <!-- Empty placeholders to align the Reset button to the end (column 8) -->
-                    <div class="d-none d-xl-block"></div>
-                    <div class="d-none d-xl-block"></div>
-                    <div class="d-none d-xl-block"></div>
-
-                    <button class="btn btn-primary text-white hb-filter-reset fw-bold" 
-                        type="button" (click)="resetFilters()">
-                        <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
-                    </button>
-                </div>
-            </div>
-
-            <!-- Table -->
-            <div class="card hb-card hb-table-card">
-                <div class="hb-table-wrap">
-                    <div class="hb-table">
-
-                        <!-- Head -->
-                        <div class="hb-table-head hb-grid-cs">
-                            <div class="hb-th">
-                                <div class="th-content"><span>STT</span></div>
-                            </div>
-
-                            <div class="hb-th" (click)="toggleSort('id')">
-                                <div class="th-content">
-                                    <span>MÃ YC</span>
-                                    <i class="fas" [ngClass]="sortIcon('id')"></i>
-                                </div>
-                            </div>
-
-                            <div class="hb-th th-left" (click)="toggleSort('customerName')">
-                                <div class="th-content">
-                                    <span>KHÁCH HÀNG</span>
-                                    <i class="fas" [ngClass]="sortIcon('customerName')"></i>
-                                </div>
-                            </div>
-
-                            <div class="hb-th">
-                                <div class="th-content"><span>SỐ ĐIỆN THOẠI</span></div>
-                            </div>
-
-                            <div class="hb-th th-left" (click)="toggleSort('subject')">
-                                <div class="th-content">
-                                    <span>CHỦ ĐỀ & DANH MỤC</span>
-                                    <i class="fas" [ngClass]="sortIcon('subject')"></i>
-                                </div>
-                            </div>
-
-                            <div class="hb-th" (click)="toggleSort('priority')">
-                                <div class="th-content">
-                                    <span>ƯU TIÊN</span>
-                                    <i class="fas" [ngClass]="sortIcon('priority')"></i>
-                                </div>
-                            </div>
-
-                            <div class="hb-th th-left" (click)="toggleSort('assignee')">
-                                <div class="th-content">
-                                    <span>NGƯỜI XỬ LÝ</span>
-                                    <i class="fas" [ngClass]="sortIcon('assignee')"></i>
-                                </div>
-                            </div>
-
-                            <div class="hb-th" (click)="toggleSort('status')">
-                                <div class="th-content">
-                                    <span>TRẠNG THÁI</span>
-                                    <i class="fas" [ngClass]="sortIcon('status')"></i>
-                                </div>
-                            </div>
-
-                            <div class="hb-th"><span>SỬA</span></div>
-                            <div class="hb-th"><span>XÓA</span></div>
-                        </div>
-
-                        <!-- Rows -->
-                        <div class="hb-table-row hb-grid-cs" *ngFor="let r of vm.rows" (click)="openDetail(r.id)">
-
-                            <div class="hb-td hb-td-center text-muted">{{ r.stt }}</div>
-
-                            <div class="hb-td hb-td-center">
-                                <span class="text-primary fw-bold" style="font-size:12px;">{{ r.id }}</span>
-                            </div>
-
-                            <div class="hb-td">
-                                <div class="hb-cell-wrap">
-                                    <div class="hb-name hb-text-truncate">{{ r.customerName }}</div>
-                                    <div class="hb-subline hb-text-truncate" style="font-size:11px;">{{ r.customerEmail
-                                        }}</div>
-                                </div>
-                            </div>
-
-                            <div class="hb-td hb-td-center text-muted">{{ r.customerPhone }}</div>
-
-                            <div class="hb-td">
-                                <div class="hb-cell-wrap">
-                                    <div class="hb-name hb-text-truncate">{{ r.subject }}</div>
-                                    <div class="hb-subline hb-text-truncate" style="font-size:11px; margin-top: 4px;">
-                                        <span class="hb-pill px-2 py-0" style="font-size: 10px; height: 18px;"
-                                              [ngClass]="categoryBadgeClass(r.category)">{{ r.categoryLabel }}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="hb-td hb-td-center">
-                                <span class="hb-pill" [ngClass]="priorityBadgeClass(r.priority)">{{ r.priorityLabel
-                                    }}</span>
-                            </div>
-
-                            <div class="hb-td">
-                                <span *ngIf="r.assignee" class="hb-text-truncate" style="max-width:120px;">{{ r.assignee
-                                    }}</span>
-                                <span *ngIf="!r.assignee" class="text-muted small">—</span>
-                            </div>
-
-                            <div class="hb-td hb-td-center">
-                                <span class="hb-pill" [ngClass]="statusBadgeClass(r.status)">{{ r.statusLabel }}</span>
-                            </div>
-
-
-                            <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
-                                <button class="hb-icon-btn" type="button" (click)="openEditFromList($event, r.id)">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                            </div>
-
-                            <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
-                                <button class="hb-icon-btn danger" type="button" (click)="deleteFromList($event, r.id)">
-                                    <i class="bi bi-trash3"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Empty state -->
-                        <div class="p-5 text-center text-muted" *ngIf="vm.rows.length === 0">
-                            Không có yêu cầu nào phù hợp.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pagination -->
-                <div class="hb-pagination">
-                    <button class="hb-page-btn" [disabled]="vm.query.page <= 1"
-                        (click)="goPage(vm.query.page - 1)">‹</button>
-                    <div class="hb-page-info">
-                        <span>Trang</span>
-                        <b>{{ vm.query.page }}</b>
-                        <span>/</span>
-                        <span>{{ vm.totalPages }}</span>
-                    </div>
-                    <button class="hb-page-btn" [disabled]="vm.query.page >= vm.totalPages"
-                        (click)="goPage(vm.query.page + 1)">›</button>
-                </div>
-            </div>
-        </ng-container>
-
-        <!-- ============ DETAIL MODE ============ -->
-        <ng-container *ngIf="mode === 'detail' && detail as d">
-            <div class="row g-3">
-                <!-- LEFT: Main content -->
-                <div class="col-lg-8">
-                    <div class="card hb-card hb-card-pad">
-                        <div class="hb-section-title">
-                            <i class="bi bi-person-circle me-2"></i>Thông tin khách hàng
-                        </div>
-
-                        <div class="hb-kv">
-                            <div class="kv-item">
-                                <div class="kv-label">HỌ TÊN</div>
-                                <div class="kv-value">{{ d.customerName }}</div>
-                                <div class="text-muted small">{{ d.customerPhone }}</div>
-                            </div>
-
-                            <div class="kv-item">
-                                <div class="kv-label">EMAIL</div>
-                                <div class="kv-value">{{ d.customerEmail }}</div>
-                            </div>
-
-                            <div class="kv-item">
-                                <div class="kv-label">KÊNH TIẾP NHẬN</div>
-                                <div class="kv-value">{{ d.channelLabel }}</div>
-                            </div>
-
-                            <div class="kv-item">
-                                <div class="kv-label">DANH MỤC</div>
-                                <div class="kv-value">{{ d.categoryLabel }}</div>
-                            </div>
-
-                            <div class="kv-item">
-                                <div class="kv-label">NGÀY TẠO</div>
-                                <div class="kv-value">{{ d.createdAt | date:'dd/MM/yyyy HH:mm' }}</div>
-                            </div>
-
-                            <div class="kv-item">
-                                <div class="kv-label">NGƯỜI PHỤ TRÁCH</div>
-                                <div class="kv-value">{{ d.assignee || '—' }}</div>
-                            </div>
-                        </div>
-
-                        <hr class="hb-hr" />
-
-                        <div class="hb-section-title">
-                            <i class="bi bi-chat-left-text me-2"></i>Nội dung thắc mắc
-                        </div>
-                        <div class="fw-bold text-muted small mb-2">{{ d.subject }}</div>
-                        <div class="hb-content-box">{{ d.content }}</div>
-
-                        <ng-container *ngIf="d.resolution">
-                            <hr class="hb-hr" />
-                            <div class="hb-section-title">
-                                <i class="bi bi-check-circle me-2"></i>Hướng giải quyết
-                            </div>
-                            <div class="hb-content-box"
-                                style="border-color:rgba(34,197,94,0.2); background:rgba(34,197,94,0.03);">{{
-                                d.resolution }}</div>
-                        </ng-container>
-
-                        <ng-container *ngIf="d.internalNote">
-                            <hr class="hb-hr" />
-                            <div class="hb-section-title">
-                                <i class="bi bi-sticky me-2"></i>Ghi chú nội bộ
-                            </div>
-                            <div class="hb-content-box"
-                                style="border-color:rgba(251,191,36,0.2); background:rgba(251,191,36,0.03);">{{
-                                d.internalNote }}</div>
-                        </ng-container>
-
-                        <hr class="hb-hr" />
-
-                        <div class="hb-section-title">
-                            <i class="bi bi-clock-history me-2"></i>Timeline xử lý
-                        </div>
-                        <div class="hb-timeline">
-                            <div class="tl-item" *ngFor="let t of d.timeline">
-                                <div class="tl-dot"></div>
-                                <div class="tl-body">
-                                    <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
-                                        <div class="text-primary fw-bold">{{ t.title }}</div>
-                                        <div class="text-muted small">{{ t.at | date:'dd/MM/yyyy HH:mm' }}</div>
-                                    </div>
-                                    <div class="text-muted small mt-1" *ngIf="t.note">{{ t.note }}</div>
-                                    <div class="text-muted small" style="font-size:11px; color:#818cf8 !important;">{{
-                                        t.actor }}</div>
-                                </div>
-                            </div>
-                            <div class="p-3 text-center text-muted small" *ngIf="d.timeline.length === 0">
-                                Chưa có hoạt động nào.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RIGHT: Sidebar -->
-                <div class="col-lg-4">
-                    <div class="card hb-card hb-card-pad hb-sticky-side">
-                        <div class="hb-section-title">Hành động & Chỉ số</div>
-
-                        <div class="hb-stepbox mb-3">
-                             <div class="step-line">
-                                 <span class="label">Danh mục:</span>
-                                 <span class="hb-pill" [ngClass]="categoryBadgeClass(d.category)">{{ d.categoryLabel }}</span>
-                             </div>
-                            <div class="step-line">
-                                <span class="label">Trạng thái:</span>
-                                <span class="hb-pill" [ngClass]="statusBadgeClass(d.status)">{{ d.statusLabel }}</span>
-                            </div>
-                            <div class="step-line">
-                                <span class="label">Độ ưu tiên:</span>
-                                <span class="hb-pill" [ngClass]="priorityBadgeClass(d.priority)">{{ d.priorityLabel
-                                    }}</span>
-                            </div>
-                            <div class="step-line">
-                                <span class="label">SLA Hẹn:</span>
-                                <b>{{ d.expectedReplyAt | date:'dd/MM/yyyy HH:mm' }}</b>
-                            </div>
-                            <div class="step-line">
-                                <span class="label">Tình trạng SLA:</span>
-                                <span class="fw-bold"
-                                    [style.color]="d.slaLabel === 'Quá hạn' ? '#f87171' : '#4ade80'">{{ d.slaLabel
-                                    }}</span>
-                            </div>
-                        </div>
-
-                        <button class="btn btn-hb w-100 mb-2" type="button" [disabled]="!canAdvance(d.status)"
-                            (click)="advanceWithConfirm(d.id)">
-                            <i class="bi bi-arrow-right-circle me-1"></i> Chuyển bước kế tiếp
-                        </button>
-
-                        <button class="btn btn-hb-accent w-100 mb-2" type="button" (click)="goEdit()">
-                            <i class="bi bi-pencil-square me-1"></i> Cập nhật & Xử lý
-                        </button>
-
-                        <button class="btn btn-hb-outline-danger w-100" type="button" (click)="deleteRequest(d.id)">
-                            <i class="bi bi-trash me-1"></i> Xóa yêu cầu
-                        </button>
-
-                        <hr class="hb-hr" />
-
-                        <div class="hb-mini-metric">
-                            <div class="mm-label">Thời gian xử lý (giờ)</div>
-                            <div class="mm-value text-primary">{{ d.resolutionHours ?? '—' }}</div>
-                        </div>
-                        <div class="hb-mini-metric">
-                            <div class="mm-label">Mã yêu cầu</div>
-                            <div class="mm-value" style="color:#818cf8; font-size:14px;">{{ d.id }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </ng-container>
-
-        <!-- ============ EDIT MODE ============ -->
-        <ng-container *ngIf="mode === 'edit' && editForm as f">
-            <div class="row g-3">
-                <div class="col-lg-8">
-                    <div class="card hb-card hb-card-pad">
-                        <div class="hb-section-title">Cập nhật nội dung xử lý</div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Trạng thái hiện tại</label>
-                                <select class="form-select" [(ngModel)]="f.status" (ngModelChange)="markDirty()">
-                                    <option *ngFor="let s of statusOptions" [ngValue]="s.value">{{ s.label }}</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">Mức độ ưu tiên</label>
-                                <select class="form-select" [(ngModel)]="f.priority" (ngModelChange)="markDirty()">
-                                    <option *ngFor="let p of priorityOptions" [value]="p.value">{{ p.label }}</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">Nhân viên phụ trách</label>
-                                <input class="form-control" [(ngModel)]="f.assignee" (ngModelChange)="markDirty()"
-                                    placeholder="Tên nhân viên..." />
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">Danh mục</label>
-                                <select class="form-select" [(ngModel)]="f.category" (ngModelChange)="markDirty()">
-                                    <option *ngFor="let c of categoryOptions" [value]="c.value">{{ c.label }}</option>
-                                </select>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label">Hướng giải quyết</label>
-                                <textarea class="form-control" rows="4" [(ngModel)]="f.resolution"
-                                    (ngModelChange)="markDirty()"
-                                    placeholder="Mô tả cách giải quyết vấn đề của khách hàng..."></textarea>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label">Ghi chú nội bộ / Kết luận</label>
-                                <textarea class="form-control" rows="5" [(ngModel)]="f.internalNote"
-                                    (ngModelChange)="markDirty()"
-                                    placeholder="Mô tả chi tiết quá trình kiểm tra và xử lý..."></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="card hb-card hb-card-pad hb-sticky-side">
-                        <div class="hb-section-title">Quy trình xử lý</div>
-                        <div class="hb-hint small text-muted mb-3">
-                            Yêu cầu sẽ đi qua các bước: <b>Mới</b> → <b>Đang xử lý</b> → <b>Chờ KH</b> → <b>Đã giải
-                                quyết</b> → <b>Đóng</b>.
-                        </div>
-
-                        <button class="btn btn-hb-success w-100 mb-2" (click)="saveEdit()" [disabled]="saving || !isDirty">
-                            <i class="bi bi-check-lg me-1"></i> Lưu thông tin
-                        </button>
-
-                        <button class="btn btn-hb-primary w-100 mb-2" (click)="sendToCustomer()" [disabled]="saving">
-                            <i class="bi bi-send-fill me-1"></i> Gửi cho khách hàng
-                        </button>
-
-                        <button class="btn btn-hb-outline w-100" (click)="cancelEdit()">Hủy bỏ</button>
-
-                        <div class="text-warning small mt-2" *ngIf="isDirty">* Bạn có thay đổi chưa lưu.</div>
-                    </div>
-                </div>
-            </div>
-        </ng-container>
+    <div class="hb-header-actions" *ngIf="mode === 'list'">
+      <button class="btn btn-hb-outline" type="button" (click)="resetFilters()">
+        <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+      </button>
+      <button class="btn btn-hb" type="button" (click)="exportCsv(exportRows)">
+        <i class="bi bi-download me-1"></i> Xuất CSV
+      </button>
     </div>
 
-    <!-- MODALS -->
-    <hb-confirm-modal [isOpen]="saveModalOpen" title="Xác nhận lưu thay đổi"
-        message="Thông tin xử lý tư vấn sẽ được cập nhật. Bạn có chắc chắn muốn lưu?" type="info"
-        confirmLabel="Lưu thay đổi" cancelLabel="Ở lại" (confirm)="executeSave()" (cancel)="onCancelSave()">
-    </hb-confirm-modal>
+    <div class="hb-header-actions" *ngIf="mode === 'detail'">
+      <button class="btn btn-hb-outline" type="button" (click)="onHeaderBack()">
+        <i class="bi bi-arrow-left me-1"></i> Quay lại Danh sách
+      </button>
+    </div>
 
-    <hb-confirm-modal [isOpen]="discardModalOpen" title="Thay đổi chưa được lưu"
-        message="Bạn đang có thay đổi chưa lưu. Nếu quay lại bây giờ, dữ liệu vừa chỉnh sẽ bị mất." type="warning"
-        confirmLabel="Bỏ thay đổi" cancelLabel="Ở lại" (confirm)="onConfirmDiscard()" (cancel)="onCancelDiscard()">
-    </hb-confirm-modal>
+    <div class="hb-header-actions" *ngIf="mode === 'edit'">
+      <button class="btn btn-hb-outline" type="button" (click)="onHeaderBack()">
+        <i class="bi bi-arrow-left me-1"></i> Quay lại Chi tiết
+      </button>
+    </div>
+  </div>
 
-    <hb-confirm-modal [isOpen]="deleteModalOpen" title="Xác nhận xóa yêu cầu"
-        message="Yêu cầu tư vấn này sẽ bị xóa khỏi danh sách quản lý." type="danger" confirmLabel="Xóa yêu cầu"
-        cancelLabel="Đóng" (confirm)="onConfirmDelete()" (cancel)="onCancelDelete()">
-    </hb-confirm-modal>
+  <div class="hb-page-body">
+    <!-- ============ LIST MODE ============ -->
+    <ng-container *ngIf="mode === 'list'">
+      <!-- KPI Summary Row -->
+      <div class="hb-summary-row">
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon"><i class="bi bi-headset"></i></div>
+          <div>
+            <div class="hb-sc-label">Tổng yêu cầu</div>
+            <div class="hb-sc-value">{{ vm.totalCount }}</div>
+          </div>
+        </div>
 
-    <hb-confirm-modal [isOpen]="advanceModalOpen" title="Xác nhận chuyển bước"
-        message="Yêu cầu sẽ được chuyển sang bước xử lý kế tiếp theo quy trình." type="info" confirmLabel="Chuyển bước"
-        cancelLabel="Ở lại" (confirm)="onConfirmAdvance()" (cancel)="onCancelAdvance()">
-    </hb-confirm-modal>
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon warn"><i class="bi bi-hourglass-split"></i></div>
+          <div>
+            <div class="hb-sc-label">Đang xử lý</div>
+            <div class="hb-sc-value">{{ vm.kpiInProgress }}</div>
+          </div>
+        </div>
+
+        <div class="hb-summary-card">
+          <div class="hb-sc-icon ok"><i class="bi bi-check-circle"></i></div>
+          <div>
+            <div class="hb-sc-label">Đã đóng</div>
+            <div class="hb-sc-value">{{ vm.kpiClosed }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="card hb-card hb-card-pad mb-3">
+        <div class="hb-filterbar">
+          <input
+            class="form-control"
+            placeholder="ID / Khách hàng / Số điện thoại / Chủ đề..."
+            [ngModel]="vm.query.q"
+            (ngModelChange)="patchQuery({ q: $event })"
+          />
+
+          <select
+            class="form-select"
+            [ngModel]="vm.query.status"
+            (ngModelChange)="patchQuery({ status: $event })"
+          >
+            <option value="all">-- Trạng thái --</option>
+            <option *ngFor="let s of vm.statusOptions" [value]="s.value">{{ s.label }}</option>
+          </select>
+
+          <select
+            class="form-select"
+            [ngModel]="vm.query.priority"
+            (ngModelChange)="patchQuery({ priority: $event })"
+          >
+            <option value="all">-- Ưu tiên --</option>
+            <option *ngFor="let p of priorityOptions" [value]="p.value">{{ p.label }}</option>
+          </select>
+
+          <select
+            class="form-select"
+            [ngModel]="vm.query.pageSize"
+            (ngModelChange)="patchQuery({ pageSize: $event })"
+          >
+            <option [ngValue]="10">10 / trang</option>
+            <option [ngValue]="20">20 / trang</option>
+            <option [ngValue]="50">50 / trang</option>
+          </select>
+
+          <!-- Empty placeholders to align the Reset button to the end (column 8) -->
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
+          <div class="d-none d-xl-block"></div>
+
+          <button
+            class="btn btn-primary text-white hb-filter-reset fw-bold"
+            type="button"
+            (click)="resetFilters()"
+          >
+            <i class="bi bi-arrow-clockwise me-1"></i> Đặt lại
+          </button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="card hb-card hb-table-card">
+        <div class="hb-table-wrap">
+          <div class="hb-table">
+            <!-- Head -->
+            <div class="hb-table-head hb-grid-cs">
+              <div class="hb-th">
+                <div class="th-content"><span>STT</span></div>
+              </div>
+
+              <div class="hb-th" (click)="toggleSort('id')">
+                <div class="th-content">
+                  <span>MÃ YC</span>
+                  <i class="fas" [ngClass]="sortIcon('id')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th th-left" (click)="toggleSort('customerName')">
+                <div class="th-content">
+                  <span>KHÁCH HÀNG</span>
+                  <i class="fas" [ngClass]="sortIcon('customerName')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th">
+                <div class="th-content"><span>SỐ ĐIỆN THOẠI</span></div>
+              </div>
+
+              <div class="hb-th th-left" (click)="toggleSort('subject')">
+                <div class="th-content">
+                  <span>CHỦ ĐỀ & DANH MỤC</span>
+                  <i class="fas" [ngClass]="sortIcon('subject')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th" (click)="toggleSort('priority')">
+                <div class="th-content">
+                  <span>ƯU TIÊN</span>
+                  <i class="fas" [ngClass]="sortIcon('priority')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th th-left" (click)="toggleSort('assignee')">
+                <div class="th-content">
+                  <span>NGƯỜI XỬ LÝ</span>
+                  <i class="fas" [ngClass]="sortIcon('assignee')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th" (click)="toggleSort('status')">
+                <div class="th-content">
+                  <span>TRẠNG THÁI</span>
+                  <i class="fas" [ngClass]="sortIcon('status')"></i>
+                </div>
+              </div>
+
+              <div class="hb-th"><span>SỬA</span></div>
+              <div class="hb-th"><span>XÓA</span></div>
+            </div>
+
+            <!-- Rows -->
+            <div
+              class="hb-table-row hb-grid-cs"
+              *ngFor="let r of vm.rows"
+              (click)="openDetail(r.id)"
+            >
+              <div class="hb-td hb-td-center text-muted">{{ r.stt }}</div>
+
+              <div class="hb-td hb-td-center">
+                <span class="text-primary fw-bold" style="font-size: 12px">{{ r.id }}</span>
+              </div>
+
+              <div class="hb-td">
+                <div class="hb-cell-wrap">
+                  <div class="hb-name hb-text-truncate">{{ r.customerName }}</div>
+                  <div class="hb-subline hb-text-truncate" style="font-size: 11px">
+                    {{ r.customerEmail }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="hb-td hb-td-center text-muted">{{ r.customerPhone }}</div>
+
+              <div class="hb-td">
+                <div class="hb-cell-wrap">
+                  <div class="hb-name hb-text-truncate">{{ r.subject }}</div>
+                  <div class="hb-subline hb-text-truncate" style="font-size: 11px; margin-top: 4px">
+                    <span
+                      class="hb-pill px-2 py-0"
+                      style="font-size: 10px; height: 18px"
+                      [ngClass]="categoryBadgeClass(r.category)"
+                      >{{ r.categoryLabel }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="hb-td hb-td-center">
+                <span class="hb-pill" [ngClass]="priorityBadgeClass(r.priority)">{{
+                  r.priorityLabel
+                }}</span>
+              </div>
+
+              <div class="hb-td">
+                <span *ngIf="r.assignee" class="hb-text-truncate" style="max-width: 120px">{{
+                  r.assignee
+                }}</span>
+                <span *ngIf="!r.assignee" class="text-muted small">—</span>
+              </div>
+
+              <div class="hb-td hb-td-center">
+                <span class="hb-pill" [ngClass]="statusBadgeClass(r.status)">{{
+                  r.statusLabel
+                }}</span>
+              </div>
+
+              <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
+                <button class="hb-icon-btn" type="button" (click)="openEditFromList($event, r.id)">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+              </div>
+
+              <div class="hb-td hb-td-center" (click)="$event.stopPropagation()">
+                <button
+                  class="hb-icon-btn danger"
+                  type="button"
+                  (click)="deleteFromList($event, r.id)"
+                >
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty state -->
+            <div class="p-5 text-center text-muted" *ngIf="vm.rows.length === 0">
+              Không có yêu cầu nào phù hợp.
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="hb-pagination">
+          <button
+            class="hb-page-btn"
+            [disabled]="vm.query.page <= 1"
+            (click)="goPage(vm.query.page - 1)"
+          >
+            ‹
+          </button>
+          <div class="hb-page-info">
+            <span>Trang</span>
+            <b>{{ vm.query.page }}</b>
+            <span>/</span>
+            <span>{{ vm.totalPages }}</span>
+          </div>
+          <button
+            class="hb-page-btn"
+            [disabled]="vm.query.page >= vm.totalPages"
+            (click)="goPage(vm.query.page + 1)"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ============ DETAIL MODE ============ -->
+    <ng-container *ngIf="mode === 'detail' && detail as d">
+      <div class="row g-3">
+        <!-- LEFT: Main content -->
+        <div class="col-lg-8">
+          <div class="card hb-card hb-card-pad">
+            <div class="hb-section-title">
+              <i class="bi bi-person-circle me-2"></i>Thông tin khách hàng
+            </div>
+
+            <div class="hb-kv">
+              <div class="kv-item">
+                <div class="kv-label">HỌ TÊN</div>
+                <div class="kv-value">{{ d.customerName }}</div>
+                <div class="text-muted small">{{ d.customerPhone }}</div>
+              </div>
+
+              <div class="kv-item">
+                <div class="kv-label">EMAIL</div>
+                <div class="kv-value">{{ d.customerEmail }}</div>
+              </div>
+
+              <div class="kv-item">
+                <div class="kv-label">KÊNH TIẾP NHẬN</div>
+                <div class="kv-value">{{ d.channelLabel }}</div>
+              </div>
+
+              <div class="kv-item">
+                <div class="kv-label">DANH MỤC</div>
+                <div class="kv-value">{{ d.categoryLabel }}</div>
+              </div>
+
+              <div class="kv-item">
+                <div class="kv-label">NGÀY TẠO</div>
+                <div class="kv-value">{{ d.createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
+              </div>
+
+              <div class="kv-item">
+                <div class="kv-label">NGƯỜI PHỤ TRÁCH</div>
+                <div class="kv-value">{{ d.assignee || '—' }}</div>
+              </div>
+            </div>
+
+            <hr class="hb-hr" />
+
+            <div class="hb-section-title">
+              <i class="bi bi-chat-left-text me-2"></i>Nội dung thắc mắc
+            </div>
+            <div class="fw-bold text-muted small mb-2">{{ d.subject }}</div>
+            <div class="hb-content-box">{{ d.content }}</div>
+
+            <ng-container *ngIf="d.resolution">
+              <hr class="hb-hr" />
+              <div class="hb-section-title">
+                <i class="bi bi-check-circle me-2"></i>Hướng giải quyết
+              </div>
+              <div
+                class="hb-content-box"
+                style="border-color: rgba(34, 197, 94, 0.2); background: rgba(34, 197, 94, 0.03)"
+              >
+                {{ d.resolution }}
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="d.internalNote">
+              <hr class="hb-hr" />
+              <div class="hb-section-title"><i class="bi bi-sticky me-2"></i>Ghi chú nội bộ</div>
+              <div
+                class="hb-content-box"
+                style="border-color: rgba(251, 191, 36, 0.2); background: rgba(251, 191, 36, 0.03)"
+              >
+                {{ d.internalNote }}
+              </div>
+            </ng-container>
+
+            <hr class="hb-hr" />
+
+            <div class="hb-section-title">
+              <i class="bi bi-clock-history me-2"></i>Timeline xử lý
+            </div>
+            <div class="hb-timeline">
+              <div class="tl-item" *ngFor="let t of d.timeline">
+                <div class="tl-dot"></div>
+                <div class="tl-body">
+                  <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
+                    <div class="text-primary fw-bold">{{ t.title }}</div>
+                    <div class="text-muted small">{{ t.at | date: 'dd/MM/yyyy HH:mm' }}</div>
+                  </div>
+                  <div class="text-muted small mt-1" *ngIf="t.note">{{ t.note }}</div>
+                  <div class="text-muted small" style="font-size: 11px; color: #818cf8 !important">
+                    {{ t.actor }}
+                  </div>
+                </div>
+              </div>
+              <div class="p-3 text-center text-muted small" *ngIf="d.timeline.length === 0">
+                Chưa có hoạt động nào.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Sidebar -->
+        <div class="col-lg-4">
+          <div class="card hb-card hb-card-pad hb-sticky-side">
+            <div class="hb-section-title">Hành động & Chỉ số</div>
+
+            <div class="hb-stepbox mb-3">
+              <div class="step-line">
+                <span class="label">Danh mục:</span>
+                <span class="hb-pill" [ngClass]="categoryBadgeClass(d.category)">{{
+                  d.categoryLabel
+                }}</span>
+              </div>
+              <div class="step-line">
+                <span class="label">Trạng thái:</span>
+                <span class="hb-pill" [ngClass]="statusBadgeClass(d.status)">{{
+                  d.statusLabel
+                }}</span>
+              </div>
+              <div class="step-line">
+                <span class="label">Độ ưu tiên:</span>
+                <span class="hb-pill" [ngClass]="priorityBadgeClass(d.priority)">{{
+                  d.priorityLabel
+                }}</span>
+              </div>
+              <div class="step-line">
+                <span class="label">SLA Hẹn:</span>
+                <b>{{ d.expectedReplyAt | date: 'dd/MM/yyyy HH:mm' }}</b>
+              </div>
+              <div class="step-line">
+                <span class="label">Tình trạng SLA:</span>
+                <span
+                  class="fw-bold"
+                  [style.color]="d.slaLabel === 'Quá hạn' ? '#f87171' : '#4ade80'"
+                  >{{ d.slaLabel }}</span
+                >
+              </div>
+            </div>
+
+            <button
+              class="btn btn-hb w-100 mb-2"
+              type="button"
+              [disabled]="!canAdvance(d.status)"
+              (click)="advanceWithConfirm(d.id)"
+            >
+              <i class="bi bi-arrow-right-circle me-1"></i> Chuyển bước kế tiếp
+            </button>
+
+            <button class="btn btn-hb-accent w-100 mb-2" type="button" (click)="goEdit()">
+              <i class="bi bi-pencil-square me-1"></i> Cập nhật & Xử lý
+            </button>
+
+            <button
+              class="btn btn-hb-outline-danger w-100"
+              type="button"
+              (click)="deleteRequest(d.id)"
+            >
+              <i class="bi bi-trash me-1"></i> Xóa yêu cầu
+            </button>
+
+            <hr class="hb-hr" />
+
+            <div class="hb-mini-metric">
+              <div class="mm-label">Thời gian xử lý (giờ)</div>
+              <div class="mm-value text-primary">{{ d.resolutionHours ?? '—' }}</div>
+            </div>
+            <div class="hb-mini-metric">
+              <div class="mm-label">Mã yêu cầu</div>
+              <div class="mm-value" style="color: #818cf8; font-size: 14px">{{ d.id }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ============ EDIT MODE ============ -->
+    <ng-container *ngIf="mode === 'edit' && editForm as f">
+      <div class="row g-3">
+        <div class="col-lg-8">
+          <div class="card hb-card hb-card-pad">
+            <div class="hb-section-title">Cập nhật nội dung xử lý</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Trạng thái hiện tại</label>
+                <select class="form-select" [(ngModel)]="f.status" (ngModelChange)="markDirty()">
+                  <option *ngFor="let s of statusOptions" [ngValue]="s.value">{{ s.label }}</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Mức độ ưu tiên</label>
+                <select class="form-select" [(ngModel)]="f.priority" (ngModelChange)="markDirty()">
+                  <option *ngFor="let p of priorityOptions" [value]="p.value">{{ p.label }}</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Nhân viên phụ trách</label>
+                <input
+                  class="form-control"
+                  [(ngModel)]="f.assignee"
+                  (ngModelChange)="markDirty()"
+                  placeholder="Tên nhân viên..."
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Danh mục</label>
+                <select class="form-select" [(ngModel)]="f.category" (ngModelChange)="markDirty()">
+                  <option *ngFor="let c of categoryOptions" [value]="c.value">{{ c.label }}</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Hướng giải quyết</label>
+                <textarea
+                  class="form-control"
+                  rows="4"
+                  [(ngModel)]="f.resolution"
+                  (ngModelChange)="markDirty()"
+                  placeholder="Mô tả cách giải quyết vấn đề của khách hàng..."
+                ></textarea>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Ghi chú nội bộ / Kết luận</label>
+                <textarea
+                  class="form-control"
+                  rows="5"
+                  [(ngModel)]="f.internalNote"
+                  (ngModelChange)="markDirty()"
+                  placeholder="Mô tả chi tiết quá trình kiểm tra và xử lý..."
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card hb-card hb-card-pad hb-sticky-side">
+            <div class="hb-section-title">Quy trình xử lý</div>
+            <div class="hb-hint small text-muted mb-3">
+              Yêu cầu sẽ đi qua các bước: <b>Mới</b> → <b>Đang xử lý</b> → <b>Chờ KH</b> →
+              <b>Đã giải quyết</b> → <b>Đóng</b>.
+            </div>
+
+            <button
+              class="btn btn-hb-success w-100 mb-2"
+              (click)="saveEdit()"
+              [disabled]="saving || !isDirty"
+            >
+              <i class="bi bi-check-lg me-1"></i> Lưu thông tin
+            </button>
+
+            <button
+              class="btn btn-hb-primary w-100 mb-2"
+              (click)="sendToCustomer()"
+              [disabled]="saving"
+            >
+              <i class="bi bi-send-fill me-1"></i> Gửi cho khách hàng
+            </button>
+
+            <button class="btn btn-hb-outline w-100" (click)="cancelEdit()">Hủy bỏ</button>
+
+            <div class="text-warning small mt-2" *ngIf="isDirty">* Bạn có thay đổi chưa lưu.</div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- MODALS -->
+  <hb-confirm-modal
+    [isOpen]="saveModalOpen"
+    title="Xác nhận lưu thay đổi"
+    message="Thông tin xử lý tư vấn sẽ được cập nhật. Bạn có chắc chắn muốn lưu?"
+    type="info"
+    confirmLabel="Lưu thay đổi"
+    cancelLabel="Ở lại"
+    (confirm)="executeSave()"
+    (cancel)="onCancelSave()"
+  >
+  </hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="discardModalOpen"
+    title="Thay đổi chưa được lưu"
+    message="Bạn đang có thay đổi chưa lưu. Nếu quay lại bây giờ, dữ liệu vừa chỉnh sẽ bị mất."
+    type="warning"
+    confirmLabel="Bỏ thay đổi"
+    cancelLabel="Ở lại"
+    (confirm)="onConfirmDiscard()"
+    (cancel)="onCancelDiscard()"
+  >
+  </hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="deleteModalOpen"
+    title="Xác nhận xóa yêu cầu"
+    message="Yêu cầu tư vấn này sẽ bị xóa khỏi danh sách quản lý."
+    type="danger"
+    confirmLabel="Xóa yêu cầu"
+    cancelLabel="Đóng"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()"
+  >
+  </hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="advanceModalOpen"
+    title="Xác nhận chuyển bước"
+    message="Yêu cầu sẽ được chuyển sang bước xử lý kế tiếp theo quy trình."
+    type="info"
+    confirmLabel="Chuyển bước"
+    cancelLabel="Ở lại"
+    (confirm)="onConfirmAdvance()"
+    (cancel)="onCancelAdvance()"
+  >
+  </hb-confirm-modal>
+
+  <hb-confirm-modal
+    [isOpen]="noticeModalOpen"
+    [title]="noticeTitle"
+    [message]="noticeMessage"
+    [type]="noticeType"
+    confirmLabel="Đã hiểu"
+    [hideCancel]="true"
+    (confirm)="noticeModalOpen = false"
+  >
+  </hb-confirm-modal>
 </div>
