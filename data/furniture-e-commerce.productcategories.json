@@ -75,21 +75,6 @@
 },
 {
   "_id": {
-    "$oid": "699d49ee6d5cf60b02c67cf7"
-  },
-  "name": "Accessories",
-  "slug": "accessories",
-  "type": "product_type",
-  "createdAt": {
-    "$date": "2026-02-24T06:49:18.746Z"
-  },
-  "updatedAt": {
-    "$date": "2026-02-24T06:49:18.746Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
     "$oid": "699d49ee6d5cf60b02c67cf8"
   },
   "name": "Living Room",
@@ -190,6 +175,21 @@
   },
   "updatedAt": {
     "$date": "2026-02-24T06:49:18.746Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a5b4d9fd417c8f2501e4a3"
+  },
+  "name": "Accessories",
+  "slug": "accessories",
+  "type": "product_type",
+  "createdAt": {
+    "$date": "2026-03-02T16:03:37.286Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T16:03:37.286Z"
   },
   "__v": 0
 }]

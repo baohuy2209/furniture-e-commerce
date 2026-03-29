@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "69be5198aff7f71bcfe4eada"
+  },
+  "user_id": {
+    "$oid": "69b0d5a4faf2c729abc0c8fa"
+  },
+  "subject": "Tôi đặt từ đầu tháng 3 nhưng tới bây giờ vẫn chưa giao hàng ",
+  "message": "Tôi đặt từ đầu tháng 3 nhưng tới bây giờ vẫn chưa giao hàng ",
+  "status": "open",
+  "createdAt": {
+    "$date": "2026-03-21T08:06:48.062Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-21T08:06:48.062Z"
+  },
+  "__v": 0
+}]

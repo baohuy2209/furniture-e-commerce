@@ -1,0 +1,192 @@
+[{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e96d"
+  },
+  "name": "Hammpton",
+  "address": "123 Hammpton St, London, UK",
+  "phone": "+44 20 7946 0000",
+  "contact_email": "info@hammpton.com",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.543Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.543Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e970"
+  },
+  "name": "Rubble",
+  "address": "101 Rubble Ln, Berlin, Germany",
+  "phone": "+49 30 123456",
+  "contact_email": "hello@rubble.de",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e971"
+  },
+  "name": "Sweet Art",
+  "address": "202 Sweet Art Blvd, Paris, France",
+  "phone": "+33 1 42 68 53 00",
+  "contact_email": "art@sweetart.fr",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e972"
+  },
+  "name": "Belize",
+  "address": "303 Belize Way, Belmopan, Belize",
+  "phone": "+501 223-4567",
+  "contact_email": "sales@belize-interiors.bz",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e973"
+  },
+  "name": "Float",
+  "address": "404 Float Dr, Copenhagen, Denmark",
+  "phone": "+45 33 12 34 56",
+  "contact_email": "info@float-design.dk",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e974"
+  },
+  "name": "Flora",
+  "address": "505 Flora Terrace, Milan, Italy",
+  "phone": "+39 02 1234567",
+  "contact_email": "ciao@flora-milan.it",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e975"
+  },
+  "name": "Geometric",
+  "address": "606 Geometric Sq, Tokyo, Japan",
+  "phone": "+81 3-1234-5678",
+  "contact_email": "design@geometric.jp",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e976"
+  },
+  "name": "Luna",
+  "address": "707 Luna Path, Stockholm, Sweden",
+  "phone": "+46 8 123 45 67",
+  "contact_email": "contact@luna-sweden.se",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e977"
+  },
+  "name": "Magnolia",
+  "address": "808 Magnolia Cir, Atlanta, USA",
+  "phone": "+1 404-555-0199",
+  "contact_email": "hello@magnolia.com",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e978"
+  },
+  "name": "Medina",
+  "address": "909 Medina Rd, Casablanca, Morocco",
+  "phone": "+212 522-123456",
+  "contact_email": "info@medina.ma",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e96f"
+  },
+  "name": "Mango",
+  "address": "789 Mango Rd, Barcelona, Spain",
+  "phone": "+34 93 432 10 00",
+  "contact_email": "contact@mango-home.es",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a3ed7ac0752cc76f72e96e"
+  },
+  "name": "Princeton",
+  "address": "456 Princeton Ave, New Jersey, USA",
+  "phone": "+1 609-258-3000",
+  "contact_email": "support@princeton-furniture.com",
+  "createdAt": {
+    "$date": "2026-03-01T07:40:42.543Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-01T07:40:42.543Z"
+  },
+  "__v": 0
+}]

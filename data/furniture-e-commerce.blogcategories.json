@@ -1,0 +1,225 @@
+[{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20001"
+  },
+  "name": "Cảm hứng Decor",
+  "slug": "cam-hung-decor",
+  "description": "Những ý tưởng trang trí không gian sống sáng tạo và độc đáo mỗi ngày.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.633Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.633Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20002"
+  },
+  "name": "Phong cách nội thất",
+  "slug": "phong-cach-noi-that",
+  "description": "Tìm hiểu về các phong cách thiết kế từ tối giản, hiện đại đến cổ điển và Indochine.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.634Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.634Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20003"
+  },
+  "name": "Tư vấn phòng khách",
+  "slug": "tu-van-phong-khach",
+  "description": "Bí quyết sắp xếp sofa, kệ tivi và bàn trà để tạo nên bộ mặt hoàn hảo cho ngôi nhà.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.634Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.634Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20006"
+  },
+  "name": "Giải pháp nhà nhỏ",
+  "slug": "giai-phap-nha-nho",
+  "description": "Mẹo tối ưu diện tích cho căn hộ chung cư và nhà phố có không gian hạn chế.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20007"
+  },
+  "name": "Mẹo bảo quản nội thất",
+  "slug": "meo-bao-quan-noi-that",
+  "description": "Hướng dẫn vệ sinh và bảo dưỡng đồ gỗ, da, vải nỉ bền đẹp theo thời gian.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20008"
+  },
+  "name": "Màu sắc & Ánh sáng",
+  "slug": "mau-sac-va-anh-sang",
+  "description": "Nghệ thuật phối màu sơn và sử dụng đèn trang trí trong thiết kế nội thất.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20009"
+  },
+  "name": "Phong thủy nhà ở",
+  "slug": "phong-thuy-nha-o",
+  "description": "Kiến thức phong thủy cơ bản giúp gia chủ bình an và tài lộc.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20010"
+  },
+  "name": "Vật liệu nội thất",
+  "slug": "vat-lieu-noi-that",
+  "description": "Phân biệt gỗ công nghiệp, gỗ tự nhiên, đá, kim loại và các loại vải bọc.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20011"
+  },
+  "name": "Nhà thông minh",
+  "slug": "nha-thong-minh",
+  "description": "Cập nhật xu hướng công nghệ Smart Home và các thiết bị nội thất thông minh.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20012"
+  },
+  "name": "Góc làm việc",
+  "slug": "goc-lam-viec",
+  "description": "Thiết kế không gian làm việc tại gia chuyên nghiệp và tăng cảm hứng sáng tạo.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20013"
+  },
+  "name": "Không gian xanh",
+  "slug": "khong-gian-xanh",
+  "description": "Đưa thiên nhiên vào nhà bằng cây cảnh và các mảng xanh kiến trúc.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20005"
+  },
+  "name": "Bếp & Phòng ăn",
+  "slug": "bep-va-phong-an",
+  "description": "Giải pháp cho căn bếp hiện đại, tiện nghi và ấm cúng cho bữa cơm gia đình.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.634Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.634Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20015"
+  },
+  "name": "Tin tức HomeBase",
+  "slug": "tin-tuc-homebase",
+  "description": "Cập nhật các chương trình khuyến mãi, sự kiện và câu chuyện khách hàng tại HomeBase.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20004"
+  },
+  "name": "Không gian phòng ngủ",
+  "slug": "khong-gian-phong-ngu",
+  "description": "Cách chọn giường ngủ, tủ quần áo và ánh sáng để có giấc ngủ ngon và không gian riêng tư.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.634Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.634Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65b2b2b2e2b2e2b2e2b20014"
+  },
+  "name": "DIY & Tái chế",
+  "slug": "diy-va-tai-che",
+  "description": "Tự tay làm đồ trang trí (Do It Yourself) và tái chế những món đồ cũ.",
+  "createdAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-02T13:18:02.635Z"
+  },
+  "__v": 0
+}]

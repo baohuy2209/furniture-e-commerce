@@ -1,0 +1,1146 @@
+[{
+  "_id": {
+    "$oid": "69a411203396538553d35378"
+  },
+  "title": "Furniture Design Workshop 2025",
+  "slug": "furniture-design-workshop-2025",
+  "description": "Tham gia cùng các chuyên gia hàng đầu để tìm hiểu về xu hướng thiết kế nội thất bền vững và hiện đại.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/spacejoy-RqO6kwm4tZY-unsplash_orxb5t.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d35379"
+      }
+    },
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358496/kam-idris-_HqHX3LBN18-unsplash_dx4nid.jpg",
+      "is_main": false,
+      "_id": {
+        "$oid": "69a411203396538553d3537a"
+      }
+    }
+  ],
+  "category": "Workshop",
+  "hightlight_des": [
+    "Gặp gỡ các nhà thiết kế nổi tiếng",
+    "Trải nghiệm vật liệu mới",
+    "Nhận chứng chỉ tham gia"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2025-01-15T09:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2025-01-17T17:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Trung tâm Triển lãm SECC",
+    "address": "799 Nguyễn Văn Linh, Quận 7",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": true,
+    "isFree": false,
+    "maxSlot": 100,
+    "registeredCount": 100
+  },
+  "status": "ENDED",
+  "timeline_event": [
+    {
+      "start_time": "09:00 15/01/2025",
+      "end_time": "10:00 15/01/2025",
+      "title": "Khai mạc & giới thiệu",
+      "description": "Giới thiệu workshop, giảng viên và nội dung chương trình."
+    },
+    {
+      "start_time": "10:00 15/01/2025",
+      "end_time": "17:00 15/01/2025",
+      "title": "Ngày 1: Kiến thức cơ bản",
+      "description": "Tìm hiểu các xu hướng thiết kế nội thất và nguyên lý cơ bản."
+    },
+    {
+      "start_time": "09:00 16/01/2025",
+      "end_time": "17:00 16/01/2025",
+      "title": "Ngày 2: Thực hành & ứng dụng",
+      "description": "Thực hành thiết kế và áp dụng kiến thức vào các bài tập thực tế."
+    },
+    {
+      "start_time": "09:00 17/01/2025",
+      "end_time": "17:00 17/01/2025",
+      "title": "Hoàn thiện & bế giảng",
+      "description": "Hoàn thiện sản phẩm, trình bày và tổng kết workshop."
+    }
+  ],
+  "search_text": "furniture design workshop 2025 ho chi minh",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.778Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:30:19.478Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d3537d"
+  },
+  "title": "International Furniture Expo",
+  "slug": "international-furniture-expo-2025",
+  "description": "Triển lãm quốc tế quy tụ các thương hiệu nội thất hàng đầu thế giới.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/spacejoy-c0JoR_-2x3E-unsplash_hyyc44.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d3537e"
+      }
+    }
+  ],
+  "category": "Triển lãm",
+  "hightlight_des": [
+    "Ra mắt bộ sưu tập thu đông",
+    "Hợp tác kinh doanh B2B",
+    "Trình diễn công nghệ sản xuất thông minh"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2025-09-10T09:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2025-09-14T18:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Trung tâm Hội nghị Quốc gia",
+    "address": "Đại lộ Thăng Long, Mễ Trì",
+    "city": "Hà Nội"
+  },
+  "registration": {
+    "requireRegister": true,
+    "isFree": false,
+    "maxSlot": 2000,
+    "registeredCount": 1950
+  },
+  "status": "ENDED",
+  "timeline_event": [
+    {
+      "start_time": "09:00 10/09/2025",
+      "end_time": "11:00 10/09/2025",
+      "title": "Khai mạc",
+      "description": "Lễ khai mạc triển lãm với sự tham gia của các thương hiệu nội thất quốc tế."
+    },
+    {
+      "start_time": "11:00 10/09/2025",
+      "end_time": "18:00 11/09/2025",
+      "title": "Tham quan & trưng bày",
+      "description": "Khách tham quan các gian hàng nội thất cao cấp từ nhiều quốc gia."
+    },
+    {
+      "start_time": "09:00 12/09/2025",
+      "end_time": "17:00 12/09/2025",
+      "title": "Hội thảo chuyên đề",
+      "description": "Các buổi chia sẻ về xu hướng thiết kế và công nghệ nội thất hiện đại."
+    },
+    {
+      "start_time": "09:00 13/09/2025",
+      "end_time": "17:00 13/09/2025",
+      "title": "Kết nối doanh nghiệp",
+      "description": "Hoạt động networking và kết nối giữa các doanh nghiệp trong ngành nội thất."
+    },
+    {
+      "start_time": "09:00 14/09/2025",
+      "end_time": "18:00 14/09/2025",
+      "title": "Bế mạc",
+      "description": "Tổng kết triển lãm và tri ân các đơn vị tham gia."
+    }
+  ],
+  "search_text": "international furniture expo 2025 ha noi",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:32:03.644Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d3537f"
+  },
+  "title": "Minimalist Living Talkshow",
+  "slug": "minimalist-living-talkshow",
+  "description": "Chia sẻ về cách bài trí không gian sống tối giản nhưng vẫn đầy đủ tiện nghi.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/inside-weather-dbH_vy7vICE-unsplash_l1gprv.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d35380"
+      }
+    }
+  ],
+  "category": "Talkshow",
+  "hightlight_des": [
+    "Giao lưu cùng KOL nội thất",
+    "Mẹo sắp xếp đồ đạc gọn gàng",
+    "Quà tặng bộ sách sống tối giản"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2025-11-05T14:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2025-11-05T16:30:00.000Z"
+    }
+  },
+  "location": {
+    "name": "The Coffee House Flagship",
+    "address": "86 Cao Thắng, Quận 3",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": true,
+    "isFree": true,
+    "maxSlot": 50,
+    "registeredCount": 50
+  },
+  "status": "ENDED",
+  "timeline_event": [
+    {
+      "start_time": "09:00 15/03/2026",
+      "end_time": "09:30 15/03/2026",
+      "title": "Đón khách & check-in",
+      "description": "Khách tham dự check-in, nhận tài liệu và ổn định chỗ ngồi."
+    },
+    {
+      "start_time": "09:30 15/03/2026",
+      "end_time": "10:30 15/03/2026",
+      "title": "Talkshow: Minimalist Living",
+      "description": "Chia sẻ về phong cách sống tối giản và cách áp dụng trong không gian sống hiện đại."
+    },
+    {
+      "start_time": "10:30 15/03/2026",
+      "end_time": "11:00 15/03/2026",
+      "title": "Q&A",
+      "description": "Giải đáp câu hỏi từ người tham dự."
+    },
+    {
+      "start_time": "11:00 15/03/2026",
+      "end_time": "11:30 15/03/2026",
+      "title": "Networking",
+      "description": "Giao lưu, kết nối giữa diễn giả và người tham dự."
+    }
+  ],
+  "search_text": "minimalist living talkshow coffee house hcm",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:08:03.010Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d35381"
+  },
+  "title": "Tet Decoration Seminar",
+  "slug": "tet-decoration-seminar-2026",
+  "description": "Hướng dẫn trang hoàng nhà cửa đón Tết Bính Ngọ theo phong cách hiện đại.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/toa-heftiba-FV3GConVSss-unsplash_dpbqsc.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d35382"
+      }
+    },
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358493/spacejoy-YI2YkyaREHk-unsplash_r1yfiv.jpg",
+      "is_main": false,
+      "_id": {
+        "$oid": "69a411203396538553d35383"
+      }
+    }
+  ],
+  "category": "Workshop",
+  "hightlight_des": [
+    "Cắm hoa ngày Tết",
+    "Cách phối màu thảm và rèm",
+    "Bố trí ánh sáng ấm cúng"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2026-01-10T08:30:00.000Z"
+    },
+    "endDate": {
+      "$date": "2026-01-10T11:30:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Showroom Furniture World",
+    "address": "Phạm Văn Đồng, Thủ Đức",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": true,
+    "isFree": true,
+    "maxSlot": 80,
+    "registeredCount": 80
+  },
+  "status": "ENDED",
+  "timeline_event": [
+    {
+      "start_time": "08:30 10/01/2026",
+      "end_time": "09:00 10/01/2026",
+      "title": "Đón khách & check-in",
+      "description": "Khách tham dự check-in, nhận vật liệu và ổn định chỗ ngồi."
+    },
+    {
+      "start_time": "09:00 10/01/2026",
+      "end_time": "10:00 10/01/2026",
+      "title": "Giới thiệu & hướng dẫn",
+      "description": "Giới thiệu về phong cách trang trí Tết hiện đại và hướng dẫn sử dụng vật liệu."
+    },
+    {
+      "start_time": "10:00 10/01/2026",
+      "end_time": "11:30 10/01/2026",
+      "title": "Thực hành trang trí",
+      "description": "Người tham gia tự tay thiết kế và trang trí không gian theo hướng dẫn."
+    },
+    {
+      "start_time": "11:30 10/01/2026",
+      "end_time": "12:00 10/01/2026",
+      "title": "Trưng bày & chia sẻ",
+      "description": "Trưng bày sản phẩm và chia sẻ ý tưởng thiết kế giữa các nhóm."
+    },
+    {
+      "start_time": "12:00 10/01/2026",
+      "end_time": "12:30 10/01/2026",
+      "title": "Kết thúc & chụp ảnh",
+      "description": "Tổng kết workshop và chụp ảnh lưu niệm."
+    }
+  ],
+  "search_text": "tet decoration seminar 2026 thu duc",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:09:46.282Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d35387"
+  },
+  "title": "Modern Office Furniture Expo",
+  "slug": "modern-office-furniture-expo-2026",
+  "description": "Giải pháp nội thất văn phòng thông minh cho các startup và doanh nghiệp.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/minh-pham-OtXADkUh3-I-unsplash_yvzjjx.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d35388"
+      }
+    },
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/spacejoy-9M66C_w_ToM-unsplash_mx8ycd.jpg",
+      "is_main": false,
+      "_id": {
+        "$oid": "69a411203396538553d35389"
+      }
+    },
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/collov-home-design-HmHArS-HvNw-unsplash_dbad5b.jpg",
+      "is_main": false,
+      "_id": {
+        "$oid": "69a411203396538553d3538a"
+      }
+    }
+  ],
+  "category": "Triển lãm",
+  "hightlight_des": [
+    "Bàn ghế công thái học thế hệ mới",
+    "Giải pháp cách âm phòng họp",
+    "Tư vấn thiết kế văn phòng miễn phí"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2026-02-15T09:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2026-03-05T18:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Gem Center",
+    "address": "8 Nguyễn Bỉnh Khiêm, Quận 1",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": true,
+    "isFree": false,
+    "maxSlot": 500,
+    "registeredCount": 420
+  },
+  "status": "ONGOING",
+  "timeline_event": [
+    {
+      "start_time": "09:00 01/06/2026",
+      "end_time": "10:00 01/06/2026",
+      "title": "Lễ khai mạc",
+      "description": "Phát biểu khai mạc và giới thiệu tổng quan triển lãm nội thất văn phòng hiện đại."
+    },
+    {
+      "start_time": "10:00 01/06/2026",
+      "end_time": "18:00 01/06/2026",
+      "title": "Tham quan triển lãm",
+      "description": "Khách tham quan các gian hàng nội thất văn phòng và giải pháp công nghệ."
+    },
+    {
+      "start_time": "09:00 02/06/2026",
+      "end_time": "18:00 02/06/2026",
+      "title": "Trưng bày & trải nghiệm",
+      "description": "Tiếp tục tham quan, trải nghiệm sản phẩm và demo thực tế."
+    },
+    {
+      "start_time": "14:00 02/06/2026",
+      "end_time": "16:00 02/06/2026",
+      "title": "Seminar: Smart Office",
+      "description": "Chia sẻ về xu hướng văn phòng thông minh cho doanh nghiệp hiện đại."
+    },
+    {
+      "start_time": "09:00 03/06/2026",
+      "end_time": "17:00 03/06/2026",
+      "title": "Kết nối doanh nghiệp",
+      "description": "Networking giữa các startup, doanh nghiệp và nhà cung cấp nội thất."
+    },
+    {
+      "start_time": "17:00 03/06/2026",
+      "end_time": "18:00 03/06/2026",
+      "title": "Bế mạc",
+      "description": "Tổng kết sự kiện và gửi lời cảm ơn đến các đối tác và khách tham dự."
+    }
+  ],
+  "search_text": "modern office furniture expo 2026 gem center",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:12:52.947Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d3538b"
+  },
+  "title": "Smart Home Integration Workshop",
+  "slug": "smart-home-integration-workshop",
+  "description": "Cách kết hợp nội thất truyền thống with các thiết bị nhà thông minh hiện đại.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/michael-warf-f8egRYt5RGk-unsplash_sfdcmr.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d3538c"
+      }
+    },
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/sven-brandsma-GZ5cKOgeIB0-unsplash_kftuhu.jpg",
+      "is_main": false,
+      "_id": {
+        "$oid": "69a411203396538553d3538d"
+      }
+    }
+  ],
+  "category": "Workshop",
+  "hightlight_des": [
+    "Trải nghiệm nhà thông minh thực tế",
+    "Lắp đặt cảm biến ánh sáng",
+    "Điều khiển nội thất bằng giọng nói"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2026-03-15T14:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2026-03-15T17:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Vincom Center Landmark 81",
+    "address": "208 Nguyễn Hữu Cảnh, Bình Thạnh",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": true,
+    "isFree": true,
+    "maxSlot": 60,
+    "registeredCount": 15
+  },
+  "status": "UPCOMING",
+  "timeline_event": [
+    {
+      "start_time": "08:30 05/07/2026",
+      "end_time": "09:00 05/07/2026",
+      "title": "Đón khách & check-in",
+      "description": "Khách tham dự check-in, nhận tài liệu và làm quen không gian workshop."
+    },
+    {
+      "start_time": "09:00 05/07/2026",
+      "end_time": "10:00 05/07/2026",
+      "title": "Giới thiệu Smart Home",
+      "description": "Tổng quan về hệ sinh thái nhà thông minh và xu hướng hiện nay."
+    },
+    {
+      "start_time": "10:00 05/07/2026",
+      "end_time": "11:00 05/07/2026",
+      "title": "Demo thiết bị",
+      "description": "Trình diễn các thiết bị smart home như đèn, cảm biến, hệ thống điều khiển."
+    },
+    {
+      "start_time": "11:00 05/07/2026",
+      "end_time": "12:00 05/07/2026",
+      "title": "Thực hành tích hợp",
+      "description": "Người tham gia tự cấu hình và kết nối các thiết bị trong hệ thống."
+    },
+    {
+      "start_time": "13:30 05/07/2026",
+      "end_time": "14:30 05/07/2026",
+      "title": "Case study thực tế",
+      "description": "Phân tích các mô hình smart home đã triển khai trong thực tế."
+    },
+    {
+      "start_time": "14:30 05/07/2026",
+      "end_time": "15:30 05/07/2026",
+      "title": "Q&A",
+      "description": "Giải đáp thắc mắc và tư vấn giải pháp phù hợp cho người tham gia."
+    },
+    {
+      "start_time": "15:30 05/07/2026",
+      "end_time": "16:00 05/07/2026",
+      "title": "Kết thúc & Networking",
+      "description": "Giao lưu, kết nối và chụp ảnh lưu niệm."
+    }
+  ],
+  "search_text": "smart home integration workshop landmark 81",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:14:35.991Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d3538e"
+  },
+  "title": "Sustainable Wood Exhibition",
+  "slug": "sustainable-wood-exhibition-2026",
+  "description": "Triển lãm các sản phẩm gỗ bền vững, đạt chứng chỉ FSC và bảo vệ môi trường.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/curology-6CJg-fOTYs4-unsplash_np1iwb.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d3538f"
+      }
+    },
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/sherzod-gulomov-P0q_HK_-GGM-unsplash_jwkxi5.jpg",
+      "is_main": false,
+      "_id": {
+        "$oid": "69a411203396538553d35390"
+      }
+    }
+  ],
+  "category": "Triển lãm",
+  "hightlight_des": [
+    "Chứng chỉ FSC cho mọi sản phẩm",
+    "Quy trình tái chế gỗ thải",
+    "Tặng cây xanh cho khách tham quan"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2026-04-20T08:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2026-04-25T20:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Công viên Gia Định",
+    "address": "Hoàng Minh Giám, Gò Vấp",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": false,
+    "isFree": true,
+    "maxSlot": 1000,
+    "registeredCount": 1
+  },
+  "status": "UPCOMING",
+  "timeline_event": [
+    {
+      "start_time": "08:00 20/04/2026",
+      "end_time": "09:00 20/04/2026",
+      "title": "Chuẩn bị & đón khách",
+      "description": "Hoàn tất công tác chuẩn bị và đón khách tham dự triển lãm."
+    },
+    {
+      "start_time": "09:00 20/04/2026",
+      "end_time": "10:00 20/04/2026",
+      "title": "Lễ khai mạc",
+      "description": "Phát biểu khai mạc và giới thiệu triển lãm gỗ bền vững."
+    },
+    {
+      "start_time": "10:00 20/04/2026",
+      "end_time": "18:00 20/04/2026",
+      "title": "Tham quan triển lãm",
+      "description": "Khách tham quan các gian hàng sản phẩm gỗ đạt chuẩn FSC."
+    },
+    {
+      "start_time": "08:30 21/04/2026",
+      "end_time": "18:00 21/04/2026",
+      "title": "Trưng bày & trải nghiệm",
+      "description": "Tiếp tục tham quan và trải nghiệm các sản phẩm nội thất bền vững."
+    },
+    {
+      "start_time": "14:00 22/04/2026",
+      "end_time": "16:00 22/04/2026",
+      "title": "Workshop: Gỗ bền vững",
+      "description": "Giới thiệu quy trình sản xuất và tiêu chuẩn FSC trong ngành gỗ."
+    },
+    {
+      "start_time": "09:00 23/04/2026",
+      "end_time": "17:00 23/04/2026",
+      "title": "Kết nối doanh nghiệp",
+      "description": "Giao lưu và kết nối giữa các doanh nghiệp và nhà thiết kế."
+    },
+    {
+      "start_time": "09:00 24/04/2026",
+      "end_time": "18:00 24/04/2026",
+      "title": "Tham quan tự do",
+      "description": "Khách tham quan tự do các gian hàng và trải nghiệm sản phẩm."
+    },
+    {
+      "start_time": "17:00 25/04/2026",
+      "end_time": "20:00 25/04/2026",
+      "title": "Bế mạc",
+      "description": "Tổng kết triển lãm và gửi lời cảm ơn đến khách tham dự."
+    }
+  ],
+  "search_text": "sustainable wood exhibition 2026 gia dinh",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T15:29:07.354Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d35391"
+  },
+  "title": "Summer Interior Design Camp",
+  "slug": "summer-interior-design-camp-2026",
+  "description": "Khóa học ngắn hạn về thiết kế nội thất dành cho sinh viên và người yêu thích sáng tạo.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/katja-rooke-77JACslA8G0-unsplash_xytbne.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d35392"
+      }
+    }
+  ],
+  "category": "Workshop",
+  "hightlight_des": [
+    "Học cùng kiến trúc sư",
+    "Thực hành thiết kế trên phần mềm",
+    "Tham quan xưởng sản xuất thực tế"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2026-06-01T08:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2026-06-30T17:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Đại học Kiến trúc TP.HCM",
+    "address": "196 Pasteur, Quận 3",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": true,
+    "isFree": false,
+    "maxSlot": 30,
+    "registeredCount": 0
+  },
+  "status": "UPCOMING",
+  "timeline_event": [
+    {
+      "start_time": "08:00 01/06/2026",
+      "end_time": "10:00 01/06/2026",
+      "title": "Khai giảng",
+      "description": "Giới thiệu khóa học, giảng viên và định hướng nội dung thiết kế nội thất."
+    },
+    {
+      "start_time": "09:00 03/06/2026",
+      "end_time": "16:00 07/06/2026",
+      "title": "Giai đoạn 1: Cơ bản",
+      "description": "Học các nguyên lý thiết kế nội thất, màu sắc, bố cục và vật liệu."
+    },
+    {
+      "start_time": "09:00 10/06/2026",
+      "end_time": "16:00 14/06/2026",
+      "title": "Giai đoạn 2: Thực hành",
+      "description": "Thực hành thiết kế không gian nội thất với các bài tập thực tế."
+    },
+    {
+      "start_time": "09:00 17/06/2026",
+      "end_time": "16:00 21/06/2026",
+      "title": "Giai đoạn 3: Dự án cá nhân",
+      "description": "Học viên phát triển dự án thiết kế nội thất riêng dưới sự hướng dẫn của giảng viên."
+    },
+    {
+      "start_time": "09:00 24/06/2026",
+      "end_time": "16:00 28/06/2026",
+      "title": "Hoàn thiện & chuẩn bị",
+      "description": "Hoàn thiện sản phẩm và chuẩn bị thuyết trình cuối khóa."
+    },
+    {
+      "start_time": "09:00 30/06/2026",
+      "end_time": "17:00 30/06/2026",
+      "title": "Bảo vệ & bế giảng",
+      "description": "Trình bày dự án, nhận xét từ giảng viên và tổng kết khóa học."
+    }
+  ],
+  "search_text": "summer interior design camp 2026 uah",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:19:15.346Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d35393"
+  },
+  "title": "Vintage Chair Restoration Mini-Workshop",
+  "slug": "vintage-chair-restoration-2025",
+  "description": " Một buổi hướng dẫn nhỏ về cách phục hồi các loại ghế gỗ cũ tại nhà.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358493/pickawood-rwa0Yh38FeA-unsplash_entfen.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d35394"
+      }
+    }
+  ],
+  "category": "Workshop",
+  "hightlight_des": [
+    "Kỹ thuật chà nhám cơ bản",
+    "Lựa chọn loại sơn phù hợp",
+    "Bảo quản gỗ lâu dài"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2025-05-12T18:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2025-05-12T20:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Xưởng mộc Decor",
+    "address": "45 Trần Não, Quận 2",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": true,
+    "isFree": true,
+    "maxSlot": 15,
+    "registeredCount": 15
+  },
+  "status": "ENDED",
+  "timeline_event": [
+    {
+      "start_time": "18:00 12/05/2025",
+      "end_time": "18:15 12/05/2025",
+      "title": "Đón khách & giới thiệu",
+      "description": "Check-in, giới thiệu về workshop và các vật dụng sẽ sử dụng."
+    },
+    {
+      "start_time": "18:15 12/05/2025",
+      "end_time": "19:00 12/05/2025",
+      "title": "Hướng dẫn kỹ thuật cơ bản",
+      "description": "Giới thiệu cách xử lý bề mặt gỗ, làm sạch và phục hồi ghế cũ."
+    },
+    {
+      "start_time": "19:00 12/05/2025",
+      "end_time": "19:45 12/05/2025",
+      "title": "Thực hành",
+      "description": "Người tham dự tự tay phục hồi một phần ghế dưới sự hướng dẫn của giảng viên."
+    },
+    {
+      "start_time": "19:45 12/05/2025",
+      "end_time": "20:00 12/05/2025",
+      "title": "Tổng kết & Q&A",
+      "description": "Giải đáp thắc mắc và chia sẻ thêm kinh nghiệm phục hồi đồ nội thất."
+    }
+  ],
+  "search_text": "vintage chair restoration 2025 workshop",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:20:41.964Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d35395"
+  },
+  "title": "Eco-friendly Fabric Showcase",
+  "slug": "eco-fabric-showcase-2025",
+  "description": "Giới thiệu các loại vải bọc sofa thân thiện với môi trường.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358493/myxa69-nZnVdtlJvbw-unsplash_qlvwni.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d35396"
+      }
+    }
+  ],
+  "category": "Triển lãm",
+  "hightlight_des": [
+    "Vải từ sợi tái chế",
+    "Độ bền và màu sắc tự nhiên",
+    "Trải nghiệm trực tiếp mẫu vải"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2025-07-20T09:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2025-07-20T17:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Showroom Green Home",
+    "address": "120 Cộng Hòa, Tân Bình",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": false,
+    "isFree": true,
+    "maxSlot": 200,
+    "registeredCount": 145
+  },
+  "status": "ENDED",
+  "timeline_event": [
+    {
+      "start_time": "09:00 20/07/2025",
+      "end_time": "09:30 20/07/2025",
+      "title": "Khai mạc",
+      "description": "Giới thiệu về triển lãm và các dòng vải thân thiện với môi trường."
+    },
+    {
+      "start_time": "09:30 20/07/2025",
+      "end_time": "12:00 20/07/2025",
+      "title": "Tham quan khu trưng bày",
+      "description": "Khách tham quan các gian hàng trưng bày vải eco cho sofa và nội thất."
+    },
+    {
+      "start_time": "13:00 20/07/2025",
+      "end_time": "14:30 20/07/2025",
+      "title": "Trình diễn sản phẩm",
+      "description": "Giới thiệu quy trình sản xuất và ứng dụng vải thân thiện môi trường."
+    },
+    {
+      "start_time": "14:30 20/07/2025",
+      "end_time": "16:00 20/07/2025",
+      "title": "Workshop mini",
+      "description": "Trải nghiệm trực tiếp chất liệu và cách lựa chọn vải phù hợp cho nội thất."
+    },
+    {
+      "start_time": "16:00 20/07/2025",
+      "end_time": "17:00 20/07/2025",
+      "title": "Networking & bế mạc",
+      "description": "Giao lưu giữa khách tham quan và các nhà cung cấp, tổng kết sự kiện."
+    }
+  ],
+  "search_text": "eco fabric showcase 2025 green home",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:22:02.140Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d35397"
+  },
+  "title": "Small Apartment Layout Talk",
+  "slug": "small-apartment-layout-talk-2025",
+  "description": "Chia sẻ kinh nghiệm sắp xếp nội thất cho căn hộ dưới 50m2.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358493/virender-singh-hE0nmTffKtM-unsplash_hqwbnd.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d35398"
+      }
+    }
+  ],
+  "category": "Talkshow",
+  "hightlight_des": [
+    "Sử dụng nội thất đa năng",
+    "Tối ưu hóa ánh sáng tự nhiên",
+    "Mẹo tạo cảm giác rộng rãi"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2025-10-18T14:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2025-10-18T16:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Yoko Coffee",
+    "address": "22 Nguyễn Thị Diệu, Quận 3",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": true,
+    "isFree": true,
+    "maxSlot": 30,
+    "registeredCount": 30
+  },
+  "status": "ENDED",
+  "timeline_event": [
+    {
+      "start_time": "14:00 18/10/2025",
+      "end_time": "14:15 18/10/2025",
+      "title": "Đón khách & check-in",
+      "description": "Khách tham dự check-in, ổn định chỗ ngồi."
+    },
+    {
+      "start_time": "14:15 18/10/2025",
+      "end_time": "15:15 18/10/2025",
+      "title": "Talk: Small Apartment Layout",
+      "description": "Chia sẻ kinh nghiệm tối ưu không gian và bố trí nội thất cho căn hộ nhỏ dưới 50m2."
+    },
+    {
+      "start_time": "15:15 18/10/2025",
+      "end_time": "15:40 18/10/2025",
+      "title": "Q&A",
+      "description": "Giải đáp các câu hỏi thực tế từ người tham dự."
+    },
+    {
+      "start_time": "15:40 18/10/2025",
+      "end_time": "16:00 18/10/2025",
+      "title": "Networking",
+      "description": "Giao lưu giữa diễn giả và người tham dự."
+    }
+  ],
+  "search_text": "small apartment layout talk 2025 yoko coffee",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:25:24.534Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d3537b"
+  },
+  "title": "Spring Home Fair",
+  "slug": "spring-home-fair-2025",
+  "description": "Hội chợ đồ gỗ và trang trí nội thất mùa xuân với hàng ngàn ưu đãi hấp dẫn.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358495/nathan-fertig-FBXuXp57eM0-unsplash_zn30jr.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d3537c"
+      }
+    }
+  ],
+  "category": "Ưu đãi",
+  "hightlight_des": [
+    "Giảm giá lên đến 50%",
+    "Khu vực tư vấn phong thủy miễn phí",
+    "Quà tặng cho 100 khách hàng đầu tiên"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2025-03-20T08:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2025-03-25T21:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Nhà thi đấu Phú Thọ",
+    "address": "1 Lữ Gia, Quận 11",
+    "city": "Hồ Chí Minh"
+  },
+  "registration": {
+    "requireRegister": false,
+    "isFree": true,
+    "maxSlot": 5000,
+    "registeredCount": 4200
+  },
+  "status": "ENDED",
+  "timeline_event": [
+    {
+      "start_time": "08:00 20/03/2025",
+      "end_time": "10:00 20/03/2025",
+      "title": "Khai mạc",
+      "description": "Giới thiệu hội chợ và các thương hiệu tham gia."
+    },
+    {
+      "start_time": "10:00 20/03/2025",
+      "end_time": "21:00 22/03/2025",
+      "title": "Tham quan & mua sắm",
+      "description": "Khách tham quan các gian hàng nội thất, đồ gỗ và trang trí nhà cửa với nhiều ưu đãi."
+    },
+    {
+      "start_time": "09:00 23/03/2025",
+      "end_time": "17:00 23/03/2025",
+      "title": "Workshop & trải nghiệm",
+      "description": "Tham gia các hoạt động trải nghiệm sản phẩm và workshop trang trí nội thất."
+    },
+    {
+      "start_time": "09:00 24/03/2025",
+      "end_time": "17:00 24/03/2025",
+      "title": "Khuyến mãi đặc biệt",
+      "description": "Ngày giảm giá sâu với nhiều ưu đãi hấp dẫn từ các gian hàng."
+    },
+    {
+      "start_time": "09:00 25/03/2025",
+      "end_time": "21:00 25/03/2025",
+      "title": "Bế mạc",
+      "description": "Tổng kết sự kiện, cảm ơn khách tham dự và đối tác."
+    }
+  ],
+  "search_text": "spring home fair 2025 phu tho",
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:26:04.126Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a411203396538553d35384"
+  },
+  "title": "Year-End Furniture Sale",
+  "slug": "year-end-furniture-sale-2025",
+  "description": "Đợt xả kho lớn nhất năm để chuẩn bị cho các bộ sưu tập mới.",
+  "images": [
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358494/spacejoy-umAXneH4GhA-unsplash_erx375.jpg",
+      "is_main": true,
+      "_id": {
+        "$oid": "69a411203396538553d35385"
+      }
+    },
+    {
+      "url_image": "https://res.cloudinary.com/dgltyap9d/image/upload/v1772358492/lotus-design-n-print-0sDzRgrN_pI-unsplash_s5lgg7.jpg",
+      "is_main": false,
+      "_id": {
+        "$oid": "69a411203396538553d35386"
+      }
+    }
+  ],
+  "category": "Ưu đãi",
+  "hightlight_des": [
+    "Giảm giá 70% tất cả mặt hàng trưng bày",
+    "Miễn phí vận chuyển nội thành",
+    "Bảo hành 12 tháng như mới"
+  ],
+  "date_range": {
+    "startDate": {
+      "$date": "2025-12-15T09:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2025-12-31T21:00:00.000Z"
+    }
+  },
+  "location": {
+    "name": "Kho hàng Furniture World",
+    "address": "Đường số 2, KCN Sóng Thần",
+    "city": "Bình Dương"
+  },
+  "registration": {
+    "requireRegister": false,
+    "isFree": true,
+    "maxSlot": 10000,
+    "registeredCount": 8500
+  },
+  "status": "ENDED",
+  "search_text": "year end sale 2025 binh duong",
+  "timeline_event": [
+    {
+      "start_time": "08:00 20/12/2025",
+      "end_time": "10:00 20/12/2025",
+      "title": "Khai mạc & mở bán",
+      "description": "Bắt đầu chương trình giảm giá cuối năm với nhiều ưu đãi hấp dẫn."
+    },
+    {
+      "start_time": "10:00 20/12/2025",
+      "end_time": "21:00 23/12/2025",
+      "title": "Giai đoạn mua sắm cao điểm",
+      "description": "Khách hàng tham quan và mua sắm các sản phẩm nội thất với mức giá ưu đãi."
+    },
+    {
+      "start_time": "09:00 24/12/2025",
+      "end_time": "21:00 27/12/2025",
+      "title": "Flash sale & ưu đãi đặc biệt",
+      "description": "Các chương trình giảm giá sâu theo khung giờ và sản phẩm giới hạn."
+    },
+    {
+      "start_time": "09:00 28/12/2025",
+      "end_time": "21:00 30/12/2025",
+      "title": "Xả kho cuối năm",
+      "description": "Thanh lý các sản phẩm tồn kho với mức giá tốt nhất trong năm."
+    },
+    {
+      "start_time": "09:00 31/12/2025",
+      "end_time": "21:00 31/12/2025",
+      "title": "Kết thúc & tổng kết",
+      "description": "Ngày cuối cùng của chương trình, tổng kết và tri ân khách hàng."
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-03-01T10:12:48.779Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-17T12:27:46.354Z"
+  },
+  "__v": 0
+}]
