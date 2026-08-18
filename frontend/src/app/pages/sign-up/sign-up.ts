@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { ToastService } from '../../services/toast-service';
 
 @Component({
   selector: 'app-sign-up',
@@ -28,6 +29,7 @@ export class SignUp {
     private router: Router,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
+    private toastService: ToastService,
   ) {}
 
   togglePassword() {
@@ -104,6 +106,7 @@ export class SignUp {
           this.cdr.detectChanges();
         }
         this.success = 'Đăng ký thành công! Đang chuyển hướng...';
+        this.toastService.success(this.success);
         setTimeout(() => {
           this.router.navigate(['/auth/verify-email']);
         }, 500);
